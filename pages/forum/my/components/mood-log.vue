@@ -2,7 +2,7 @@
 	<view class="forum-index-mood-log-content">
 		<view class="forum-index-list">
 			<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
-				<view class="forum-index-list-item" v-for="(item,index) in newContens" :key="index">
+				<view class="forum-index-list-item" v-for="(item,index) in data.list" :key="index">
 					<view class="item-header">
 						<view class="item-header-left">
 							<view class="header-pic">
@@ -45,8 +45,13 @@
 
 <script setup>
 	import {
-		ref
+		onMounted,
+		ref,
+		reactive
 	} from 'vue';
+	import {
+		getArticleList
+	} from "@/api/article.js"
 	import share from '@/components/share/share.vue'
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
 	const sharePopup = ref(null)
@@ -61,6 +66,16 @@
 		label: "关注"
 	}]);
 	const contentTabsActive = ref(0);
+	const data = reactive({
+		listParams:{
+			"current": 1,
+			"size": 10,
+			"params":{
+				
+			}
+		},
+		list:[]
+	})
 	const contentTabsHandler = (options) => {
 		if (contentTabsActive.value != options.id) {
 			contentTabsActive.value = options.id
@@ -122,6 +137,15 @@
 	const openShare = () => {
 		sharePopup.value.openShare()
 	}
+	
+	const getList = async () => {
+		let res = await getArticleList(data.listParams);
+		data.list=res.data.records
+	}
+	
+	onMounted(()=>{
+		getList()
+	})
 </script>
 
 <style lang="scss" scoped>
