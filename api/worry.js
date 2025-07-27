@@ -1,6 +1,6 @@
 import http from "@/utils/request.js"
-// 获取文章列表
-export const getArticleList = (params, config = {}) => http.post('/api/article/article/getArticleList',
+// 获取心事列表
+export const getWorryList = (params, config = {}) => http.post('/api/emotion/emotion/getEmotionList',
 	params, config)
 
 export const getArticleDetail = (params, config = {}) => http.post('/api/article/article/getArticleDetail',
@@ -9,5 +9,5 @@ export const getArticleDetail = (params, config = {}) => http.post('/api/article
 export const getCommentById = (params, config = {}) => http.post('/api/comment/comment/getCommentById',
 	params, config)
 	
-export const saveComment = (params, config = {}) => http.post('/api/comment/comment/saveComment',
+export const saveEmotion = (params, config = {}) => http.post('/api/emotion/emotion/saveEmotion',
 	params, config)
