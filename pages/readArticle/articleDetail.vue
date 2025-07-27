@@ -94,6 +94,7 @@
 	} from '@/stores/global.js';
 	import {
 		getArticleDetail,
+		getCommentById,
 		saveComment
 	} from "@/api/article.js"
 	import RecommendArticleItem from '@/components/Recommend-Article-Item';
@@ -133,6 +134,9 @@
 		id: 7
 	}]);
 	const info = ref()
+	
+	const commentList = ref()
+	
 	const changeTabHandler = (index) => {
 		tabActive.value = index
 	}
@@ -169,6 +173,14 @@
 		});
 		info.value = res.data;
 	}
+	
+	const getList = async () => {
+		let res = await getCommentById({
+			id: route.query.id
+		});
+		
+		commentList.value = res.data;
+	}
 
 	const onSaveComment = async () => {
 		let res = await saveComment({
@@ -184,7 +196,9 @@
 		console.log(res)
 	}
 	onMounted(() => {
-		getInfo()
+		getInfo();
+		
+		getList();
 	})
 </script>
 

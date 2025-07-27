@@ -7,7 +7,7 @@
 
 		<view class="forum-index-list">
 			<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
-				<view class="forum-index-list-item" v-for="(item,index) in newContens" :key="index">
+				<view class="forum-index-list-item" v-for="(item,index) in data.list" :key="index">
 					<view class="item-header">
 						<view class="item-header-left" @click="openOtherHandler">
 							<view class="header-pic">
@@ -55,12 +55,27 @@
 
 <script setup>
 	import {
-		ref
+		onMounted,
+		ref,
+		reactive
 	} from 'vue';
+	import {
+		getWorryList
+	} from "@/api/worry.js"
 	import share from '@/components/share/share.vue'
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
 	const props = defineProps(['statusBarHeight']);
 	const sharePopup = ref(null)
+	const data = reactive({
+		listParams:{
+			"current": 1,
+			"size": 10,
+			"params":{
+				
+			}
+		},
+		list:[]
+	})
 	const contentTabsList = ref([{
 		id: 0,
 		label: "最新"
@@ -139,6 +154,15 @@
 			url:'/pages/forum/other/other'
 		})
 	}
+	
+	const getList = async () => {
+		let res = await getWorryList(data.listParams);
+		data.list=res.data.records
+	}
+	
+	onMounted(()=>{
+		getList()
+	})
 </script>
 
 <style lang="scss" scoped>

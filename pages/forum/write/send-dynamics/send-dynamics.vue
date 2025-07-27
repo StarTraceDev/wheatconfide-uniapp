@@ -6,7 +6,7 @@
 				<uni-icons type="left" size="24" @click="backFn"></uni-icons>
 			</template>
 			<template v-slot:right>
-				<view class="right">
+				<view class="right" @click="onSaveComment">
 					发布
 				</view>
 			</template>
@@ -43,7 +43,11 @@
 		onMounted,
 		ref
 	} from 'vue';
-
+	
+	import {
+		saveEmotion
+	} from "@/api/worry.js"
+	
 	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
@@ -73,6 +77,19 @@
 		uni.navigateTo({
 			url:"/pages/forum/write/choose-topic/choose-topic"
 		})
+	}
+	
+	const onSaveComment = async () => {
+		let res = await saveEmotion({
+			"content": content.value
+		});
+		replyContent.value=""
+		uni.showToast({
+		    title: '发布成功',
+		    icon: 'none', // 可选值 'success', 'loading', 'none'
+		    duration: 2000 // 持续时长，单位ms
+		});
+		console.log(res)
 	}
 </script>
 
