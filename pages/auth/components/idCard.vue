@@ -1,0 +1,302 @@
+<template>
+	<view class="id-card-box">
+		<view class="id-card-content-box">
+			<view class="id-card-content">
+				<view class="title">身份认证</view>
+				<view class="remark">仅用于身份实名核验，信息会严格保密</view>
+				<view class="unload-card-box">
+					<view class="upload-card-item">
+						<image src="@/static/auth/id-card-front.png" class="img"></image>
+						<view class="txt">身份证人像面</view>
+					</view>
+					<view class="upload-card-item">
+						<image src="@/static/auth/id-card-back.png" class="img"></image>
+						<view class="txt">身份证国徽面</view>
+					</view>
+				</view>
+				<view class="id-card-form-content">
+					<view class="form-item">
+						<view class="label require">姓名</view>
+						<view class="content">{{name}}</view>
+					</view>
+					<view class="form-item">
+						<view class="label require">身份证号</view>
+						<view class="content">{{idNum}}</view>
+					</view>
+					<view class="form-item">
+						<view class="label require">职业</view>
+						<view class="content" :class="!value?'weight':''" @click="openPopupHandler">请选择<uni-icons
+								type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+					</view>
+					<view class="form-item">
+						<view class="label require">星座</view>
+						<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
+								color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+					</view>
+					<view class="form-item">
+						<view class="label require">所在地区</view>
+						<view class="content" :class="!value?'weight':''" @click="openCityHandler">请选择<uni-icons
+								type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+					</view>
+					<view class="form-item">
+						<view class="label require">服务类型</view>
+						<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
+								color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+					</view>
+					<view class="form-item user-sign">
+						<view class="label">个人签名</view>
+						<view class="content-input" style="width: 400rpx;">
+							<uni-easyinput trim="all" type="text" placeholder="请输入个人签名" :inputBorder="false"
+								:clearable="false" :placeholderStyle="{'text-align':'right'}">
+							</uni-easyinput>
+						</view>
+					</view>
+					<view class="form-item user-introduction">
+						<view class="label">个人简介</view>
+						<view class="introduction-content">
+							<uni-easyinput type="textarea" placeholder="请输入个人简介" :inputBorder="false" :clearable="false"
+								:styles="{'background-color':'#f6f6f6'}" />
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<uni-popup ref="popup" type="bottom" border-radius="24rpx 24rpx 0 0" class="career-popup">
+			<view class="career-popup-box">
+				<view class="career-popup-header">
+					<view></view>
+					<view class="title">选择职业</view>
+					<view @click="closeCareerHandler">
+						<uni-icons type="closeempty" size="14" color="rgba(0,0,0,0.3)"></uni-icons>
+					</view>
+				</view>
+				<view class="career-popup-content-list">
+					<view class="career-popup-content-item" v-for="i in 20" :key="i">心理咨询师{{i}}</view>
+				</view>
+			</view>
+		</uni-popup>
+	</view>
+</template>
+
+<script setup>
+	import {
+		onMounted,
+		ref
+	} from 'vue';
+	import cityJson from "@/static/city-json/city-list.js"
+	const cityList = ref(cityJson);
+	const name = ref('张三');
+	const idNum = ref('342312199601122426');
+	const popup = ref(null);
+	const cityPopup = ref(null);
+	const openPopupHandler = () => {
+		console.log(123);
+		popup.value.open();
+	}
+
+	const openCityHandler = () => {
+		uni.navigateTo({
+			url: "/pages/auth/cityChoose"
+		})
+	}
+
+	const closeCareerHandler = () => {
+		popup.value.close();
+	}
+	const closeCityPopupHandler = () => {
+		cityPopup.value.close();
+	}
+
+	const cityClick = () => {
+
+	}
+</script>
+
+<style scoped lang="scss">
+	.id-card-box {
+		width: 750rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.id-card-content-box {
+			width: 686rpx;
+			height: 1444rpx;
+			background: #fff;
+			border-radius: 20rpx;
+			display: flex;
+			justify-content: center;
+
+			.id-card-content {
+				width: 630rpx;
+			}
+
+			.title {
+				font-size: 36rpx;
+				font-weight: 500;
+				letter-spacing: normal;
+				color: #212528;
+				margin-top: 36rpx;
+			}
+
+			.remark {
+				font-size: 26rpx;
+				letter-spacing: normal;
+				color: rgba(0, 0, 0, 0.5);
+				margin-top: 12rpx;
+			}
+
+			.unload-card-box {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 26rpx;
+
+				.upload-card-item {
+					width: 296rpx;
+					height: 268rpx;
+					border-radius: 10rpx;
+					background: #F5F5F5;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex-direction: column;
+
+					.img {
+						width: 192rpx;
+						height: 132rpx;
+					}
+
+					.txt {
+						font-size: 24rpx;
+						font-weight: normal;
+						letter-spacing: normal;
+						color: rgba(0, 0, 0, 0.6);
+						margin-top: 40rpx;
+					}
+				}
+			}
+
+			.id-card-form-content {
+				margin-top: 54rpx;
+
+				.form-item {
+					display: flex;
+					justify-content: space-between;
+					align-items: start;
+					margin-top: 52rpx;
+
+					.label {
+						position: relative;
+						font-size: 28rpx;
+						color: rgba(0, 0, 0, 0.85)
+					}
+
+					.require {
+						&::after {
+							content: '*';
+							color: #FA5151;
+							position: absolute;
+							right: -20rpx;
+						}
+					}
+
+					.content {
+						font-size: 28rpx;
+						text-align: right;
+						letter-spacing: normal;
+						color: rgba(0, 0, 0, 0.35);
+
+						.textarea {}
+					}
+
+					.weight {
+						color: rgba(0, 0, 0, 0.65);
+					}
+				}
+
+				.user-sign {
+					align-items: center;
+					margin-top: 42rpx;
+
+					.content-input {
+						::v-deep .uni-input-input {
+							color: rgba(0, 0, 0, 0.35);
+							text-align: right !important;
+
+						}
+					}
+				}
+
+				.user-introduction {
+					flex-direction: column;
+
+					.introduction-content {
+						width: 630rpx;
+						height: 190rpx;
+						margin-top: 24rpx;
+
+						::v-deep .uni-easyinput__content-textarea {
+							padding: 0rpx 12rpx !important;
+						}
+
+						.uni-easyinput {
+							background-color: #f6f6f6;
+							color: rgba(0, 0, 0, 0.35);
+						}
+					}
+				}
+
+			}
+		}
+
+		::v-deep .career-popup {
+			z-index: 99999999 !important;
+		}
+
+		.career-popup-box,
+		.city-popup {
+			width: 750rpx;
+			height: 578rpx;
+			background: #fff;
+			border-radius: 24rpx 24rpx 0rpx 0rpx;
+
+
+			.career-popup-header,
+			.city-popup-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 88rpx;
+				padding-right: 36rpx;
+
+				.title {
+					font-size: 32rpx;
+					font-weight: 500;
+					line-height: normal;
+					color: #000000;
+				}
+			}
+
+			.career-popup-content-list,
+			.city-popup-content-list {
+				padding: 0rpx 36rpx;
+				height: 490rpx;
+				overflow-y: scroll;
+				.career-popup-content-item {
+					color: rgba(0, 0, 0, 0.6);
+					font-size: 28rpx;
+					flex-shrink: 0;
+					line-height: 64rpx;
+					margin-top: 32rpx;
+				}
+
+				&::after {
+					content: '';
+					flex: auto;
+					/* 或者flex: 1 */
+				}
+			}
+		}
+	}
+</style>

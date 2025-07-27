@@ -1,0 +1,179 @@
+{
+    "name" : "uniapp-project-z",
+    "appid" : "__UNI__7FF0662",
+    "description" : "",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
+    /* 5+App特有相关 */
+    "app-plus" : {
+        "usingComponents" : true,
+        "nvueStyleCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        /* 模块配置 */
+        "modules" : {
+            "Push" : {},
+            "Record" : {},
+            "Camera" : {},
+            "VideoPlayer" : {}
+        },
+        /* 应用发布信息 */
+        "distribute" : {
+            /* android打包配置 */
+            "android" : {
+                "permissions" : [
+                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                ]
+            },
+            /* ios打包配置 */
+            "ios" : {
+                "dSYMs" : false
+            },
+            /* SDK配置 */
+            "sdkConfigs" : {
+                "push" : {}
+            }
+        },
+        "nativePlugins" : {
+            "GoEasy-Uniapp" : {
+                "OPPO appid" : "",
+                "OPPO appkey" : "",
+                "OPPO appsecret" : "",
+                "HuaWei APP ID" : "",
+                "VIVO AppID" : "",
+                "VIVO AppKey" : "",
+                "XIAOMI AppID" : "",
+                "XIAOMI AppKey" : "",
+                "MEIZU App ID" : "",
+                "MEIZU App Key" : "",
+                "FCM Project ID" : "",
+                "FCM App ID" : "",
+                "FCM current_key" : "",
+                "__plugin_info__" : {
+                    "name" : "GoEasy消息推送v1.5.0",
+                    "description" : "GoEasy消息推送，厂商通道集成, 参数顺序乱七八糟，GoEasy也很无奈：），因为Uniapp插件的参数是无序的",
+                    "platforms" : "Android,iOS",
+                    "url" : "",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : false,
+                    "bought" : -1,
+                    "pid" : "",
+                    "parameters" : {
+                        "OPPO appid" : {
+                            "des" : "",
+                            "key" : "io.goeasy.oppo.app_id",
+                            "value" : "_${OPPO appid}"
+                        },
+                        "OPPO appkey" : {
+                            "des" : "",
+                            "key" : "io.goeasy.oppo.app_key",
+                            "value" : ""
+                        },
+                        "OPPO appsecret" : {
+                            "des" : "",
+                            "key" : "io.goeasy.oppo.app_secret",
+                            "value" : ""
+                        },
+                        "HuaWei APP ID" : {
+                            "des" : "",
+                            "key" : "com.huawei.hms.client.appid",
+                            "value" : ""
+                        },
+                        "VIVO AppID" : {
+                            "des" : "",
+                            "key" : "com.vivo.push.app_id",
+                            "value" : ""
+                        },
+                        "VIVO AppKey" : {
+                            "des" : "",
+                            "key" : "com.vivo.push.api_key",
+                            "value" : ""
+                        },
+                        "XIAOMI AppID" : {
+                            "des" : "",
+                            "key" : "io.goeasy.xiaomi.app_id",
+                            "value" : "_${XIAOMI AppID}"
+                        },
+                        "XIAOMI AppKey" : {
+                            "des" : "",
+                            "key" : "io.goeasy.xiaomi.app_key",
+                            "value" : "_${XIAOMI AppKey}"
+                        },
+                        "MEIZU App ID" : {
+                            "des" : "",
+                            "key" : "io.goeasy.meizu.app_id",
+                            "value" : "_${MEIZU App ID}"
+                        },
+                        "MEIZU App Key" : {
+                            "des" : "",
+                            "key" : "io.goeasy.meizu.app_key",
+                            "value" : ""
+                        },
+                        "FCM Project ID" : {
+                            "des" : "",
+                            "key" : "io.goeasy.fcm.project_id",
+                            "value" : ""
+                        },
+                        "FCM App ID" : {
+                            "des" : "",
+                            "key" : "io.goeasy.fcm.app_id",
+                            "value" : ""
+                        },
+                        "FCM current_key" : {
+                            "des" : "",
+                            "key" : "io.goeasy.fcm.current_key",
+                            "value" : ""
+                        }
+                    }
+                }
+            }
+        }
+    },
+    /* 快应用特有相关 */
+    "quickapp" : {},
+    /* 小程序特有相关 */
+    "mp-weixin" : {
+        "appid" : "wx5e271af078cf3204",
+        "setting" : {
+            "urlCheck" : false,
+            "postcss" : true,
+            "es6" : true,
+            "minified" : true
+        },
+        "usingComponents" : true
+    },
+    "mp-alipay" : {
+        "usingComponents" : true
+    },
+    "mp-baidu" : {
+        "usingComponents" : true
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "vueVersion" : "3"
+}

@@ -1,0 +1,280 @@
+{
+	"pages": [{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/confide/index",
+			"style": {
+				"navigationBarTitleText": "倾听师首页"
+			}
+		},
+		{
+			"path": "pages/confide/detail",
+			"style": {
+				"navigationBarTitleText": "倾听师详情"
+			}
+		},
+		{
+			"path": "pages/consult/index",
+			"style": {
+				"navigationBarTitleText": "咨询师首页"
+			}
+		},
+		{
+			"path": "pages/consult/detail",
+			"style": {
+				"navigationBarTitleText": "咨询师详情"
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/message/index",
+			"style": {
+				"navigationBarTitleText": "消息"
+			}
+		},
+		{
+			"path": "pages/my/index",
+			"style": {
+				"navigationStyle": "custom",
+				"backgroundColor": "#F4F6F8",
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/readArticle/readArticle",
+			"style": {
+				"navigationBarTitleText": "文章列表"
+			}
+		},
+		{
+			"path": "pages/readArticle/articleDetail",
+			"style": {
+				"navigationBarTitleText": "文章详情"
+			}
+		},
+		{
+			"path": "pages/settled/settled",
+			"style": {
+				"navigationBarTitleText": "入驻"
+			}
+		}, {
+			"path": "pages/consult-feel/consult-feel",
+			"style": {
+				"navigationBarTitleText": "咨询感受"
+			}
+		},
+		{
+			"path": "pages/evaluate/evaluate",
+			"style": {
+				"navigationBarTitleText": "评价列表"
+			}
+		},
+		{
+			"path": "pages/forum/index/index",
+			"style": {
+				"navigationBarTitleText": "论坛首页"
+			}
+		},
+		{
+			"path": "pages/forum/write/write",
+			"style": {
+				"navigationBarTitleText": "写"
+			}
+		},
+		{
+			"path": "pages/forum/my/my",
+			"style": {
+				"navigationBarTitleText": "个人空间"
+			}
+		},
+		{
+			"path": "pages/forum/other/other",
+			"style": {
+				"navigationBarTitleText": "其他人空间"
+			}
+		},
+		{
+			"path": "pages/forum/mailbox/mailbox",
+			"style": {
+				"navigationBarTitleText": "信箱详情"
+			}
+		},
+		{
+			"path": "pages/forum/write/ask-question/ask-question",
+			"style": {
+				"navigationBarTitleText": "提问题"
+			}
+		},
+		{
+			"path": "pages/forum/write/send-dynamics/send-dynamics",
+			"style": {
+				"navigationBarTitleText": "发动态"
+			}
+		},
+		{
+			"path": "pages/forum/write/write-mailbox/write-mailbox",
+			"style": {
+				"navigationBarTitleText": "写信"
+			}
+		},
+		{
+			"path": "pages/forum/my/userInfo",
+			"style": {
+				"navigationBarTitleText": "用户信息"
+			}
+		},
+		{
+			"path": "pages/forum/write/choose-topic/choose-topic",
+			"style": {
+				"navigationBarTitleText": "选择话题"
+			}
+		},
+		{
+			"path": "pages/psychological-test/index/index",
+			"style": {
+				"navigationBarTitleText": "心理测试"
+			}
+		},
+		{
+			"path": "pages/psychological-test/order/order",
+			"style": {
+				"navigationBarTitleText": "我的评测"
+			}
+		},
+		{
+			"path": "pages/psychological-test/test-type/test-type",
+			"style": {
+				"navigationBarTitleText": "评测类型"
+			}
+		},
+		{
+			"path": "pages/psychological-test/start-test/start-test",
+			"style": {
+				"navigationBarTitleText": "潜意识投射测试"
+			}
+		},
+		{
+			"path": "pages/psychological-test/comment/comment",
+			"style": {
+				"navigationBarTitleText": "评论"
+			}
+		},
+		{
+			"path": "pages/psychological-test/contact-consult/contact-consult",
+			"style": {
+				"navigationBarTitleText": "联系咨询师"
+			}
+		},
+		{
+			"path": "pages/psychological-test/test-result/test-result",
+			"style": {
+				"navigationBarTitleText": "测试结果"
+			}
+		},
+		{
+			"path": "pages/psychological-test/charge-test/charge-test",
+			"style": {
+				"navigationBarTitleText": "收费测试"
+			}
+		},
+		{
+			"path": "pages/psychological-test/free-test/free-test",
+			"style": {
+				"navigationBarTitleText": "免费测试"
+			}
+		},
+		{
+			"path": "pages/message/private-chat",
+			"style": {
+				"navigationBarTitleText": "uni-app",
+				"navigationBarBackgroundColor": "#F1F1F1",
+				"enablePullDownRefresh": true,
+				"navigationStyle": ""
+			}
+		},
+		{
+			"path": "pages/auth/auth",
+			"style": {
+				"navigationBarTitleText": "认证",
+				"navigationBarBackgroundColor": "#F4F6F8",
+				"navigationStyle": "",
+				"navigationBarTextStyle": "black"
+			}
+		}, {
+			"path": "pages/auth/cityChoose",
+			"style": {
+				"navigationBarTitleText": "城市选择",
+				"navigationBarBackgroundColor": "#F4F6F8",
+				"navigationStyle": "",
+				"navigationBarTextStyle": "black"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#3cc51f",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "/static/switchIcon/index.png",
+			"selectedIconPath": "/static/switchIcon/index-active.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/consult/index",
+			"iconPath": "/static/switchIcon/consult.png",
+			"selectedIconPath": "/static/switchIcon/consult-active.png",
+			"text": "咨询"
+		}, {
+			"pagePath": "pages/confide/index",
+			"iconPath": "/static/switchIcon/confide.png",
+			"selectedIconPath": "/static/switchIcon/confide-active.png",
+			"text": "倾诉"
+		}, {
+			"pagePath": "pages/message/index",
+			"iconPath": "/static/switchIcon/message.png",
+			"selectedIconPath": "/static/switchIcon/message-active.png",
+			"text": "消息"
+		}, {
+			"pagePath": "pages/my/index",
+			"iconPath": "/static/switchIcon/my.png",
+			"selectedIconPath": "/static/switchIcon/my-active.png",
+			"text": "我的"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTitleText": "",
+		"navigationStyle": "custom",
+		"navigationBarBackgroundColor": "#ffffff",
+		"pageOrientation": "portrait",
+		"navigationBarTextStyle": "black",
+		"backgroundColor": "#F4F6F8",
+		"backgroundColorTop": "#F4F5F6",
+		"backgroundColorBottom": "#F4F5F6",
+		"h5": {
+			"maxWidth": 1190,
+			"navigationBarTextStyle": "white",
+			"navigationBarBackgroundColor": "#007AFF"
+		},
+		"bounce":"none"
+	},
+	"uniIdRouter": {},
+	"condition": {
+		"current": 0,
+		"list": [{
+			"name": "",
+			"path": "pages/login/login",
+			"query": ""
+		}]
+	}
+}

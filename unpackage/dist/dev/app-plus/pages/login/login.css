@@ -1,0 +1,199 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.login-box {
+  background: #fff;
+  height: 100vh;
+  width: 100vw;
+}
+.login-box .login-bg {
+  position: relative;
+  width: 23.4375rem;
+  height: 17.9375rem;
+}
+.login-box .login-bg .bg-top {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.login-box .login-bg .bg-top .image {
+  width: 100%;
+  height: 100%;
+}
+.login-box .login-bg .bg-top-content {
+  position: absolute;
+  top: 5.25rem;
+  left: 1.875rem;
+}
+.login-box .login-bg .bg-top-content .logo {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+.login-box .login-bg .bg-top-content .welcome {
+  line-height: 1;
+  margin-top: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+  color: #212528;
+}
+.login-box .login-bg .bg-top-content .welcome .txt {
+  color: #35CA95;
+}
+.login-box .login-bg .bg-top-content .msg {
+  color: #000000;
+  margin-top: 0.75rem;
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
+.login-box .login-area {
+  padding: 0 1.8125rem;
+  border-radius: 1rem;
+  position: relative;
+  top: -2.8125rem;
+  background: #fff;
+}
+.login-box .login-area .change-login-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  padding-top: 1.5625rem;
+}
+.login-box .login-area .change-login-type .login-type {
+  position: relative;
+}
+.login-box .login-area .change-login-type .login-type .image {
+  width: 10rem;
+  height: 3rem;
+}
+.login-box .login-area .change-login-type .login-type .login-msg {
+  position: absolute;
+  width: 10rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #34A755;
+  font-size: 0.875rem;
+  top: 0;
+}
+.login-box .login-area .change-login-type .login-type .active {
+  color: #fff;
+}
+.login-box .login-area .login-content .code,
+.login-box .login-area .login-content .uni-input {
+  border-radius: 30px;
+  width: 19.6875rem;
+  height: 3rem;
+  background: #F6F6F6;
+  padding: 0 0.625rem;
+  margin-top: 1.25rem;
+}
+.login-box .login-area .login-content .code {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.login-box .login-area .login-content .code .code-input {
+  width: 14.0625rem;
+}
+.login-box .login-area .login-content .code .send-code {
+  font-size: 0.8125rem;
+  color: #34A755;
+}
+.login-box .login-area .login-content .msg {
+  color: #9E9E9E;
+  font-size: 0.8125rem;
+}
+.login-box .login-area .login-content .login-btn {
+  width: 19.6875rem;
+  height: 3rem;
+  background-color: #34A755;
+  border-radius: 1.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1.25rem;
+}
+.login-box .login-area .wechat-login {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.login-box .login-area .wechat-login .wechat-msg {
+  color: #9F9F9F;
+  font-size: 0.75rem;
+  font-weight: 400;
+  position: relative;
+  text-align: center;
+}
+.login-box .login-area .wechat-login .wechat-msg::after {
+  width: 7.3125rem;
+  height: 0.03125rem;
+  background-color: rgba(0, 0, 0, 0.08);
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0.4375rem;
+}
+.login-box .login-area .wechat-login .wechat-msg::before {
+  width: 7.3125rem;
+  height: 0.03125rem;
+  background-color: rgba(0, 0, 0, 0.08);
+  position: absolute;
+  content: "";
+  right: 0;
+  top: 0.4375rem;
+}
+.login-box .login-area .wechat-login .wechat-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-box .login-area .wechat-login .wechat-content .wechat {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: 0.625rem;
+}
+.login-box .agree {
+  font-size: 0.75rem;
+  color: #9F9F9F;
+  position: absolute;
+  bottom: 1.25rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.login-box .agree .txt {
+  color: #000;
+}

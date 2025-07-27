@@ -1,0 +1,15 @@
+{
+  "hash": "95dafa22",
+  "configHash": "3a908714",
+  "lockfileHash": "301d29f2",
+  "browserHash": "174fd6b9",
+  "optimized": {
+    "json-bigint": {
+      "src": "../../../../../node_modules/json-bigint/index.js",
+      "file": "json-bigint.js",
+      "fileHash": "3d558707",
+      "needsInterop": true
+    }
+  },
+  "chunks": {}
+}

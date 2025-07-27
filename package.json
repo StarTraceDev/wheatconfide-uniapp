@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "bignumber.js": "^9.3.1",
+    "goeasy": "^2.13.17",
+    "json-bigint": "^1.0.0",
+    "lodash-es": "^4.17.21",
+    "pinia": "^3.0.2",
+    "vue-danmaku": "^2.0.1"
+  }
+}

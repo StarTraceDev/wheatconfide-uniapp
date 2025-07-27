@@ -1,0 +1,270 @@
+{
+  "@platforms": [
+    "android",
+    "iPhone",
+    "iPad"
+  ],
+  "id": "__UNI__7FF0662",
+  "name": "uniapp-project-z",
+  "version": {
+    "name": "1.0.0",
+    "code": "100"
+  },
+  "description": "",
+  "developer": {
+    "name": "",
+    "email": "",
+    "url": ""
+  },
+  "permissions": {
+    "Push": {},
+    "Record": {},
+    "Camera": {},
+    "VideoPlayer": {},
+    "UniNView": {
+      "description": "UniNView原生渲染"
+    }
+  },
+  "plus": {
+    "useragent": {
+      "value": "uni-app",
+      "concatenate": true
+    },
+    "splashscreen": {
+      "target": "id:1",
+      "autoclose": true,
+      "waiting": true,
+      "delay": 0
+    },
+    "popGesture": "close",
+    "launchwebview": {
+      "id": "1",
+      "kernel": "WKWebview"
+    },
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3,
+    "distribute": {
+      "google": {
+        "permissions": [
+          "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+          "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+          "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+          "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+          "<uses-feature android:name=\"android.hardware.camera\"/>",
+          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+        ]
+      },
+      "apple": {
+        "dSYMs": false
+      },
+      "plugins": {
+        "push": {},
+        "audio": {
+          "mp3": {
+            "description": "Android平台录音支持MP3格式文件"
+          }
+        }
+      }
+    },
+    "nativePlugins": {
+      "GoEasy-Uniapp": {
+        "OPPO appid": "",
+        "OPPO appkey": "",
+        "OPPO appsecret": "",
+        "HuaWei APP ID": "",
+        "VIVO AppID": "",
+        "VIVO AppKey": "",
+        "XIAOMI AppID": "",
+        "XIAOMI AppKey": "",
+        "MEIZU App ID": "",
+        "MEIZU App Key": "",
+        "FCM Project ID": "",
+        "FCM App ID": "",
+        "FCM current_key": "",
+        "__plugin_info__": {
+          "name": "GoEasy消息推送v1.5.0",
+          "description": "GoEasy消息推送，厂商通道集成, 参数顺序乱七八糟，GoEasy也很无奈：），因为Uniapp插件的参数是无序的",
+          "platforms": "Android,iOS",
+          "url": "",
+          "android_package_name": "",
+          "ios_bundle_id": "",
+          "isCloud": false,
+          "bought": -1,
+          "pid": "",
+          "parameters": {
+            "OPPO appid": {
+              "des": "",
+              "key": "io.goeasy.oppo.app_id",
+              "value": "_${OPPO appid}"
+            },
+            "OPPO appkey": {
+              "des": "",
+              "key": "io.goeasy.oppo.app_key",
+              "value": ""
+            },
+            "OPPO appsecret": {
+              "des": "",
+              "key": "io.goeasy.oppo.app_secret",
+              "value": ""
+            },
+            "HuaWei APP ID": {
+              "des": "",
+              "key": "com.huawei.hms.client.appid",
+              "value": ""
+            },
+            "VIVO AppID": {
+              "des": "",
+              "key": "com.vivo.push.app_id",
+              "value": ""
+            },
+            "VIVO AppKey": {
+              "des": "",
+              "key": "com.vivo.push.api_key",
+              "value": ""
+            },
+            "XIAOMI AppID": {
+              "des": "",
+              "key": "io.goeasy.xiaomi.app_id",
+              "value": "_${XIAOMI AppID}"
+            },
+            "XIAOMI AppKey": {
+              "des": "",
+              "key": "io.goeasy.xiaomi.app_key",
+              "value": "_${XIAOMI AppKey}"
+            },
+            "MEIZU App ID": {
+              "des": "",
+              "key": "io.goeasy.meizu.app_id",
+              "value": "_${MEIZU App ID}"
+            },
+            "MEIZU App Key": {
+              "des": "",
+              "key": "io.goeasy.meizu.app_key",
+              "value": ""
+            },
+            "FCM Project ID": {
+              "des": "",
+              "key": "io.goeasy.fcm.project_id",
+              "value": ""
+            },
+            "FCM App ID": {
+              "des": "",
+              "key": "io.goeasy.fcm.app_id",
+              "value": ""
+            },
+            "FCM current_key": {
+              "des": "",
+              "key": "io.goeasy.fcm.current_key",
+              "value": ""
+            }
+          }
+        }
+      }
+    },
+    "statusbar": {
+      "immersed": "supportedDevice",
+      "style": "dark",
+      "background": "#ffffff"
+    },
+    "uniStatistics": {
+      "enable": false
+    },
+    "allowsInlineMediaPlayback": true,
+    "safearea": {
+      "background": "#ffffff",
+      "bottom": {
+        "offset": "auto"
+      }
+    },
+    "uni-app": {
+      "control": "uni-v3",
+      "vueVersion": "3",
+      "compilerVersion": "4.66",
+      "nvueCompiler": "uni-app",
+      "renderer": "auto",
+      "nvue": {
+        "flex-direction": "column"
+      },
+      "nvueLaunchMode": "normal",
+      "webView": {
+        "minUserAgentVersion": "49.0"
+      }
+    },
+    "tabBar": {
+      "position": "bottom",
+      "color": "#7A7E83",
+      "selectedColor": "#3cc51f",
+      "borderStyle": "rgba(0,0,0,0.4)",
+      "blurEffect": "none",
+      "fontSize": "10px",
+      "iconWidth": "24px",
+      "spacing": "3px",
+      "height": "50px",
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "iconPath": "/static/switchIcon/index.png",
+          "selectedIconPath": "/static/switchIcon/index-active.png",
+          "text": "首页"
+        },
+        {
+          "pagePath": "pages/consult/index",
+          "iconPath": "/static/switchIcon/consult.png",
+          "selectedIconPath": "/static/switchIcon/consult-active.png",
+          "text": "咨询"
+        },
+        {
+          "pagePath": "pages/confide/index",
+          "iconPath": "/static/switchIcon/confide.png",
+          "selectedIconPath": "/static/switchIcon/confide-active.png",
+          "text": "倾诉"
+        },
+        {
+          "pagePath": "pages/message/index",
+          "iconPath": "/static/switchIcon/message.png",
+          "selectedIconPath": "/static/switchIcon/message-active.png",
+          "text": "消息"
+        },
+        {
+          "pagePath": "pages/my/index",
+          "iconPath": "/static/switchIcon/my.png",
+          "selectedIconPath": "/static/switchIcon/my-active.png",
+          "text": "我的"
+        }
+      ],
+      "backgroundColor": "#ffffff",
+      "selectedIndex": 0,
+      "shown": true
+    }
+  },
+  "app-harmony": {
+    "useragent": {
+      "value": "uni-app",
+      "concatenate": true
+    },
+    "uniStatistics": {
+      "enable": false
+    },
+    "safearea": {
+      "background": "#ffffff",
+      "bottom": {
+        "offset": "auto"
+      }
+    }
+  },
+  "screenOrientation": [
+    "portrait-primary",
+    "portrait-secondary"
+  ],
+  "launch_path": "__uniappview.html"
+}
