@@ -187,7 +187,7 @@
 					</view>
 				</view>
 				<view class="article-list">
-					<RecommendArticleItem v-for="i in 5" class="article-item" @click="openArticleFn(2)">
+					<RecommendArticleItem :info="i" v-for="i in data.list" class="article-item" @click="openArticleDetailFn(i)">
 					</RecommendArticleItem>
 				</view>
 			</view>
@@ -235,8 +235,12 @@
 		userlnfo
 	} from "@/common/api/apis.js"
 	import {
+		getArticleList
+	} from "@/common/api/article.js"
+	import {
 		ref,
-		onMounted
+		onMounted,
+		reactive
 	} from 'vue';
 	import ConfideTeacherListItem from '@/components/Confide-Teacher-List-Item.vue';
 	import ConsultTeacherListItem from '@/components/Consult-Teacher-List-Item.vue';
@@ -249,6 +253,16 @@
 	const statusBarHeight = ref(globalStore.statusBarHeight + 20 + 'rpx');
 	const searchContentHeight = ref(globalStore.statusBarHeight + 56 + 'rpx');
 	let scrollTop = ref(0);
+	const data = reactive({
+		listParams:{
+			"current": 1,
+			"size": 10,
+			"params":{
+				
+			}
+		},
+		list:[]
+	})
 	let iconList = ref([{
 		txt: "人际关系",
 		url: "/static/index/icon1.png"
@@ -349,10 +363,25 @@
 	const getUserlnfo = async () => {
 		let res = await userlnfo();
 		globalStore.setUserInfo(res.data);
-		console.log(res)
+		// console.log(res)
 	}
+	
+	const openArticleDetailFn = (item) => {
+		uni.navigateTo({
+			url: "/pages/readArticle/articleDetail?id="+item.id
+		})
+	}
+	
+	const getList = async () => {
+		let res = await getArticleList(data.listParams);
+		data.list = res.data.records
+		console.log('========================')
+	}
+	
 	onMounted(() => {
-		getUserlnfo()
+		// getUserlnfo()
+		
+		getList()
 	});
 </script>
 <style lang="scss" scoped>

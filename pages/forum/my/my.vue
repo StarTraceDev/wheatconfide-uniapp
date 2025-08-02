@@ -8,7 +8,7 @@
 				<view class="user-info-content">
 					<image src="@/static/my/profile.png" class="profile"></image>
 					<view>
-						<view class="nick-name">大石头</view>
+						<view class="nick-name">{{ userlnfo1.id}}</view>
 						<view class="id-num">
 							<text>ID：12367263732</text>
 						</view>
@@ -58,6 +58,9 @@
 </template>
 <script setup>
 	import {
+		userlnfo
+	} from "@/common/api/apis.js"
+	import {
 		nextTick,
 		onMounted,
 		ref
@@ -80,7 +83,9 @@
 		label: "信箱"
 	}]);
 
-
+	const userlnfo1 = ref({
+		
+	});
 
 	const headerTabsActive = ref(0);
 	const headerTabsHandler = (options) => {
@@ -107,6 +112,19 @@
 			url:'/pages/forum/my/userInfo'
 		})
 	}
+	
+	/**
+	 * 获取当前用户信息
+	 */
+	const getUserlnfo = async () => {
+		let res = await userlnfo();
+		userlnfo1.value = res.data;
+		globalStore.setUserInfo(res.data);
+		console.log(res.data)
+	}
+	onMounted(() => {
+		getUserlnfo()
+	});
 </script>
 <style lang="scss" scoped>
 	.forum-my-box {

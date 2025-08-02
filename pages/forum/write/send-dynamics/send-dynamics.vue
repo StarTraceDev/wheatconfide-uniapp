@@ -83,7 +83,7 @@
 		let res = await saveEmotion({
 			"content": content.value
 		});
-		replyContent.value=""
+		// replyContent.value=""
 		uni.showToast({
 		    title: '发布成功',
 		    icon: 'none', // 可选值 'success', 'loading', 'none'
