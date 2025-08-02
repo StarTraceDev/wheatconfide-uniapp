@@ -79,7 +79,8 @@
 	const loginFn = async () => {
 		if (type.value == "2") {
 			let res = await quickReg(state.value);
-			store.setToken(res.data.token);
+			// uni.setStorageSync('token', res.data.token)
+			// store.setToken(res.data.token);
 		}
 		if (type.value == "1") {
 			let res = await smsLogin(state.value);

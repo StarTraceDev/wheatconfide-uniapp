@@ -37,6 +37,9 @@
 				</view>
 				<view class="contact">文章转载/侵权，请联系邮箱：<text class="txt">6757567@163.com</text></view>
 			</view>
+			<view v-for="(item,index) in commentList" :key="index">
+				{{ item.content }}
+			</view>
 			<view class="hot-psychological-box">
 				<view class="hot-psychological-header">
 					<view class="title">热门咨询师</view>
@@ -87,7 +90,8 @@
 <script setup>
 	import {
 		onMounted,
-		ref
+		ref,
+		reactive
 	} from 'vue';
 	import {
 		useGlobalDataStore
@@ -108,6 +112,16 @@
 	const route = useRoute();
 	const tabActive = ref(0);
 	const replyContent = ref("");
+	const data = reactive({
+		listParams:{
+			"current": 1,
+			"size": 10,
+			"params":{
+				
+			}
+		},
+		list:[]
+	})
 	const tabLists = ref([{
 		txt: "推荐",
 		id: 1
@@ -175,11 +189,10 @@
 	}
 	
 	const getList = async () => {
-		let res = await getCommentById({
-			id: route.query.id
-		});
+		data.listParams.params.articleId = route.query.id
+		let res = await getCommentById(data.listParams);
 		
-		commentList.value = res.data;
+		commentList.value = res.data.records;
 	}
 
 	const onSaveComment = async () => {
