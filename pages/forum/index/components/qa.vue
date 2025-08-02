@@ -69,7 +69,7 @@
 	} from 'vue';
 	import {
 		getAnswerList
-	} from "@/api/answer.js"
+	} from "@/common/api/answer.js"
 	import share from '@/components/share/share.vue'
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
 	const sharePopup = ref(null)

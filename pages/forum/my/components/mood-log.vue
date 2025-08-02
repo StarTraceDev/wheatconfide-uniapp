@@ -51,7 +51,7 @@
 	} from 'vue';
 	import {
 		getArticleList
-	} from "@/api/article.js"
+	} from "@/common/api/article.js"
 	import share from '@/components/share/share.vue'
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
 	const sharePopup = ref(null)

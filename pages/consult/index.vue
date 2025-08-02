@@ -102,7 +102,12 @@
 <script setup>
 	import {
 		getConsultantList
-	} from "@/api/consultant.js"
+	} from "@/common/api/consultant.js"
+	import {
+		quickReg,
+		sendSms,
+		smsLogin
+	} from "@/common/api/apis.js"
 	import {
 		onMounted,
 		ref,

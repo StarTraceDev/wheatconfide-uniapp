@@ -61,7 +61,7 @@
 	} from 'vue';
 	import {
 		getWorryList
-	} from "@/api/worry.js"
+	} from "@/common/api/worry.js"
 	import share from '@/components/share/share.vue'
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
 	const props = defineProps(['statusBarHeight']);

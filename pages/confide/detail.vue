@@ -292,7 +292,7 @@
 	} from '@/stores/global.js';
 	import {
 		getConsultantById
-	} from "@/api/consultant.js";
+	} from "@/common/api/consultant.js";
 	import {
 		useRoute
 	} from 'vue-router'; // 引入路由钩子

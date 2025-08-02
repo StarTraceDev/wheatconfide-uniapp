@@ -233,7 +233,7 @@
 <script setup>
 	import {
 		userlnfo
-	} from "@/api/apis.js"
+	} from "@/common/api/apis.js"
 	import {
 		ref,
 		onMounted

@@ -152,6 +152,17 @@
     },
     /* 快应用特有相关 */
     "quickapp" : {},
+	"h5": {
+	  "devServer": {
+	    "proxy": {
+	      "/api": {
+	        "target": "https://ceshi.maimiaoqingsu.com/",
+	        "changeOrigin": true
+	        // "pathRewrite": { "^/api": "" }
+	      }
+	    }
+	  }
+	},
     /* 小程序特有相关 */
     "mp-weixin" : {
         "appid" : "wx5e271af078cf3204",
@@ -163,6 +174,7 @@
         },
         "usingComponents" : true
     },
+
     "mp-alipay" : {
         "usingComponents" : true
     },

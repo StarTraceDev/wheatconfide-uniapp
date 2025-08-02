@@ -143,7 +143,7 @@
 	} from '@/stores/global.js';
 	import {
 		getConsultantList
-	} from "@/api/consultant.js"
+	} from "@/common/api/consultant.js"
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	const scrollTop = ref(0);

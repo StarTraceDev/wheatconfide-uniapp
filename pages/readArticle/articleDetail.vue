@@ -100,7 +100,7 @@
 		getArticleDetail,
 		getCommentById,
 		saveComment
-	} from "@/api/article.js"
+	} from "@/common/api/article.js"
 	import RecommendArticleItem from '@/components/Recommend-Article-Item';
 	import ConsultTeacherListItem from '@/components/Consult-Teacher-List-Item.vue';
 	import {

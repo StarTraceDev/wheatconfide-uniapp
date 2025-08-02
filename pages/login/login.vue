@@ -54,7 +54,7 @@
 		quickReg,
 		sendSms,
 		smsLogin
-	} from "@/api/apis.js"
+	} from "@/common/api/apis.js"
 	// 在组件中使用
 	import {
 		useGlobalDataStore
@@ -79,8 +79,8 @@
 	const loginFn = async () => {
 		if (type.value == "2") {
 			let res = await quickReg(state.value);
-			// uni.setStorageSync('token', res.data.token)
-			// store.setToken(res.data.token);
+			uni.setStorageSync('token', res.data.token)
+			store.setToken(res.data.token);
 		}
 		if (type.value == "1") {
 			let res = await smsLogin(state.value);

@@ -46,7 +46,7 @@
 	
 	import {
 		saveEmotion
-	} from "@/api/worry.js"
+	} from "@/common/api/worry.js"
 	
 	const backFn = () => {
 		uni.navigateBack({

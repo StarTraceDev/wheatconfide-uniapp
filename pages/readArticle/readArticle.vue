@@ -53,7 +53,7 @@
 	} from '@/stores/global.js';
 	import {
 		getArticleList
-	} from "@/api/article.js"
+	} from "@/common/api/article.js"
 	import RecommendArticleItem from '@/components/Recommend-Article-Item'
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
