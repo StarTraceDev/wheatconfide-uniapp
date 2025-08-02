@@ -56,15 +56,39 @@ if (uni.restoreGlobal) {
   function resolveEasycom(component, easycom) {
     return typeof component === "string" ? easycom : component;
   }
-  const createHook = (lifecycle) => (hook, target = vue.getCurrentInstance()) => {
+  const createLifeCycleHook = (lifecycle, flag = 0) => (hook, target = vue.getCurrentInstance()) => {
     !vue.isInSSRComponentSetup && vue.injectHook(lifecycle, hook, target);
   };
-  const onShow = /* @__PURE__ */ createHook(ON_SHOW);
-  const onHide = /* @__PURE__ */ createHook(ON_HIDE);
-  const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
-  const onReady = /* @__PURE__ */ createHook(ON_READY);
-  const onUnload = /* @__PURE__ */ createHook(ON_UNLOAD);
-  const onPullDownRefresh = /* @__PURE__ */ createHook(ON_PULL_DOWN_REFRESH);
+  const onShow = /* @__PURE__ */ createLifeCycleHook(
+    ON_SHOW,
+    1 | 2
+    /* HookFlags.PAGE */
+  );
+  const onHide = /* @__PURE__ */ createLifeCycleHook(
+    ON_HIDE,
+    1 | 2
+    /* HookFlags.PAGE */
+  );
+  const onLoad = /* @__PURE__ */ createLifeCycleHook(
+    ON_LOAD,
+    2
+    /* HookFlags.PAGE */
+  );
+  const onReady = /* @__PURE__ */ createLifeCycleHook(
+    ON_READY,
+    2
+    /* HookFlags.PAGE */
+  );
+  const onUnload = /* @__PURE__ */ createLifeCycleHook(
+    ON_UNLOAD,
+    2
+    /* HookFlags.PAGE */
+  );
+  const onPullDownRefresh = /* @__PURE__ */ createLifeCycleHook(
+    ON_PULL_DOWN_REFRESH,
+    2
+    /* HookFlags.PAGE */
+  );
   var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
   function getDefaultExportFromCjs(x2) {
     return x2 && x2.__esModule && Object.prototype.hasOwnProperty.call(x2, "default") ? x2["default"] : x2;
@@ -3740,6 +3764,7 @@ This will fail in production.`);
       const loginFn = async () => {
         if (type.value == "2") {
           let res = await quickReg(state.value);
+          uni.setStorageSync("token", res.data.token);
           store.setToken(res.data.token);
         }
         if (type.value == "1") {
@@ -3753,7 +3778,7 @@ This will fail in production.`);
         let res = await sendSms({
           phone: state.value.userName
         });
-        formatAppLog("log", "at pages/login/login.vue:99", res);
+        formatAppLog("log", "at pages/login/login.vue:100", res);
       };
       const __returned__ = { store, get type() {
         return type;
@@ -3926,7 +3951,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["render", _sfc_render$13], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/login/login.vue"]]);
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["render", _sfc_render$13], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/login/login.vue"]]);
   const fontData = [
     {
       "font_class": "arrow-down",
@@ -4646,7 +4671,7 @@ This will fail in production.`);
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$4 = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["render", _sfc_render$12], ["__scopeId", "data-v-d31e1c47"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-icons/components/uni-icons/uni-icons.vue"]]);
+  const __easycom_0$4 = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["render", _sfc_render$12], ["__scopeId", "data-v-d31e1c47"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-icons/components/uni-icons/uni-icons.vue"]]);
   const isObject = (val) => val !== null && typeof val === "object";
   const defaultDelimiters = ["{", "}"];
   class BaseFormatter {
@@ -5171,7 +5196,7 @@ This will fail in production.`);
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const __easycom_1$3 = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["render", _sfc_render$11], ["__scopeId", "data-v-f07ef577"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar.vue"]]);
+  const __easycom_1$3 = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["render", _sfc_render$11], ["__scopeId", "data-v-f07ef577"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar.vue"]]);
   const getConsultantList = (params, config2 = {}) => http.post(
     "/api/consultant/consultant/getConsultantList",
     params,
@@ -5530,7 +5555,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesConfideIndex = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["render", _sfc_render$10], ["__scopeId", "data-v-882f34cc"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/confide/index.vue"]]);
+  const PagesConfideIndex = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["render", _sfc_render$10], ["__scopeId", "data-v-882f34cc"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/confide/index.vue"]]);
   const _sfc_main$10 = {
     name: "UniStatusBar",
     data() {
@@ -5553,7 +5578,7 @@ This will fail in production.`);
       /* STYLE */
     );
   }
-  const statusBar = /* @__PURE__ */ _export_sfc(_sfc_main$10, [["render", _sfc_render$$], ["__scopeId", "data-v-7920e3e0"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-status-bar.vue"]]);
+  const statusBar = /* @__PURE__ */ _export_sfc(_sfc_main$10, [["render", _sfc_render$$], ["__scopeId", "data-v-7920e3e0"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-status-bar.vue"]]);
   const getVal = (val) => typeof val === "number" ? val + "px" : val;
   const _sfc_main$$ = {
     name: "UniNavBar",
@@ -5830,7 +5855,7 @@ This will fail in production.`);
       /* CLASS */
     );
   }
-  const __easycom_1$2 = /* @__PURE__ */ _export_sfc(_sfc_main$$, [["render", _sfc_render$_], ["__scopeId", "data-v-26544265"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-nav-bar.vue"]]);
+  const __easycom_1$2 = /* @__PURE__ */ _export_sfc(_sfc_main$$, [["render", _sfc_render$_], ["__scopeId", "data-v-26544265"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-nav-bar.vue"]]);
   const _sfc_main$_ = {
     name: "UniSteps",
     props: {
@@ -6021,7 +6046,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const __easycom_2$4 = /* @__PURE__ */ _export_sfc(_sfc_main$_, [["render", _sfc_render$Z], ["__scopeId", "data-v-c0a11c53"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-steps/components/uni-steps/uni-steps.vue"]]);
+  const __easycom_2$4 = /* @__PURE__ */ _export_sfc(_sfc_main$_, [["render", _sfc_render$Z], ["__scopeId", "data-v-c0a11c53"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-steps/components/uni-steps/uni-steps.vue"]]);
   const _sfc_main$Z = {
     name: "UniRate",
     props: {
@@ -6287,7 +6312,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const __easycom_2$3 = /* @__PURE__ */ _export_sfc(_sfc_main$Z, [["render", _sfc_render$Y], ["__scopeId", "data-v-5c8fbdf3"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-rate/components/uni-rate/uni-rate.vue"]]);
+  const __easycom_2$3 = /* @__PURE__ */ _export_sfc(_sfc_main$Z, [["render", _sfc_render$Y], ["__scopeId", "data-v-5c8fbdf3"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-rate/components/uni-rate/uni-rate.vue"]]);
   /*!
     * vue-router v4.3.0
     * (c) 2024 Eduardo San Martin Morote
@@ -6463,7 +6488,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const MoteLinesDivide = /* @__PURE__ */ _export_sfc(_sfc_main$Y, [["render", _sfc_render$X], ["__scopeId", "data-v-8964ac41"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/mote-lines-divide/mote-lines-divide.vue"]]);
+  const MoteLinesDivide = /* @__PURE__ */ _export_sfc(_sfc_main$Y, [["render", _sfc_render$X], ["__scopeId", "data-v-8964ac41"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/mote-lines-divide/mote-lines-divide.vue"]]);
   const _imports_0$e = "/static/common/back_circle.png";
   const _imports_2$8 = "/static/common/share_circle.png";
   const _imports_3$8 = "/static/common/yellow-follow.png";
@@ -7055,7 +7080,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesConfideDetail = /* @__PURE__ */ _export_sfc(_sfc_main$X, [["render", _sfc_render$W], ["__scopeId", "data-v-0094f2d4"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/confide/detail.vue"]]);
+  const PagesConfideDetail = /* @__PURE__ */ _export_sfc(_sfc_main$X, [["render", _sfc_render$W], ["__scopeId", "data-v-0094f2d4"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/confide/detail.vue"]]);
   const _imports_1$c = "/static/consult/find-teacher-image.png";
   const _imports_2$7 = "/static/consult/try-consult-image.png";
   const _imports_3$6 = "/static/consult/free-consult-image.png";
@@ -7095,10 +7120,16 @@ This will fail in production.`);
       const getList = async () => {
         let res = await getConsultantList(data.listParpms);
         data.list = res.data.records;
-        formatAppLog("log", "at pages/consult/index.vue:148", res);
+        formatAppLog("log", "at pages/consult/index.vue:153", res);
       };
       const __returned__ = { globalStore, statusBarHeight, scrollTop, data, onPageScroll, searchFn, openDetail, getList, get getConsultantList() {
         return getConsultantList;
+      }, get quickReg() {
+        return quickReg;
+      }, get sendSms() {
+        return sendSms;
+      }, get smsLogin() {
+        return smsLogin;
       }, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, get useGlobalDataStore() {
         return useGlobalDataStore;
       } };
@@ -7363,7 +7394,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesConsultIndex = /* @__PURE__ */ _export_sfc(_sfc_main$W, [["render", _sfc_render$V], ["__scopeId", "data-v-7a0095d3"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/consult/index.vue"]]);
+  const PagesConsultIndex = /* @__PURE__ */ _export_sfc(_sfc_main$W, [["render", _sfc_render$V], ["__scopeId", "data-v-7a0095d3"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/consult/index.vue"]]);
   class MPAnimation {
     constructor(options, _this) {
       this.options = options;
@@ -7743,7 +7774,7 @@ This will fail in production.`);
       [vue.vShow, $data.isShow]
     ]);
   }
-  const __easycom_0$3 = /* @__PURE__ */ _export_sfc(_sfc_main$V, [["render", _sfc_render$U], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-transition/components/uni-transition/uni-transition.vue"]]);
+  const __easycom_0$3 = /* @__PURE__ */ _export_sfc(_sfc_main$V, [["render", _sfc_render$U], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-transition/components/uni-transition/uni-transition.vue"]]);
   const _sfc_main$U = {
     name: "uniPopup",
     components: {},
@@ -8157,7 +8188,7 @@ This will fail in production.`);
       /* CLASS */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_2$2 = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["render", _sfc_render$T], ["__scopeId", "data-v-4dd3c44b"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-popup/components/uni-popup/uni-popup.vue"]]);
+  const __easycom_2$2 = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["render", _sfc_render$T], ["__scopeId", "data-v-4dd3c44b"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-popup/components/uni-popup/uni-popup.vue"]]);
   const _imports_3$5 = "/static/common/address.png";
   const _imports_4$4 = "/static/common/follwer.png";
   const _imports_6$3 = "/static/common/follow.png";
@@ -8875,7 +8906,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesConsultDetail = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["render", _sfc_render$S], ["__scopeId", "data-v-067f89c2"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/consult/detail.vue"]]);
+  const PagesConsultDetail = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["render", _sfc_render$S], ["__scopeId", "data-v-067f89c2"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/consult/detail.vue"]]);
   const _sfc_main$S = {};
   function _sfc_render$R(_ctx, _cache) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "teacher-container" }, [
@@ -8909,7 +8940,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const ConfideTeacherListItem = /* @__PURE__ */ _export_sfc(_sfc_main$S, [["render", _sfc_render$R], ["__scopeId", "data-v-5a7db619"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/Confide-Teacher-List-Item.vue"]]);
+  const ConfideTeacherListItem = /* @__PURE__ */ _export_sfc(_sfc_main$S, [["render", _sfc_render$R], ["__scopeId", "data-v-5a7db619"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/Confide-Teacher-List-Item.vue"]]);
   const _sfc_main$R = {};
   function _sfc_render$Q(_ctx, _cache) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "teacher-container" }, [
@@ -8942,7 +8973,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const ConsultTeacherListItem = /* @__PURE__ */ _export_sfc(_sfc_main$R, [["render", _sfc_render$Q], ["__scopeId", "data-v-07f0244f"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/Consult-Teacher-List-Item.vue"]]);
+  const ConsultTeacherListItem = /* @__PURE__ */ _export_sfc(_sfc_main$R, [["render", _sfc_render$Q], ["__scopeId", "data-v-07f0244f"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/Consult-Teacher-List-Item.vue"]]);
   const _sfc_main$Q = {
     __name: "Recommend-Article-Item",
     props: {
@@ -8988,7 +9019,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const RecommendArticleItem = /* @__PURE__ */ _export_sfc(_sfc_main$Q, [["render", _sfc_render$P], ["__scopeId", "data-v-c9e42a9c"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/Recommend-Article-Item.vue"]]);
+  const RecommendArticleItem = /* @__PURE__ */ _export_sfc(_sfc_main$Q, [["render", _sfc_render$P], ["__scopeId", "data-v-c9e42a9c"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/Recommend-Article-Item.vue"]]);
   const _sfc_main$P = {};
   function _sfc_render$O(_ctx, _cache) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "forum-Item" }, [
@@ -9023,7 +9054,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const ForumItem = /* @__PURE__ */ _export_sfc(_sfc_main$P, [["render", _sfc_render$O], ["__scopeId", "data-v-94df90e2"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/Forum-Item.vue"]]);
+  const ForumItem = /* @__PURE__ */ _export_sfc(_sfc_main$P, [["render", _sfc_render$O], ["__scopeId", "data-v-94df90e2"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/Forum-Item.vue"]]);
   const _imports_0$d = "/static/index/grass.png";
   const _imports_1$b = "/static/index/Consultant.png";
   const _imports_2$6 = "/static/index/Listening.png";
@@ -9638,7 +9669,7 @@ This will fail in production.`);
       /* NEED_PATCH */
     );
   }
-  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$O, [["render", _sfc_render$N], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/index/index.vue"]]);
+  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$O, [["render", _sfc_render$N], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/index/index.vue"]]);
   const _sfc_main$N = {
     name: "UniBadge",
     emits: ["click"],
@@ -9779,7 +9810,7 @@ This will fail in production.`);
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["render", _sfc_render$M], ["__scopeId", "data-v-c97cb896"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-badge/components/uni-badge/uni-badge.vue"]]);
+  const __easycom_0$2 = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["render", _sfc_render$M], ["__scopeId", "data-v-c97cb896"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-badge/components/uni-badge/uni-badge.vue"]]);
   function formatDate(t2) {
     t2 = t2 || Date.now();
     let time = new Date(t2);
@@ -10438,7 +10469,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesMessageIndex = /* @__PURE__ */ _export_sfc(_sfc_main$M, [["render", _sfc_render$L], ["__scopeId", "data-v-780fc0ad"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/message/index.vue"]]);
+  const PagesMessageIndex = /* @__PURE__ */ _export_sfc(_sfc_main$M, [["render", _sfc_render$L], ["__scopeId", "data-v-780fc0ad"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/message/index.vue"]]);
   const _imports_0$b = "/static/my/my-top-bg.png";
   const _imports_2$5 = "/static/my/copy.png";
   const _imports_3$4 = "/static/my/bottom-arrow.png";
@@ -10647,7 +10678,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesMyIndex = /* @__PURE__ */ _export_sfc(_sfc_main$L, [["render", _sfc_render$K], ["__scopeId", "data-v-f97bc692"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/my/index.vue"]]);
+  const PagesMyIndex = /* @__PURE__ */ _export_sfc(_sfc_main$L, [["render", _sfc_render$K], ["__scopeId", "data-v-f97bc692"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/my/index.vue"]]);
   const getArticleList = (params, config2 = {}) => http.post(
     "/api/article/article/getArticleList",
     params,
@@ -10655,6 +10686,11 @@ This will fail in production.`);
   );
   const getArticleDetail = (params, config2 = {}) => http.post(
     "/api/article/article/getArticleDetail",
+    params,
+    config2
+  );
+  const getCommentById = (params, config2 = {}) => http.post(
+    "/api/comment/comment/getCommentById",
     params,
     config2
   );
@@ -10849,7 +10885,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesReadArticleReadArticle = /* @__PURE__ */ _export_sfc(_sfc_main$K, [["render", _sfc_render$J], ["__scopeId", "data-v-bb7d28f6"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/readArticle/readArticle.vue"]]);
+  const PagesReadArticleReadArticle = /* @__PURE__ */ _export_sfc(_sfc_main$K, [["render", _sfc_render$J], ["__scopeId", "data-v-bb7d28f6"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/readArticle/readArticle.vue"]]);
   function obj2strClass(obj) {
     let classess = "";
     for (let key in obj) {
@@ -11350,7 +11386,7 @@ This will fail in production.`);
       /* CLASS, STYLE */
     );
   }
-  const __easycom_2$1 = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["render", _sfc_render$I], ["__scopeId", "data-v-09fd5285"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue"]]);
+  const __easycom_2$1 = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["render", _sfc_render$I], ["__scopeId", "data-v-09fd5285"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue"]]);
   const _sfc_main$I = {
     __name: "articleDetail",
     setup(__props, { expose: __expose }) {
@@ -11362,7 +11398,15 @@ This will fail in production.`);
       const statusBarHeight = vue.ref(globalStore.statusBarHeight + "px");
       const route = useRoute();
       const tabActive = vue.ref(0);
-      const replyContent = vue.ref("");
+      const replyContent2 = vue.ref("");
+      const data = vue.reactive({
+        listParams: {
+          "current": 1,
+          "size": 10,
+          "params": {}
+        },
+        list: []
+      });
       const tabLists = vue.ref([{
         txt: "推荐",
         id: 1
@@ -11389,6 +11433,7 @@ This will fail in production.`);
         id: 7
       }]);
       const info = vue.ref();
+      const commentList = vue.ref();
       const changeTabHandler = (index) => {
         tabActive.value = index;
       };
@@ -11420,12 +11465,17 @@ This will fail in production.`);
         });
         info.value = res.data;
       };
+      const getList = async () => {
+        data.listParams.params.articleId = route.query.id;
+        let res = await getCommentById(data.listParams);
+        commentList.value = res.data.records;
+      };
       const onSaveComment = async () => {
         let res = await saveComment({
-          "content": replyContent.value,
+          "content": replyContent2.value,
           "articleId": route.query.id
         });
-        replyContent.value = "";
+        replyContent2.value = "";
         uni.showToast({
           title: "发布成功",
           icon: "none",
@@ -11433,15 +11483,18 @@ This will fail in production.`);
           duration: 2e3
           // 持续时长，单位ms
         });
-        formatAppLog("log", "at pages/readArticle/articleDetail.vue:184", res);
+        formatAppLog("log", "at pages/readArticle/articleDetail.vue:209", res);
       };
       vue.onMounted(() => {
         getInfo();
+        getList();
       });
-      const __returned__ = { globalStore, statusBarHeight, route, tabActive, replyContent, tabLists, info, changeTabHandler, backFn, switchTabsFn, openArticleFn, getInfo, onSaveComment, onMounted: vue.onMounted, ref: vue.ref, get useGlobalDataStore() {
+      const __returned__ = { globalStore, statusBarHeight, route, tabActive, replyContent: replyContent2, data, tabLists, info, commentList, changeTabHandler, backFn, switchTabsFn, openArticleFn, getInfo, getList, onSaveComment, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, get useGlobalDataStore() {
         return useGlobalDataStore;
       }, get getArticleDetail() {
         return getArticleDetail;
+      }, get getCommentById() {
+        return getCommentById;
       }, get saveComment() {
         return saveComment;
       }, get RecommendArticleItem() {
@@ -11535,6 +11588,21 @@ This will fail in production.`);
             vue.createElementVNode("text", { class: "txt" }, "6757567@163.com")
           ])
         ]),
+        (vue.openBlock(true), vue.createElementBlock(
+          vue.Fragment,
+          null,
+          vue.renderList($setup.commentList, (item, index) => {
+            return vue.openBlock(), vue.createElementBlock(
+              "view",
+              { key: index },
+              vue.toDisplayString(item.content),
+              1
+              /* TEXT */
+            );
+          }),
+          128
+          /* KEYED_FRAGMENT */
+        )),
         vue.createElementVNode("view", { class: "hot-psychological-box" }, [
           vue.createElementVNode("view", { class: "hot-psychological-header" }, [
             vue.createElementVNode("view", { class: "title" }, "热门咨询师"),
@@ -11640,7 +11708,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesReadArticleArticleDetail = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["render", _sfc_render$H], ["__scopeId", "data-v-b2c79a96"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/readArticle/articleDetail.vue"]]);
+  const PagesReadArticleArticleDetail = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["render", _sfc_render$H], ["__scopeId", "data-v-b2c79a96"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/readArticle/articleDetail.vue"]]);
   const _sfc_main$H = {
     __name: "settled",
     setup(__props, { expose: __expose }) {
@@ -11714,7 +11782,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesSettledSettled = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["render", _sfc_render$G], ["__scopeId", "data-v-1356a0f4"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/settled/settled.vue"]]);
+  const PagesSettledSettled = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["render", _sfc_render$G], ["__scopeId", "data-v-1356a0f4"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/settled/settled.vue"]]);
   const _imports_2$4 = "/static/common/arrow.png";
   const _imports_3$3 = "/static/common/sort.png";
   const _sfc_main$G = {
@@ -11726,7 +11794,7 @@ This will fail in production.`);
       }));
       const globalStore = useGlobalDataStore();
       const statusBarHeight = vue.ref(globalStore.statusBarHeight + "px");
-      const replyContent = vue.ref("");
+      const replyContent2 = vue.ref("");
       const scrollTop = vue.ref(0);
       const backFn = () => {
         uni.navigateBack({
@@ -11736,7 +11804,7 @@ This will fail in production.`);
       const onPageScroll = (e2) => {
         scrollTop.value = e2.detail.scrollTop;
       };
-      const __returned__ = { globalStore, statusBarHeight, replyContent, scrollTop, backFn, onPageScroll, onMounted: vue.onMounted, ref: vue.ref, get useGlobalDataStore() {
+      const __returned__ = { globalStore, statusBarHeight, replyContent: replyContent2, scrollTop, backFn, onPageScroll, onMounted: vue.onMounted, ref: vue.ref, get useGlobalDataStore() {
         return useGlobalDataStore;
       }, get MoteLinesDivide() {
         return MoteLinesDivide;
@@ -11930,7 +11998,7 @@ This will fail in production.`);
       vue.createElementVNode("view", { class: "contact-teach" }, "向张三咨询师咨询")
     ]);
   }
-  const PagesConsultFeelConsultFeel = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["render", _sfc_render$F], ["__scopeId", "data-v-aa8d1f1e"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/consult-feel/consult-feel.vue"]]);
+  const PagesConsultFeelConsultFeel = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["render", _sfc_render$F], ["__scopeId", "data-v-aa8d1f1e"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/consult-feel/consult-feel.vue"]]);
   const _sfc_main$F = {
     __name: "evaluate",
     setup(__props, { expose: __expose }) {
@@ -11940,7 +12008,7 @@ This will fail in production.`);
       }));
       const globalStore = useGlobalDataStore();
       const statusBarHeight = vue.ref(globalStore.statusBarHeight + "px");
-      const replyContent = vue.ref("");
+      const replyContent2 = vue.ref("");
       const scrollTop = vue.ref(0);
       const backFn = () => {
         uni.navigateBack({
@@ -11950,7 +12018,7 @@ This will fail in production.`);
       const onPageScroll = (e2) => {
         scrollTop.value = e2.detail.scrollTop;
       };
-      const __returned__ = { globalStore, statusBarHeight, replyContent, scrollTop, backFn, onPageScroll, onMounted: vue.onMounted, ref: vue.ref, get useGlobalDataStore() {
+      const __returned__ = { globalStore, statusBarHeight, replyContent: replyContent2, scrollTop, backFn, onPageScroll, onMounted: vue.onMounted, ref: vue.ref, get useGlobalDataStore() {
         return useGlobalDataStore;
       }, get MoteLinesDivide() {
         return MoteLinesDivide;
@@ -12076,7 +12144,17 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesEvaluateEvaluate = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["render", _sfc_render$E], ["__scopeId", "data-v-2020f577"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/evaluate/evaluate.vue"]]);
+  const PagesEvaluateEvaluate = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["render", _sfc_render$E], ["__scopeId", "data-v-2020f577"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/evaluate/evaluate.vue"]]);
+  const getWorryList = (params, config2 = {}) => http.post(
+    "/api/emotion/emotion/getEmotionList",
+    params,
+    config2
+  );
+  const saveEmotion = (params, config2 = {}) => http.post(
+    "/api/emotion/emotion/saveEmotion",
+    params,
+    config2
+  );
   const _sfc_main$E = {
     __name: "report",
     setup(__props, { expose: __expose }) {
@@ -12183,7 +12261,7 @@ This will fail in production.`);
       /* NEED_PATCH */
     );
   }
-  const report = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["render", _sfc_render$D], ["__scopeId", "data-v-09fef91a"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/report/report.vue"]]);
+  const report = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["render", _sfc_render$D], ["__scopeId", "data-v-09fef91a"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/report/report.vue"]]);
   const _sfc_main$D = {
     __name: "share",
     setup(__props, { expose: __expose }) {
@@ -12348,7 +12426,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const share = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$C], ["__scopeId", "data-v-11758b78"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/components/share/share.vue"]]);
+  const share = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$C], ["__scopeId", "data-v-11758b78"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/components/share/share.vue"]]);
   const _imports_1$8 = "/static/common/zan.png";
   const _imports_2$3 = "/static/common/zan-active.png";
   const _imports_3$2 = "/static/common/msg.png";
@@ -12360,6 +12438,14 @@ This will fail in production.`);
       __expose();
       const props = __props;
       const sharePopup = vue.ref(null);
+      const data = vue.reactive({
+        listParams: {
+          "current": 1,
+          "size": 10,
+          "params": {}
+        },
+        list: []
+      });
       const contentTabsList = vue.ref([{
         id: 0,
         label: "最新"
@@ -12435,7 +12521,16 @@ This will fail in production.`);
           url: "/pages/forum/other/other"
         });
       };
-      const __returned__ = { props, sharePopup, contentTabsList, contentTabsActive, contentTabsHandler, newContens, openShare, openOtherHandler, ref: vue.ref, share, get MoteLinesDivide() {
+      const getList = async () => {
+        let res = await getWorryList(data.listParams);
+        data.list = res.data.records;
+      };
+      vue.onMounted(() => {
+        getList();
+      });
+      const __returned__ = { props, sharePopup, data, contentTabsList, contentTabsActive, contentTabsHandler, newContens, openShare, openOtherHandler, getList, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, get getWorryList() {
+        return getWorryList;
+      }, share, get MoteLinesDivide() {
         return MoteLinesDivide;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -12469,7 +12564,7 @@ This will fail in production.`);
           (vue.openBlock(true), vue.createElementBlock(
             vue.Fragment,
             null,
-            vue.renderList($setup.newContens, (item, index) => {
+            vue.renderList($setup.data.list, (item, index) => {
               return vue.openBlock(), vue.createElementBlock("view", {
                 class: "forum-index-list-item",
                 key: index
@@ -12589,13 +12684,26 @@ This will fail in production.`);
       )
     ]);
   }
-  const worry = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-54064256"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/index/components/worry.vue"]]);
+  const worry = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["render", _sfc_render$B], ["__scopeId", "data-v-54064256"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/index/components/worry.vue"]]);
+  const getAnswerList = (params, config2 = {}) => http.post(
+    "/api/answer/answer/getAnswerList",
+    params,
+    config2
+  );
   const _imports_0$a = "/static/forum/question.svg";
   const _sfc_main$B = {
     __name: "qa",
     setup(__props, { expose: __expose }) {
       __expose();
       const sharePopup = vue.ref(null);
+      const data = vue.reactive({
+        listParams: {
+          "current": 1,
+          "size": 10,
+          "params": {}
+        },
+        list: []
+      });
       const contentTabsList = vue.ref([{
         id: 0,
         label: "最新"
@@ -12663,7 +12771,16 @@ This will fail in production.`);
       const openShare = () => {
         sharePopup.value.openShare();
       };
-      const __returned__ = { sharePopup, contentTabsList, contentTabsActive, contentTabsHandler, newContens, openShare, ref: vue.ref, share, get MoteLinesDivide() {
+      const getList = async () => {
+        let res = await getAnswerList(data.listParams);
+        data.list = res.data.records;
+      };
+      vue.onMounted(() => {
+        getList();
+      });
+      const __returned__ = { sharePopup, data, contentTabsList, contentTabsActive, contentTabsHandler, newContens, openShare, getList, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, get getAnswerList() {
+        return getAnswerList;
+      }, share, get MoteLinesDivide() {
         return MoteLinesDivide;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -12733,7 +12850,7 @@ This will fail in production.`);
           (vue.openBlock(true), vue.createElementBlock(
             vue.Fragment,
             null,
-            vue.renderList($setup.newContens, (item, index) => {
+            vue.renderList($setup.data.list, (item, index) => {
               return vue.openBlock(), vue.createElementBlock("view", {
                 class: "forum-index-list-item",
                 key: index
@@ -12743,7 +12860,13 @@ This will fail in production.`);
                     src: _imports_0$a,
                     class: "img"
                   }),
-                  vue.createElementVNode("text", { class: "txt" }, "我像不像友情里的舔狗？")
+                  vue.createElementVNode(
+                    "text",
+                    { class: "txt" },
+                    vue.toDisplayString(item.title),
+                    1
+                    /* TEXT */
+                  )
                 ]),
                 vue.createElementVNode("view", { class: "item-header" }, [
                   vue.createElementVNode("view", { class: "item-header-left" }, [
@@ -12837,7 +12960,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const qa = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-c51b6f35"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/index/components/qa.vue"]]);
+  const qa = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["render", _sfc_render$A], ["__scopeId", "data-v-c51b6f35"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/index/components/qa.vue"]]);
   const _imports_1$7 = "/static/common/forum-fab.png";
   const _sfc_main$A = {
     __name: "index",
@@ -12946,7 +13069,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$z], ["__scopeId", "data-v-9a476886"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/index/index.vue"]]);
+  const PagesForumIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$z], ["__scopeId", "data-v-9a476886"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/index/index.vue"]]);
   const _imports_0$9 = "/static/forum/send.svg";
   const _imports_1$6 = "/static/forum/qa.svg";
   const _sfc_main$z = {
@@ -13035,7 +13158,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumWriteWrite = /* @__PURE__ */ _export_sfc(_sfc_main$z, [["render", _sfc_render$y], ["__scopeId", "data-v-2e0604c5"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/write/write.vue"]]);
+  const PagesForumWriteWrite = /* @__PURE__ */ _export_sfc(_sfc_main$z, [["render", _sfc_render$y], ["__scopeId", "data-v-2e0604c5"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/write/write.vue"]]);
   const _sfc_main$y = {
     __name: "mood-log",
     setup(__props, { expose: __expose }) {
@@ -13052,6 +13175,14 @@ This will fail in production.`);
         label: "关注"
       }]);
       const contentTabsActive = vue.ref(0);
+      const data = vue.reactive({
+        listParams: {
+          "current": 1,
+          "size": 10,
+          "params": {}
+        },
+        list: []
+      });
       const contentTabsHandler = (options) => {
         if (contentTabsActive.value != options.id) {
           contentTabsActive.value = options.id;
@@ -13111,7 +13242,16 @@ This will fail in production.`);
       const openShare = () => {
         sharePopup.value.openShare();
       };
-      const __returned__ = { sharePopup, contentTabsList, contentTabsActive, contentTabsHandler, newContens, openShare, ref: vue.ref, share, get MoteLinesDivide() {
+      const getList = async () => {
+        let res = await getArticleList(data.listParams);
+        data.list = res.data.records;
+      };
+      vue.onMounted(() => {
+        getList();
+      });
+      const __returned__ = { sharePopup, contentTabsList, contentTabsActive, data, contentTabsHandler, newContens, openShare, getList, onMounted: vue.onMounted, ref: vue.ref, reactive: vue.reactive, get getArticleList() {
+        return getArticleList;
+      }, share, get MoteLinesDivide() {
         return MoteLinesDivide;
       } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
@@ -13130,7 +13270,7 @@ This will fail in production.`);
           (vue.openBlock(true), vue.createElementBlock(
             vue.Fragment,
             null,
-            vue.renderList($setup.newContens, (item, index) => {
+            vue.renderList($setup.data.list, (item, index) => {
               return vue.openBlock(), vue.createElementBlock("view", {
                 class: "forum-index-list-item",
                 key: index
@@ -13231,7 +13371,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const modeLog = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["render", _sfc_render$x], ["__scopeId", "data-v-28960cbc"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/my/components/mood-log.vue"]]);
+  const modeLog = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["render", _sfc_render$x], ["__scopeId", "data-v-28960cbc"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/my/components/mood-log.vue"]]);
   const _sfc_main$x = {
     __name: "mail-box",
     setup(__props, { expose: __expose }) {
@@ -13323,7 +13463,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const mailBox = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["render", _sfc_render$w], ["__scopeId", "data-v-b26a0557"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/my/components/mail-box.vue"]]);
+  const mailBox = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["render", _sfc_render$w], ["__scopeId", "data-v-b26a0557"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/my/components/mail-box.vue"]]);
   const _sfc_main$w = {
     __name: "my",
     setup(__props, { expose: __expose }) {
@@ -13461,7 +13601,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumMyMy = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render$v], ["__scopeId", "data-v-216c1057"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/my/my.vue"]]);
+  const PagesForumMyMy = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["render", _sfc_render$v], ["__scopeId", "data-v-216c1057"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/my/my.vue"]]);
   const _sfc_main$v = {
     __name: "dynamics-log",
     setup(__props, { expose: __expose }) {
@@ -13657,7 +13797,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const dynamicsLog = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__scopeId", "data-v-e75141f3"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/other/components/dynamics-log.vue"]]);
+  const dynamicsLog = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["render", _sfc_render$u], ["__scopeId", "data-v-e75141f3"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/other/components/dynamics-log.vue"]]);
   const _sfc_main$u = {
     __name: "other",
     setup(__props, { expose: __expose }) {
@@ -13786,7 +13926,7 @@ This will fail in production.`);
       ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const PagesForumOtherOther = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-154647ed"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/other/other.vue"]]);
+  const PagesForumOtherOther = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["render", _sfc_render$t], ["__scopeId", "data-v-154647ed"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/other/other.vue"]]);
   const _sfc_main$t = {
     __name: "mailbox",
     setup(__props, { expose: __expose }) {
@@ -13877,7 +14017,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumMailboxMailbox = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__scopeId", "data-v-954d4f5b"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/mailbox/mailbox.vue"]]);
+  const PagesForumMailboxMailbox = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["render", _sfc_render$s], ["__scopeId", "data-v-954d4f5b"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/mailbox/mailbox.vue"]]);
   const _imports_0$8 = "/static/forum/tag.png";
   const _sfc_main$s = {
     __name: "ask-question",
@@ -14082,7 +14222,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesForumWriteAskQuestionAskQuestion = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__scopeId", "data-v-9411c4a9"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/write/ask-question/ask-question.vue"]]);
+  const PagesForumWriteAskQuestionAskQuestion = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$r], ["__scopeId", "data-v-9411c4a9"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/write/ask-question/ask-question.vue"]]);
   const _imports_0$7 = "/static/forum/upload-image.svg";
   const _imports_1$5 = "/static/forum/topic.png";
   const _sfc_main$r = {
@@ -14116,7 +14256,23 @@ This will fail in production.`);
           url: "/pages/forum/write/choose-topic/choose-topic"
         });
       };
-      const __returned__ = { backFn, content, tagContent, imageArr, uploadImageHandler, delImageHandler, addTopicHandler, onMounted: vue.onMounted, ref: vue.ref };
+      const onSaveComment = async () => {
+        let res = await saveEmotion({
+          "content": content.value
+        });
+        replyContent.value = "";
+        uni.showToast({
+          title: "发布成功",
+          icon: "none",
+          // 可选值 'success', 'loading', 'none'
+          duration: 2e3
+          // 持续时长，单位ms
+        });
+        formatAppLog("log", "at pages/forum/write/send-dynamics/send-dynamics.vue:92", res);
+      };
+      const __returned__ = { backFn, content, tagContent, imageArr, uploadImageHandler, delImageHandler, addTopicHandler, onSaveComment, onMounted: vue.onMounted, ref: vue.ref, get saveEmotion() {
+        return saveEmotion;
+      } };
       Object.defineProperty(__returned__, "__isScriptSetup", { enumerable: false, value: true });
       return __returned__;
     }
@@ -14141,7 +14297,10 @@ This will fail in production.`);
           })
         ]),
         right: vue.withCtx(() => [
-          vue.createElementVNode("view", { class: "right" }, " 发布 ")
+          vue.createElementVNode("view", {
+            class: "right",
+            onClick: $setup.onSaveComment
+          }, " 发布 ")
         ]),
         _: 1
         /* STABLE */
@@ -14226,7 +14385,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumWriteSendDynamicsSendDynamics = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__scopeId", "data-v-c0c3a8cf"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/write/send-dynamics/send-dynamics.vue"]]);
+  const PagesForumWriteSendDynamicsSendDynamics = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["render", _sfc_render$q], ["__scopeId", "data-v-c0c3a8cf"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/write/send-dynamics/send-dynamics.vue"]]);
   const _sfc_main$q = {
     __name: "write-mailbox",
     setup(__props, { expose: __expose }) {
@@ -14345,7 +14504,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumWriteWriteMailboxWriteMailbox = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__scopeId", "data-v-32c33dfb"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/write/write-mailbox/write-mailbox.vue"]]);
+  const PagesForumWriteWriteMailboxWriteMailbox = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$p], ["__scopeId", "data-v-32c33dfb"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/write/write-mailbox/write-mailbox.vue"]]);
   let Calendar$1 = class Calendar {
     constructor({
       selected,
@@ -14792,7 +14951,7 @@ This will fail in production.`);
       /* CLASS, NEED_HYDRATION */
     );
   }
-  const calendarItem = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-3c762a01"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-datetime-picker/components/uni-datetime-picker/calendar-item.vue"]]);
+  const calendarItem = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$o], ["__scopeId", "data-v-3c762a01"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/calendar-item.vue"]]);
   const en$3 = {
     "uni-datetime-picker.selectDate": "select date",
     "uni-datetime-picker.selectTime": "select time",
@@ -15748,7 +15907,7 @@ This will fail in production.`);
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const TimePicker = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-1d532b70"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-datetime-picker/components/uni-datetime-picker/time-picker.vue"]]);
+  const TimePicker = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$n], ["__scopeId", "data-v-1d532b70"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/time-picker.vue"]]);
   const {
     t: t$3
   } = initVueI18n(i18nMessages);
@@ -16526,7 +16685,7 @@ This will fail in production.`);
       /* NEED_HYDRATION */
     );
   }
-  const Calendar = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-1d379219"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-datetime-picker/components/uni-datetime-picker/calendar.vue"]]);
+  const Calendar = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$m], ["__scopeId", "data-v-1d379219"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/calendar.vue"]]);
   const _sfc_main$m = {
     name: "UniDatetimePicker",
     options: {
@@ -17534,7 +17693,7 @@ This will fail in production.`);
       }, null, 8, ["date", "defTime", "start-date", "end-date", "selectableTimes", "startPlaceholder", "endPlaceholder", "default-value", "pleStatus", "range", "hasTime", "hideSecond", "onConfirm", "onMaskClose", "onChange"])) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-9802168a"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker.vue"]]);
+  const __easycom_1$1 = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$l], ["__scopeId", "data-v-9802168a"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker.vue"]]);
   const _sfc_main$l = {
     __name: "userInfo",
     setup(__props, { expose: __expose }) {
@@ -17747,7 +17906,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesForumMyUserInfo = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-5723f2e8"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/my/userInfo.vue"]]);
+  const PagesForumMyUserInfo = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$k], ["__scopeId", "data-v-5723f2e8"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/my/userInfo.vue"]]);
   const _imports_0$6 = "/static/forum/topic-b.png";
   const _sfc_main$k = {
     __name: "choose-topic",
@@ -17868,7 +18027,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesForumWriteChooseTopicChooseTopic = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-255c2008"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/forum/write/choose-topic/choose-topic.vue"]]);
+  const PagesForumWriteChooseTopicChooseTopic = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$j], ["__scopeId", "data-v-255c2008"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/forum/write/choose-topic/choose-topic.vue"]]);
   const _imports_0$5 = "/static/psychological-test/logo.svg";
   const _imports_1$4 = "/static/forum/bg.png";
   const _sfc_main$j = {
@@ -18202,7 +18361,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-778f7de8"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/index/index.vue"]]);
+  const PagesPsychologicalTestIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$i], ["__scopeId", "data-v-778f7de8"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/index/index.vue"]]);
   const _sfc_main$i = {
     __name: "order",
     setup(__props, { expose: __expose }) {
@@ -18343,7 +18502,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestOrderOrder = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-94d077b1"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/order/order.vue"]]);
+  const PagesPsychologicalTestOrderOrder = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$h], ["__scopeId", "data-v-94d077b1"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/order/order.vue"]]);
   const _sfc_main$h = {
     __name: "test-type",
     setup(__props, { expose: __expose }) {
@@ -18529,7 +18688,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestTestTypeTestType = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-a192c592"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/test-type/test-type.vue"]]);
+  const PagesPsychologicalTestTestTypeTestType = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g], ["__scopeId", "data-v-a192c592"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/test-type/test-type.vue"]]);
   const _imports_1$3 = "/static/psychological-test/q-logo.svg";
   const _sfc_main$g = {
     __name: "start-test",
@@ -18656,7 +18815,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestStartTestStartTest = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-6da95672"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/start-test/start-test.vue"]]);
+  const PagesPsychologicalTestStartTestStartTest = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-6da95672"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/start-test/start-test.vue"]]);
   const _sfc_main$f = {
     __name: "comment",
     setup(__props, { expose: __expose }) {
@@ -18740,7 +18899,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestCommentComment = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-90c4927a"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/comment/comment.vue"]]);
+  const PagesPsychologicalTestCommentComment = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-90c4927a"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/comment/comment.vue"]]);
   const _sfc_main$e = {
     __name: "contact-consult",
     setup(__props, { expose: __expose }) {
@@ -18806,7 +18965,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestContactConsultContactConsult = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-8508c3e0"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/contact-consult/contact-consult.vue"]]);
+  const PagesPsychologicalTestContactConsultContactConsult = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-8508c3e0"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/contact-consult/contact-consult.vue"]]);
   const _imports_1$2 = "/static/psychological-test/comment.svg";
   const _imports_2$2 = "/static/psychological-test/save-share.svg";
   const _imports_3$1 = "/static/psychological-test/send-consult.svg";
@@ -18983,7 +19142,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const PagesPsychologicalTestTestResultTestResult = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-fea36aa9"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/test-result/test-result.vue"]]);
+  const PagesPsychologicalTestTestResultTestResult = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-fea36aa9"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/test-result/test-result.vue"]]);
   const _sfc_main$c = {
     __name: "charge-test",
     setup(__props, { expose: __expose }) {
@@ -19198,7 +19357,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestChargeTestChargeTest = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-566b2014"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/charge-test/charge-test.vue"]]);
+  const PagesPsychologicalTestChargeTestChargeTest = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-566b2014"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/charge-test/charge-test.vue"]]);
   const _sfc_main$b = {
     __name: "free-test",
     setup(__props, { expose: __expose }) {
@@ -19338,7 +19497,7 @@ This will fail in production.`);
       ])
     ]);
   }
-  const PagesPsychologicalTestFreeTestFreeTest = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-bec04afb"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/psychological-test/free-test/free-test.vue"]]);
+  const PagesPsychologicalTestFreeTestFreeTest = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-bec04afb"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/psychological-test/free-test/free-test.vue"]]);
   class EmojiDecoder {
     constructor(url, emojiMap) {
       __publicField(this, "emojiMap", null);
@@ -20570,7 +20729,7 @@ This will fail in production.`);
       /* NEED_HYDRATION */
     );
   }
-  const PagesMessagePrivateChat = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/message/private-chat.vue"]]);
+  const PagesMessagePrivateChat = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/message/private-chat.vue"]]);
   const cityJson = [{ "letter": "A", "city": "阿坝县" }, { "letter": "A", "city": "阿巴嘎旗" }, { "letter": "A", "city": "阿坝藏族羌族自治州" }, { "letter": "A", "city": "阿尔山市" }, { "letter": "A", "city": "阿合奇县" }, { "letter": "A", "city": "阿克塞哈萨克族自治县" }, { "letter": "A", "city": "阿克苏市" }, { "letter": "A", "city": "阿克苏地区" }, { "letter": "A", "city": "阿克陶县" }, { "letter": "A", "city": "阿拉尔市" }, { "letter": "A", "city": "阿拉山口市" }, { "letter": "A", "city": "阿拉善盟" }, { "letter": "A", "city": "阿拉善右旗" }, { "letter": "A", "city": "阿拉善左旗" }, { "letter": "A", "city": "阿勒泰市" }, { "letter": "A", "city": "阿勒泰地区" }, { "letter": "A", "city": "阿里地区" }, { "letter": "A", "city": "阿鲁科尔沁旗" }, { "letter": "A", "city": "安达市" }, { "letter": "A", "city": "安多县" }, { "letter": "A", "city": "安福县" }, { "letter": "A", "city": "昂仁县" }, { "letter": "A", "city": "安国市" }, { "letter": "A", "city": "安化县" }, { "letter": "A", "city": "安吉县" }, { "letter": "A", "city": "安康市" }, { "letter": "A", "city": "安龙县" }, { "letter": "A", "city": "安陆市" }, { "letter": "A", "city": "安宁市" }, { "letter": "A", "city": "安平县" }, { "letter": "A", "city": "安庆市" }, { "letter": "A", "city": "安丘市" }, { "letter": "A", "city": "安仁县" }, { "letter": "A", "city": "安塞区" }, { "letter": "A", "city": "鞍山市" }, { "letter": "A", "city": "安顺市" }, { "letter": "A", "city": "安图县" }, { "letter": "A", "city": "安溪县" }, { "letter": "A", "city": "安乡县" }, { "letter": "A", "city": "安新县" }, { "letter": "A", "city": "安阳市" }, { "letter": "A", "city": "安阳县" }, { "letter": "A", "city": "安义县" }, { "letter": "A", "city": "安远县" }, { "letter": "A", "city": "安岳县" }, { "letter": "A", "city": "安泽县" }, { "letter": "A", "city": "敖汉旗" }, { "letter": "A", "city": "澳门特别行政区" }, { "letter": "A", "city": "阿荣旗" }, { "letter": "A", "city": "阿图什市" }, { "letter": "A", "city": "阿瓦提县" }, { "letter": "B", "city": "巴楚县" }, { "letter": "B", "city": "巴东县" }, { "letter": "B", "city": "白城市" }, { "letter": "B", "city": "拜城县" }, { "letter": "B", "city": "白河县" }, { "letter": "B", "city": "白朗县" }, { "letter": "B", "city": "拜泉县" }, { "letter": "B", "city": "百色市" }, { "letter": "B", "city": "白沙黎族自治县" }, { "letter": "B", "city": "白山市" }, { "letter": "B", "city": "白水县" }, { "letter": "B", "city": "柏乡县" }, { "letter": "B", "city": "白银市" }, { "letter": "B", "city": "白玉县" }, { "letter": "B", "city": "巴里坤哈萨克自治县" }, { "letter": "B", "city": "巴林右旗" }, { "letter": "B", "city": "巴林左旗" }, { "letter": "B", "city": "巴马瑶族自治县" }, { "letter": "B", "city": "班戈县" }, { "letter": "B", "city": "班玛县" }, { "letter": "B", "city": "保德县" }, { "letter": "B", "city": "保定市" }, { "letter": "B", "city": "宝丰县" }, { "letter": "B", "city": "宝鸡市" }, { "letter": "B", "city": "保靖县" }, { "letter": "B", "city": "保康县" }, { "letter": "B", "city": "宝清县" }, { "letter": "B", "city": "保山市" }, { "letter": "B", "city": "保亭黎族苗族自治县" }, { "letter": "B", "city": "包头市" }, { "letter": "B", "city": "宝兴县" }, { "letter": "B", "city": "宝应县" }, { "letter": "B", "city": "巴青县" }, { "letter": "B", "city": "八宿县" }, { "letter": "B", "city": "巴塘县" }, { "letter": "B", "city": "巴彦县" }, { "letter": "B", "city": "巴彦淖尔市" }, { "letter": "B", "city": "巴音郭楞蒙古自治州" }, { "letter": "B", "city": "巴中市" }, { "letter": "B", "city": "霸州市" }, { "letter": "B", "city": "北安市" }, { "letter": "B", "city": "北川羌族自治县" }, { "letter": "B", "city": "北海市" }, { "letter": "B", "city": "北京市" }, { "letter": "B", "city": "北流市" }, { "letter": "B", "city": "北票市" }, { "letter": "B", "city": "北屯市" }, { "letter": "B", "city": "北镇市" }, { "letter": "B", "city": "蚌埠市" }, { "letter": "B", "city": "本溪市" }, { "letter": "B", "city": "本溪满族自治县" }, { "letter": "B", "city": "边坝县" }, { "letter": "B", "city": "毕节市" }, { "letter": "B", "city": "宾川县" }, { "letter": "B", "city": "滨海县" }, { "letter": "B", "city": "宾县" }, { "letter": "B", "city": "彬县" }, { "letter": "B", "city": "宾阳县" }, { "letter": "B", "city": "滨州市" }, { "letter": "B", "city": "比如县" }, { "letter": "B", "city": "泌阳县" }, { "letter": "B", "city": "博爱县" }, { "letter": "B", "city": "博白县" }, { "letter": "B", "city": "博尔塔拉蒙古自治州" }, { "letter": "B", "city": "博湖县" }, { "letter": "B", "city": "博乐市" }, { "letter": "B", "city": "勃利县" }, { "letter": "B", "city": "博罗县" }, { "letter": "B", "city": "波密县" }, { "letter": "B", "city": "泊头市" }, { "letter": "B", "city": "博兴县" }, { "letter": "B", "city": "博野县" }, { "letter": "B", "city": "亳州市" }, { "letter": "B", "city": "布尔津县" }, { "letter": "B", "city": "布拖县" }, { "letter": "C", "city": "苍南县" }, { "letter": "C", "city": "苍梧县" }, { "letter": "C", "city": "苍溪县" }, { "letter": "C", "city": "沧县" }, { "letter": "C", "city": "沧源佤族自治县" }, { "letter": "C", "city": "沧州市" }, { "letter": "C", "city": "曹县" }, { "letter": "C", "city": "册亨县" }, { "letter": "C", "city": "策勒县" }, { "letter": "C", "city": "岑巩县" }, { "letter": "C", "city": "岑溪市" }, { "letter": "C", "city": "察布查尔锡伯自治县" }, { "letter": "C", "city": "察哈尔右翼后旗" }, { "letter": "C", "city": "察哈尔右翼前旗" }, { "letter": "C", "city": "察哈尔右翼中旗" }, { "letter": "C", "city": "柴桑区" }, { "letter": "C", "city": "茶陵县" }, { "letter": "C", "city": "长白朝鲜族自治县" }, { "letter": "C", "city": "长春市" }, { "letter": "C", "city": "长岛县" }, { "letter": "C", "city": "常德市" }, { "letter": "C", "city": "昌都市" }, { "letter": "C", "city": "长丰县" }, { "letter": "C", "city": "长葛市" }, { "letter": "C", "city": "长海县" }, { "letter": "C", "city": "昌吉市" }, { "letter": "C", "city": "昌江黎族自治县" }, { "letter": "C", "city": "昌吉回族自治州" }, { "letter": "C", "city": "昌乐县" }, { "letter": "C", "city": "昌黎县" }, { "letter": "C", "city": "长岭县" }, { "letter": "C", "city": "常宁市" }, { "letter": "C", "city": "长宁县" }, { "letter": "C", "city": "昌宁县" }, { "letter": "C", "city": "长沙市" }, { "letter": "C", "city": "长沙县" }, { "letter": "C", "city": "常山县" }, { "letter": "C", "city": "常熟市" }, { "letter": "C", "city": "长顺县" }, { "letter": "C", "city": "长泰县" }, { "letter": "C", "city": "长汀县" }, { "letter": "C", "city": "昌图县" }, { "letter": "C", "city": "长武县" }, { "letter": "C", "city": "长兴县" }, { "letter": "C", "city": "长阳土家族自治县" }, { "letter": "C", "city": "昌邑市" }, { "letter": "C", "city": "长垣县" }, { "letter": "C", "city": "长治市" }, { "letter": "C", "city": "长治县" }, { "letter": "C", "city": "常州市" }, { "letter": "C", "city": "巢湖市" }, { "letter": "C", "city": "朝阳市" }, { "letter": "C", "city": "朝阳县" }, { "letter": "C", "city": "潮州市" }, { "letter": "C", "city": "察雅县" }, { "letter": "C", "city": "察隅县" }, { "letter": "C", "city": "陈巴尔虎旗" }, { "letter": "C", "city": "成安县" }, { "letter": "C", "city": "城步苗族自治县" }, { "letter": "C", "city": "澄城县" }, { "letter": "C", "city": "承德市" }, { "letter": "C", "city": "承德县" }, { "letter": "C", "city": "成都市" }, { "letter": "C", "city": "称多县" }, { "letter": "C", "city": "城固县" }, { "letter": "C", "city": "澄江县" }, { "letter": "C", "city": "城口县" }, { "letter": "C", "city": "澄迈县" }, { "letter": "C", "city": "成武县" }, { "letter": "C", "city": "成县" }, { "letter": "C", "city": "辰溪县" }, { "letter": "C", "city": "郴州市" }, { "letter": "C", "city": "赤壁市" }, { "letter": "C", "city": "赤城县" }, { "letter": "C", "city": "赤峰市" }, { "letter": "C", "city": "茌平县" }, { "letter": "C", "city": "赤水市" }, { "letter": "C", "city": "池州市" }, { "letter": "C", "city": "崇明区" }, { "letter": "C", "city": "重庆市" }, { "letter": "C", "city": "崇仁县" }, { "letter": "C", "city": "崇信县" }, { "letter": "C", "city": "崇阳县" }, { "letter": "C", "city": "崇义县" }, { "letter": "C", "city": "崇州市" }, { "letter": "C", "city": "崇左市" }, { "letter": "C", "city": "淳安县" }, { "letter": "C", "city": "淳化县" }, { "letter": "C", "city": "楚雄市" }, { "letter": "C", "city": "楚雄彝族自治州" }, { "letter": "C", "city": "滁州市" }, { "letter": "C", "city": "慈利县" }, { "letter": "C", "city": "慈溪市" }, { "letter": "C", "city": "磁县" }, { "letter": "C", "city": "从江县" }, { "letter": "C", "city": "措美县" }, { "letter": "C", "city": "错那县" }, { "letter": "C", "city": "措勤县" }, { "letter": "D", "city": "大安市" }, { "letter": "D", "city": "大柴旦行政委员会" }, { "letter": "D", "city": "大厂回族自治县" }, { "letter": "D", "city": "达尔罕茂明安联合旗" }, { "letter": "D", "city": "大方县" }, { "letter": "D", "city": "大关县" }, { "letter": "D", "city": "大化瑶族自治县" }, { "letter": "D", "city": "大城县" }, { "letter": "D", "city": "岱山县" }, { "letter": "D", "city": "代县" }, { "letter": "D", "city": "达拉特旗" }, { "letter": "D", "city": "大理市" }, { "letter": "D", "city": "大荔县" }, { "letter": "D", "city": "大连市" }, { "letter": "D", "city": "大理白族自治州" }, { "letter": "D", "city": "大名县" }, { "letter": "D", "city": "丹巴县" }, { "letter": "D", "city": "郸城县" }, { "letter": "D", "city": "丹东市" }, { "letter": "D", "city": "丹凤县" }, { "letter": "D", "city": "宕昌县" }, { "letter": "D", "city": "砀山县" }, { "letter": "D", "city": "当涂县" }, { "letter": "D", "city": "当雄县" }, { "letter": "D", "city": "当阳市" }, { "letter": "D", "city": "大宁县" }, { "letter": "D", "city": "丹江口市" }, { "letter": "D", "city": "丹棱县" }, { "letter": "D", "city": "丹阳市" }, { "letter": "D", "city": "丹寨县" }, { "letter": "D", "city": "儋州市" }, { "letter": "D", "city": "稻城县" }, { "letter": "D", "city": "道孚县" }, { "letter": "D", "city": "道县" }, { "letter": "D", "city": "道真仡佬族苗族自治县" }, { "letter": "D", "city": "大埔县" }, { "letter": "D", "city": "大庆市" }, { "letter": "D", "city": "达日县" }, { "letter": "D", "city": "大石桥市" }, { "letter": "D", "city": "大田县" }, { "letter": "D", "city": "大同市" }, { "letter": "D", "city": "大同县" }, { "letter": "D", "city": "大通回族土族自治县" }, { "letter": "D", "city": "大悟县" }, { "letter": "D", "city": "大新县" }, { "letter": "D", "city": "大兴安岭地区" }, { "letter": "D", "city": "大姚县" }, { "letter": "D", "city": "大冶市" }, { "letter": "D", "city": "大邑县" }, { "letter": "D", "city": "大英县" }, { "letter": "D", "city": "大余县" }, { "letter": "D", "city": "达州市" }, { "letter": "D", "city": "大竹县" }, { "letter": "D", "city": "德安县" }, { "letter": "D", "city": "德保县" }, { "letter": "D", "city": "德昌县" }, { "letter": "D", "city": "德格县" }, { "letter": "D", "city": "德宏傣族景颇族自治州" }, { "letter": "D", "city": "德化县" }, { "letter": "D", "city": "德惠市" }, { "letter": "D", "city": "德江县" }, { "letter": "D", "city": "德令哈市" }, { "letter": "D", "city": "登封市" }, { "letter": "D", "city": "磴口县" }, { "letter": "D", "city": "灯塔市" }, { "letter": "D", "city": "邓州市" }, { "letter": "D", "city": "德钦县" }, { "letter": "D", "city": "德清县" }, { "letter": "D", "city": "德庆县" }, { "letter": "D", "city": "得荣县" }, { "letter": "D", "city": "德兴市" }, { "letter": "D", "city": "德阳市" }, { "letter": "D", "city": "德州市" }, { "letter": "D", "city": "垫江县" }, { "letter": "D", "city": "调兵山市" }, { "letter": "D", "city": "迭部县" }, { "letter": "D", "city": "定安县" }, { "letter": "D", "city": "定边县" }, { "letter": "D", "city": "定结县" }, { "letter": "D", "city": "定南县" }, { "letter": "D", "city": "丁青县" }, { "letter": "D", "city": "定日县" }, { "letter": "D", "city": "定西市" }, { "letter": "D", "city": "定襄县" }, { "letter": "D", "city": "定兴县" }, { "letter": "D", "city": "定远县" }, { "letter": "D", "city": "定州市" }, { "letter": "D", "city": "迪庆藏族自治州" }, { "letter": "D", "city": "东安县" }, { "letter": "D", "city": "东阿县" }, { "letter": "D", "city": "东方市" }, { "letter": "D", "city": "东丰县" }, { "letter": "D", "city": "东港市" }, { "letter": "D", "city": "东莞市" }, { "letter": "D", "city": "东光县" }, { "letter": "D", "city": "东海县" }, { "letter": "D", "city": "洞口县" }, { "letter": "D", "city": "东兰县" }, { "letter": "D", "city": "东辽县" }, { "letter": "D", "city": "东明县" }, { "letter": "D", "city": "东宁市" }, { "letter": "D", "city": "东平县" }, { "letter": "D", "city": "东山县" }, { "letter": "D", "city": "东台市" }, { "letter": "D", "city": "东乌珠穆沁旗" }, { "letter": "D", "city": "东乡族自治县" }, { "letter": "D", "city": "东兴市" }, { "letter": "D", "city": "东阳市" }, { "letter": "D", "city": "东营市" }, { "letter": "D", "city": "东源县" }, { "letter": "D", "city": "东至县" }, { "letter": "D", "city": "都安瑶族自治县" }, { "letter": "D", "city": "都昌县" }, { "letter": "D", "city": "杜尔伯特蒙古族自治县" }, { "letter": "D", "city": "都江堰市" }, { "letter": "D", "city": "都兰县" }, { "letter": "D", "city": "敦化市" }, { "letter": "D", "city": "敦煌市" }, { "letter": "D", "city": "多伦县" }, { "letter": "D", "city": "独山县" }, { "letter": "D", "city": "都匀市" }, { "letter": "E", "city": "峨边彝族自治县" }, { "letter": "E", "city": "鄂尔多斯市" }, { "letter": "E", "city": "额尔古纳市" }, { "letter": "E", "city": "额济纳旗" }, { "letter": "E", "city": "鄂伦春自治旗" }, { "letter": "E", "city": "峨眉山市" }, { "letter": "E", "city": "额敏县" }, { "letter": "E", "city": "恩平市" }, { "letter": "E", "city": "恩施市" }, { "letter": "E", "city": "恩施土家族苗族自治州" }, { "letter": "E", "city": "二连浩特市" }, { "letter": "E", "city": "洱源县" }, { "letter": "E", "city": "峨山彝族自治县" }, { "letter": "E", "city": "鄂托克旗" }, { "letter": "E", "city": "鄂托克前旗" }, { "letter": "E", "city": "鄂温克族自治旗" }, { "letter": "E", "city": "鄂州市" }, { "letter": "F", "city": "法库县" }, { "letter": "F", "city": "繁昌县" }, { "letter": "F", "city": "方城县" }, { "letter": "F", "city": "防城港市" }, { "letter": "F", "city": "方山县" }, { "letter": "F", "city": "房县" }, { "letter": "F", "city": "方正县" }, { "letter": "F", "city": "范县" }, { "letter": "F", "city": "繁峙县" }, { "letter": "F", "city": "肥城市" }, { "letter": "F", "city": "肥东县" }, { "letter": "F", "city": "肥西县" }, { "letter": "F", "city": "费县" }, { "letter": "F", "city": "肥乡县" }, { "letter": "F", "city": "丰城市" }, { "letter": "F", "city": "凤城市" }, { "letter": "F", "city": "丰都县" }, { "letter": "F", "city": "凤冈县" }, { "letter": "F", "city": "凤凰县" }, { "letter": "F", "city": "奉节县" }, { "letter": "F", "city": "封开县" }, { "letter": "F", "city": "丰宁满族自治县" }, { "letter": "F", "city": "凤庆县" }, { "letter": "F", "city": "封丘县" }, { "letter": "F", "city": "凤山县" }, { "letter": "F", "city": "丰顺县" }, { "letter": "F", "city": "凤台县" }, { "letter": "F", "city": "丰县" }, { "letter": "F", "city": "凤县" }, { "letter": "F", "city": "凤翔县" }, { "letter": "F", "city": "奉新县" }, { "letter": "F", "city": "凤阳县" }, { "letter": "F", "city": "丰镇市" }, { "letter": "F", "city": "汾西县" }, { "letter": "F", "city": "汾阳市" }, { "letter": "F", "city": "分宜县" }, { "letter": "F", "city": "佛冈县" }, { "letter": "F", "city": "佛坪县" }, { "letter": "F", "city": "佛山市" }, { "letter": "F", "city": "福安市" }, { "letter": "F", "city": "阜城县" }, { "letter": "F", "city": "富川瑶族自治县" }, { "letter": "F", "city": "福鼎市" }, { "letter": "F", "city": "扶风县" }, { "letter": "F", "city": "福贡县" }, { "letter": "F", "city": "扶沟县" }, { "letter": "F", "city": "府谷县" }, { "letter": "F", "city": "福海县" }, { "letter": "F", "city": "富锦市" }, { "letter": "F", "city": "阜康市" }, { "letter": "F", "city": "浮梁县" }, { "letter": "F", "city": "富民县" }, { "letter": "F", "city": "阜南县" }, { "letter": "F", "city": "阜宁县" }, { "letter": "F", "city": "富宁县" }, { "letter": "F", "city": "阜平县" }, { "letter": "F", "city": "富平县" }, { "letter": "F", "city": "福清市" }, { "letter": "F", "city": "福泉市" }, { "letter": "F", "city": "浮山县" }, { "letter": "F", "city": "抚顺市" }, { "letter": "F", "city": "富顺县" }, { "letter": "F", "city": "抚顺县" }, { "letter": "F", "city": "抚松县" }, { "letter": "F", "city": "扶绥县" }, { "letter": "F", "city": "富县" }, { "letter": "F", "city": "阜新市" }, { "letter": "F", "city": "阜新蒙古族自治县" }, { "letter": "F", "city": "阜阳市" }, { "letter": "F", "city": "扶余市" }, { "letter": "F", "city": "富裕县" }, { "letter": "F", "city": "富源县" }, { "letter": "F", "city": "抚远市" }, { "letter": "F", "city": "富蕴县" }, { "letter": "F", "city": "福州市" }, { "letter": "F", "city": "抚州市" }, { "letter": "G", "city": "噶尔县" }, { "letter": "G", "city": "改则县" }, { "letter": "G", "city": "盖州市" }, { "letter": "G", "city": "甘德县" }, { "letter": "G", "city": "岗巴县" }, { "letter": "G", "city": "刚察县" }, { "letter": "G", "city": "甘谷县" }, { "letter": "G", "city": "甘洛县" }, { "letter": "G", "city": "甘南县" }, { "letter": "G", "city": "甘南藏族自治州" }, { "letter": "G", "city": "甘泉县" }, { "letter": "G", "city": "赣州市" }, { "letter": "G", "city": "甘孜县" }, { "letter": "G", "city": "甘孜藏族自治州" }, { "letter": "G", "city": "高安市" }, { "letter": "G", "city": "高碑店市" }, { "letter": "G", "city": "皋兰县" }, { "letter": "G", "city": "高密市" }, { "letter": "G", "city": "高平市" }, { "letter": "G", "city": "高青县" }, { "letter": "G", "city": "高台县" }, { "letter": "G", "city": "高唐县" }, { "letter": "G", "city": "高县" }, { "letter": "G", "city": "高阳县" }, { "letter": "G", "city": "高邑县" }, { "letter": "G", "city": "高邮市" }, { "letter": "G", "city": "高州市" }, { "letter": "G", "city": "格尔木市" }, { "letter": "G", "city": "革吉县" }, { "letter": "G", "city": "个旧市" }, { "letter": "G", "city": "耿马傣族佤族自治县" }, { "letter": "G", "city": "根河市" }, { "letter": "G", "city": "公安县" }, { "letter": "G", "city": "工布江达县" }, { "letter": "G", "city": "恭城瑶族自治县" }, { "letter": "G", "city": "贡嘎县" }, { "letter": "G", "city": "共和县" }, { "letter": "G", "city": "贡觉县" }, { "letter": "G", "city": "巩留县" }, { "letter": "G", "city": "共青城市" }, { "letter": "G", "city": "贡山独龙族怒族自治县" }, { "letter": "G", "city": "珙县" }, { "letter": "G", "city": "巩义市" }, { "letter": "G", "city": "公主岭市" }, { "letter": "G", "city": "固安县" }, { "letter": "G", "city": "广安市" }, { "letter": "G", "city": "广昌县" }, { "letter": "G", "city": "广德县" }, { "letter": "G", "city": "广汉市" }, { "letter": "G", "city": "广河县" }, { "letter": "G", "city": "广灵县" }, { "letter": "G", "city": "广南县" }, { "letter": "G", "city": "广宁县" }, { "letter": "G", "city": "广平县" }, { "letter": "G", "city": "广饶县" }, { "letter": "G", "city": "光山县" }, { "letter": "G", "city": "广水市" }, { "letter": "G", "city": "广元市" }, { "letter": "G", "city": "光泽县" }, { "letter": "G", "city": "广州市" }, { "letter": "G", "city": "广宗县" }, { "letter": "G", "city": "关岭布依族苗族自治县" }, { "letter": "G", "city": "灌南县" }, { "letter": "G", "city": "馆陶县" }, { "letter": "G", "city": "冠县" }, { "letter": "G", "city": "灌阳县" }, { "letter": "G", "city": "灌云县" }, { "letter": "G", "city": "瓜州县" }, { "letter": "G", "city": "谷城县" }, { "letter": "G", "city": "故城县" }, { "letter": "G", "city": "贵德县" }, { "letter": "G", "city": "贵定县" }, { "letter": "G", "city": "桂东县" }, { "letter": "G", "city": "贵港市" }, { "letter": "G", "city": "桂林市" }, { "letter": "G", "city": "贵南县" }, { "letter": "G", "city": "桂平市" }, { "letter": "G", "city": "贵溪市" }, { "letter": "G", "city": "贵阳市" }, { "letter": "G", "city": "桂阳县" }, { "letter": "G", "city": "古交市" }, { "letter": "G", "city": "古浪县" }, { "letter": "G", "city": "古蔺县" }, { "letter": "G", "city": "果洛藏族自治州" }, { "letter": "G", "city": "固始县" }, { "letter": "G", "city": "古田县" }, { "letter": "G", "city": "古县" }, { "letter": "G", "city": "固阳县" }, { "letter": "G", "city": "沽源县" }, { "letter": "G", "city": "固原市" }, { "letter": "G", "city": "古丈县" }, { "letter": "G", "city": "固镇县" }, { "letter": "H", "city": "哈巴河县" }, { "letter": "H", "city": "哈尔滨市" }, { "letter": "H", "city": "海安县" }, { "letter": "H", "city": "海北藏族自治州" }, { "letter": "H", "city": "海城市" }, { "letter": "H", "city": "海东市" }, { "letter": "H", "city": "海丰县" }, { "letter": "H", "city": "海口市" }, { "letter": "H", "city": "海林市" }, { "letter": "H", "city": "海伦市" }, { "letter": "H", "city": "海门市" }, { "letter": "H", "city": "海南藏族自治州" }, { "letter": "H", "city": "海宁市" }, { "letter": "H", "city": "海西蒙古族藏族自治州" }, { "letter": "H", "city": "海兴县" }, { "letter": "H", "city": "海盐县" }, { "letter": "H", "city": "海晏县" }, { "letter": "H", "city": "海阳市" }, { "letter": "H", "city": "海原县" }, { "letter": "H", "city": "哈密市" }, { "letter": "H", "city": "韩城市" }, { "letter": "H", "city": "汉川市" }, { "letter": "H", "city": "邯郸市" }, { "letter": "H", "city": "邯郸县" }, { "letter": "H", "city": "杭锦后旗" }, { "letter": "H", "city": "杭锦旗" }, { "letter": "H", "city": "杭州市" }, { "letter": "H", "city": "含山县" }, { "letter": "H", "city": "汉寿县" }, { "letter": "H", "city": "汉阴县" }, { "letter": "H", "city": "汉源县" }, { "letter": "H", "city": "汉中市" }, { "letter": "H", "city": "鹤壁市" }, { "letter": "H", "city": "和布克赛尔蒙古自治县" }, { "letter": "H", "city": "河池市" }, { "letter": "H", "city": "合肥市" }, { "letter": "H", "city": "鹤峰县" }, { "letter": "H", "city": "鹤岗市" }, { "letter": "H", "city": "黑河市" }, { "letter": "H", "city": "黑山县" }, { "letter": "H", "city": "黑水县" }, { "letter": "H", "city": "河间市" }, { "letter": "H", "city": "合江县" }, { "letter": "H", "city": "河津市" }, { "letter": "H", "city": "和静县" }, { "letter": "H", "city": "河口瑶族自治县" }, { "letter": "H", "city": "贺兰县" }, { "letter": "H", "city": "和林格尔县" }, { "letter": "H", "city": "和龙市" }, { "letter": "H", "city": "河南蒙古族自治县" }, { "letter": "H", "city": "衡东县" }, { "letter": "H", "city": "横峰县" }, { "letter": "H", "city": "衡南县" }, { "letter": "H", "city": "衡山县" }, { "letter": "H", "city": "衡水市" }, { "letter": "H", "city": "横县" }, { "letter": "H", "city": "衡阳市" }, { "letter": "H", "city": "衡阳县" }, { "letter": "H", "city": "和平县" }, { "letter": "H", "city": "合浦县" }, { "letter": "H", "city": "鹤庆县" }, { "letter": "H", "city": "河曲县" }, { "letter": "H", "city": "鹤山市" }, { "letter": "H", "city": "合山市" }, { "letter": "H", "city": "合水县" }, { "letter": "H", "city": "和顺县" }, { "letter": "H", "city": "和硕县" }, { "letter": "H", "city": "和田市" }, { "letter": "H", "city": "和田县" }, { "letter": "H", "city": "和田地区" }, { "letter": "H", "city": "和县" }, { "letter": "H", "city": "合阳县" }, { "letter": "H", "city": "河源市" }, { "letter": "H", "city": "菏泽市" }, { "letter": "H", "city": "赫章县" }, { "letter": "H", "city": "和政县" }, { "letter": "H", "city": "贺州市" }, { "letter": "H", "city": "合作市" }, { "letter": "H", "city": "红安县" }, { "letter": "H", "city": "洪洞县" }, { "letter": "H", "city": "红河县" }, { "letter": "H", "city": "红河哈尼族彝族自治州" }, { "letter": "H", "city": "洪湖市" }, { "letter": "H", "city": "洪江市" }, { "letter": "H", "city": "洪雅县" }, { "letter": "H", "city": "红原县" }, { "letter": "H", "city": "洪泽区" }, { "letter": "H", "city": "侯马市" }, { "letter": "H", "city": "华安县" }, { "letter": "H", "city": "华池县" }, { "letter": "H", "city": "桦川县" }, { "letter": "H", "city": "化德县" }, { "letter": "H", "city": "桦甸市" }, { "letter": "H", "city": "淮安市" }, { "letter": "H", "city": "怀安县" }, { "letter": "H", "city": "淮北市" }, { "letter": "H", "city": "淮滨县" }, { "letter": "H", "city": "怀化市" }, { "letter": "H", "city": "怀集县" }, { "letter": "H", "city": "怀来县" }, { "letter": "H", "city": "淮南市" }, { "letter": "H", "city": "怀宁县" }, { "letter": "H", "city": "怀仁县" }, { "letter": "H", "city": "淮阳县" }, { "letter": "H", "city": "怀远县" }, { "letter": "H", "city": "化隆回族自治县" }, { "letter": "H", "city": "桦南县" }, { "letter": "H", "city": "潢川县" }, { "letter": "H", "city": "黄冈市" }, { "letter": "H", "city": "黄骅市" }, { "letter": "H", "city": "黄陵县" }, { "letter": "H", "city": "黄龙县" }, { "letter": "H", "city": "黄梅县" }, { "letter": "H", "city": "黄南藏族自治州" }, { "letter": "H", "city": "黄平县" }, { "letter": "H", "city": "黄山市" }, { "letter": "H", "city": "黄石市" }, { "letter": "H", "city": "湟源县" }, { "letter": "H", "city": "湟中县" }, { "letter": "H", "city": "华宁县" }, { "letter": "H", "city": "环江毛南族自治县" }, { "letter": "H", "city": "桓仁满族自治县" }, { "letter": "H", "city": "桓台县" }, { "letter": "H", "city": "环县" }, { "letter": "H", "city": "华坪县" }, { "letter": "H", "city": "华容县" }, { "letter": "H", "city": "华亭县" }, { "letter": "H", "city": "滑县" }, { "letter": "H", "city": "华阴市" }, { "letter": "H", "city": "华蓥市" }, { "letter": "H", "city": "花垣县" }, { "letter": "H", "city": "化州市" }, { "letter": "H", "city": "壶关县" }, { "letter": "H", "city": "呼和浩特市" }, { "letter": "H", "city": "惠安县" }, { "letter": "H", "city": "会昌县" }, { "letter": "H", "city": "惠东县" }, { "letter": "H", "city": "会东县" }, { "letter": "H", "city": "惠来县" }, { "letter": "H", "city": "会理县" }, { "letter": "H", "city": "惠民县" }, { "letter": "H", "city": "辉南县" }, { "letter": "H", "city": "睢宁县" }, { "letter": "H", "city": "会宁县" }, { "letter": "H", "city": "惠水县" }, { "letter": "H", "city": "会同县" }, { "letter": "H", "city": "辉县市" }, { "letter": "H", "city": "睢县" }, { "letter": "H", "city": "徽县" }, { "letter": "H", "city": "会泽县" }, { "letter": "H", "city": "惠州市" }, { "letter": "H", "city": "湖口县" }, { "letter": "H", "city": "虎林市" }, { "letter": "H", "city": "葫芦岛市" }, { "letter": "H", "city": "呼伦贝尔市" }, { "letter": "H", "city": "呼玛县" }, { "letter": "H", "city": "珲春市" }, { "letter": "H", "city": "浑源县" }, { "letter": "H", "city": "霍城县" }, { "letter": "H", "city": "霍尔果斯市" }, { "letter": "H", "city": "获嘉县" }, { "letter": "H", "city": "霍林郭勒市" }, { "letter": "H", "city": "霍邱县" }, { "letter": "H", "city": "霍山县" }, { "letter": "H", "city": "霍州市" }, { "letter": "H", "city": "呼图壁县" }, { "letter": "H", "city": "湖州市" }, { "letter": "H", "city": "互助土族自治县" }, { "letter": "J", "city": "加查县" }, { "letter": "J", "city": "嘉禾县" }, { "letter": "J", "city": "夹江县" }, { "letter": "J", "city": "嘉黎县" }, { "letter": "J", "city": "佳木斯市" }, { "letter": "J", "city": "吉安市" }, { "letter": "J", "city": "集安市" }, { "letter": "J", "city": "吉安县" }, { "letter": "J", "city": "建昌县" }, { "letter": "J", "city": "剑川县" }, { "letter": "J", "city": "建德市" }, { "letter": "J", "city": "江安县" }, { "letter": "J", "city": "江城哈尼族彝族自治县" }, { "letter": "J", "city": "江达县" }, { "letter": "J", "city": "剑阁县" }, { "letter": "J", "city": "江华瑶族自治县" }, { "letter": "J", "city": "江口县" }, { "letter": "J", "city": "将乐县" }, { "letter": "J", "city": "江陵县" }, { "letter": "J", "city": "江门市" }, { "letter": "J", "city": "江山市" }, { "letter": "J", "city": "绛县" }, { "letter": "J", "city": "江阴市" }, { "letter": "J", "city": "江永县" }, { "letter": "J", "city": "江油市" }, { "letter": "J", "city": "江孜县" }, { "letter": "J", "city": "剑河县" }, { "letter": "J", "city": "建湖县" }, { "letter": "J", "city": "监利县" }, { "letter": "J", "city": "建宁县" }, { "letter": "J", "city": "建瓯市" }, { "letter": "J", "city": "建平县" }, { "letter": "J", "city": "建始县" }, { "letter": "J", "city": "建水县" }, { "letter": "J", "city": "犍为县" }, { "letter": "J", "city": "简阳市" }, { "letter": "J", "city": "尖扎县" }, { "letter": "J", "city": "交城县" }, { "letter": "J", "city": "蛟河市" }, { "letter": "J", "city": "交口县" }, { "letter": "J", "city": "蕉岭县" }, { "letter": "J", "city": "胶州市" }, { "letter": "J", "city": "焦作市" }, { "letter": "J", "city": "嘉善县" }, { "letter": "J", "city": "伽师县" }, { "letter": "J", "city": "郏县" }, { "letter": "J", "city": "佳县" }, { "letter": "J", "city": "嘉祥县" }, { "letter": "J", "city": "嘉兴市" }, { "letter": "J", "city": "嘉荫县" }, { "letter": "J", "city": "嘉鱼县" }, { "letter": "J", "city": "嘉峪关市" }, { "letter": "J", "city": "鸡东县" }, { "letter": "J", "city": "界首市" }, { "letter": "J", "city": "揭西县" }, { "letter": "J", "city": "介休市" }, { "letter": "J", "city": "揭阳市" }, { "letter": "J", "city": "吉林市" }, { "letter": "J", "city": "吉隆县" }, { "letter": "J", "city": "吉木乃县" }, { "letter": "J", "city": "吉木萨尔县" }, { "letter": "J", "city": "济南市" }, { "letter": "J", "city": "金昌市" }, { "letter": "J", "city": "晋城市" }, { "letter": "J", "city": "金川县" }, { "letter": "J", "city": "靖安县" }, { "letter": "J", "city": "靖边县" }, { "letter": "J", "city": "泾川县" }, { "letter": "J", "city": "旌德县" }, { "letter": "J", "city": "景德镇市" }, { "letter": "J", "city": "景东彝族自治县" }, { "letter": "J", "city": "井冈山市" }, { "letter": "J", "city": "景谷傣族彝族自治县" }, { "letter": "J", "city": "精河县" }, { "letter": "J", "city": "景洪市" }, { "letter": "J", "city": "靖江市" }, { "letter": "J", "city": "静乐县" }, { "letter": "J", "city": "荆门市" }, { "letter": "J", "city": "静宁县" }, { "letter": "J", "city": "景宁畲族自治县" }, { "letter": "J", "city": "京山县" }, { "letter": "J", "city": "景泰县" }, { "letter": "J", "city": "靖西市" }, { "letter": "J", "city": "景县" }, { "letter": "J", "city": "泾县" }, { "letter": "J", "city": "井陉县" }, { "letter": "J", "city": "井研县" }, { "letter": "J", "city": "泾阳县" }, { "letter": "J", "city": "靖宇县" }, { "letter": "J", "city": "靖远县" }, { "letter": "J", "city": "泾源县" }, { "letter": "J", "city": "荆州市" }, { "letter": "J", "city": "靖州苗族侗族自治县" }, { "letter": "J", "city": "金湖县" }, { "letter": "J", "city": "金华市" }, { "letter": "J", "city": "济宁市" }, { "letter": "J", "city": "晋江市" }, { "letter": "J", "city": "金门县" }, { "letter": "J", "city": "锦屏县" }, { "letter": "J", "city": "金平苗族瑶族傣族自治县" }, { "letter": "J", "city": "金沙县" }, { "letter": "J", "city": "津市市" }, { "letter": "J", "city": "金塔县" }, { "letter": "J", "city": "金堂县" }, { "letter": "J", "city": "金溪县" }, { "letter": "J", "city": "进贤县" }, { "letter": "J", "city": "金乡县" }, { "letter": "J", "city": "金秀瑶族自治县" }, { "letter": "J", "city": "金阳县" }, { "letter": "J", "city": "缙云县" }, { "letter": "J", "city": "金寨县" }, { "letter": "J", "city": "晋中市" }, { "letter": "J", "city": "锦州市" }, { "letter": "J", "city": "晋州市" }, { "letter": "J", "city": "稷山县" }, { "letter": "J", "city": "积石山保安族东乡族撒拉族自治县" }, { "letter": "J", "city": "吉首市" }, { "letter": "J", "city": "吉水县" }, { "letter": "J", "city": "九江市" }, { "letter": "J", "city": "九龙县" }, { "letter": "J", "city": "酒泉市" }, { "letter": "J", "city": "九寨沟县" }, { "letter": "J", "city": "久治县" }, { "letter": "J", "city": "鸡西市" }, { "letter": "J", "city": "绩溪县" }, { "letter": "J", "city": "蓟县" }, { "letter": "J", "city": "吉县" }, { "letter": "J", "city": "集贤县" }, { "letter": "J", "city": "济阳县" }, { "letter": "J", "city": "济源市" }, { "letter": "J", "city": "鸡泽县" }, { "letter": "J", "city": "冀州区" }, { "letter": "J", "city": "鄄城县" }, { "letter": "J", "city": "巨鹿县" }, { "letter": "J", "city": "莒南县" }, { "letter": "J", "city": "句容市" }, { "letter": "J", "city": "莒县" }, { "letter": "J", "city": "巨野县" }, { "letter": "K", "city": "开封市" }, { "letter": "K", "city": "开化县" }, { "letter": "K", "city": "开江县" }, { "letter": "K", "city": "凯里市" }, { "letter": "K", "city": "开鲁县" }, { "letter": "K", "city": "开平市" }, { "letter": "K", "city": "开阳县" }, { "letter": "K", "city": "开原市" }, { "letter": "K", "city": "开远市" }, { "letter": "K", "city": "开州区" }, { "letter": "K", "city": "喀喇沁旗" }, { "letter": "K", "city": "喀喇沁左翼蒙古族自治县" }, { "letter": "K", "city": "康保县" }, { "letter": "K", "city": "康定市" }, { "letter": "K", "city": "康乐县" }, { "letter": "K", "city": "康马县" }, { "letter": "K", "city": "康平县" }, { "letter": "K", "city": "康县" }, { "letter": "K", "city": "喀什市" }, { "letter": "K", "city": "喀什地区" }, { "letter": "K", "city": "克东县" }, { "letter": "K", "city": "科尔沁右翼前旗" }, { "letter": "K", "city": "科尔沁右翼中旗" }, { "letter": "K", "city": "科尔沁左翼后旗" }, { "letter": "K", "city": "科尔沁左翼中旗" }, { "letter": "K", "city": "可克达拉市" }, { "letter": "K", "city": "克拉玛依市" }, { "letter": "K", "city": "岢岚县" }, { "letter": "K", "city": "垦利区" }, { "letter": "K", "city": "柯坪县" }, { "letter": "K", "city": "克山县" }, { "letter": "K", "city": "克什克腾旗" }, { "letter": "K", "city": "克孜勒苏柯尔克孜自治州" }, { "letter": "K", "city": "宽城满族自治县" }, { "letter": "K", "city": "宽甸满族自治县" }, { "letter": "K", "city": "库车县" }, { "letter": "K", "city": "库尔勒市" }, { "letter": "K", "city": "奎屯市" }, { "letter": "K", "city": "库伦旗" }, { "letter": "K", "city": "昆明市" }, { "letter": "K", "city": "昆山市" }, { "letter": "K", "city": "昆玉市" }, { "letter": "L", "city": "来安县" }, { "letter": "L", "city": "来宾市" }, { "letter": "L", "city": "来凤县" }, { "letter": "L", "city": "涞水县" }, { "letter": "L", "city": "莱芜市" }, { "letter": "L", "city": "莱西市" }, { "letter": "L", "city": "莱阳市" }, { "letter": "L", "city": "涞源县" }, { "letter": "L", "city": "莱州市" }, { "letter": "L", "city": "澜沧拉祜族自治县" }, { "letter": "L", "city": "岚皋县" }, { "letter": "L", "city": "廊坊市" }, { "letter": "L", "city": "浪卡子县" }, { "letter": "L", "city": "郎溪县" }, { "letter": "L", "city": "朗县" }, { "letter": "L", "city": "阆中市" }, { "letter": "L", "city": "兰考县" }, { "letter": "L", "city": "兰陵县" }, { "letter": "L", "city": "兰坪白族普米族自治县" }, { "letter": "L", "city": "蓝山县" }, { "letter": "L", "city": "蓝田县" }, { "letter": "L", "city": "兰溪市" }, { "letter": "L", "city": "兰西县" }, { "letter": "L", "city": "岚县" }, { "letter": "L", "city": "兰州市" }, { "letter": "L", "city": "老河口市" }, { "letter": "L", "city": "乐陵市" }, { "letter": "L", "city": "乐亭县" }, { "letter": "L", "city": "拉萨市" }, { "letter": "L", "city": "拉孜县" }, { "letter": "L", "city": "乐安县" }, { "letter": "L", "city": "乐昌市" }, { "letter": "L", "city": "乐东黎族自治县" }, { "letter": "L", "city": "雷波县" }, { "letter": "L", "city": "雷山县" }, { "letter": "L", "city": "类乌齐县" }, { "letter": "L", "city": "耒阳市" }, { "letter": "L", "city": "雷州市" }, { "letter": "L", "city": "冷湖行政委员会" }, { "letter": "L", "city": "冷水江市" }, { "letter": "L", "city": "乐平市" }, { "letter": "L", "city": "乐山市" }, { "letter": "L", "city": "乐业县" }, { "letter": "L", "city": "乐至县" }, { "letter": "L", "city": "连城县" }, { "letter": "L", "city": "凉城县" }, { "letter": "L", "city": "两当县" }, { "letter": "L", "city": "梁河县" }, { "letter": "L", "city": "梁山县" }, { "letter": "L", "city": "凉山彝族自治州" }, { "letter": "L", "city": "莲花县" }, { "letter": "L", "city": "连江县" }, { "letter": "L", "city": "廉江市" }, { "letter": "L", "city": "连南瑶族自治县" }, { "letter": "L", "city": "连平县" }, { "letter": "L", "city": "连山壮族瑶族自治县" }, { "letter": "L", "city": "涟水县" }, { "letter": "L", "city": "涟源市" }, { "letter": "L", "city": "连云港市" }, { "letter": "L", "city": "连州市" }, { "letter": "L", "city": "聊城市" }, { "letter": "L", "city": "辽阳市" }, { "letter": "L", "city": "辽阳县" }, { "letter": "L", "city": "辽源市" }, { "letter": "L", "city": "荔波县" }, { "letter": "L", "city": "黎城县" }, { "letter": "L", "city": "利川市" }, { "letter": "L", "city": "黎川县" }, { "letter": "L", "city": "丽江市" }, { "letter": "L", "city": "利津县" }, { "letter": "L", "city": "醴陵市" }, { "letter": "L", "city": "临沧市" }, { "letter": "L", "city": "临城县" }, { "letter": "L", "city": "林甸县" }, { "letter": "L", "city": "临汾市" }, { "letter": "L", "city": "临高县" }, { "letter": "L", "city": "灵宝市" }, { "letter": "L", "city": "灵璧县" }, { "letter": "L", "city": "陵川县" }, { "letter": "L", "city": "灵川县" }, { "letter": "L", "city": "凌海市" }, { "letter": "L", "city": "灵丘县" }, { "letter": "L", "city": "灵山县" }, { "letter": "L", "city": "灵石县" }, { "letter": "L", "city": "灵寿县" }, { "letter": "L", "city": "陵水黎族自治县" }, { "letter": "L", "city": "灵台县" }, { "letter": "L", "city": "灵武市" }, { "letter": "L", "city": "陵县" }, { "letter": "L", "city": "凌源市" }, { "letter": "L", "city": "凌云县" }, { "letter": "L", "city": "临海市" }, { "letter": "L", "city": "临江市" }, { "letter": "L", "city": "林口县" }, { "letter": "L", "city": "临澧县" }, { "letter": "L", "city": "临清市" }, { "letter": "L", "city": "临朐县" }, { "letter": "L", "city": "临泉县" }, { "letter": "L", "city": "临沭县" }, { "letter": "L", "city": "邻水县" }, { "letter": "L", "city": "临潭县" }, { "letter": "L", "city": "临洮县" }, { "letter": "L", "city": "临武县" }, { "letter": "L", "city": "临西县" }, { "letter": "L", "city": "林西县" }, { "letter": "L", "city": "临夏市" }, { "letter": "L", "city": "临夏县" }, { "letter": "L", "city": "临夏回族自治州" }, { "letter": "L", "city": "临县" }, { "letter": "L", "city": "临湘市" }, { "letter": "L", "city": "临沂市" }, { "letter": "L", "city": "临邑县" }, { "letter": "L", "city": "临猗县" }, { "letter": "L", "city": "临颍县" }, { "letter": "L", "city": "麟游县" }, { "letter": "L", "city": "临泽县" }, { "letter": "L", "city": "临漳县" }, { "letter": "L", "city": "林芝市" }, { "letter": "L", "city": "林州市" }, { "letter": "L", "city": "林周县" }, { "letter": "L", "city": "黎平县" }, { "letter": "L", "city": "荔浦县" }, { "letter": "L", "city": "礼泉县" }, { "letter": "L", "city": "梨树县" }, { "letter": "L", "city": "丽水市" }, { "letter": "L", "city": "理塘县" }, { "letter": "L", "city": "六安市" }, { "letter": "L", "city": "留坝县" }, { "letter": "L", "city": "柳城县" }, { "letter": "L", "city": "柳河县" }, { "letter": "L", "city": "柳林县" }, { "letter": "L", "city": "六盘水市" }, { "letter": "L", "city": "浏阳市" }, { "letter": "L", "city": "柳州市" }, { "letter": "L", "city": "澧县" }, { "letter": "L", "city": "蠡县" }, { "letter": "L", "city": "理县" }, { "letter": "L", "city": "礼县" }, { "letter": "L", "city": "利辛县" }, { "letter": "L", "city": "溧阳市" }, { "letter": "L", "city": "隆安县" }, { "letter": "L", "city": "隆昌市" }, { "letter": "L", "city": "龙川县" }, { "letter": "L", "city": "陇川县" }, { "letter": "L", "city": "隆德县" }, { "letter": "L", "city": "龙海市" }, { "letter": "L", "city": "隆化县" }, { "letter": "L", "city": "隆回县" }, { "letter": "L", "city": "龙江县" }, { "letter": "L", "city": "龙井市" }, { "letter": "L", "city": "龙口市" }, { "letter": "L", "city": "龙里县" }, { "letter": "L", "city": "龙陵县" }, { "letter": "L", "city": "隆林各族自治县" }, { "letter": "L", "city": "龙门县" }, { "letter": "L", "city": "龙南县" }, { "letter": "L", "city": "陇南市" }, { "letter": "L", "city": "龙泉市" }, { "letter": "L", "city": "龙山县" }, { "letter": "L", "city": "龙胜各族自治县" }, { "letter": "L", "city": "陇西县" }, { "letter": "L", "city": "陇县" }, { "letter": "L", "city": "龙岩市" }, { "letter": "L", "city": "隆尧县" }, { "letter": "L", "city": "龙游县" }, { "letter": "L", "city": "龙州县" }, { "letter": "L", "city": "隆子县" }, { "letter": "L", "city": "娄底市" }, { "letter": "L", "city": "娄烦县" }, { "letter": "L", "city": "栾川县" }, { "letter": "L", "city": "滦南县" }, { "letter": "L", "city": "滦平县" }, { "letter": "L", "city": "滦县" }, { "letter": "L", "city": "潞城市" }, { "letter": "L", "city": "陆川县" }, { "letter": "L", "city": "鲁甸县" }, { "letter": "L", "city": "泸定县" }, { "letter": "L", "city": "略阳县" }, { "letter": "L", "city": "陆丰市" }, { "letter": "L", "city": "禄丰县" }, { "letter": "L", "city": "陆河县" }, { "letter": "L", "city": "炉霍县" }, { "letter": "L", "city": "庐江县" }, { "letter": "L", "city": "陆良县" }, { "letter": "L", "city": "卢龙县" }, { "letter": "L", "city": "轮台县" }, { "letter": "L", "city": "萝北县" }, { "letter": "L", "city": "罗城仫佬族自治县" }, { "letter": "L", "city": "洛川县" }, { "letter": "L", "city": "罗甸县" }, { "letter": "L", "city": "罗定市" }, { "letter": "L", "city": "漯河市" }, { "letter": "L", "city": "罗江县" }, { "letter": "L", "city": "洛隆县" }, { "letter": "L", "city": "洛南县" }, { "letter": "L", "city": "洛宁县" }, { "letter": "L", "city": "罗平县" }, { "letter": "L", "city": "洛浦县" }, { "letter": "L", "city": "罗山县" }, { "letter": "L", "city": "罗田县" }, { "letter": "L", "city": "洛阳市" }, { "letter": "L", "city": "罗源县" }, { "letter": "L", "city": "洛扎县" }, { "letter": "L", "city": "碌曲县" }, { "letter": "L", "city": "禄劝彝族苗族自治县" }, { "letter": "L", "city": "鲁山县" }, { "letter": "L", "city": "庐山市" }, { "letter": "L", "city": "芦山县" }, { "letter": "L", "city": "卢氏县" }, { "letter": "L", "city": "泸水市" }, { "letter": "L", "city": "芦溪县" }, { "letter": "L", "city": "泸溪县" }, { "letter": "L", "city": "泸西县" }, { "letter": "L", "city": "泸县" }, { "letter": "L", "city": "鹿邑县" }, { "letter": "L", "city": "鹿寨县" }, { "letter": "L", "city": "泸州市" }, { "letter": "L", "city": "绿春县" }, { "letter": "L", "city": "吕梁市" }, { "letter": "M", "city": "马鞍山市" }, { "letter": "M", "city": "马边彝族自治县" }, { "letter": "M", "city": "麻城市" }, { "letter": "M", "city": "玛多县" }, { "letter": "M", "city": "马尔康市" }, { "letter": "M", "city": "马关县" }, { "letter": "M", "city": "麦盖提县" }, { "letter": "M", "city": "麻江县" }, { "letter": "M", "city": "麻栗坡县" }, { "letter": "M", "city": "马龙县" }, { "letter": "M", "city": "玛纳斯县" }, { "letter": "M", "city": "芒康县" }, { "letter": "M", "city": "芒市" }, { "letter": "M", "city": "茫崖行政委员会" }, { "letter": "M", "city": "满洲里市" }, { "letter": "M", "city": "茂名市" }, { "letter": "M", "city": "茂县" }, { "letter": "M", "city": "玛沁县" }, { "letter": "M", "city": "玛曲县" }, { "letter": "M", "city": "马山县" }, { "letter": "M", "city": "麻阳苗族自治县" }, { "letter": "M", "city": "美姑县" }, { "letter": "M", "city": "梅河口市" }, { "letter": "M", "city": "眉山市" }, { "letter": "M", "city": "湄潭县" }, { "letter": "M", "city": "眉县" }, { "letter": "M", "city": "梅州市" }, { "letter": "M", "city": "蒙城县" }, { "letter": "M", "city": "孟村回族自治县" }, { "letter": "M", "city": "勐海县" }, { "letter": "M", "city": "孟津县" }, { "letter": "M", "city": "勐腊县" }, { "letter": "M", "city": "孟连傣族拉祜族佤族自治县" }, { "letter": "M", "city": "蒙山县" }, { "letter": "M", "city": "蒙阴县" }, { "letter": "M", "city": "孟州市" }, { "letter": "M", "city": "蒙自市" }, { "letter": "M", "city": "门源回族自治县" }, { "letter": "M", "city": "渑池县" }, { "letter": "M", "city": "冕宁县" }, { "letter": "M", "city": "勉县" }, { "letter": "M", "city": "绵阳市" }, { "letter": "M", "city": "绵竹市" }, { "letter": "M", "city": "弥渡县" }, { "letter": "M", "city": "弥勒市" }, { "letter": "M", "city": "米林县" }, { "letter": "M", "city": "汨罗市" }, { "letter": "M", "city": "民丰县" }, { "letter": "M", "city": "明光市" }, { "letter": "M", "city": "明水县" }, { "letter": "M", "city": "明溪县" }, { "letter": "M", "city": "民和回族土族自治县" }, { "letter": "M", "city": "闽侯县" }, { "letter": "M", "city": "民乐县" }, { "letter": "M", "city": "民勤县" }, { "letter": "M", "city": "闽清县" }, { "letter": "M", "city": "民权县" }, { "letter": "M", "city": "岷县" }, { "letter": "M", "city": "密山市" }, { "letter": "M", "city": "米易县" }, { "letter": "M", "city": "米脂县" }, { "letter": "M", "city": "漠河县" }, { "letter": "M", "city": "墨江哈尼族自治县" }, { "letter": "M", "city": "莫力达瓦达斡尔族自治旗" }, { "letter": "M", "city": "墨脱县" }, { "letter": "M", "city": "牟定县" }, { "letter": "M", "city": "墨玉县" }, { "letter": "M", "city": "墨竹工卡县" }, { "letter": "M", "city": "沐川县" }, { "letter": "M", "city": "牡丹江市" }, { "letter": "M", "city": "木兰县" }, { "letter": "M", "city": "木垒哈萨克自治县" }, { "letter": "M", "city": "穆棱市" }, { "letter": "M", "city": "木里藏族自治县" }, { "letter": "N", "city": "乃东区" }, { "letter": "N", "city": "奈曼旗" }, { "letter": "N", "city": "南安市" }, { "letter": "N", "city": "南澳县" }, { "letter": "N", "city": "南部县" }, { "letter": "N", "city": "南昌市" }, { "letter": "N", "city": "南昌县" }, { "letter": "N", "city": "南城县" }, { "letter": "N", "city": "南充市" }, { "letter": "N", "city": "南丹县" }, { "letter": "N", "city": "南丰县" }, { "letter": "N", "city": "南宫市" }, { "letter": "N", "city": "囊谦县" }, { "letter": "N", "city": "南和县" }, { "letter": "N", "city": "南华县" }, { "letter": "N", "city": "南江县" }, { "letter": "N", "city": "南涧彝族自治县" }, { "letter": "N", "city": "南京市" }, { "letter": "N", "city": "南靖县" }, { "letter": "N", "city": "南乐县" }, { "letter": "N", "city": "南陵县" }, { "letter": "N", "city": "南木林县" }, { "letter": "N", "city": "南宁市" }, { "letter": "N", "city": "南皮县" }, { "letter": "N", "city": "南平市" }, { "letter": "N", "city": "南沙群岛" }, { "letter": "N", "city": "南通市" }, { "letter": "N", "city": "南县" }, { "letter": "N", "city": "南雄市" }, { "letter": "N", "city": "南阳市" }, { "letter": "N", "city": "南漳县" }, { "letter": "N", "city": "南召县" }, { "letter": "N", "city": "那坡县" }, { "letter": "N", "city": "那曲市" }, { "letter": "N", "city": "那曲县" }, { "letter": "N", "city": "纳雍县" }, { "letter": "N", "city": "讷河市" }, { "letter": "N", "city": "内黄县" }, { "letter": "N", "city": "内江市" }, { "letter": "N", "city": "内丘县" }, { "letter": "N", "city": "内乡县" }, { "letter": "N", "city": "嫩江县" }, { "letter": "N", "city": "聂拉木县" }, { "letter": "N", "city": "聂荣县" }, { "letter": "N", "city": "尼勒克县" }, { "letter": "N", "city": "尼玛县" }, { "letter": "N", "city": "尼木县" }, { "letter": "N", "city": "宁安市" }, { "letter": "N", "city": "宁波市" }, { "letter": "N", "city": "宁城县" }, { "letter": "N", "city": "宁德市" }, { "letter": "N", "city": "宁都县" }, { "letter": "N", "city": "宁洱哈尼族彝族自治县" }, { "letter": "N", "city": "宁国市" }, { "letter": "N", "city": "宁海县" }, { "letter": "N", "city": "宁化县" }, { "letter": "N", "city": "宁晋县" }, { "letter": "N", "city": "宁津县" }, { "letter": "N", "city": "宁蒗彝族自治县" }, { "letter": "N", "city": "宁陵县" }, { "letter": "N", "city": "宁明县" }, { "letter": "N", "city": "宁南县" }, { "letter": "N", "city": "宁强县" }, { "letter": "N", "city": "宁陕县" }, { "letter": "N", "city": "宁武县" }, { "letter": "N", "city": "宁县" }, { "letter": "N", "city": "宁阳县" }, { "letter": "N", "city": "宁远县" }, { "letter": "N", "city": "农安县" }, { "letter": "N", "city": "怒江傈僳族自治州" }, { "letter": "P", "city": "磐安县" }, { "letter": "P", "city": "盘锦市" }, { "letter": "P", "city": "盘山县" }, { "letter": "P", "city": "磐石市" }, { "letter": "P", "city": "盘州市" }, { "letter": "P", "city": "攀枝花市" }, { "letter": "P", "city": "沛县" }, { "letter": "P", "city": "蓬安县" }, { "letter": "P", "city": "蓬莱市" }, { "letter": "P", "city": "彭水苗族土家族自治县" }, { "letter": "P", "city": "蓬溪县" }, { "letter": "P", "city": "彭阳县" }, { "letter": "P", "city": "彭泽县" }, { "letter": "P", "city": "彭州市" }, { "letter": "P", "city": "偏关县" }, { "letter": "P", "city": "屏边苗族自治县" }, { "letter": "P", "city": "平昌县" }, { "letter": "P", "city": "平定县" }, { "letter": "P", "city": "平顶山市" }, { "letter": "P", "city": "平度市" }, { "letter": "P", "city": "平果县" }, { "letter": "P", "city": "平和县" }, { "letter": "P", "city": "平湖市" }, { "letter": "P", "city": "平江县" }, { "letter": "P", "city": "平乐县" }, { "letter": "P", "city": "平利县" }, { "letter": "P", "city": "平凉市" }, { "letter": "P", "city": "平陆县" }, { "letter": "P", "city": "平罗县" }, { "letter": "P", "city": "平南县" }, { "letter": "P", "city": "屏南县" }, { "letter": "P", "city": "平泉市" }, { "letter": "P", "city": "屏山县" }, { "letter": "P", "city": "平山县" }, { "letter": "P", "city": "平顺县" }, { "letter": "P", "city": "平潭县" }, { "letter": "P", "city": "平塘县" }, { "letter": "P", "city": "平武县" }, { "letter": "P", "city": "萍乡市" }, { "letter": "P", "city": "平乡县" }, { "letter": "P", "city": "凭祥市" }, { "letter": "P", "city": "平阳县" }, { "letter": "P", "city": "平遥县" }, { "letter": "P", "city": "平邑县" }, { "letter": "P", "city": "平阴县" }, { "letter": "P", "city": "平舆县" }, { "letter": "P", "city": "平原县" }, { "letter": "P", "city": "平远县" }, { "letter": "P", "city": "皮山县" }, { "letter": "P", "city": "邳州市" }, { "letter": "P", "city": "鄱阳县" }, { "letter": "P", "city": "普安县" }, { "letter": "P", "city": "浦北县" }, { "letter": "P", "city": "浦城县" }, { "letter": "P", "city": "蒲城县" }, { "letter": "P", "city": "普定县" }, { "letter": "P", "city": "普洱市" }, { "letter": "P", "city": "普格县" }, { "letter": "P", "city": "浦江县" }, { "letter": "P", "city": "蒲江县" }, { "letter": "P", "city": "普兰县" }, { "letter": "P", "city": "普宁市" }, { "letter": "P", "city": "莆田市" }, { "letter": "P", "city": "蒲县" }, { "letter": "P", "city": "濮阳市" }, { "letter": "P", "city": "濮阳县" }, { "letter": "Q", "city": "迁安市" }, { "letter": "Q", "city": "乾安县" }, { "letter": "Q", "city": "黔东南苗族侗族自治州" }, { "letter": "Q", "city": "前郭尔罗斯蒙古族自治县" }, { "letter": "Q", "city": "潜江市" }, { "letter": "Q", "city": "黔南布依族苗族自治州" }, { "letter": "Q", "city": "潜山县" }, { "letter": "Q", "city": "黔西县" }, { "letter": "Q", "city": "迁西县" }, { "letter": "Q", "city": "乾县" }, { "letter": "Q", "city": "黔西南布依族苗族自治州" }, { "letter": "Q", "city": "千阳县" }, { "letter": "Q", "city": "巧家县" }, { "letter": "Q", "city": "蕲春县" }, { "letter": "Q", "city": "祁东县" }, { "letter": "Q", "city": "启东市" }, { "letter": "Q", "city": "且末县" }, { "letter": "Q", "city": "齐河县" }, { "letter": "Q", "city": "祁连县" }, { "letter": "Q", "city": "祁门县" }, { "letter": "Q", "city": "秦安县" }, { "letter": "Q", "city": "庆安县" }, { "letter": "Q", "city": "庆城县" }, { "letter": "Q", "city": "青川县" }, { "letter": "Q", "city": "青岛市" }, { "letter": "Q", "city": "清丰县" }, { "letter": "Q", "city": "青冈县" }, { "letter": "Q", "city": "清河县" }, { "letter": "Q", "city": "青河县" }, { "letter": "Q", "city": "清涧县" }, { "letter": "Q", "city": "清流县" }, { "letter": "Q", "city": "晴隆县" }, { "letter": "Q", "city": "青龙满族自治县" }, { "letter": "Q", "city": "青神县" }, { "letter": "Q", "city": "清水县" }, { "letter": "Q", "city": "清水河县" }, { "letter": "Q", "city": "青田县" }, { "letter": "Q", "city": "青铜峡市" }, { "letter": "Q", "city": "青县" }, { "letter": "Q", "city": "清徐县" }, { "letter": "Q", "city": "庆阳市" }, { "letter": "Q", "city": "青阳县" }, { "letter": "Q", "city": "清远市" }, { "letter": "Q", "city": "庆元县" }, { "letter": "Q", "city": "清原满族自治县" }, { "letter": "Q", "city": "庆云县" }, { "letter": "Q", "city": "清镇市" }, { "letter": "Q", "city": "青州市" }, { "letter": "Q", "city": "秦皇岛市" }, { "letter": "Q", "city": "沁水县" }, { "letter": "Q", "city": "沁县" }, { "letter": "Q", "city": "沁阳市" }, { "letter": "Q", "city": "沁源县" }, { "letter": "Q", "city": "钦州市" }, { "letter": "Q", "city": "琼海市" }, { "letter": "Q", "city": "琼结县" }, { "letter": "Q", "city": "邛崃市" }, { "letter": "Q", "city": "琼中黎族苗族自治县" }, { "letter": "Q", "city": "齐齐哈尔市" }, { "letter": "Q", "city": "岐山县" }, { "letter": "Q", "city": "奇台县" }, { "letter": "Q", "city": "七台河市" }, { "letter": "Q", "city": "丘北县" }, { "letter": "Q", "city": "邱县" }, { "letter": "Q", "city": "栖霞市" }, { "letter": "Q", "city": "杞县" }, { "letter": "Q", "city": "祁县" }, { "letter": "Q", "city": "淇县" }, { "letter": "Q", "city": "祁阳县" }, { "letter": "Q", "city": "全椒县" }, { "letter": "Q", "city": "全南县" }, { "letter": "Q", "city": "泉州市" }, { "letter": "Q", "city": "全州县" }, { "letter": "Q", "city": "确山县" }, { "letter": "Q", "city": "曲阜市" }, { "letter": "Q", "city": "曲靖市" }, { "letter": "Q", "city": "曲麻莱县" }, { "letter": "Q", "city": "曲水县" }, { "letter": "Q", "city": "曲松县" }, { "letter": "Q", "city": "曲沃县" }, { "letter": "Q", "city": "渠县" }, { "letter": "Q", "city": "曲阳县" }, { "letter": "Q", "city": "衢州市" }, { "letter": "Q", "city": "曲周县" }, { "letter": "R", "city": "壤塘县" }, { "letter": "R", "city": "饶河县" }, { "letter": "R", "city": "饶平县" }, { "letter": "R", "city": "饶阳县" }, { "letter": "R", "city": "仁布县" }, { "letter": "R", "city": "仁化县" }, { "letter": "R", "city": "仁怀市" }, { "letter": "R", "city": "任丘市" }, { "letter": "R", "city": "仁寿县" }, { "letter": "R", "city": "任县" }, { "letter": "R", "city": "日喀则市" }, { "letter": "R", "city": "日土县" }, { "letter": "R", "city": "日照市" }, { "letter": "R", "city": "融安县" }, { "letter": "R", "city": "荣成市" }, { "letter": "R", "city": "容城县" }, { "letter": "R", "city": "榕江县" }, { "letter": "R", "city": "融水苗族自治县" }, { "letter": "R", "city": "荣县" }, { "letter": "R", "city": "容县" }, { "letter": "R", "city": "汝城县" }, { "letter": "R", "city": "如东县" }, { "letter": "R", "city": "如皋市" }, { "letter": "R", "city": "瑞安市" }, { "letter": "R", "city": "瑞昌市" }, { "letter": "R", "city": "芮城县" }, { "letter": "R", "city": "瑞金市" }, { "letter": "R", "city": "瑞丽市" }, { "letter": "R", "city": "汝南县" }, { "letter": "R", "city": "若尔盖县" }, { "letter": "R", "city": "若羌县" }, { "letter": "R", "city": "乳山市" }, { "letter": "R", "city": "汝阳县" }, { "letter": "R", "city": "乳源瑶族自治县" }, { "letter": "R", "city": "汝州市" }, { "letter": "S", "city": "萨嘎县" }, { "letter": "S", "city": "萨迦县" }, { "letter": "S", "city": "三都水族自治县" }, { "letter": "S", "city": "桑日县" }, { "letter": "S", "city": "桑植县" }, { "letter": "S", "city": "三河市" }, { "letter": "S", "city": "三江侗族自治县" }, { "letter": "S", "city": "三门县" }, { "letter": "S", "city": "三门峡市" }, { "letter": "S", "city": "三明市" }, { "letter": "S", "city": "三沙市" }, { "letter": "S", "city": "三穗县" }, { "letter": "S", "city": "三台县" }, { "letter": "S", "city": "三亚市" }, { "letter": "S", "city": "三原县" }, { "letter": "S", "city": "色达县" }, { "letter": "S", "city": "莎车县" }, { "letter": "S", "city": "沙河市" }, { "letter": "S", "city": "山丹县" }, { "letter": "S", "city": "上蔡县" }, { "letter": "S", "city": "商城县" }, { "letter": "S", "city": "商都县" }, { "letter": "S", "city": "上高县" }, { "letter": "S", "city": "上海市" }, { "letter": "S", "city": "上杭县" }, { "letter": "S", "city": "商河县" }, { "letter": "S", "city": "上栗县" }, { "letter": "S", "city": "上林县" }, { "letter": "S", "city": "商洛市" }, { "letter": "S", "city": "商南县" }, { "letter": "S", "city": "商丘市" }, { "letter": "S", "city": "上饶市" }, { "letter": "S", "city": "上饶县" }, { "letter": "S", "city": "商水县" }, { "letter": "S", "city": "上思县" }, { "letter": "S", "city": "尚义县" }, { "letter": "S", "city": "上犹县" }, { "letter": "S", "city": "尚志市" }, { "letter": "S", "city": "山南市" }, { "letter": "S", "city": "鄯善县" }, { "letter": "S", "city": "汕头市" }, { "letter": "S", "city": "汕尾市" }, { "letter": "S", "city": "单县" }, { "letter": "S", "city": "山阳县" }, { "letter": "S", "city": "山阴县" }, { "letter": "S", "city": "邵东县" }, { "letter": "S", "city": "韶关市" }, { "letter": "S", "city": "韶山市" }, { "letter": "S", "city": "邵武市" }, { "letter": "S", "city": "绍兴市" }, { "letter": "S", "city": "邵阳市" }, { "letter": "S", "city": "邵阳县" }, { "letter": "S", "city": "沙湾县" }, { "letter": "S", "city": "沙县" }, { "letter": "S", "city": "沙雅县" }, { "letter": "S", "city": "沙洋县" }, { "letter": "S", "city": "射洪县" }, { "letter": "S", "city": "神池县" }, { "letter": "S", "city": "嵊泗县" }, { "letter": "S", "city": "嵊州市" }, { "letter": "S", "city": "神木市" }, { "letter": "S", "city": "神农架林区" }, { "letter": "S", "city": "沈丘县" }, { "letter": "S", "city": "莘县" }, { "letter": "S", "city": "沈阳市" }, { "letter": "S", "city": "深泽县" }, { "letter": "S", "city": "申扎县" }, { "letter": "S", "city": "深圳市" }, { "letter": "S", "city": "深州市" }, { "letter": "S", "city": "社旗县" }, { "letter": "S", "city": "涉县" }, { "letter": "S", "city": "歙县" }, { "letter": "S", "city": "射阳县" }, { "letter": "S", "city": "施秉县" }, { "letter": "S", "city": "石城县" }, { "letter": "S", "city": "施甸县" }, { "letter": "S", "city": "什邡市" }, { "letter": "S", "city": "石河子市" }, { "letter": "S", "city": "石家庄市" }, { "letter": "S", "city": "石林彝族自治县" }, { "letter": "S", "city": "石楼县" }, { "letter": "S", "city": "石门县" }, { "letter": "S", "city": "石棉县" }, { "letter": "S", "city": "石屏县" }, { "letter": "S", "city": "石阡县" }, { "letter": "S", "city": "石渠县" }, { "letter": "S", "city": "石泉县" }, { "letter": "S", "city": "石狮市" }, { "letter": "S", "city": "石首市" }, { "letter": "S", "city": "石台县" }, { "letter": "S", "city": "始兴县" }, { "letter": "S", "city": "十堰市" }, { "letter": "S", "city": "石柱土家族自治县" }, { "letter": "S", "city": "师宗县" }, { "letter": "S", "city": "石嘴山市" }, { "letter": "S", "city": "寿光市" }, { "letter": "S", "city": "寿宁县" }, { "letter": "S", "city": "寿县" }, { "letter": "S", "city": "寿阳县" }, { "letter": "S", "city": "双柏县" }, { "letter": "S", "city": "双峰县" }, { "letter": "S", "city": "双河市" }, { "letter": "S", "city": "双湖县" }, { "letter": "S", "city": "双江拉祜族佤族布朗族傣族自治县" }, { "letter": "S", "city": "双辽市" }, { "letter": "S", "city": "双牌县" }, { "letter": "S", "city": "双鸭山市" }, { "letter": "S", "city": "舒城县" }, { "letter": "S", "city": "疏附县" }, { "letter": "S", "city": "水城县" }, { "letter": "S", "city": "水富县" }, { "letter": "S", "city": "舒兰市" }, { "letter": "S", "city": "疏勒县" }, { "letter": "S", "city": "顺昌县" }, { "letter": "S", "city": "顺平县" }, { "letter": "S", "city": "朔州市" }, { "letter": "S", "city": "沭阳县" }, { "letter": "S", "city": "泗洪县" }, { "letter": "S", "city": "四会市" }, { "letter": "S", "city": "思南县" }, { "letter": "S", "city": "四平市" }, { "letter": "S", "city": "泗水县" }, { "letter": "S", "city": "泗县" }, { "letter": "S", "city": "泗阳县" }, { "letter": "S", "city": "四子王旗" }, { "letter": "S", "city": "嵩明县" }, { "letter": "S", "city": "松潘县" }, { "letter": "S", "city": "松桃苗族自治县" }, { "letter": "S", "city": "松溪县" }, { "letter": "S", "city": "嵩县" }, { "letter": "S", "city": "松阳县" }, { "letter": "S", "city": "松原市" }, { "letter": "S", "city": "松滋市" }, { "letter": "S", "city": "肃北蒙古族自治县" }, { "letter": "S", "city": "绥滨县" }, { "letter": "S", "city": "遂昌县" }, { "letter": "S", "city": "遂川县" }, { "letter": "S", "city": "绥德县" }, { "letter": "S", "city": "绥芬河市" }, { "letter": "S", "city": "绥化市" }, { "letter": "S", "city": "绥江县" }, { "letter": "S", "city": "绥棱县" }, { "letter": "S", "city": "遂宁市" }, { "letter": "S", "city": "绥宁县" }, { "letter": "S", "city": "遂平县" }, { "letter": "S", "city": "濉溪县" }, { "letter": "S", "city": "遂溪县" }, { "letter": "S", "city": "随县" }, { "letter": "S", "city": "绥阳县" }, { "letter": "S", "city": "绥中县" }, { "letter": "S", "city": "随州市" }, { "letter": "S", "city": "肃南裕固族自治县" }, { "letter": "S", "city": "肃宁县" }, { "letter": "S", "city": "苏尼特右旗" }, { "letter": "S", "city": "苏尼特左旗" }, { "letter": "S", "city": "孙吴县" }, { "letter": "S", "city": "索县" }, { "letter": "S", "city": "宿迁市" }, { "letter": "S", "city": "宿松县" }, { "letter": "S", "city": "苏州市" }, { "letter": "S", "city": "宿州市" }, { "letter": "T", "city": "塔城市" }, { "letter": "T", "city": "塔城地区" }, { "letter": "T", "city": "塔河县" }, { "letter": "T", "city": "泰安市" }, { "letter": "T", "city": "台安县" }, { "letter": "T", "city": "太白县" }, { "letter": "T", "city": "台北市" }, { "letter": "T", "city": "太仓市" }, { "letter": "T", "city": "太谷县" }, { "letter": "T", "city": "太和县" }, { "letter": "T", "city": "泰和县" }, { "letter": "T", "city": "太湖县" }, { "letter": "T", "city": "台江县" }, { "letter": "T", "city": "太康县" }, { "letter": "T", "city": "泰来县" }, { "letter": "T", "city": "泰宁县" }, { "letter": "T", "city": "太仆寺旗" }, { "letter": "T", "city": "台前县" }, { "letter": "T", "city": "台山市" }, { "letter": "T", "city": "泰顺县" }, { "letter": "T", "city": "泰兴市" }, { "letter": "T", "city": "太原市" }, { "letter": "T", "city": "台州市" }, { "letter": "T", "city": "泰州市" }, { "letter": "T", "city": "郯城县" }, { "letter": "T", "city": "唐河县" }, { "letter": "T", "city": "唐山市" }, { "letter": "T", "city": "唐县" }, { "letter": "T", "city": "汤阴县" }, { "letter": "T", "city": "汤原县" }, { "letter": "T", "city": "桃江县" }, { "letter": "T", "city": "洮南市" }, { "letter": "T", "city": "桃源县" }, { "letter": "T", "city": "塔什库尔干塔吉克自治县" }, { "letter": "T", "city": "特克斯县" }, { "letter": "T", "city": "腾冲市" }, { "letter": "T", "city": "藤县" }, { "letter": "T", "city": "滕州市" }, { "letter": "T", "city": "天长市" }, { "letter": "T", "city": "天等县" }, { "letter": "T", "city": "田东县" }, { "letter": "T", "city": "天峨县" }, { "letter": "T", "city": "天津市" }, { "letter": "T", "city": "天峻县" }, { "letter": "T", "city": "田林县" }, { "letter": "T", "city": "天门市" }, { "letter": "T", "city": "天全县" }, { "letter": "T", "city": "天水市" }, { "letter": "T", "city": "天台县" }, { "letter": "T", "city": "田阳县" }, { "letter": "T", "city": "天镇县" }, { "letter": "T", "city": "天柱县" }, { "letter": "T", "city": "天祝藏族自治县" }, { "letter": "T", "city": "铁力市" }, { "letter": "T", "city": "铁岭市" }, { "letter": "T", "city": "铁岭县" }, { "letter": "T", "city": "铁门关市" }, { "letter": "T", "city": "桐柏县" }, { "letter": "T", "city": "桐城市" }, { "letter": "T", "city": "通城县" }, { "letter": "T", "city": "铜川市" }, { "letter": "T", "city": "通道侗族自治县" }, { "letter": "T", "city": "同德县" }, { "letter": "T", "city": "铜鼓县" }, { "letter": "T", "city": "潼关县" }, { "letter": "T", "city": "通海县" }, { "letter": "T", "city": "通河县" }, { "letter": "T", "city": "通化市" }, { "letter": "T", "city": "通化县" }, { "letter": "T", "city": "同江市" }, { "letter": "T", "city": "通江县" }, { "letter": "T", "city": "通辽市" }, { "letter": "T", "city": "铜陵市" }, { "letter": "T", "city": "铜陵县" }, { "letter": "T", "city": "桐庐县" }, { "letter": "T", "city": "铜仁市" }, { "letter": "T", "city": "同仁县" }, { "letter": "T", "city": "通山县" }, { "letter": "T", "city": "通渭县" }, { "letter": "T", "city": "桐乡市" }, { "letter": "T", "city": "同心县" }, { "letter": "T", "city": "通许县" }, { "letter": "T", "city": "通榆县" }, { "letter": "T", "city": "桐梓县" }, { "letter": "T", "city": "团风县" }, { "letter": "T", "city": "吐鲁番市" }, { "letter": "T", "city": "图们市" }, { "letter": "T", "city": "土默特右旗" }, { "letter": "T", "city": "土默特左旗" }, { "letter": "T", "city": "图木舒克市" }, { "letter": "T", "city": "屯昌县" }, { "letter": "T", "city": "屯留县" }, { "letter": "T", "city": "托克托县" }, { "letter": "T", "city": "托克逊县" }, { "letter": "T", "city": "托里县" }, { "letter": "T", "city": "突泉县" }, { "letter": "W", "city": "瓦房店市" }, { "letter": "W", "city": "万安县" }, { "letter": "W", "city": "旺苍县" }, { "letter": "W", "city": "望都县" }, { "letter": "W", "city": "望江县" }, { "letter": "W", "city": "望奎县" }, { "letter": "W", "city": "望谟县" }, { "letter": "W", "city": "汪清县" }, { "letter": "W", "city": "万年县" }, { "letter": "W", "city": "万宁市" }, { "letter": "W", "city": "万荣县" }, { "letter": "W", "city": "万源市" }, { "letter": "W", "city": "万载县" }, { "letter": "W", "city": "围场满族蒙古族自治县" }, { "letter": "W", "city": "潍坊市" }, { "letter": "W", "city": "威海市" }, { "letter": "W", "city": "卫辉市" }, { "letter": "W", "city": "尉犁县" }, { "letter": "W", "city": "渭南市" }, { "letter": "W", "city": "威宁彝族回族苗族自治县" }, { "letter": "W", "city": "微山县" }, { "letter": "W", "city": "巍山彝族回族自治县" }, { "letter": "W", "city": "尉氏县" }, { "letter": "W", "city": "魏县" }, { "letter": "W", "city": "威县" }, { "letter": "W", "city": "维西傈僳族自治县" }, { "letter": "W", "city": "威信县" }, { "letter": "W", "city": "威远县" }, { "letter": "W", "city": "渭源县" }, { "letter": "W", "city": "文安县" }, { "letter": "W", "city": "文昌市" }, { "letter": "W", "city": "文成县" }, { "letter": "W", "city": "汶川县" }, { "letter": "W", "city": "瓮安县" }, { "letter": "W", "city": "翁牛特旗" }, { "letter": "W", "city": "翁源县" }, { "letter": "W", "city": "温岭市" }, { "letter": "W", "city": "温泉县" }, { "letter": "W", "city": "文山市" }, { "letter": "W", "city": "汶上县" }, { "letter": "W", "city": "文山壮族苗族自治州" }, { "letter": "W", "city": "文水县" }, { "letter": "W", "city": "温宿县" }, { "letter": "W", "city": "闻喜县" }, { "letter": "W", "city": "温县" }, { "letter": "W", "city": "文县" }, { "letter": "W", "city": "温州市" }, { "letter": "W", "city": "涡阳县" }, { "letter": "W", "city": "武安市" }, { "letter": "W", "city": "吴堡县" }, { "letter": "W", "city": "五常市" }, { "letter": "W", "city": "武城县" }, { "letter": "W", "city": "吴川市" }, { "letter": "W", "city": "武川县" }, { "letter": "W", "city": "务川仡佬族苗族自治县" }, { "letter": "W", "city": "五大连池市" }, { "letter": "W", "city": "无棣县" }, { "letter": "W", "city": "武定县" }, { "letter": "W", "city": "五峰土家族自治县" }, { "letter": "W", "city": "武冈市" }, { "letter": "W", "city": "舞钢市" }, { "letter": "W", "city": "武功县" }, { "letter": "W", "city": "乌海市" }, { "letter": "W", "city": "武汉市" }, { "letter": "W", "city": "五河县" }, { "letter": "W", "city": "芜湖市" }, { "letter": "W", "city": "芜湖县" }, { "letter": "W", "city": "五华县" }, { "letter": "W", "city": "无极县" }, { "letter": "W", "city": "五家渠市" }, { "letter": "W", "city": "乌兰县" }, { "letter": "W", "city": "乌兰察布市" }, { "letter": "W", "city": "乌兰浩特市" }, { "letter": "W", "city": "乌拉特后旗" }, { "letter": "W", "city": "乌拉特前旗" }, { "letter": "W", "city": "乌拉特中旗" }, { "letter": "W", "city": "五莲县" }, { "letter": "W", "city": "乌鲁木齐市" }, { "letter": "W", "city": "乌鲁木齐县" }, { "letter": "W", "city": "武宁县" }, { "letter": "W", "city": "武平县" }, { "letter": "W", "city": "吴起县" }, { "letter": "W", "city": "乌恰县" }, { "letter": "W", "city": "武强县" }, { "letter": "W", "city": "吴桥县" }, { "letter": "W", "city": "巫山县" }, { "letter": "W", "city": "武山县" }, { "letter": "W", "city": "武胜县" }, { "letter": "W", "city": "乌审旗" }, { "letter": "W", "city": "乌什县" }, { "letter": "W", "city": "乌苏市" }, { "letter": "W", "city": "五台县" }, { "letter": "W", "city": "无为县" }, { "letter": "W", "city": "武威市" }, { "letter": "W", "city": "无锡市" }, { "letter": "W", "city": "巫溪县" }, { "letter": "W", "city": "武乡县" }, { "letter": "W", "city": "武宣县" }, { "letter": "W", "city": "武穴市" }, { "letter": "W", "city": "舞阳县" }, { "letter": "W", "city": "武义县" }, { "letter": "W", "city": "武邑县" }, { "letter": "W", "city": "武夷山市" }, { "letter": "W", "city": "五原县" }, { "letter": "W", "city": "婺源县" }, { "letter": "W", "city": "五寨县" }, { "letter": "W", "city": "武陟县" }, { "letter": "W", "city": "五指山市" }, { "letter": "W", "city": "吴忠市" }, { "letter": "W", "city": "梧州市" }, { "letter": "X", "city": "夏河县" }, { "letter": "X", "city": "峡江县" }, { "letter": "X", "city": "夏津县" }, { "letter": "X", "city": "厦门市" }, { "letter": "X", "city": "西安市" }, { "letter": "X", "city": "咸丰县" }, { "letter": "X", "city": "项城市" }, { "letter": "X", "city": "襄城县" }, { "letter": "X", "city": "乡城县" }, { "letter": "X", "city": "襄汾县" }, { "letter": "X", "city": "香港特别行政区" }, { "letter": "X", "city": "香格里拉市" }, { "letter": "X", "city": "香河县" }, { "letter": "X", "city": "镶黄旗" }, { "letter": "X", "city": "乡宁县" }, { "letter": "X", "city": "象山县" }, { "letter": "X", "city": "响水县" }, { "letter": "X", "city": "湘潭市" }, { "letter": "X", "city": "湘潭县" }, { "letter": "X", "city": "湘乡市" }, { "letter": "X", "city": "湘西土家族苗族自治州" }, { "letter": "X", "city": "襄阳市" }, { "letter": "X", "city": "湘阴县" }, { "letter": "X", "city": "襄垣县" }, { "letter": "X", "city": "祥云县" }, { "letter": "X", "city": "象州县" }, { "letter": "X", "city": "仙居县" }, { "letter": "X", "city": "咸宁市" }, { "letter": "X", "city": "仙桃市" }, { "letter": "X", "city": "献县" }, { "letter": "X", "city": "咸阳市" }, { "letter": "X", "city": "仙游县" }, { "letter": "X", "city": "孝昌县" }, { "letter": "X", "city": "孝感市" }, { "letter": "X", "city": "小金县" }, { "letter": "X", "city": "萧县" }, { "letter": "X", "city": "孝义市" }, { "letter": "X", "city": "霞浦县" }, { "letter": "X", "city": "夏县" }, { "letter": "X", "city": "夏邑县" }, { "letter": "X", "city": "西昌市" }, { "letter": "X", "city": "西充县" }, { "letter": "X", "city": "西畴县" }, { "letter": "X", "city": "淅川县" }, { "letter": "X", "city": "喜德县" }, { "letter": "X", "city": "谢通门县" }, { "letter": "X", "city": "西丰县" }, { "letter": "X", "city": "息烽县" }, { "letter": "X", "city": "西和县" }, { "letter": "X", "city": "西华县" }, { "letter": "X", "city": "西吉县" }, { "letter": "X", "city": "西林县" }, { "letter": "X", "city": "锡林郭勒盟" }, { "letter": "X", "city": "锡林浩特市" }, { "letter": "X", "city": "西盟佤族自治县" }, { "letter": "X", "city": "新安县" }, { "letter": "X", "city": "新巴尔虎右旗" }, { "letter": "X", "city": "新巴尔虎左旗" }, { "letter": "X", "city": "新宾满族自治县" }, { "letter": "X", "city": "新蔡县" }, { "letter": "X", "city": "新昌县" }, { "letter": "X", "city": "忻城县" }, { "letter": "X", "city": "信丰县" }, { "letter": "X", "city": "新丰县" }, { "letter": "X", "city": "兴安盟" }, { "letter": "X", "city": "新干县" }, { "letter": "X", "city": "兴安县" }, { "letter": "X", "city": "兴城市" }, { "letter": "X", "city": "兴国县" }, { "letter": "X", "city": "兴海县" }, { "letter": "X", "city": "兴和县" }, { "letter": "X", "city": "兴化市" }, { "letter": "X", "city": "兴隆县" }, { "letter": "X", "city": "兴宁市" }, { "letter": "X", "city": "兴平市" }, { "letter": "X", "city": "兴仁县" }, { "letter": "X", "city": "兴山县" }, { "letter": "X", "city": "邢台市" }, { "letter": "X", "city": "邢台县" }, { "letter": "X", "city": "行唐县" }, { "letter": "X", "city": "兴文县" }, { "letter": "X", "city": "兴县" }, { "letter": "X", "city": "荥阳市" }, { "letter": "X", "city": "兴业县" }, { "letter": "X", "city": "兴义市" }, { "letter": "X", "city": "新河县" }, { "letter": "X", "city": "新和县" }, { "letter": "X", "city": "新化县" }, { "letter": "X", "city": "新晃侗族自治县" }, { "letter": "X", "city": "西宁市" }, { "letter": "X", "city": "辛集市" }, { "letter": "X", "city": "新绛县" }, { "letter": "X", "city": "新津县" }, { "letter": "X", "city": "新乐市" }, { "letter": "X", "city": "新龙县" }, { "letter": "X", "city": "新密市" }, { "letter": "X", "city": "新民市" }, { "letter": "X", "city": "新宁县" }, { "letter": "X", "city": "新平彝族傣族自治县" }, { "letter": "X", "city": "新邵县" }, { "letter": "X", "city": "新泰市" }, { "letter": "X", "city": "新田县" }, { "letter": "X", "city": "新县" }, { "letter": "X", "city": "新乡市" }, { "letter": "X", "city": "新乡县" }, { "letter": "X", "city": "新兴县" }, { "letter": "X", "city": "信阳市" }, { "letter": "X", "city": "新野县" }, { "letter": "X", "city": "信宜市" }, { "letter": "X", "city": "新沂市" }, { "letter": "X", "city": "新余市" }, { "letter": "X", "city": "新源县" }, { "letter": "X", "city": "新郑市" }, { "letter": "X", "city": "忻州市" }, { "letter": "X", "city": "雄县" }, { "letter": "X", "city": "西平县" }, { "letter": "X", "city": "西沙群岛" }, { "letter": "X", "city": "西双版纳傣族自治州" }, { "letter": "X", "city": "浠水县" }, { "letter": "X", "city": "习水县" }, { "letter": "X", "city": "休宁县" }, { "letter": "X", "city": "秀山土家族苗族自治县" }, { "letter": "X", "city": "修水县" }, { "letter": "X", "city": "修文县" }, { "letter": "X", "city": "修武县" }, { "letter": "X", "city": "岫岩满族自治县" }, { "letter": "X", "city": "西乌珠穆沁旗" }, { "letter": "X", "city": "西峡县" }, { "letter": "X", "city": "息县" }, { "letter": "X", "city": "隰县" }, { "letter": "X", "city": "西乡县" }, { "letter": "X", "city": "昔阳县" }, { "letter": "X", "city": "宣城市" }, { "letter": "X", "city": "宣恩县" }, { "letter": "X", "city": "宣汉县" }, { "letter": "X", "city": "宣化县" }, { "letter": "X", "city": "宣威市" }, { "letter": "X", "city": "许昌市" }, { "letter": "X", "city": "寻甸回族彝族自治县" }, { "letter": "X", "city": "循化撒拉族自治县" }, { "letter": "X", "city": "逊克县" }, { "letter": "X", "city": "寻乌县" }, { "letter": "X", "city": "浚县" }, { "letter": "X", "city": "旬阳县" }, { "letter": "X", "city": "旬邑县" }, { "letter": "X", "city": "溆浦县" }, { "letter": "X", "city": "徐闻县" }, { "letter": "X", "city": "盱眙县" }, { "letter": "X", "city": "叙永县" }, { "letter": "X", "city": "徐州市" }, { "letter": "Y", "city": "雅安市" }, { "letter": "Y", "city": "亚东县" }, { "letter": "Y", "city": "雅江县" }, { "letter": "Y", "city": "牙克石市" }, { "letter": "Y", "city": "延安市" }, { "letter": "Y", "city": "延边朝鲜族自治州" }, { "letter": "Y", "city": "盐边县" }, { "letter": "Y", "city": "延长县" }, { "letter": "Y", "city": "盐城市" }, { "letter": "Y", "city": "盐池县" }, { "letter": "Y", "city": "延川县" }, { "letter": "Y", "city": "漾濞彝族自治县" }, { "letter": "Y", "city": "阳城县" }, { "letter": "Y", "city": "阳春市" }, { "letter": "Y", "city": "阳高县" }, { "letter": "Y", "city": "阳谷县" }, { "letter": "Y", "city": "阳江市" }, { "letter": "Y", "city": "阳曲县" }, { "letter": "Y", "city": "阳泉市" }, { "letter": "Y", "city": "阳山县" }, { "letter": "Y", "city": "阳朔县" }, { "letter": "Y", "city": "阳西县" }, { "letter": "Y", "city": "洋县" }, { "letter": "Y", "city": "阳新县" }, { "letter": "Y", "city": "阳信县" }, { "letter": "Y", "city": "阳原县" }, { "letter": "Y", "city": "扬中市" }, { "letter": "Y", "city": "扬州市" }, { "letter": "Y", "city": "沿河土家族自治县" }, { "letter": "Y", "city": "延吉市" }, { "letter": "Y", "city": "延津县" }, { "letter": "Y", "city": "盐津县" }, { "letter": "Y", "city": "鄢陵县" }, { "letter": "Y", "city": "炎陵县" }, { "letter": "Y", "city": "焉耆回族自治县" }, { "letter": "Y", "city": "盐山县" }, { "letter": "Y", "city": "铅山县" }, { "letter": "Y", "city": "砚山县" }, { "letter": "Y", "city": "偃师市" }, { "letter": "Y", "city": "延寿县" }, { "letter": "Y", "city": "烟台市" }, { "letter": "Y", "city": "盐亭县" }, { "letter": "Y", "city": "盐源县" }, { "letter": "Y", "city": "姚安县" }, { "letter": "Y", "city": "叶城县" }, { "letter": "Y", "city": "叶县" }, { "letter": "Y", "city": "依安县" }, { "letter": "Y", "city": "宜宾市" }, { "letter": "Y", "city": "宜宾县" }, { "letter": "Y", "city": "宜昌市" }, { "letter": "Y", "city": "宜城市" }, { "letter": "Y", "city": "翼城县" }, { "letter": "Y", "city": "伊川县" }, { "letter": "Y", "city": "宜川县" }, { "letter": "Y", "city": "宜春市" }, { "letter": "Y", "city": "伊春市" }, { "letter": "Y", "city": "宜都市" }, { "letter": "Y", "city": "宜丰县" }, { "letter": "Y", "city": "宜黄县" }, { "letter": "Y", "city": "伊金霍洛旗" }, { "letter": "Y", "city": "宜君县" }, { "letter": "Y", "city": "依兰县" }, { "letter": "Y", "city": "宜良县" }, { "letter": "Y", "city": "彝良县" }, { "letter": "Y", "city": "伊犁哈萨克自治州" }, { "letter": "Y", "city": "仪陇县" }, { "letter": "Y", "city": "义马市" }, { "letter": "Y", "city": "易门县" }, { "letter": "Y", "city": "沂南县" }, { "letter": "Y", "city": "银川市" }, { "letter": "Y", "city": "应城市" }, { "letter": "Y", "city": "英德市" }, { "letter": "Y", "city": "盈江县" }, { "letter": "Y", "city": "荥经县" }, { "letter": "Y", "city": "英吉沙县" }, { "letter": "Y", "city": "营口市" }, { "letter": "Y", "city": "营山县" }, { "letter": "Y", "city": "英山县" }, { "letter": "Y", "city": "颍上县" }, { "letter": "Y", "city": "鹰潭市" }, { "letter": "Y", "city": "应县" }, { "letter": "Y", "city": "伊宁市" }, { "letter": "Y", "city": "伊宁县" }, { "letter": "Y", "city": "印江土家族苗族自治县" }, { "letter": "Y", "city": "沂水县" }, { "letter": "Y", "city": "伊通满族自治县" }, { "letter": "Y", "city": "义乌市" }, { "letter": "Y", "city": "伊吾县" }, { "letter": "Y", "city": "易县" }, { "letter": "Y", "city": "义县" }, { "letter": "Y", "city": "黟县" }, { "letter": "Y", "city": "宜兴市" }, { "letter": "Y", "city": "益阳市" }, { "letter": "Y", "city": "弋阳县" }, { "letter": "Y", "city": "宜阳县" }, { "letter": "Y", "city": "沂源县" }, { "letter": "Y", "city": "宜章县" }, { "letter": "Y", "city": "仪征市" }, { "letter": "Y", "city": "永安市" }, { "letter": "Y", "city": "永昌县" }, { "letter": "Y", "city": "永城市" }, { "letter": "Y", "city": "永春县" }, { "letter": "Y", "city": "永德县" }, { "letter": "Y", "city": "永登县" }, { "letter": "Y", "city": "永丰县" }, { "letter": "Y", "city": "永福县" }, { "letter": "Y", "city": "永和县" }, { "letter": "Y", "city": "永济市" }, { "letter": "Y", "city": "永吉县" }, { "letter": "Y", "city": "永嘉县" }, { "letter": "Y", "city": "永靖县" }, { "letter": "Y", "city": "永康市" }, { "letter": "Y", "city": "永年县" }, { "letter": "Y", "city": "永宁县" }, { "letter": "Y", "city": "永平县" }, { "letter": "Y", "city": "永清县" }, { "letter": "Y", "city": "永仁县" }, { "letter": "Y", "city": "永善县" }, { "letter": "Y", "city": "永胜县" }, { "letter": "Y", "city": "永寿县" }, { "letter": "Y", "city": "永顺县" }, { "letter": "Y", "city": "永泰县" }, { "letter": "Y", "city": "永新县" }, { "letter": "Y", "city": "永兴县" }, { "letter": "Y", "city": "永修县" }, { "letter": "Y", "city": "永州市" }, { "letter": "Y", "city": "尤溪县" }, { "letter": "Y", "city": "攸县" }, { "letter": "Y", "city": "酉阳土家族苗族自治县" }, { "letter": "Y", "city": "友谊县" }, { "letter": "Y", "city": "右玉县" }, { "letter": "Y", "city": "远安县" }, { "letter": "Y", "city": "沅江市" }, { "letter": "Y", "city": "元江哈尼族彝族傣族自治县" }, { "letter": "Y", "city": "沅陵县" }, { "letter": "Y", "city": "元谋县" }, { "letter": "Y", "city": "原平市" }, { "letter": "Y", "city": "垣曲县" }, { "letter": "Y", "city": "元氏县" }, { "letter": "Y", "city": "原阳县" }, { "letter": "Y", "city": "元阳县" }, { "letter": "Y", "city": "虞城县" }, { "letter": "Y", "city": "禹城市" }, { "letter": "Y", "city": "于都县" }, { "letter": "Y", "city": "岳池县" }, { "letter": "Y", "city": "岳普湖县" }, { "letter": "Y", "city": "乐清市" }, { "letter": "Y", "city": "岳西县" }, { "letter": "Y", "city": "越西县" }, { "letter": "Y", "city": "岳阳市" }, { "letter": "Y", "city": "岳阳县" }, { "letter": "Y", "city": "余干县" }, { "letter": "Y", "city": "玉环市" }, { "letter": "Y", "city": "余江县" }, { "letter": "Y", "city": "玉林市" }, { "letter": "Y", "city": "榆林市" }, { "letter": "Y", "city": "玉龙纳西族自治县" }, { "letter": "Y", "city": "玉门市" }, { "letter": "Y", "city": "裕民县" }, { "letter": "Y", "city": "郁南县" }, { "letter": "Y", "city": "运城市" }, { "letter": "Y", "city": "郓城县" }, { "letter": "Y", "city": "云浮市" }, { "letter": "Y", "city": "云和县" }, { "letter": "Y", "city": "筠连县" }, { "letter": "Y", "city": "云龙县" }, { "letter": "Y", "city": "云梦县" }, { "letter": "Y", "city": "郧西县" }, { "letter": "Y", "city": "勋县" }, { "letter": "Y", "city": "云县" }, { "letter": "Y", "city": "云霄县" }, { "letter": "Y", "city": "云阳县" }, { "letter": "Y", "city": "玉屏侗族自治县" }, { "letter": "Y", "city": "余庆县" }, { "letter": "Y", "city": "玉山县" }, { "letter": "Y", "city": "榆社县" }, { "letter": "Y", "city": "榆树市" }, { "letter": "Y", "city": "玉树市" }, { "letter": "Y", "city": "玉树藏族自治州" }, { "letter": "Y", "city": "鱼台县" }, { "letter": "Y", "city": "玉田县" }, { "letter": "Y", "city": "于田县" }, { "letter": "Y", "city": "玉溪市" }, { "letter": "Y", "city": "蔚县" }, { "letter": "Y", "city": "盂县" }, { "letter": "Y", "city": "余姚市" }, { "letter": "Y", "city": "榆中县" }, { "letter": "Y", "city": "禹州市" }, { "letter": "Z", "city": "杂多县" }, { "letter": "Z", "city": "赞皇县" }, { "letter": "Z", "city": "枣强县" }, { "letter": "Z", "city": "枣阳市" }, { "letter": "Z", "city": "枣庄市" }, { "letter": "Z", "city": "泽库县" }, { "letter": "Z", "city": "泽普县" }, { "letter": "Z", "city": "泽州县" }, { "letter": "Z", "city": "札达县" }, { "letter": "Z", "city": "扎赉特旗" }, { "letter": "Z", "city": "扎兰屯市" }, { "letter": "Z", "city": "扎鲁特旗" }, { "letter": "Z", "city": "扎囊县" }, { "letter": "Z", "city": "张北县" }, { "letter": "Z", "city": "张家川回族自治县" }, { "letter": "Z", "city": "张家港市" }, { "letter": "Z", "city": "张家界市" }, { "letter": "Z", "city": "张家口市" }, { "letter": "Z", "city": "漳平市" }, { "letter": "Z", "city": "漳浦县" }, { "letter": "Z", "city": "樟树市" }, { "letter": "Z", "city": "彰武县" }, { "letter": "Z", "city": "漳县" }, { "letter": "Z", "city": "张掖市" }, { "letter": "Z", "city": "漳州市" }, { "letter": "Z", "city": "长子县" }, { "letter": "Z", "city": "湛江市" }, { "letter": "Z", "city": "诏安县" }, { "letter": "Z", "city": "肇东市" }, { "letter": "Z", "city": "昭觉县" }, { "letter": "Z", "city": "昭平县" }, { "letter": "Z", "city": "肇庆市" }, { "letter": "Z", "city": "昭苏县" }, { "letter": "Z", "city": "昭通市" }, { "letter": "Z", "city": "赵县" }, { "letter": "Z", "city": "招远市" }, { "letter": "Z", "city": "肇源县" }, { "letter": "Z", "city": "肇州县" }, { "letter": "Z", "city": "柘城县" }, { "letter": "Z", "city": "镇安县" }, { "letter": "Z", "city": "镇巴县" }, { "letter": "Z", "city": "贞丰县" }, { "letter": "Z", "city": "正安县" }, { "letter": "Z", "city": "正定县" }, { "letter": "Z", "city": "政和县" }, { "letter": "Z", "city": "正蓝旗" }, { "letter": "Z", "city": "正宁县" }, { "letter": "Z", "city": "正镶白旗" }, { "letter": "Z", "city": "正阳县" }, { "letter": "Z", "city": "郑州市" }, { "letter": "Z", "city": "镇江市" }, { "letter": "Z", "city": "镇康县" }, { "letter": "Z", "city": "镇赉县" }, { "letter": "Z", "city": "镇宁布依族苗族自治县" }, { "letter": "Z", "city": "镇平县" }, { "letter": "Z", "city": "镇坪县" }, { "letter": "Z", "city": "镇雄县" }, { "letter": "Z", "city": "镇远县" }, { "letter": "Z", "city": "镇原县" }, { "letter": "Z", "city": "镇沅彝族哈尼族拉祜族自治县" }, { "letter": "Z", "city": "柘荣县" }, { "letter": "Z", "city": "志丹县" }, { "letter": "Z", "city": "治多县" }, { "letter": "Z", "city": "枝江市" }, { "letter": "Z", "city": "芷江侗族自治县" }, { "letter": "Z", "city": "织金县" }, { "letter": "Z", "city": "仲巴县" }, { "letter": "Z", "city": "中方县" }, { "letter": "Z", "city": "中江县" }, { "letter": "Z", "city": "中牟县" }, { "letter": "Z", "city": "中宁县" }, { "letter": "Z", "city": "中山市" }, { "letter": "Z", "city": "钟山县" }, { "letter": "Z", "city": "中沙群岛的岛礁及其海域" }, { "letter": "Z", "city": "中卫市" }, { "letter": "Z", "city": "忠县" }, { "letter": "Z", "city": "钟祥市" }, { "letter": "Z", "city": "中阳县" }, { "letter": "Z", "city": "周口市" }, { "letter": "Z", "city": "周宁县" }, { "letter": "Z", "city": "舟曲县" }, { "letter": "Z", "city": "舟山市" }, { "letter": "Z", "city": "周至县" }, { "letter": "Z", "city": "庄河市" }, { "letter": "Z", "city": "庄浪县" }, { "letter": "Z", "city": "诸城市" }, { "letter": "Z", "city": "珠海市" }, { "letter": "Z", "city": "诸暨市" }, { "letter": "Z", "city": "驻马店市" }, { "letter": "Z", "city": "准格尔旗" }, { "letter": "Z", "city": "涿鹿县" }, { "letter": "Z", "city": "卓尼县" }, { "letter": "Z", "city": "涿州市" }, { "letter": "Z", "city": "卓资县" }, { "letter": "Z", "city": "竹山县" }, { "letter": "Z", "city": "竹溪县" }, { "letter": "Z", "city": "株洲市" }, { "letter": "Z", "city": "株洲县" }, { "letter": "Z", "city": "淄博市" }, { "letter": "Z", "city": "子长县" }, { "letter": "Z", "city": "自贡市" }, { "letter": "Z", "city": "秭归县" }, { "letter": "Z", "city": "紫金县" }, { "letter": "Z", "city": "梓潼县" }, { "letter": "Z", "city": "资溪县" }, { "letter": "Z", "city": "资兴市" }, { "letter": "Z", "city": "资阳市" }, { "letter": "Z", "city": "紫阳县" }, { "letter": "Z", "city": "资源县" }, { "letter": "Z", "city": "紫云苗族布依族自治县" }, { "letter": "Z", "city": "资中县" }, { "letter": "Z", "city": "子洲县" }, { "letter": "Z", "city": "枞阳县" }, { "letter": "Z", "city": "邹城市" }, { "letter": "Z", "city": "邹平县" }, { "letter": "Z", "city": "遵化市" }, { "letter": "Z", "city": "遵义市" }, { "letter": "Z", "city": "左贡县" }, { "letter": "Z", "city": "左权县" }, { "letter": "Z", "city": "柞水县" }, { "letter": "Z", "city": "左云县" }];
   const _imports_0$3 = "/static/auth/id-card-front.png";
   const _imports_1 = "/static/auth/id-card-back.png";
@@ -20814,7 +20973,7 @@ This will fail in production.`);
       )
     ]);
   }
-  const idCard = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-1bff6c23"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/auth/components/idCard.vue"]]);
+  const idCard = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-1bff6c23"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/auth/components/idCard.vue"]]);
   const pages = [
     {
       path: "pages/login/login",
@@ -21170,7 +21329,6 @@ This will fail in production.`);
         return e4.words = this.words.slice(0), e4;
       }, random: function(t4) {
         for (var n4, s3 = [], r3 = function(t5) {
-          t5 = t5;
           var n5 = 987654321, s4 = 4294967295;
           return function() {
             var r4 = ((n5 = 36969 * (65535 & n5) + (n5 >> 16) & s4) << 16) + (t5 = 18e3 * (65535 & t5) + (t5 >> 16) & s4) & s4;
@@ -21261,8 +21419,8 @@ This will fail in production.`);
           var s3 = t4 + n3, r3 = e4[s3];
           e4[s3] = 16711935 & (r3 << 8 | r3 >>> 24) | 4278255360 & (r3 << 24 | r3 >>> 8);
         }
-        var i3 = this._hash.words, o3 = e4[t4 + 0], c3 = e4[t4 + 1], p2 = e4[t4 + 2], f2 = e4[t4 + 3], g2 = e4[t4 + 4], m2 = e4[t4 + 5], y2 = e4[t4 + 6], _2 = e4[t4 + 7], w2 = e4[t4 + 8], v2 = e4[t4 + 9], I2 = e4[t4 + 10], S2 = e4[t4 + 11], b2 = e4[t4 + 12], k2 = e4[t4 + 13], T2 = e4[t4 + 14], A2 = e4[t4 + 15], P2 = i3[0], C2 = i3[1], x2 = i3[2], O2 = i3[3];
-        P2 = u2(P2, C2, x2, O2, o3, 7, a2[0]), O2 = u2(O2, P2, C2, x2, c3, 12, a2[1]), x2 = u2(x2, O2, P2, C2, p2, 17, a2[2]), C2 = u2(C2, x2, O2, P2, f2, 22, a2[3]), P2 = u2(P2, C2, x2, O2, g2, 7, a2[4]), O2 = u2(O2, P2, C2, x2, m2, 12, a2[5]), x2 = u2(x2, O2, P2, C2, y2, 17, a2[6]), C2 = u2(C2, x2, O2, P2, _2, 22, a2[7]), P2 = u2(P2, C2, x2, O2, w2, 7, a2[8]), O2 = u2(O2, P2, C2, x2, v2, 12, a2[9]), x2 = u2(x2, O2, P2, C2, I2, 17, a2[10]), C2 = u2(C2, x2, O2, P2, S2, 22, a2[11]), P2 = u2(P2, C2, x2, O2, b2, 7, a2[12]), O2 = u2(O2, P2, C2, x2, k2, 12, a2[13]), x2 = u2(x2, O2, P2, C2, T2, 17, a2[14]), P2 = h2(P2, C2 = u2(C2, x2, O2, P2, A2, 22, a2[15]), x2, O2, c3, 5, a2[16]), O2 = h2(O2, P2, C2, x2, y2, 9, a2[17]), x2 = h2(x2, O2, P2, C2, S2, 14, a2[18]), C2 = h2(C2, x2, O2, P2, o3, 20, a2[19]), P2 = h2(P2, C2, x2, O2, m2, 5, a2[20]), O2 = h2(O2, P2, C2, x2, I2, 9, a2[21]), x2 = h2(x2, O2, P2, C2, A2, 14, a2[22]), C2 = h2(C2, x2, O2, P2, g2, 20, a2[23]), P2 = h2(P2, C2, x2, O2, v2, 5, a2[24]), O2 = h2(O2, P2, C2, x2, T2, 9, a2[25]), x2 = h2(x2, O2, P2, C2, f2, 14, a2[26]), C2 = h2(C2, x2, O2, P2, w2, 20, a2[27]), P2 = h2(P2, C2, x2, O2, k2, 5, a2[28]), O2 = h2(O2, P2, C2, x2, p2, 9, a2[29]), x2 = h2(x2, O2, P2, C2, _2, 14, a2[30]), P2 = l2(P2, C2 = h2(C2, x2, O2, P2, b2, 20, a2[31]), x2, O2, m2, 4, a2[32]), O2 = l2(O2, P2, C2, x2, w2, 11, a2[33]), x2 = l2(x2, O2, P2, C2, S2, 16, a2[34]), C2 = l2(C2, x2, O2, P2, T2, 23, a2[35]), P2 = l2(P2, C2, x2, O2, c3, 4, a2[36]), O2 = l2(O2, P2, C2, x2, g2, 11, a2[37]), x2 = l2(x2, O2, P2, C2, _2, 16, a2[38]), C2 = l2(C2, x2, O2, P2, I2, 23, a2[39]), P2 = l2(P2, C2, x2, O2, k2, 4, a2[40]), O2 = l2(O2, P2, C2, x2, o3, 11, a2[41]), x2 = l2(x2, O2, P2, C2, f2, 16, a2[42]), C2 = l2(C2, x2, O2, P2, y2, 23, a2[43]), P2 = l2(P2, C2, x2, O2, v2, 4, a2[44]), O2 = l2(O2, P2, C2, x2, b2, 11, a2[45]), x2 = l2(x2, O2, P2, C2, A2, 16, a2[46]), P2 = d2(P2, C2 = l2(C2, x2, O2, P2, p2, 23, a2[47]), x2, O2, o3, 6, a2[48]), O2 = d2(O2, P2, C2, x2, _2, 10, a2[49]), x2 = d2(x2, O2, P2, C2, T2, 15, a2[50]), C2 = d2(C2, x2, O2, P2, m2, 21, a2[51]), P2 = d2(P2, C2, x2, O2, b2, 6, a2[52]), O2 = d2(O2, P2, C2, x2, f2, 10, a2[53]), x2 = d2(x2, O2, P2, C2, I2, 15, a2[54]), C2 = d2(C2, x2, O2, P2, c3, 21, a2[55]), P2 = d2(P2, C2, x2, O2, w2, 6, a2[56]), O2 = d2(O2, P2, C2, x2, A2, 10, a2[57]), x2 = d2(x2, O2, P2, C2, y2, 15, a2[58]), C2 = d2(C2, x2, O2, P2, k2, 21, a2[59]), P2 = d2(P2, C2, x2, O2, g2, 6, a2[60]), O2 = d2(O2, P2, C2, x2, S2, 10, a2[61]), x2 = d2(x2, O2, P2, C2, p2, 15, a2[62]), C2 = d2(C2, x2, O2, P2, v2, 21, a2[63]), i3[0] = i3[0] + P2 | 0, i3[1] = i3[1] + C2 | 0, i3[2] = i3[2] + x2 | 0, i3[3] = i3[3] + O2 | 0;
+        var i3 = this._hash.words, o3 = e4[t4 + 0], c3 = e4[t4 + 1], p2 = e4[t4 + 2], f2 = e4[t4 + 3], g2 = e4[t4 + 4], m2 = e4[t4 + 5], y2 = e4[t4 + 6], _2 = e4[t4 + 7], w2 = e4[t4 + 8], I2 = e4[t4 + 9], v2 = e4[t4 + 10], S2 = e4[t4 + 11], T2 = e4[t4 + 12], b2 = e4[t4 + 13], E2 = e4[t4 + 14], k2 = e4[t4 + 15], A2 = i3[0], P2 = i3[1], C2 = i3[2], O2 = i3[3];
+        A2 = u2(A2, P2, C2, O2, o3, 7, a2[0]), O2 = u2(O2, A2, P2, C2, c3, 12, a2[1]), C2 = u2(C2, O2, A2, P2, p2, 17, a2[2]), P2 = u2(P2, C2, O2, A2, f2, 22, a2[3]), A2 = u2(A2, P2, C2, O2, g2, 7, a2[4]), O2 = u2(O2, A2, P2, C2, m2, 12, a2[5]), C2 = u2(C2, O2, A2, P2, y2, 17, a2[6]), P2 = u2(P2, C2, O2, A2, _2, 22, a2[7]), A2 = u2(A2, P2, C2, O2, w2, 7, a2[8]), O2 = u2(O2, A2, P2, C2, I2, 12, a2[9]), C2 = u2(C2, O2, A2, P2, v2, 17, a2[10]), P2 = u2(P2, C2, O2, A2, S2, 22, a2[11]), A2 = u2(A2, P2, C2, O2, T2, 7, a2[12]), O2 = u2(O2, A2, P2, C2, b2, 12, a2[13]), C2 = u2(C2, O2, A2, P2, E2, 17, a2[14]), A2 = h2(A2, P2 = u2(P2, C2, O2, A2, k2, 22, a2[15]), C2, O2, c3, 5, a2[16]), O2 = h2(O2, A2, P2, C2, y2, 9, a2[17]), C2 = h2(C2, O2, A2, P2, S2, 14, a2[18]), P2 = h2(P2, C2, O2, A2, o3, 20, a2[19]), A2 = h2(A2, P2, C2, O2, m2, 5, a2[20]), O2 = h2(O2, A2, P2, C2, v2, 9, a2[21]), C2 = h2(C2, O2, A2, P2, k2, 14, a2[22]), P2 = h2(P2, C2, O2, A2, g2, 20, a2[23]), A2 = h2(A2, P2, C2, O2, I2, 5, a2[24]), O2 = h2(O2, A2, P2, C2, E2, 9, a2[25]), C2 = h2(C2, O2, A2, P2, f2, 14, a2[26]), P2 = h2(P2, C2, O2, A2, w2, 20, a2[27]), A2 = h2(A2, P2, C2, O2, b2, 5, a2[28]), O2 = h2(O2, A2, P2, C2, p2, 9, a2[29]), C2 = h2(C2, O2, A2, P2, _2, 14, a2[30]), A2 = l2(A2, P2 = h2(P2, C2, O2, A2, T2, 20, a2[31]), C2, O2, m2, 4, a2[32]), O2 = l2(O2, A2, P2, C2, w2, 11, a2[33]), C2 = l2(C2, O2, A2, P2, S2, 16, a2[34]), P2 = l2(P2, C2, O2, A2, E2, 23, a2[35]), A2 = l2(A2, P2, C2, O2, c3, 4, a2[36]), O2 = l2(O2, A2, P2, C2, g2, 11, a2[37]), C2 = l2(C2, O2, A2, P2, _2, 16, a2[38]), P2 = l2(P2, C2, O2, A2, v2, 23, a2[39]), A2 = l2(A2, P2, C2, O2, b2, 4, a2[40]), O2 = l2(O2, A2, P2, C2, o3, 11, a2[41]), C2 = l2(C2, O2, A2, P2, f2, 16, a2[42]), P2 = l2(P2, C2, O2, A2, y2, 23, a2[43]), A2 = l2(A2, P2, C2, O2, I2, 4, a2[44]), O2 = l2(O2, A2, P2, C2, T2, 11, a2[45]), C2 = l2(C2, O2, A2, P2, k2, 16, a2[46]), A2 = d2(A2, P2 = l2(P2, C2, O2, A2, p2, 23, a2[47]), C2, O2, o3, 6, a2[48]), O2 = d2(O2, A2, P2, C2, _2, 10, a2[49]), C2 = d2(C2, O2, A2, P2, E2, 15, a2[50]), P2 = d2(P2, C2, O2, A2, m2, 21, a2[51]), A2 = d2(A2, P2, C2, O2, T2, 6, a2[52]), O2 = d2(O2, A2, P2, C2, f2, 10, a2[53]), C2 = d2(C2, O2, A2, P2, v2, 15, a2[54]), P2 = d2(P2, C2, O2, A2, c3, 21, a2[55]), A2 = d2(A2, P2, C2, O2, w2, 6, a2[56]), O2 = d2(O2, A2, P2, C2, k2, 10, a2[57]), C2 = d2(C2, O2, A2, P2, y2, 15, a2[58]), P2 = d2(P2, C2, O2, A2, b2, 21, a2[59]), A2 = d2(A2, P2, C2, O2, g2, 6, a2[60]), O2 = d2(O2, A2, P2, C2, S2, 10, a2[61]), C2 = d2(C2, O2, A2, P2, p2, 15, a2[62]), P2 = d2(P2, C2, O2, A2, I2, 21, a2[63]), i3[0] = i3[0] + A2 | 0, i3[1] = i3[1] + P2 | 0, i3[2] = i3[2] + C2 | 0, i3[3] = i3[3] + O2 | 0;
       }, _doFinalize: function() {
         var t4 = this._data, n3 = t4.words, s3 = 8 * this._nDataBytes, r3 = 8 * t4.sigBytes;
         n3[r3 >>> 5] |= 128 << 24 - r3 % 32;
@@ -21359,17 +21517,17 @@ This will fail in production.`);
       }, _map: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=" };
     }(), n2.enc.Base64);
   });
-  const c$1 = "FUNCTION", u$1 = "OBJECT", h$1 = "CLIENT_DB", l$1 = "pending", d$1 = "fulfilled", p$1 = "rejected";
-  function f$1(e2) {
+  const c$1 = "uni_id_token", u$1 = "uni_id_token_expired", h$1 = "uniIdToken", l$1 = { DEFAULT: "FUNCTION", FUNCTION: "FUNCTION", OBJECT: "OBJECT", CLIENT_DB: "CLIENT_DB" }, d$1 = "pending", p$1 = "fulfilled", f$1 = "rejected";
+  function g$1(e2) {
     return Object.prototype.toString.call(e2).slice(8, -1).toLowerCase();
   }
-  function g$1(e2) {
-    return "object" === f$1(e2);
-  }
   function m$1(e2) {
-    return "function" == typeof e2;
+    return "object" === g$1(e2);
   }
   function y$1(e2) {
+    return "function" == typeof e2;
+  }
+  function _$1(e2) {
     return function() {
       try {
         return e2.apply(e2, arguments);
@@ -21378,41 +21536,78 @@ This will fail in production.`);
       }
     };
   }
-  const _$1 = "REJECTED", w$1 = "NOT_PENDING";
+  const w$1 = "REJECTED", I$1 = "NOT_PENDING";
   let v$1 = class v {
-    constructor({ createPromise: e2, retryRule: t2 = _$1 } = {}) {
+    constructor({ createPromise: e2, retryRule: t2 = w$1 } = {}) {
       this.createPromise = e2, this.status = null, this.promise = null, this.retryRule = t2;
     }
     get needRetry() {
       if (!this.status)
         return true;
       switch (this.retryRule) {
-        case _$1:
-          return this.status === p$1;
         case w$1:
-          return this.status !== l$1;
+          return this.status === f$1;
+        case I$1:
+          return this.status !== d$1;
       }
     }
     exec() {
-      return this.needRetry ? (this.status = l$1, this.promise = this.createPromise().then((e2) => (this.status = d$1, Promise.resolve(e2)), (e2) => (this.status = p$1, Promise.reject(e2))), this.promise) : this.promise;
+      return this.needRetry ? (this.status = d$1, this.promise = this.createPromise().then((e2) => (this.status = p$1, Promise.resolve(e2)), (e2) => (this.status = f$1, Promise.reject(e2))), this.promise) : this.promise;
     }
   };
-  function I$1(e2) {
+  let S$1 = class S {
+    constructor() {
+      this._callback = {};
+    }
+    addListener(e2, t2) {
+      this._callback[e2] || (this._callback[e2] = []), this._callback[e2].push(t2);
+    }
+    on(e2, t2) {
+      return this.addListener(e2, t2);
+    }
+    removeListener(e2, t2) {
+      if (!t2)
+        throw new Error('The "listener" argument must be of type function. Received undefined');
+      const n2 = this._callback[e2];
+      if (!n2)
+        return;
+      const s2 = function(e3, t3) {
+        for (let n3 = e3.length - 1; n3 >= 0; n3--)
+          if (e3[n3] === t3)
+            return n3;
+        return -1;
+      }(n2, t2);
+      n2.splice(s2, 1);
+    }
+    off(e2, t2) {
+      return this.removeListener(e2, t2);
+    }
+    removeAllListener(e2) {
+      delete this._callback[e2];
+    }
+    emit(e2, ...t2) {
+      const n2 = this._callback[e2];
+      if (n2)
+        for (let e3 = 0; e3 < n2.length; e3++)
+          n2[e3](...t2);
+    }
+  };
+  function T$1(e2) {
     return e2 && "string" == typeof e2 ? JSON.parse(e2) : e2;
   }
-  const S$1 = true, b$1 = "app", T$1 = I$1(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), A$1 = b$1, P$1 = I$1(""), C$1 = I$1("[]") || [];
-  let O$1 = "";
+  const b$1 = true, E$1 = "app", A$1 = T$1(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), P$1 = E$1, C$1 = T$1(""), O$1 = T$1("[]") || [];
+  let N$1 = "";
   try {
-    O$1 = "__UNI__7FF0662";
+    N$1 = "__UNI__3262174";
   } catch (e2) {
   }
-  let E$1, L$1 = {};
-  function R$1(e2, t2 = {}) {
+  let R$1, L$1 = {};
+  function U$1(e2, t2 = {}) {
     var n2, s2;
     return n2 = L$1, s2 = e2, Object.prototype.hasOwnProperty.call(n2, s2) || (L$1[e2] = t2), L$1[e2];
   }
-  function U$1() {
-    return E$1 || (E$1 = function() {
+  function D$1() {
+    return R$1 || (R$1 = function() {
       if ("undefined" != typeof globalThis)
         return globalThis;
       if ("undefined" != typeof self)
@@ -21423,102 +21618,103 @@ This will fail in production.`);
         return this;
       }
       return void 0 !== e2() ? e2() : new Function("return this")();
-    }(), E$1);
+    }(), R$1);
   }
   L$1 = uni._globalUniCloudObj ? uni._globalUniCloudObj : uni._globalUniCloudObj = {};
-  const N$1 = ["invoke", "success", "fail", "complete"], D$1 = R$1("_globalUniCloudInterceptor");
-  function M$1(e2, t2) {
-    D$1[e2] || (D$1[e2] = {}), g$1(t2) && Object.keys(t2).forEach((n2) => {
-      N$1.indexOf(n2) > -1 && function(e3, t3, n3) {
-        let s2 = D$1[e3][t3];
-        s2 || (s2 = D$1[e3][t3] = []), -1 === s2.indexOf(n3) && m$1(n3) && s2.push(n3);
+  const M$1 = ["invoke", "success", "fail", "complete"], q$1 = U$1("_globalUniCloudInterceptor");
+  function F$1(e2, t2) {
+    q$1[e2] || (q$1[e2] = {}), m$1(t2) && Object.keys(t2).forEach((n2) => {
+      M$1.indexOf(n2) > -1 && function(e3, t3, n3) {
+        let s2 = q$1[e3][t3];
+        s2 || (s2 = q$1[e3][t3] = []), -1 === s2.indexOf(n3) && y$1(n3) && s2.push(n3);
       }(e2, n2, t2[n2]);
     });
   }
-  function q$1(e2, t2) {
-    D$1[e2] || (D$1[e2] = {}), g$1(t2) ? Object.keys(t2).forEach((n2) => {
-      N$1.indexOf(n2) > -1 && function(e3, t3, n3) {
-        const s2 = D$1[e3][t3];
+  function K$1(e2, t2) {
+    q$1[e2] || (q$1[e2] = {}), m$1(t2) ? Object.keys(t2).forEach((n2) => {
+      M$1.indexOf(n2) > -1 && function(e3, t3, n3) {
+        const s2 = q$1[e3][t3];
         if (!s2)
           return;
         const r2 = s2.indexOf(n3);
         r2 > -1 && s2.splice(r2, 1);
       }(e2, n2, t2[n2]);
-    }) : delete D$1[e2];
+    }) : delete q$1[e2];
   }
-  function K$1(e2, t2) {
+  function j$1(e2, t2) {
     return e2 && 0 !== e2.length ? e2.reduce((e3, n2) => e3.then(() => n2(t2)), Promise.resolve()) : Promise.resolve();
   }
-  function F$1(e2, t2) {
-    return D$1[e2] && D$1[e2][t2] || [];
+  function $$1(e2, t2) {
+    return q$1[e2] && q$1[e2][t2] || [];
   }
-  function j$1(e2) {
-    M$1("callObject", e2);
+  function B$1(e2) {
+    F$1("callObject", e2);
   }
-  const $$1 = R$1("_globalUniCloudListener"), B$1 = "response", W$1 = "needLogin", H$1 = "refreshToken", J$1 = "clientdb", z$1 = "cloudfunction", V$1 = "cloudobject";
-  function G$1(e2) {
-    return $$1[e2] || ($$1[e2] = []), $$1[e2];
+  const W$1 = U$1("_globalUniCloudListener"), H$1 = { RESPONSE: "response", NEED_LOGIN: "needLogin", REFRESH_TOKEN: "refreshToken" }, J$1 = { CLIENT_DB: "clientdb", CLOUD_FUNCTION: "cloudfunction", CLOUD_OBJECT: "cloudobject" };
+  function z$1(e2) {
+    return W$1[e2] || (W$1[e2] = []), W$1[e2];
   }
-  function Y$1(e2, t2) {
-    const n2 = G$1(e2);
+  function V$1(e2, t2) {
+    const n2 = z$1(e2);
     n2.includes(t2) || n2.push(t2);
   }
-  function Q$1(e2, t2) {
-    const n2 = G$1(e2), s2 = n2.indexOf(t2);
+  function G$1(e2, t2) {
+    const n2 = z$1(e2), s2 = n2.indexOf(t2);
     -1 !== s2 && n2.splice(s2, 1);
   }
-  function X$1(e2, t2) {
-    const n2 = G$1(e2);
+  function Y$1(e2, t2) {
+    const n2 = z$1(e2);
     for (let e3 = 0; e3 < n2.length; e3++) {
       (0, n2[e3])(t2);
     }
   }
-  let Z$1, ee$1 = false;
-  function te$1() {
-    return Z$1 || (Z$1 = new Promise((e2) => {
-      ee$1 && e2(), function t2() {
+  let Q$1, X$1 = false;
+  function Z$1() {
+    return Q$1 || (Q$1 = new Promise((e2) => {
+      X$1 && e2(), function t2() {
         if ("function" == typeof getCurrentPages) {
           const t3 = getCurrentPages();
-          t3 && t3[0] && (ee$1 = true, e2());
+          t3 && t3[0] && (X$1 = true, e2());
         }
-        ee$1 || setTimeout(() => {
+        X$1 || setTimeout(() => {
           t2();
         }, 30);
       }();
-    }), Z$1);
+    }), Q$1);
   }
-  function ne$1(e2) {
+  function ee$1(e2) {
     const t2 = {};
     for (const n2 in e2) {
       const s2 = e2[n2];
-      m$1(s2) && (t2[n2] = y$1(s2));
+      y$1(s2) && (t2[n2] = _$1(s2));
     }
     return t2;
   }
-  let se$1 = class se extends Error {
+  let te$1 = class te extends Error {
     constructor(e2) {
-      super(e2.message), this.errMsg = e2.message || e2.errMsg || "unknown system error", this.code = this.errCode = e2.code || e2.errCode || "SYSTEM_ERROR", this.errSubject = this.subject = e2.subject || e2.errSubject, this.cause = e2.cause, this.requestId = e2.requestId;
+      const t2 = e2.message || e2.errMsg || "unknown system error";
+      super(t2), this.errMsg = t2, this.code = this.errCode = e2.code || e2.errCode || "SYSTEM_ERROR", this.errSubject = this.subject = e2.subject || e2.errSubject, this.cause = e2.cause, this.requestId = e2.requestId;
     }
     toJson(e2 = 0) {
       if (!(e2 >= 10))
         return e2++, { errCode: this.errCode, errMsg: this.errMsg, errSubject: this.errSubject, cause: this.cause && this.cause.toJson ? this.cause.toJson(e2) : this.cause };
     }
   };
-  var re$1 = { request: (e2) => uni.request(e2), uploadFile: (e2) => uni.uploadFile(e2), setStorageSync: (e2, t2) => uni.setStorageSync(e2, t2), getStorageSync: (e2) => uni.getStorageSync(e2), removeStorageSync: (e2) => uni.removeStorageSync(e2), clearStorageSync: () => uni.clearStorageSync(), connectSocket: (e2) => uni.connectSocket(e2) };
-  function ie$1(e2) {
-    return e2 && ie$1(e2.__v_raw) || e2;
+  var ne$1 = { request: (e2) => uni.request(e2), uploadFile: (e2) => uni.uploadFile(e2), setStorageSync: (e2, t2) => uni.setStorageSync(e2, t2), getStorageSync: (e2) => uni.getStorageSync(e2), removeStorageSync: (e2) => uni.removeStorageSync(e2), clearStorageSync: () => uni.clearStorageSync(), connectSocket: (e2) => uni.connectSocket(e2) };
+  function se$1(e2) {
+    return e2 && se$1(e2.__v_raw) || e2;
   }
-  function oe$1() {
-    return { token: re$1.getStorageSync("uni_id_token") || re$1.getStorageSync("uniIdToken"), tokenExpired: re$1.getStorageSync("uni_id_token_expired") };
+  function re$1() {
+    return { token: ne$1.getStorageSync(c$1) || ne$1.getStorageSync(h$1), tokenExpired: ne$1.getStorageSync(u$1) };
   }
-  function ae$1({ token: e2, tokenExpired: t2 } = {}) {
-    e2 && re$1.setStorageSync("uni_id_token", e2), t2 && re$1.setStorageSync("uni_id_token_expired", t2);
+  function ie$1({ token: e2, tokenExpired: t2 } = {}) {
+    e2 && ne$1.setStorageSync(c$1, e2), t2 && ne$1.setStorageSync(u$1, t2);
   }
-  let ce$1, ue$1;
-  function he$1() {
-    return ce$1 || (ce$1 = uni.getSystemInfoSync()), ce$1;
+  let oe$1, ae$1;
+  function ce$1() {
+    return oe$1 || (oe$1 = uni.getSystemInfoSync()), oe$1;
   }
-  function le$1() {
+  function ue$1() {
     let e2, t2;
     try {
       if (uni.getLaunchOptionsSync) {
@@ -21531,17 +21727,17 @@ This will fail in production.`);
     }
     return { channel: e2, scene: t2 };
   }
-  let de$1 = {};
-  function pe$1() {
+  let he$1 = {};
+  function le$1() {
     const e2 = uni.getLocale && uni.getLocale() || "en";
-    if (ue$1)
-      return { ...de$1, ...ue$1, locale: e2, LOCALE: e2 };
-    const t2 = he$1(), { deviceId: n2, osName: s2, uniPlatform: r2, appId: i2 } = t2, o2 = ["appId", "appLanguage", "appName", "appVersion", "appVersionCode", "appWgtVersion", "browserName", "browserVersion", "deviceBrand", "deviceId", "deviceModel", "deviceType", "osName", "osVersion", "romName", "romVersion", "ua", "hostName", "hostVersion", "uniPlatform", "uniRuntimeVersion", "uniRuntimeVersionCode", "uniCompilerVersion", "uniCompilerVersionCode"];
+    if (ae$1)
+      return { ...he$1, ...ae$1, locale: e2, LOCALE: e2 };
+    const t2 = ce$1(), { deviceId: n2, osName: s2, uniPlatform: r2, appId: i2 } = t2, o2 = ["appId", "appLanguage", "appName", "appVersion", "appVersionCode", "appWgtVersion", "browserName", "browserVersion", "deviceBrand", "deviceId", "deviceModel", "deviceType", "osName", "osVersion", "romName", "romVersion", "ua", "hostName", "hostVersion", "uniPlatform", "uniRuntimeVersion", "uniRuntimeVersionCode", "uniCompilerVersion", "uniCompilerVersionCode"];
     for (const e3 in t2)
       Object.hasOwnProperty.call(t2, e3) && -1 === o2.indexOf(e3) && delete t2[e3];
-    return ue$1 = { PLATFORM: r2, OS: s2, APPID: i2, DEVICEID: n2, ...le$1(), ...t2 }, { ...de$1, ...ue$1, locale: e2, LOCALE: e2 };
+    return ae$1 = { PLATFORM: r2, OS: s2, APPID: i2, DEVICEID: n2, ...ue$1(), ...t2 }, { ...he$1, ...ae$1, locale: e2, LOCALE: e2 };
   }
-  var fe$1 = { sign: function(e2, t2) {
+  var de$1 = { sign: function(e2, t2) {
     let n2 = "";
     return Object.keys(e2).sort().forEach(function(t3) {
       e2[t3] && (n2 = n2 + "&" + t3 + "=" + e2[t3]);
@@ -21553,27 +21749,27 @@ This will fail in production.`);
         const t3 = e3.data && e3.data.header && e3.data.header["x-serverless-request-id"] || e3.header && e3.header["request-id"];
         if (!e3.statusCode || e3.statusCode >= 400) {
           const n3 = e3.data && e3.data.error && e3.data.error.code || "SYS_ERR", r3 = e3.data && e3.data.error && e3.data.error.message || e3.errMsg || "request:fail";
-          return s2(new se$1({ code: n3, message: r3, requestId: t3 }));
+          return s2(new te$1({ code: n3, message: r3, requestId: t3 }));
         }
         const r2 = e3.data;
         if (r2.error)
-          return s2(new se$1({ code: r2.error.code, message: r2.error.message, requestId: t3 }));
+          return s2(new te$1({ code: r2.error.code, message: r2.error.message, requestId: t3 }));
         r2.result = r2.data, r2.requestId = t3, delete r2.data, n2(r2);
       } }));
     });
   }, toBase64: function(e2) {
     return a$1.stringify(o$1.parse(e2));
   } };
-  var ge$1 = class ge {
+  var pe$1 = class pe {
     constructor(e2) {
       ["spaceId", "clientSecret"].forEach((t2) => {
         if (!Object.prototype.hasOwnProperty.call(e2, t2))
           throw new Error(`${t2} required`);
-      }), this.config = Object.assign({}, { endpoint: 0 === e2.spaceId.indexOf("mp-") ? "https://api.next.bspapp.com" : "https://api.bspapp.com" }, e2), this.config.provider = "aliyun", this.config.requestUrl = this.config.endpoint + "/client", this.config.envType = this.config.envType || "public", this.config.accessTokenKey = "access_token_" + this.config.spaceId, this.adapter = re$1, this._getAccessTokenPromiseHub = new v$1({ createPromise: () => this.requestAuth(this.setupRequest({ method: "serverless.auth.user.anonymousAuthorize", params: "{}" }, "auth")).then((e3) => {
+      }), this.config = Object.assign({}, { endpoint: 0 === e2.spaceId.indexOf("mp-") ? "https://api.next.bspapp.com" : "https://api.bspapp.com" }, e2), this.config.provider = "aliyun", this.config.requestUrl = this.config.endpoint + "/client", this.config.envType = this.config.envType || "public", this.config.accessTokenKey = "access_token_" + this.config.spaceId, this.adapter = ne$1, this._getAccessTokenPromiseHub = new v$1({ createPromise: () => this.requestAuth(this.setupRequest({ method: "serverless.auth.user.anonymousAuthorize", params: "{}" }, "auth")).then((e3) => {
         if (!e3.result || !e3.result.accessToken)
-          throw new se$1({ code: "AUTH_FAILED", message: "获取accessToken失败" });
+          throw new te$1({ code: "AUTH_FAILED", message: "获取accessToken失败" });
         this.setAccessToken(e3.result.accessToken);
-      }), retryRule: w$1 });
+      }), retryRule: I$1 });
     }
     get hasAccessToken() {
       return !!this.accessToken;
@@ -21582,7 +21778,7 @@ This will fail in production.`);
       this.accessToken = e2;
     }
     requestWrapped(e2) {
-      return fe$1.wrappedRequest(e2, this.adapter.request);
+      return de$1.wrappedRequest(e2, this.adapter.request);
     }
     requestAuth(e2) {
       return this.requestWrapped(e2);
@@ -21600,11 +21796,11 @@ This will fail in production.`);
     }
     rebuildRequest(e2) {
       const t2 = Object.assign({}, e2);
-      return t2.data.token = this.accessToken, t2.header["x-basement-token"] = this.accessToken, t2.header["x-serverless-sign"] = fe$1.sign(t2.data, this.config.clientSecret), t2;
+      return t2.data.token = this.accessToken, t2.header["x-basement-token"] = this.accessToken, t2.header["x-serverless-sign"] = de$1.sign(t2.data, this.config.clientSecret), t2;
     }
     setupRequest(e2, t2) {
       const n2 = Object.assign({}, e2, { spaceId: this.config.spaceId, timestamp: Date.now() }), s2 = { "Content-Type": "application/json" };
-      return "auth" !== t2 && (n2.token = this.accessToken, s2["x-basement-token"] = this.accessToken), s2["x-serverless-sign"] = fe$1.sign(n2, this.config.clientSecret), { url: this.config.requestUrl, method: "POST", data: n2, dataType: "json", header: s2 };
+      return "auth" !== t2 && (n2.token = this.accessToken, s2["x-basement-token"] = this.accessToken), s2["x-serverless-sign"] = de$1.sign(n2, this.config.clientSecret), { url: this.config.requestUrl, method: "POST", data: n2, dataType: "json", header: s2 };
     }
     getAccessToken() {
       return this._getAccessTokenPromiseHub.exec();
@@ -21623,9 +21819,9 @@ This will fail in production.`);
     uploadFileToOSS({ url: e2, formData: t2, name: n2, filePath: s2, fileType: r2, onUploadProgress: i2 }) {
       return new Promise((o2, a2) => {
         const c2 = this.adapter.uploadFile({ url: e2, formData: t2, name: n2, filePath: s2, fileType: r2, header: { "X-OSS-server-side-encrpytion": "AES256" }, success(e3) {
-          e3 && e3.statusCode < 400 ? o2(e3) : a2(new se$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
+          e3 && e3.statusCode < 400 ? o2(e3) : a2(new te$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
         }, fail(e3) {
-          a2(new se$1({ code: e3.code || "UPLOAD_FAILED", message: e3.message || e3.errMsg || "文件上传失败" }));
+          a2(new te$1({ code: e3.code || "UPLOAD_FAILED", message: e3.message || e3.errMsg || "文件上传失败" }));
         } });
         "function" == typeof i2 && c2 && "function" == typeof c2.onProgressUpdate && c2.onProgressUpdate((e3) => {
           i2({ loaded: e3.totalBytesSent, total: e3.totalBytesExpectedToSend });
@@ -21637,41 +21833,46 @@ This will fail in production.`);
       return this.request(this.setupRequest(t2));
     }
     async uploadFile({ filePath: e2, cloudPath: t2, fileType: n2 = "image", cloudPathAsRealPath: s2 = false, onUploadProgress: r2, config: i2 }) {
-      if ("string" !== f$1(t2))
-        throw new se$1({ code: "INVALID_PARAM", message: "cloudPath必须为字符串类型" });
+      if ("string" !== g$1(t2))
+        throw new te$1({ code: "INVALID_PARAM", message: "cloudPath必须为字符串类型" });
       if (!(t2 = t2.trim()))
-        throw new se$1({ code: "INVALID_PARAM", message: "cloudPath不可为空" });
+        throw new te$1({ code: "INVALID_PARAM", message: "cloudPath不可为空" });
       if (/:\/\//.test(t2))
-        throw new se$1({ code: "INVALID_PARAM", message: "cloudPath不合法" });
+        throw new te$1({ code: "INVALID_PARAM", message: "cloudPath不合法" });
       const o2 = i2 && i2.envType || this.config.envType;
       if (s2 && ("/" !== t2[0] && (t2 = "/" + t2), t2.indexOf("\\") > -1))
-        throw new se$1({ code: "INVALID_PARAM", message: "使用cloudPath作为路径时，cloudPath不可包含“\\”" });
-      const a2 = (await this.getOSSUploadOptionsFromPath({ env: o2, filename: s2 ? t2.split("/").pop() : t2, fileId: s2 ? t2 : void 0 })).result, c2 = "https://" + a2.cdnDomain + "/" + a2.ossPath, { securityToken: u2, accessKeyId: h2, signature: l2, host: d2, ossPath: p2, id: g2, policy: m2, ossCallbackUrl: y2 } = a2, _2 = { "Cache-Control": "max-age=2592000", "Content-Disposition": "attachment", OSSAccessKeyId: h2, Signature: l2, host: d2, id: g2, key: p2, policy: m2, success_action_status: 200 };
+        throw new te$1({ code: "INVALID_PARAM", message: "使用cloudPath作为路径时，cloudPath不可包含“\\”" });
+      const a2 = (await this.getOSSUploadOptionsFromPath({ env: o2, filename: s2 ? t2.split("/").pop() : t2, fileId: s2 ? t2 : void 0 })).result, c2 = "https://" + a2.cdnDomain + "/" + a2.ossPath, { securityToken: u2, accessKeyId: h2, signature: l2, host: d2, ossPath: p2, id: f2, policy: m2, ossCallbackUrl: y2 } = a2, _2 = { "Cache-Control": "max-age=2592000", "Content-Disposition": "attachment", OSSAccessKeyId: h2, Signature: l2, host: d2, id: f2, key: p2, policy: m2, success_action_status: 200 };
       if (u2 && (_2["x-oss-security-token"] = u2), y2) {
-        const e3 = JSON.stringify({ callbackUrl: y2, callbackBody: JSON.stringify({ fileId: g2, spaceId: this.config.spaceId }), callbackBodyType: "application/json" });
-        _2.callback = fe$1.toBase64(e3);
+        const e3 = JSON.stringify({ callbackUrl: y2, callbackBody: JSON.stringify({ fileId: f2, spaceId: this.config.spaceId }), callbackBodyType: "application/json" });
+        _2.callback = de$1.toBase64(e3);
       }
       const w2 = { url: "https://" + a2.host, formData: _2, fileName: "file", name: "file", filePath: e2, fileType: n2 };
       if (await this.uploadFileToOSS(Object.assign({}, w2, { onUploadProgress: r2 })), y2)
         return { success: true, filePath: e2, fileID: c2 };
-      if ((await this.reportOSSUpload({ id: g2 })).success)
+      if ((await this.reportOSSUpload({ id: f2 })).success)
         return { success: true, filePath: e2, fileID: c2 };
-      throw new se$1({ code: "UPLOAD_FAILED", message: "文件上传失败" });
+      throw new te$1({ code: "UPLOAD_FAILED", message: "文件上传失败" });
     }
     getTempFileURL({ fileList: e2 } = {}) {
       return new Promise((t2, n2) => {
-        Array.isArray(e2) && 0 !== e2.length || n2(new se$1({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" })), t2({ fileList: e2.map((e3) => ({ fileID: e3, tempFileURL: e3 })) });
+        Array.isArray(e2) && 0 !== e2.length || n2(new te$1({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" })), this.getFileInfo({ fileList: e2 }).then((n3) => {
+          t2({ fileList: e2.map((e3, t3) => {
+            const s2 = n3.fileList[t3];
+            return { fileID: e3, tempFileURL: s2 && s2.url || e3 };
+          }) });
+        });
       });
     }
     async getFileInfo({ fileList: e2 } = {}) {
       if (!Array.isArray(e2) || 0 === e2.length)
-        throw new se$1({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" });
+        throw new te$1({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" });
       const t2 = { method: "serverless.file.resource.info", params: JSON.stringify({ id: e2.map((e3) => e3.split("?")[0]).join(",") }) };
       return { fileList: (await this.request(this.setupRequest(t2))).result };
     }
   };
-  var me$1 = { init(e2) {
-    const t2 = new ge$1(e2), n2 = { signInAnonymously: function() {
+  var fe$1 = { init(e2) {
+    const t2 = new pe$1(e2), n2 = { signInAnonymously: function() {
       return t2.authorize();
     }, getLoginState: function() {
       return Promise.resolve(false);
@@ -21680,13 +21881,13 @@ This will fail in production.`);
       return n2;
     }, t2.customAuth = t2.auth, t2;
   } };
-  const ye$1 = "undefined" != typeof location && "http:" === location.protocol ? "http:" : "https:";
-  var _e$1;
+  const ge$1 = "undefined" != typeof location && "http:" === location.protocol ? "http:" : "https:";
+  var me$1;
   !function(e2) {
     e2.local = "local", e2.none = "none", e2.session = "session";
-  }(_e$1 || (_e$1 = {}));
-  var we$1 = function() {
-  }, ve$1 = n$1(function(e2, t2) {
+  }(me$1 || (me$1 = {}));
+  var ye$1 = function() {
+  }, _e$1 = n$1(function(e2, t2) {
     var n2;
     e2.exports = (n2 = r$1, function(e3) {
       var t3 = n2, s2 = t3.lib, r2 = s2.WordArray, i2 = s2.Hasher, o2 = t3.algo, a2 = [], c2 = [];
@@ -21713,8 +21914,8 @@ This will fail in production.`);
             var f2 = u2[p2 - 15], g2 = (f2 << 25 | f2 >>> 7) ^ (f2 << 14 | f2 >>> 18) ^ f2 >>> 3, m2 = u2[p2 - 2], y2 = (m2 << 15 | m2 >>> 17) ^ (m2 << 13 | m2 >>> 19) ^ m2 >>> 10;
             u2[p2] = g2 + u2[p2 - 7] + y2 + u2[p2 - 16];
           }
-          var _2 = s3 & r3 ^ s3 & i3 ^ r3 & i3, w2 = (s3 << 30 | s3 >>> 2) ^ (s3 << 19 | s3 >>> 13) ^ (s3 << 10 | s3 >>> 22), v2 = d2 + ((a3 << 26 | a3 >>> 6) ^ (a3 << 21 | a3 >>> 11) ^ (a3 << 7 | a3 >>> 25)) + (a3 & h3 ^ ~a3 & l2) + c2[p2] + u2[p2];
-          d2 = l2, l2 = h3, h3 = a3, a3 = o3 + v2 | 0, o3 = i3, i3 = r3, r3 = s3, s3 = v2 + (w2 + _2) | 0;
+          var _2 = s3 & r3 ^ s3 & i3 ^ r3 & i3, w2 = (s3 << 30 | s3 >>> 2) ^ (s3 << 19 | s3 >>> 13) ^ (s3 << 10 | s3 >>> 22), I2 = d2 + ((a3 << 26 | a3 >>> 6) ^ (a3 << 21 | a3 >>> 11) ^ (a3 << 7 | a3 >>> 25)) + (a3 & h3 ^ ~a3 & l2) + c2[p2] + u2[p2];
+          d2 = l2, l2 = h3, h3 = a3, a3 = o3 + I2 | 0, o3 = i3, i3 = r3, r3 = s3, s3 = I2 + (w2 + _2) | 0;
         }
         n3[0] = n3[0] + s3 | 0, n3[1] = n3[1] + r3 | 0, n3[2] = n3[2] + i3 | 0, n3[3] = n3[3] + o3 | 0, n3[4] = n3[4] + a3 | 0, n3[5] = n3[5] + h3 | 0, n3[6] = n3[6] + l2 | 0, n3[7] = n3[7] + d2 | 0;
       }, _doFinalize: function() {
@@ -21726,16 +21927,16 @@ This will fail in production.`);
       } });
       t3.SHA256 = i2._createHelper(h2), t3.HmacSHA256 = i2._createHmacHelper(h2);
     }(Math), n2.SHA256);
-  }), Ie$1 = ve$1, Se$1 = n$1(function(e2, t2) {
+  }), we$1 = _e$1, Ie$1 = n$1(function(e2, t2) {
     e2.exports = r$1.HmacSHA256;
   });
-  const be$1 = () => {
+  const ve$1 = () => {
     let e2;
     if (!Promise) {
       e2 = () => {
       }, e2.promise = {};
       const t3 = () => {
-        throw new se$1({ message: 'Your Node runtime does support ES6 Promises. Set "global.Promise" to your preferred implementation of promises.' });
+        throw new te$1({ message: 'Your Node runtime does support ES6 Promises. Set "global.Promise" to your preferred implementation of promises.' });
       };
       return Object.defineProperty(e2.promise, "then", { get: t3 }), Object.defineProperty(e2.promise, "catch", { get: t3 }), e2;
     }
@@ -21744,24 +21945,24 @@ This will fail in production.`);
     });
     return e2.promise = t2, e2;
   };
-  function ke$1(e2) {
+  function Se$1(e2) {
     return void 0 === e2;
   }
   function Te$1(e2) {
     return "[object Null]" === Object.prototype.toString.call(e2);
   }
-  function Ae$1(e2 = "") {
+  function be$1(e2 = "") {
     return e2.replace(/([\s\S]+)\s+(请前往云开发AI小助手查看问题：.*)/, "$1");
   }
-  function Pe$1(e2 = 32) {
-    const t2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", n2 = t2.length;
-    let s2 = "";
-    for (let r2 = 0; r2 < e2; r2++)
-      s2 += t2.charAt(Math.floor(Math.random() * n2));
-    return s2;
+  function Ee$1(e2 = 32) {
+    const t2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let n2 = "";
+    for (let s2 = 0; s2 < e2; s2++)
+      n2 += t2.charAt(Math.floor(62 * Math.random()));
+    return n2;
   }
-  var Ce$1;
-  function xe$1(e2) {
+  var ke$1;
+  function Ae$1(e2) {
     const t2 = (n2 = e2, "[object Array]" === Object.prototype.toString.call(n2) ? e2 : [e2]);
     var n2;
     for (const e3 of t2) {
@@ -21772,39 +21973,39 @@ This will fail in production.`);
   }
   !function(e2) {
     e2.WEB = "web", e2.WX_MP = "wx_mp";
-  }(Ce$1 || (Ce$1 = {}));
-  const Oe$1 = { adapter: null, runtime: void 0 }, Ee$1 = ["anonymousUuidKey"];
-  let Le$1 = class Le extends we$1 {
+  }(ke$1 || (ke$1 = {}));
+  const Pe$1 = { adapter: null, runtime: void 0 }, Ce$1 = ["anonymousUuidKey"];
+  let Oe$1 = class Oe extends ye$1 {
     constructor() {
-      super(), Oe$1.adapter.root.tcbObject || (Oe$1.adapter.root.tcbObject = {});
+      super(), Pe$1.adapter.root.tcbObject || (Pe$1.adapter.root.tcbObject = {});
     }
     setItem(e2, t2) {
-      Oe$1.adapter.root.tcbObject[e2] = t2;
+      Pe$1.adapter.root.tcbObject[e2] = t2;
     }
     getItem(e2) {
-      return Oe$1.adapter.root.tcbObject[e2];
+      return Pe$1.adapter.root.tcbObject[e2];
     }
     removeItem(e2) {
-      delete Oe$1.adapter.root.tcbObject[e2];
+      delete Pe$1.adapter.root.tcbObject[e2];
     }
     clear() {
-      delete Oe$1.adapter.root.tcbObject;
+      delete Pe$1.adapter.root.tcbObject;
     }
   };
-  function Re$1(e2, t2) {
+  function xe$1(e2, t2) {
     switch (e2) {
       case "local":
-        return t2.localStorage || new Le$1();
+        return t2.localStorage || new Oe$1();
       case "none":
-        return new Le$1();
+        return new Oe$1();
       default:
-        return t2.sessionStorage || new Le$1();
+        return t2.sessionStorage || new Oe$1();
     }
   }
-  let Ue$1 = class Ue {
+  let Ne$1 = class Ne {
     constructor(e2) {
       if (!this._storage) {
-        this._persistence = Oe$1.adapter.primaryStorage || e2.persistence, this._storage = Re$1(this._persistence, Oe$1.adapter);
+        this._persistence = Pe$1.adapter.primaryStorage || e2.persistence, this._storage = xe$1(this._persistence, Pe$1.adapter);
         const t2 = `access_token_${e2.env}`, n2 = `access_token_expire_${e2.env}`, s2 = `refresh_token_${e2.env}`, r2 = `anonymous_uuid_${e2.env}`, i2 = `login_type_${e2.env}`, o2 = "device_id", a2 = `token_type_${e2.env}`, c2 = `user_info_${e2.env}`;
         this.keys = { accessTokenKey: t2, accessTokenExpireKey: n2, refreshTokenKey: s2, anonymousUuidKey: r2, loginTypeKey: i2, userInfoKey: c2, deviceIdKey: o2, tokenTypeKey: a2 };
       }
@@ -21814,13 +22015,13 @@ This will fail in production.`);
         return;
       const t2 = "local" === this._persistence;
       this._persistence = e2;
-      const n2 = Re$1(e2, Oe$1.adapter);
+      const n2 = xe$1(e2, Pe$1.adapter);
       for (const e3 in this.keys) {
         const s2 = this.keys[e3];
-        if (t2 && Ee$1.includes(e3))
+        if (t2 && Ce$1.includes(e3))
           continue;
         const r2 = this._storage.getItem(s2);
-        ke$1(r2) || Te$1(r2) || (n2.setItem(s2, r2), this._storage.removeItem(s2));
+        Se$1(r2) || Te$1(r2) || (n2.setItem(s2, r2), this._storage.removeItem(s2));
       }
       this._storage = n2;
     }
@@ -21854,21 +22055,21 @@ This will fail in production.`);
       this._storage.removeItem(e2);
     }
   };
-  const Ne$1 = {}, De$1 = {};
-  function Me$1(e2) {
-    return Ne$1[e2];
+  const Re$1 = {}, Le$1 = {};
+  function Ue$1(e2) {
+    return Re$1[e2];
   }
-  let qe$1 = class qe {
+  let De$1 = class De {
     constructor(e2, t2) {
       this.data = t2 || null, this.name = e2;
     }
   };
-  let Ke$1 = class Ke extends qe$1 {
+  let Me$1 = class Me extends De$1 {
     constructor(e2, t2) {
       super("error", { error: e2, data: t2 }), this.error = e2;
     }
   };
-  const Fe$1 = new class {
+  const qe$1 = new class {
     constructor() {
       this._listeners = {};
     }
@@ -21886,9 +22087,9 @@ This will fail in production.`);
       }(e2, t2, this._listeners), this;
     }
     fire(e2, t2) {
-      if (e2 instanceof Ke$1)
+      if (e2 instanceof Me$1)
         return console.error(e2.error), this;
-      const n2 = "string" == typeof e2 ? new qe$1(e2, t2 || {}) : e2;
+      const n2 = "string" == typeof e2 ? new De$1(e2, t2 || {}) : e2;
       const s2 = n2.name;
       if (this._listens(s2)) {
         n2.target = this;
@@ -21902,21 +22103,21 @@ This will fail in production.`);
       return this._listeners[e2] && this._listeners[e2].length > 0;
     }
   }();
+  function Fe$1(e2, t2) {
+    qe$1.on(e2, t2);
+  }
+  function Ke$1(e2, t2 = {}) {
+    qe$1.fire(e2, t2);
+  }
   function je$1(e2, t2) {
-    Fe$1.on(e2, t2);
+    qe$1.off(e2, t2);
   }
-  function $e$1(e2, t2 = {}) {
-    Fe$1.fire(e2, t2);
-  }
-  function Be$1(e2, t2) {
-    Fe$1.off(e2, t2);
-  }
-  const We$1 = "loginStateChanged", He$1 = "loginStateExpire", Je$1 = "loginTypeChanged", ze$1 = "anonymousConverted", Ve$1 = "refreshAccessToken";
-  var Ge$1;
+  const $e$1 = "loginStateChanged", Be$1 = "loginStateExpire", We$1 = "loginTypeChanged", He$1 = "anonymousConverted", Je$1 = "refreshAccessToken";
+  var ze$1;
   !function(e2) {
     e2.ANONYMOUS = "ANONYMOUS", e2.WECHAT = "WECHAT", e2.WECHAT_PUBLIC = "WECHAT-PUBLIC", e2.WECHAT_OPEN = "WECHAT-OPEN", e2.CUSTOM = "CUSTOM", e2.EMAIL = "EMAIL", e2.USERNAME = "USERNAME", e2.NULL = "NULL";
-  }(Ge$1 || (Ge$1 = {}));
-  let Ye$1 = class Ye {
+  }(ze$1 || (ze$1 = {}));
+  let Ve$1 = class Ve {
     constructor() {
       this._fnPromiseMap = /* @__PURE__ */ new Map();
     }
@@ -21925,8 +22126,8 @@ This will fail in production.`);
       return n2 || (n2 = new Promise(async (n3, s2) => {
         try {
           await this._runIdlePromise();
-          const s3 = t2();
-          n3(await s3);
+          const e3 = t2();
+          n3(await e3);
         } catch (e3) {
           s2(e3);
         } finally {
@@ -21938,19 +22139,19 @@ This will fail in production.`);
       return Promise.resolve();
     }
   };
-  let Qe$1 = class Qe {
+  let Ge$1 = class Ge {
     constructor(e2) {
-      this._singlePromise = new Ye$1(), this._cache = Me$1(e2.env), this._baseURL = `https://${e2.env}.ap-shanghai.tcb-api.tencentcloudapi.com`, this._reqClass = new Oe$1.adapter.reqClass({ timeout: e2.timeout, timeoutMsg: `请求在${e2.timeout / 1e3}s内未完成，已中断`, restrictedMethods: ["post"] });
+      this._singlePromise = new Ve$1(), this._cache = Ue$1(e2.env), this._baseURL = `https://${e2.env}.ap-shanghai.tcb-api.tencentcloudapi.com`, this._reqClass = new Pe$1.adapter.reqClass({ timeout: e2.timeout, timeoutMsg: `请求在${e2.timeout / 1e3}s内未完成，已中断`, restrictedMethods: ["post"] });
     }
     _getDeviceId() {
       if (this._deviceID)
         return this._deviceID;
       const { deviceIdKey: e2 } = this._cache.keys;
       let t2 = this._cache.getStore(e2);
-      return "string" == typeof t2 && t2.length >= 16 && t2.length <= 48 || (t2 = Pe$1(), this._cache.setStore(e2, t2)), this._deviceID = t2, t2;
+      return "string" == typeof t2 && t2.length >= 16 && t2.length <= 48 || (t2 = Ee$1(), this._cache.setStore(e2, t2)), this._deviceID = t2, t2;
     }
     async _request(e2, t2, n2 = {}) {
-      const s2 = { "x-request-id": Pe$1(), "x-device-id": this._getDeviceId() };
+      const s2 = { "x-request-id": Ee$1(), "x-device-id": this._getDeviceId() };
       if (n2.withAccessToken) {
         const { tokenTypeKey: e3 } = this._cache.keys, t3 = await this.getAccessToken(), n3 = this._cache.getStore(e3);
         s2.authorization = `${n3} ${t3}`;
@@ -21959,8 +22160,8 @@ This will fail in production.`);
     }
     async _fetchAccessToken() {
       const { loginTypeKey: e2, accessTokenKey: t2, accessTokenExpireKey: n2, tokenTypeKey: s2 } = this._cache.keys, r2 = this._cache.getStore(e2);
-      if (r2 && r2 !== Ge$1.ANONYMOUS)
-        throw new se$1({ code: "INVALID_OPERATION", message: "非匿名登录不支持刷新 access token" });
+      if (r2 && r2 !== ze$1.ANONYMOUS)
+        throw new te$1({ code: "INVALID_OPERATION", message: "非匿名登录不支持刷新 access token" });
       const i2 = await this._singlePromise.run("fetchAccessToken", async () => (await this._request("/auth/v1/signin/anonymously", {}, { method: "post" })).data), { access_token: o2, expires_in: a2, token_type: c2 } = i2;
       return this._cache.setStore(s2, c2), this._cache.setStore(t2, o2), this._cache.setStore(n2, Date.now() + 1e3 * a2), o2;
     }
@@ -21974,14 +22175,14 @@ This will fail in production.`);
     }
     async refreshAccessToken() {
       const { accessTokenKey: e2, accessTokenExpireKey: t2, loginTypeKey: n2 } = this._cache.keys;
-      return this._cache.removeStore(e2), this._cache.removeStore(t2), this._cache.setStore(n2, Ge$1.ANONYMOUS), this.getAccessToken();
+      return this._cache.removeStore(e2), this._cache.removeStore(t2), this._cache.setStore(n2, ze$1.ANONYMOUS), this.getAccessToken();
     }
     async getUserInfo() {
       return this._singlePromise.run("getUserInfo", async () => (await this._request("/auth/v1/user/me", {}, { withAccessToken: true, method: "get" })).data);
     }
   };
-  const Xe$1 = ["auth.getJwt", "auth.logout", "auth.signInWithTicket", "auth.signInAnonymously", "auth.signIn", "auth.fetchAccessTokenWithRefreshToken", "auth.signUpWithEmailAndPassword", "auth.activateEndUserMail", "auth.sendPasswordResetEmail", "auth.resetPasswordWithToken", "auth.isUsernameRegistered"], Ze$1 = { "X-SDK-Version": "1.3.5" };
-  function et$1(e2, t2, n2) {
+  const Ye$1 = ["auth.getJwt", "auth.logout", "auth.signInWithTicket", "auth.signInAnonymously", "auth.signIn", "auth.fetchAccessTokenWithRefreshToken", "auth.signUpWithEmailAndPassword", "auth.activateEndUserMail", "auth.sendPasswordResetEmail", "auth.resetPasswordWithToken", "auth.isUsernameRegistered"], Qe$1 = { "X-SDK-Version": "1.3.5" };
+  function Xe$1(e2, t2, n2) {
     const s2 = e2[t2];
     e2[t2] = function(t3) {
       const r2 = {}, i2 = {};
@@ -22000,14 +22201,14 @@ This will fail in production.`);
       })(), t3.headers = { ...t3.headers || {}, ...i2 }, s2.call(e2, t3);
     };
   }
-  function tt$1() {
+  function Ze$1() {
     const e2 = Math.random().toString(16).slice(2);
-    return { data: { seqId: e2 }, headers: { ...Ze$1, "x-seqid": e2 } };
+    return { data: { seqId: e2 }, headers: { ...Qe$1, "x-seqid": e2 } };
   }
-  let nt$1 = class nt {
+  let et$1 = class et {
     constructor(e2 = {}) {
       var t2;
-      this.config = e2, this._reqClass = new Oe$1.adapter.reqClass({ timeout: this.config.timeout, timeoutMsg: `请求在${this.config.timeout / 1e3}s内未完成，已中断`, restrictedMethods: ["post"] }), this._cache = Me$1(this.config.env), this._localCache = (t2 = this.config.env, De$1[t2]), this.oauth = new Qe$1(this.config), et$1(this._reqClass, "post", [tt$1]), et$1(this._reqClass, "upload", [tt$1]), et$1(this._reqClass, "download", [tt$1]);
+      this.config = e2, this._reqClass = new Pe$1.adapter.reqClass({ timeout: this.config.timeout, timeoutMsg: `请求在${this.config.timeout / 1e3}s内未完成，已中断`, restrictedMethods: ["post"] }), this._cache = Ue$1(this.config.env), this._localCache = (t2 = this.config.env, Le$1[t2]), this.oauth = new Ge$1(this.config), Xe$1(this._reqClass, "post", [Ze$1]), Xe$1(this._reqClass, "upload", [Ze$1]), Xe$1(this._reqClass, "download", [Ze$1]);
     }
     async post(e2) {
       return await this._reqClass.post(e2);
@@ -22035,27 +22236,27 @@ This will fail in production.`);
       this._cache.removeStore(e2), this._cache.removeStore(t2);
       let i2 = this._cache.getStore(n2);
       if (!i2)
-        throw new se$1({ message: "未登录CloudBase" });
+        throw new te$1({ message: "未登录CloudBase" });
       const o2 = { refresh_token: i2 }, a2 = await this.request("auth.fetchAccessTokenWithRefreshToken", o2);
       if (a2.data.code) {
         const { code: e3 } = a2.data;
         if ("SIGN_PARAM_INVALID" === e3 || "REFRESH_TOKEN_EXPIRED" === e3 || "INVALID_REFRESH_TOKEN" === e3) {
-          if (this._cache.getStore(s2) === Ge$1.ANONYMOUS && "INVALID_REFRESH_TOKEN" === e3) {
+          if (this._cache.getStore(s2) === ze$1.ANONYMOUS && "INVALID_REFRESH_TOKEN" === e3) {
             const e4 = this._cache.getStore(r2), t3 = this._cache.getStore(n2), s3 = await this.send("auth.signInAnonymously", { anonymous_uuid: e4, refresh_token: t3 });
             return this.setRefreshToken(s3.refresh_token), this._refreshAccessToken();
           }
-          $e$1(He$1), this._cache.removeStore(n2);
+          Ke$1(Be$1), this._cache.removeStore(n2);
         }
-        throw new se$1({ code: a2.data.code, message: `刷新access token失败：${a2.data.code}` });
+        throw new te$1({ code: a2.data.code, message: `刷新access token失败：${a2.data.code}` });
       }
       if (a2.data.access_token)
-        return $e$1(Ve$1), this._cache.setStore(e2, a2.data.access_token), this._cache.setStore(t2, a2.data.access_token_expire + Date.now()), { accessToken: a2.data.access_token, accessTokenExpire: a2.data.access_token_expire };
+        return Ke$1(Je$1), this._cache.setStore(e2, a2.data.access_token), this._cache.setStore(t2, a2.data.access_token_expire + Date.now()), { accessToken: a2.data.access_token, accessTokenExpire: a2.data.access_token_expire };
       a2.data.refresh_token && (this._cache.removeStore(n2), this._cache.setStore(n2, a2.data.refresh_token), this._refreshAccessToken());
     }
     async getAccessToken() {
       const { accessTokenKey: e2, accessTokenExpireKey: t2, refreshTokenKey: n2 } = this._cache.keys;
       if (!this._cache.getStore(n2))
-        throw new se$1({ message: "refresh token不存在，登录状态异常" });
+        throw new te$1({ message: "refresh token不存在，登录状态异常" });
       let s2 = this._cache.getStore(e2), r2 = this._cache.getStore(t2), i2 = true;
       return this._shouldRefreshAccessTokenHook && !await this._shouldRefreshAccessTokenHook(s2, r2) && (i2 = false), (!s2 || !r2 || r2 < Date.now()) && i2 ? this.refreshAccessToken() : { accessToken: s2, accessTokenExpire: r2 };
     }
@@ -22064,7 +22265,7 @@ This will fail in production.`);
       let r2 = "application/x-www-form-urlencoded";
       const i2 = { action: e2, env: this.config.env, dataVersion: "2019-08-16", ...t2 };
       let o2;
-      if (-1 === Xe$1.indexOf(e2) && (this._cache.keys, i2.access_token = await this.oauth.getAccessToken()), "storage.uploadFile" === e2) {
+      if (-1 === Ye$1.indexOf(e2) && (this._cache.keys, i2.access_token = await this.oauth.getAccessToken()), "storage.uploadFile" === e2) {
         o2 = new FormData();
         for (let e3 in o2)
           o2.hasOwnProperty(e3) && void 0 !== o2[e3] && o2.append(e3, i2[e3]);
@@ -22087,24 +22288,24 @@ This will fail in production.`);
         for (let e4 in n3)
           "" === r3 ? !s3 && (t3 += "?") : r3 += "&", r3 += `${e4}=${encodeURIComponent(n3[e4])}`;
         return /^http(s)?\:\/\//.test(t3 += r3) ? t3 : `${e3}${t3}`;
-      }(ye$1, "//tcb-api.tencentcloudapi.com/web", d2);
+      }(ge$1, "//tcb-api.tencentcloudapi.com/web", d2);
       l2 && (p2 += l2);
       const f2 = await this.post({ url: p2, data: o2, ...a2 }), g2 = f2.header && f2.header["x-tcb-trace"];
       if (g2 && this._localCache.setStore(s2, g2), 200 !== Number(f2.status) && 200 !== Number(f2.statusCode) || !f2.data)
-        throw new se$1({ code: "NETWORK_ERROR", message: "network request error" });
+        throw new te$1({ code: "NETWORK_ERROR", message: "network request error" });
       return f2;
     }
     async send(e2, t2 = {}, n2 = {}) {
       const s2 = await this.request(e2, t2, { ...n2, onUploadProgress: t2.onUploadProgress });
-      if (("ACCESS_TOKEN_DISABLED" === s2.data.code || "ACCESS_TOKEN_EXPIRED" === s2.data.code) && -1 === Xe$1.indexOf(e2)) {
+      if (("ACCESS_TOKEN_DISABLED" === s2.data.code || "ACCESS_TOKEN_EXPIRED" === s2.data.code) && -1 === Ye$1.indexOf(e2)) {
         await this.oauth.refreshAccessToken();
         const s3 = await this.request(e2, t2, { ...n2, onUploadProgress: t2.onUploadProgress });
         if (s3.data.code)
-          throw new se$1({ code: s3.data.code, message: Ae$1(s3.data.message) });
+          throw new te$1({ code: s3.data.code, message: be$1(s3.data.message) });
         return s3.data;
       }
       if (s2.data.code)
-        throw new se$1({ code: s2.data.code, message: Ae$1(s2.data.message) });
+        throw new te$1({ code: s2.data.code, message: be$1(s2.data.message) });
       return s2.data;
     }
     setRefreshToken(e2) {
@@ -22112,13 +22313,13 @@ This will fail in production.`);
       this._cache.removeStore(t2), this._cache.removeStore(n2), this._cache.setStore(s2, e2);
     }
   };
-  const st$1 = {};
-  function rt$1(e2) {
-    return st$1[e2];
+  const tt$1 = {};
+  function nt$1(e2) {
+    return tt$1[e2];
   }
-  let it$1 = class it {
+  let st$1 = class st {
     constructor(e2) {
-      this.config = e2, this._cache = Me$1(e2.env), this._request = rt$1(e2.env);
+      this.config = e2, this._cache = Ue$1(e2.env), this._request = nt$1(e2.env);
     }
     setRefreshToken(e2) {
       const { accessTokenKey: t2, accessTokenExpireKey: n2, refreshTokenKey: s2 } = this._cache.keys;
@@ -22137,15 +22338,15 @@ This will fail in production.`);
       this._cache.setStore(t2, e2);
     }
   };
-  let ot$1 = class ot {
+  let rt$1 = class rt {
     constructor(e2) {
       if (!e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "envId is not defined" });
-      this._envId = e2, this._cache = Me$1(this._envId), this._request = rt$1(this._envId), this.setUserInfo();
+        throw new te$1({ code: "PARAM_ERROR", message: "envId is not defined" });
+      this._envId = e2, this._cache = Ue$1(this._envId), this._request = nt$1(this._envId), this.setUserInfo();
     }
     linkWithTicket(e2) {
       if ("string" != typeof e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "ticket must be string" });
+        throw new te$1({ code: "PARAM_ERROR", message: "ticket must be string" });
       return this._request.send("auth.linkWithTicket", { ticket: e2 });
     }
     linkWithRedirect(e2) {
@@ -22159,7 +22360,7 @@ This will fail in production.`);
     }
     updateUsername(e2) {
       if ("string" != typeof e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "username must be a string" });
+        throw new te$1({ code: "PARAM_ERROR", message: "username must be a string" });
       return this._request.send("auth.updateUsername", { username: e2 });
     }
     async getLinkedUidList() {
@@ -22195,65 +22396,65 @@ This will fail in production.`);
       this._cache.setStore(t2, e2), this.setUserInfo();
     }
   };
-  let at$1 = class at {
+  let it$1 = class it {
     constructor(e2) {
       if (!e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "envId is not defined" });
-      this._cache = Me$1(e2);
+        throw new te$1({ code: "PARAM_ERROR", message: "envId is not defined" });
+      this._cache = Ue$1(e2);
       const { refreshTokenKey: t2, accessTokenKey: n2, accessTokenExpireKey: s2 } = this._cache.keys, r2 = this._cache.getStore(t2), i2 = this._cache.getStore(n2), o2 = this._cache.getStore(s2);
-      this.credential = { refreshToken: r2, accessToken: i2, accessTokenExpire: o2 }, this.user = new ot$1(e2);
+      this.credential = { refreshToken: r2, accessToken: i2, accessTokenExpire: o2 }, this.user = new rt$1(e2);
     }
     get isAnonymousAuth() {
-      return this.loginType === Ge$1.ANONYMOUS;
+      return this.loginType === ze$1.ANONYMOUS;
     }
     get isCustomAuth() {
-      return this.loginType === Ge$1.CUSTOM;
+      return this.loginType === ze$1.CUSTOM;
     }
     get isWeixinAuth() {
-      return this.loginType === Ge$1.WECHAT || this.loginType === Ge$1.WECHAT_OPEN || this.loginType === Ge$1.WECHAT_PUBLIC;
+      return this.loginType === ze$1.WECHAT || this.loginType === ze$1.WECHAT_OPEN || this.loginType === ze$1.WECHAT_PUBLIC;
     }
     get loginType() {
       return this._cache.getStore(this._cache.keys.loginTypeKey);
     }
   };
-  let ct$1 = class ct extends it$1 {
+  let ot$1 = class ot extends st$1 {
     async signIn() {
-      this._cache.updatePersistence("local"), await this._request.oauth.getAccessToken(), $e$1(We$1), $e$1(Je$1, { env: this.config.env, loginType: Ge$1.ANONYMOUS, persistence: "local" });
-      const e2 = new at$1(this.config.env);
+      this._cache.updatePersistence("local"), await this._request.oauth.getAccessToken(), Ke$1($e$1), Ke$1(We$1, { env: this.config.env, loginType: ze$1.ANONYMOUS, persistence: "local" });
+      const e2 = new it$1(this.config.env);
       return await e2.user.refresh(), e2;
     }
     async linkAndRetrieveDataWithTicket(e2) {
       const { anonymousUuidKey: t2, refreshTokenKey: n2 } = this._cache.keys, s2 = this._cache.getStore(t2), r2 = this._cache.getStore(n2), i2 = await this._request.send("auth.linkAndRetrieveDataWithTicket", { anonymous_uuid: s2, refresh_token: r2, ticket: e2 });
       if (i2.refresh_token)
-        return this._clearAnonymousUUID(), this.setRefreshToken(i2.refresh_token), await this._request.refreshAccessToken(), $e$1(ze$1, { env: this.config.env }), $e$1(Je$1, { loginType: Ge$1.CUSTOM, persistence: "local" }), { credential: { refreshToken: i2.refresh_token } };
-      throw new se$1({ message: "匿名转化失败" });
+        return this._clearAnonymousUUID(), this.setRefreshToken(i2.refresh_token), await this._request.refreshAccessToken(), Ke$1(He$1, { env: this.config.env }), Ke$1(We$1, { loginType: ze$1.CUSTOM, persistence: "local" }), { credential: { refreshToken: i2.refresh_token } };
+      throw new te$1({ message: "匿名转化失败" });
     }
     _setAnonymousUUID(e2) {
       const { anonymousUuidKey: t2, loginTypeKey: n2 } = this._cache.keys;
-      this._cache.removeStore(t2), this._cache.setStore(t2, e2), this._cache.setStore(n2, Ge$1.ANONYMOUS);
+      this._cache.removeStore(t2), this._cache.setStore(t2, e2), this._cache.setStore(n2, ze$1.ANONYMOUS);
     }
     _clearAnonymousUUID() {
       this._cache.removeStore(this._cache.keys.anonymousUuidKey);
     }
   };
-  let ut$1 = class ut extends it$1 {
+  let at$1 = class at extends st$1 {
     async signIn(e2) {
       if ("string" != typeof e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "ticket must be a string" });
+        throw new te$1({ code: "PARAM_ERROR", message: "ticket must be a string" });
       const { refreshTokenKey: t2 } = this._cache.keys, n2 = await this._request.send("auth.signInWithTicket", { ticket: e2, refresh_token: this._cache.getStore(t2) || "" });
       if (n2.refresh_token)
-        return this.setRefreshToken(n2.refresh_token), await this._request.refreshAccessToken(), $e$1(We$1), $e$1(Je$1, { env: this.config.env, loginType: Ge$1.CUSTOM, persistence: this.config.persistence }), await this.refreshUserInfo(), new at$1(this.config.env);
-      throw new se$1({ message: "自定义登录失败" });
+        return this.setRefreshToken(n2.refresh_token), await this._request.refreshAccessToken(), Ke$1($e$1), Ke$1(We$1, { env: this.config.env, loginType: ze$1.CUSTOM, persistence: this.config.persistence }), await this.refreshUserInfo(), new it$1(this.config.env);
+      throw new te$1({ message: "自定义登录失败" });
     }
   };
-  let ht$1 = class ht extends it$1 {
+  let ct$1 = class ct extends st$1 {
     async signIn(e2, t2) {
       if ("string" != typeof e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "email must be a string" });
+        throw new te$1({ code: "PARAM_ERROR", message: "email must be a string" });
       const { refreshTokenKey: n2 } = this._cache.keys, s2 = await this._request.send("auth.signIn", { loginType: "EMAIL", email: e2, password: t2, refresh_token: this._cache.getStore(n2) || "" }), { refresh_token: r2, access_token: i2, access_token_expire: o2 } = s2;
       if (r2)
-        return this.setRefreshToken(r2), i2 && o2 ? this.setAccessToken(i2, o2) : await this._request.refreshAccessToken(), await this.refreshUserInfo(), $e$1(We$1), $e$1(Je$1, { env: this.config.env, loginType: Ge$1.EMAIL, persistence: this.config.persistence }), new at$1(this.config.env);
-      throw s2.code ? new se$1({ code: s2.code, message: `邮箱登录失败: ${s2.message}` }) : new se$1({ message: "邮箱登录失败" });
+        return this.setRefreshToken(r2), i2 && o2 ? this.setAccessToken(i2, o2) : await this._request.refreshAccessToken(), await this.refreshUserInfo(), Ke$1($e$1), Ke$1(We$1, { env: this.config.env, loginType: ze$1.EMAIL, persistence: this.config.persistence }), new it$1(this.config.env);
+      throw s2.code ? new te$1({ code: s2.code, message: `邮箱登录失败: ${s2.message}` }) : new te$1({ message: "邮箱登录失败" });
     }
     async activate(e2) {
       return this._request.send("auth.activateEndUserMail", { token: e2 });
@@ -22262,20 +22463,20 @@ This will fail in production.`);
       return this._request.send("auth.resetPasswordWithToken", { token: e2, newPassword: t2 });
     }
   };
-  let lt$1 = class lt extends it$1 {
+  let ut$1 = class ut extends st$1 {
     async signIn(e2, t2) {
       if ("string" != typeof e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "username must be a string" });
+        throw new te$1({ code: "PARAM_ERROR", message: "username must be a string" });
       "string" != typeof t2 && (t2 = "", console.warn("password is empty"));
-      const { refreshTokenKey: n2 } = this._cache.keys, s2 = await this._request.send("auth.signIn", { loginType: Ge$1.USERNAME, username: e2, password: t2, refresh_token: this._cache.getStore(n2) || "" }), { refresh_token: r2, access_token_expire: i2, access_token: o2 } = s2;
+      const { refreshTokenKey: n2 } = this._cache.keys, s2 = await this._request.send("auth.signIn", { loginType: ze$1.USERNAME, username: e2, password: t2, refresh_token: this._cache.getStore(n2) || "" }), { refresh_token: r2, access_token_expire: i2, access_token: o2 } = s2;
       if (r2)
-        return this.setRefreshToken(r2), o2 && i2 ? this.setAccessToken(o2, i2) : await this._request.refreshAccessToken(), await this.refreshUserInfo(), $e$1(We$1), $e$1(Je$1, { env: this.config.env, loginType: Ge$1.USERNAME, persistence: this.config.persistence }), new at$1(this.config.env);
-      throw s2.code ? new se$1({ code: s2.code, message: `用户名密码登录失败: ${s2.message}` }) : new se$1({ message: "用户名密码登录失败" });
+        return this.setRefreshToken(r2), o2 && i2 ? this.setAccessToken(o2, i2) : await this._request.refreshAccessToken(), await this.refreshUserInfo(), Ke$1($e$1), Ke$1(We$1, { env: this.config.env, loginType: ze$1.USERNAME, persistence: this.config.persistence }), new it$1(this.config.env);
+      throw s2.code ? new te$1({ code: s2.code, message: `用户名密码登录失败: ${s2.message}` }) : new te$1({ message: "用户名密码登录失败" });
     }
   };
-  let dt$1 = class dt {
+  let ht$1 = class ht {
     constructor(e2) {
-      this.config = e2, this._cache = Me$1(e2.env), this._request = rt$1(e2.env), this._onAnonymousConverted = this._onAnonymousConverted.bind(this), this._onLoginTypeChanged = this._onLoginTypeChanged.bind(this), je$1(Je$1, this._onLoginTypeChanged);
+      this.config = e2, this._cache = Ue$1(e2.env), this._request = nt$1(e2.env), this._onAnonymousConverted = this._onAnonymousConverted.bind(this), this._onLoginTypeChanged = this._onLoginTypeChanged.bind(this), Fe$1(We$1, this._onLoginTypeChanged);
     }
     get currentUser() {
       const e2 = this.hasLoginState();
@@ -22285,38 +22486,38 @@ This will fail in production.`);
       return this._cache.getStore(this._cache.keys.loginTypeKey);
     }
     anonymousAuthProvider() {
-      return new ct$1(this.config);
+      return new ot$1(this.config);
     }
     customAuthProvider() {
-      return new ut$1(this.config);
+      return new at$1(this.config);
     }
     emailAuthProvider() {
-      return new ht$1(this.config);
+      return new ct$1(this.config);
     }
     usernameAuthProvider() {
-      return new lt$1(this.config);
+      return new ut$1(this.config);
     }
     async signInAnonymously() {
-      return new ct$1(this.config).signIn();
+      return new ot$1(this.config).signIn();
     }
     async signInWithEmailAndPassword(e2, t2) {
-      return new ht$1(this.config).signIn(e2, t2);
+      return new ct$1(this.config).signIn(e2, t2);
     }
     signInWithUsernameAndPassword(e2, t2) {
-      return new lt$1(this.config).signIn(e2, t2);
+      return new ut$1(this.config).signIn(e2, t2);
     }
     async linkAndRetrieveDataWithTicket(e2) {
-      this._anonymousAuthProvider || (this._anonymousAuthProvider = new ct$1(this.config)), je$1(ze$1, this._onAnonymousConverted);
+      this._anonymousAuthProvider || (this._anonymousAuthProvider = new ot$1(this.config)), Fe$1(He$1, this._onAnonymousConverted);
       return await this._anonymousAuthProvider.linkAndRetrieveDataWithTicket(e2);
     }
     async signOut() {
-      if (this.loginType === Ge$1.ANONYMOUS)
-        throw new se$1({ message: "匿名用户不支持登出操作" });
+      if (this.loginType === ze$1.ANONYMOUS)
+        throw new te$1({ message: "匿名用户不支持登出操作" });
       const { refreshTokenKey: e2, accessTokenKey: t2, accessTokenExpireKey: n2 } = this._cache.keys, s2 = this._cache.getStore(e2);
       if (!s2)
         return;
       const r2 = await this._request.send("auth.logout", { refresh_token: s2 });
-      return this._cache.removeStore(e2), this._cache.removeStore(t2), this._cache.removeStore(n2), $e$1(We$1), $e$1(Je$1, { env: this.config.env, loginType: Ge$1.NULL, persistence: this.config.persistence }), r2;
+      return this._cache.removeStore(e2), this._cache.removeStore(t2), this._cache.removeStore(n2), Ke$1($e$1), Ke$1(We$1, { env: this.config.env, loginType: ze$1.NULL, persistence: this.config.persistence }), r2;
     }
     async signUpWithEmailAndPassword(e2, t2) {
       return this._request.send("auth.signUpWithEmailAndPassword", { email: e2, password: t2 });
@@ -22325,7 +22526,7 @@ This will fail in production.`);
       return this._request.send("auth.sendPasswordResetEmail", { email: e2 });
     }
     onLoginStateChanged(e2) {
-      je$1(We$1, () => {
+      Fe$1($e$1, () => {
         const t3 = this.hasLoginState();
         e2.call(this, t3);
       });
@@ -22333,16 +22534,16 @@ This will fail in production.`);
       e2.call(this, t2);
     }
     onLoginStateExpired(e2) {
-      je$1(He$1, e2.bind(this));
+      Fe$1(Be$1, e2.bind(this));
     }
     onAccessTokenRefreshed(e2) {
-      je$1(Ve$1, e2.bind(this));
+      Fe$1(Je$1, e2.bind(this));
     }
     onAnonymousConverted(e2) {
-      je$1(ze$1, e2.bind(this));
+      Fe$1(He$1, e2.bind(this));
     }
     onLoginTypeChanged(e2) {
-      je$1(Je$1, () => {
+      Fe$1(We$1, () => {
         const t2 = this.hasLoginState();
         e2.call(this, t2);
       });
@@ -22352,11 +22553,11 @@ This will fail in production.`);
     }
     hasLoginState() {
       const { accessTokenKey: e2, accessTokenExpireKey: t2 } = this._cache.keys, n2 = this._cache.getStore(e2), s2 = this._cache.getStore(t2);
-      return this._request.oauth.isAccessTokenExpired(n2, s2) ? null : new at$1(this.config.env);
+      return this._request.oauth.isAccessTokenExpired(n2, s2) ? null : new it$1(this.config.env);
     }
     async isUsernameRegistered(e2) {
       if ("string" != typeof e2)
-        throw new se$1({ code: "PARAM_ERROR", message: "username must be a string" });
+        throw new te$1({ code: "PARAM_ERROR", message: "username must be a string" });
       const { data: t2 } = await this._request.send("auth.isUsernameRegistered", { username: e2 });
       return t2 && t2.isRegistered;
     }
@@ -22364,7 +22565,7 @@ This will fail in production.`);
       return Promise.resolve(this.hasLoginState());
     }
     async signInWithTicket(e2) {
-      return new ut$1(this.config).signIn(e2);
+      return new at$1(this.config).signIn(e2);
     }
     shouldRefreshAccessToken(e2) {
       this._request._shouldRefreshAccessTokenHook = e2.bind(this);
@@ -22385,63 +22586,63 @@ This will fail in production.`);
       s2 === this.config.env && (this._cache.updatePersistence(n2), this._cache.setStore(this._cache.keys.loginTypeKey, t2));
     }
   };
-  const pt$1 = function(e2, t2) {
-    t2 = t2 || be$1();
-    const n2 = rt$1(this.config.env), { cloudPath: s2, filePath: r2, onUploadProgress: i2, fileType: o2 = "image" } = e2;
+  const lt$1 = function(e2, t2) {
+    t2 = t2 || ve$1();
+    const n2 = nt$1(this.config.env), { cloudPath: s2, filePath: r2, onUploadProgress: i2, fileType: o2 = "image" } = e2;
     return n2.send("storage.getUploadMetadata", { path: s2 }).then((e3) => {
       const { data: { url: a2, authorization: c2, token: u2, fileId: h2, cosFileId: l2 }, requestId: d2 } = e3, p2 = { key: s2, signature: c2, "x-cos-meta-fileid": l2, success_action_status: "201", "x-cos-security-token": u2 };
       n2.upload({ url: a2, data: p2, file: r2, name: s2, fileType: o2, onUploadProgress: i2 }).then((e4) => {
-        201 === e4.statusCode ? t2(null, { fileID: h2, requestId: d2 }) : t2(new se$1({ code: "STORAGE_REQUEST_FAIL", message: `STORAGE_REQUEST_FAIL: ${e4.data}` }));
+        201 === e4.statusCode ? t2(null, { fileID: h2, requestId: d2 }) : t2(new te$1({ code: "STORAGE_REQUEST_FAIL", message: `STORAGE_REQUEST_FAIL: ${e4.data}` }));
       }).catch((e4) => {
         t2(e4);
       });
     }).catch((e3) => {
       t2(e3);
     }), t2.promise;
-  }, ft$1 = function(e2, t2) {
-    t2 = t2 || be$1();
-    const n2 = rt$1(this.config.env), { cloudPath: s2 } = e2;
+  }, dt$1 = function(e2, t2) {
+    t2 = t2 || ve$1();
+    const n2 = nt$1(this.config.env), { cloudPath: s2 } = e2;
     return n2.send("storage.getUploadMetadata", { path: s2 }).then((e3) => {
       t2(null, e3);
     }).catch((e3) => {
       t2(e3);
     }), t2.promise;
-  }, gt$1 = function({ fileList: e2 }, t2) {
-    if (t2 = t2 || be$1(), !e2 || !Array.isArray(e2))
+  }, pt$1 = function({ fileList: e2 }, t2) {
+    if (t2 = t2 || ve$1(), !e2 || !Array.isArray(e2))
       return { code: "INVALID_PARAM", message: "fileList必须是非空的数组" };
     for (let t3 of e2)
       if (!t3 || "string" != typeof t3)
         return { code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" };
     const n2 = { fileid_list: e2 };
-    return rt$1(this.config.env).send("storage.batchDeleteFile", n2).then((e3) => {
+    return nt$1(this.config.env).send("storage.batchDeleteFile", n2).then((e3) => {
       e3.code ? t2(null, e3) : t2(null, { fileList: e3.data.delete_list, requestId: e3.requestId });
     }).catch((e3) => {
       t2(e3);
     }), t2.promise;
-  }, mt$1 = function({ fileList: e2 }, t2) {
-    t2 = t2 || be$1(), e2 && Array.isArray(e2) || t2(null, { code: "INVALID_PARAM", message: "fileList必须是非空的数组" });
+  }, ft$1 = function({ fileList: e2 }, t2) {
+    t2 = t2 || ve$1(), e2 && Array.isArray(e2) || t2(null, { code: "INVALID_PARAM", message: "fileList必须是非空的数组" });
     let n2 = [];
     for (let s3 of e2)
       "object" == typeof s3 ? (s3.hasOwnProperty("fileID") && s3.hasOwnProperty("maxAge") || t2(null, { code: "INVALID_PARAM", message: "fileList的元素必须是包含fileID和maxAge的对象" }), n2.push({ fileid: s3.fileID, max_age: s3.maxAge })) : "string" == typeof s3 ? n2.push({ fileid: s3 }) : t2(null, { code: "INVALID_PARAM", message: "fileList的元素必须是字符串" });
     const s2 = { file_list: n2 };
-    return rt$1(this.config.env).send("storage.batchGetDownloadUrl", s2).then((e3) => {
+    return nt$1(this.config.env).send("storage.batchGetDownloadUrl", s2).then((e3) => {
       e3.code ? t2(null, e3) : t2(null, { fileList: e3.data.download_list, requestId: e3.requestId });
     }).catch((e3) => {
       t2(e3);
     }), t2.promise;
-  }, yt$1 = async function({ fileID: e2 }, t2) {
-    const n2 = (await mt$1.call(this, { fileList: [{ fileID: e2, maxAge: 600 }] })).fileList[0];
+  }, gt$1 = async function({ fileID: e2 }, t2) {
+    const n2 = (await ft$1.call(this, { fileList: [{ fileID: e2, maxAge: 600 }] })).fileList[0];
     if ("SUCCESS" !== n2.code)
       return t2 ? t2(n2) : new Promise((e3) => {
         e3(n2);
       });
-    const s2 = rt$1(this.config.env);
+    const s2 = nt$1(this.config.env);
     let r2 = n2.download_url;
     if (r2 = encodeURI(r2), !t2)
       return s2.download({ url: r2 });
     t2(await s2.download({ url: r2 }));
-  }, _t$1 = function({ name: e2, data: t2, query: n2, parse: s2, search: r2, timeout: i2 }, o2) {
-    const a2 = o2 || be$1();
+  }, mt$1 = function({ name: e2, data: t2, query: n2, parse: s2, search: r2, timeout: i2 }, o2) {
+    const a2 = o2 || ve$1();
     let c2;
     try {
       c2 = t2 ? JSON.stringify(t2) : "";
@@ -22449,9 +22650,9 @@ This will fail in production.`);
       return Promise.reject(e3);
     }
     if (!e2)
-      return Promise.reject(new se$1({ code: "PARAM_ERROR", message: "函数名不能为空" }));
+      return Promise.reject(new te$1({ code: "PARAM_ERROR", message: "函数名不能为空" }));
     const u2 = { inQuery: n2, parse: s2, search: r2, function_name: e2, request_data: c2 };
-    return rt$1(this.config.env).send("functions.invokeFunction", u2, { timeout: i2 }).then((e3) => {
+    return nt$1(this.config.env).send("functions.invokeFunction", u2, { timeout: i2 }).then((e3) => {
       if (e3.code)
         a2(null, e3);
       else {
@@ -22462,22 +22663,22 @@ This will fail in production.`);
           try {
             t3 = JSON.parse(e3.data.response_data), a2(null, { result: t3, requestId: e3.requestId });
           } catch (e4) {
-            a2(new se$1({ message: "response data must be json" }));
+            a2(new te$1({ message: "response data must be json" }));
           }
       }
       return a2.promise;
     }).catch((e3) => {
       a2(e3);
     }), a2.promise;
-  }, wt$1 = { timeout: 15e3, persistence: "session" }, vt$1 = {};
+  }, yt$1 = { timeout: 15e3, persistence: "session" }, _t$1 = 6e5, wt$1 = {};
   let It$1 = class It2 {
     constructor(e2) {
       this.config = e2 || this.config, this.authObj = void 0;
     }
     init(e2) {
-      switch (Oe$1.adapter || (this.requestClient = new Oe$1.adapter.reqClass({ timeout: e2.timeout || 5e3, timeoutMsg: `请求在${(e2.timeout || 5e3) / 1e3}s内未完成，已中断` })), this.config = { ...wt$1, ...e2 }, true) {
-        case this.config.timeout > 6e5:
-          console.warn("timeout大于可配置上限[10分钟]，已重置为上限数值"), this.config.timeout = 6e5;
+      switch (Pe$1.adapter || (this.requestClient = new Pe$1.adapter.reqClass({ timeout: e2.timeout || 5e3, timeoutMsg: `请求在${(e2.timeout || 5e3) / 1e3}s内未完成，已中断` })), this.config = { ...yt$1, ...e2 }, true) {
+        case this.config.timeout > _t$1:
+          console.warn("timeout大于可配置上限[10分钟]，已重置为上限数值"), this.config.timeout = _t$1;
           break;
         case this.config.timeout < 100:
           console.warn("timeout小于可配置下限[100ms]，已重置为下限数值"), this.config.timeout = 100;
@@ -22487,64 +22688,64 @@ This will fail in production.`);
     auth({ persistence: e2 } = {}) {
       if (this.authObj)
         return this.authObj;
-      const t2 = e2 || Oe$1.adapter.primaryStorage || wt$1.persistence;
+      const t2 = e2 || Pe$1.adapter.primaryStorage || yt$1.persistence;
       var n2;
       return t2 !== this.config.persistence && (this.config.persistence = t2), function(e3) {
         const { env: t3 } = e3;
-        Ne$1[t3] = new Ue$1(e3), De$1[t3] = new Ue$1({ ...e3, persistence: "local" });
-      }(this.config), n2 = this.config, st$1[n2.env] = new nt$1(n2), this.authObj = new dt$1(this.config), this.authObj;
+        Re$1[t3] = new Ne$1(e3), Le$1[t3] = new Ne$1({ ...e3, persistence: "local" });
+      }(this.config), n2 = this.config, tt$1[n2.env] = new et$1(n2), this.authObj = new ht$1(this.config), this.authObj;
     }
     on(e2, t2) {
-      return je$1.apply(this, [e2, t2]);
+      return Fe$1.apply(this, [e2, t2]);
     }
     off(e2, t2) {
-      return Be$1.apply(this, [e2, t2]);
+      return je$1.apply(this, [e2, t2]);
     }
     callFunction(e2, t2) {
-      return _t$1.apply(this, [e2, t2]);
-    }
-    deleteFile(e2, t2) {
-      return gt$1.apply(this, [e2, t2]);
-    }
-    getTempFileURL(e2, t2) {
       return mt$1.apply(this, [e2, t2]);
     }
-    downloadFile(e2, t2) {
-      return yt$1.apply(this, [e2, t2]);
-    }
-    uploadFile(e2, t2) {
+    deleteFile(e2, t2) {
       return pt$1.apply(this, [e2, t2]);
     }
-    getUploadMetadata(e2, t2) {
+    getTempFileURL(e2, t2) {
       return ft$1.apply(this, [e2, t2]);
     }
+    downloadFile(e2, t2) {
+      return gt$1.apply(this, [e2, t2]);
+    }
+    uploadFile(e2, t2) {
+      return lt$1.apply(this, [e2, t2]);
+    }
+    getUploadMetadata(e2, t2) {
+      return dt$1.apply(this, [e2, t2]);
+    }
     registerExtension(e2) {
-      vt$1[e2.name] = e2;
+      wt$1[e2.name] = e2;
     }
     async invokeExtension(e2, t2) {
-      const n2 = vt$1[e2];
+      const n2 = wt$1[e2];
       if (!n2)
-        throw new se$1({ message: `扩展${e2} 必须先注册` });
+        throw new te$1({ message: `扩展${e2} 必须先注册` });
       return await n2.invoke(t2, this);
     }
     useAdapters(e2) {
-      const { adapter: t2, runtime: n2 } = xe$1(e2) || {};
-      t2 && (Oe$1.adapter = t2), n2 && (Oe$1.runtime = n2);
+      const { adapter: t2, runtime: n2 } = Ae$1(e2) || {};
+      t2 && (Pe$1.adapter = t2), n2 && (Pe$1.runtime = n2);
     }
   };
-  var St$1 = new It$1();
-  function bt$1(e2, t2, n2) {
+  var vt$1 = new It$1();
+  function St$1(e2, t2, n2) {
     void 0 === n2 && (n2 = {});
     var s2 = /\?/.test(t2), r2 = "";
     for (var i2 in n2)
       "" === r2 ? !s2 && (t2 += "?") : r2 += "&", r2 += i2 + "=" + encodeURIComponent(n2[i2]);
     return /^http(s)?:\/\//.test(t2 += r2) ? t2 : "" + e2 + t2;
   }
-  let kt$1 = class kt {
+  let Tt$1 = class Tt {
     get(e2) {
       const { url: t2, data: n2, headers: s2, timeout: r2 } = e2;
       return new Promise((e3, i2) => {
-        re$1.request({ url: bt$1("https:", t2), data: n2, method: "GET", header: s2, timeout: r2, success(t3) {
+        ne$1.request({ url: St$1("https:", t2), data: n2, method: "GET", header: s2, timeout: r2, success(t3) {
           e3(t3);
         }, fail(e4) {
           i2(e4);
@@ -22554,7 +22755,7 @@ This will fail in production.`);
     post(e2) {
       const { url: t2, data: n2, headers: s2, timeout: r2 } = e2;
       return new Promise((e3, i2) => {
-        re$1.request({ url: bt$1("https:", t2), data: n2, method: "POST", header: s2, timeout: r2, success(t3) {
+        ne$1.request({ url: St$1("https:", t2), data: n2, method: "POST", header: s2, timeout: r2, success(t3) {
           e3(t3);
         }, fail(e4) {
           i2(e4);
@@ -22563,7 +22764,7 @@ This will fail in production.`);
     }
     upload(e2) {
       return new Promise((t2, n2) => {
-        const { url: s2, file: r2, data: i2, headers: o2, fileType: a2 } = e2, c2 = re$1.uploadFile({ url: bt$1("https:", s2), name: "file", formData: Object.assign({}, i2), filePath: r2, fileType: a2, header: o2, success(e3) {
+        const { url: s2, file: r2, data: i2, headers: o2, fileType: a2 } = e2, c2 = ne$1.uploadFile({ url: St$1("https:", s2), name: "file", formData: Object.assign({}, i2), filePath: r2, fileType: a2, header: o2, success(e3) {
           const n3 = { statusCode: e3.statusCode, data: e3.data || {} };
           200 === e3.statusCode && i2.success_action_status && (n3.statusCode = parseInt(i2.success_action_status, 10)), t2(n3);
         }, fail(e3) {
@@ -22575,23 +22776,23 @@ This will fail in production.`);
       });
     }
   };
-  const Tt$1 = { setItem(e2, t2) {
-    re$1.setStorageSync(e2, t2);
-  }, getItem: (e2) => re$1.getStorageSync(e2), removeItem(e2) {
-    re$1.removeStorageSync(e2);
+  const bt$1 = { setItem(e2, t2) {
+    ne$1.setStorageSync(e2, t2);
+  }, getItem: (e2) => ne$1.getStorageSync(e2), removeItem(e2) {
+    ne$1.removeStorageSync(e2);
   }, clear() {
-    re$1.clearStorageSync();
+    ne$1.clearStorageSync();
   } };
-  var At$1 = { genAdapter: function() {
-    return { root: {}, reqClass: kt$1, localStorage: Tt$1, primaryStorage: "local" };
+  var Et$1 = { genAdapter: function() {
+    return { root: {}, reqClass: Tt$1, localStorage: bt$1, primaryStorage: "local" };
   }, isMatch: function() {
     return true;
   }, runtime: "uni_app" };
-  St$1.useAdapters(At$1);
-  const Pt$1 = St$1, Ct$1 = Pt$1.init;
-  Pt$1.init = function(e2) {
+  vt$1.useAdapters(Et$1);
+  const kt$1 = vt$1, At$1 = kt$1.init;
+  kt$1.init = function(e2) {
     e2.env = e2.spaceId;
-    const t2 = Ct$1.call(this, e2);
+    const t2 = At$1.call(this, e2);
     t2.config.provider = "tencent", t2.config.spaceId = e2.spaceId;
     const n2 = t2.auth;
     return t2.auth = function(e3) {
@@ -22600,7 +22801,7 @@ This will fail in production.`);
         var n3;
         t3[e4] = (n3 = t3[e4], function(e5) {
           e5 = e5 || {};
-          const { success: t4, fail: s2, complete: r2 } = ne$1(e5);
+          const { success: t4, fail: s2, complete: r2 } = ee$1(e5);
           if (!(t4 || s2 || r2))
             return n3.call(this, e5);
           n3.call(this, e5).then((e6) => {
@@ -22612,12 +22813,12 @@ This will fail in production.`);
       }), t3;
     }, t2.customAuth = t2.auth, t2;
   };
-  var xt$1 = Pt$1;
-  async function Ot$1(e2, t2) {
+  var Pt$1 = kt$1;
+  async function Ct$1(e2, t2) {
     const n2 = `http://${e2}:${t2}/system/ping`;
     try {
       const e3 = await (s2 = { url: n2, timeout: 500 }, new Promise((e4, t3) => {
-        re$1.request({ ...s2, success(t4) {
+        ne$1.request({ ...s2, success(t4) {
           e4(t4);
         }, fail(e5) {
           t3(e5);
@@ -22629,37 +22830,37 @@ This will fail in production.`);
     }
     var s2;
   }
-  async function Et$1(e2, t2) {
+  async function Ot$1(e2, t2) {
     let n2;
     for (let s2 = 0; s2 < e2.length; s2++) {
       const r2 = e2[s2];
-      if (await Ot$1(r2, t2)) {
+      if (await Ct$1(r2, t2)) {
         n2 = r2;
         break;
       }
     }
     return { address: n2, port: t2 };
   }
-  const Lt$1 = { "serverless.file.resource.generateProximalSign": "storage/generate-proximal-sign", "serverless.file.resource.report": "storage/report", "serverless.file.resource.delete": "storage/delete", "serverless.file.resource.getTempFileURL": "storage/get-temp-file-url" };
-  var Rt$1 = class Rt {
+  const xt$1 = { "serverless.file.resource.generateProximalSign": "storage/generate-proximal-sign", "serverless.file.resource.report": "storage/report", "serverless.file.resource.delete": "storage/delete", "serverless.file.resource.getTempFileURL": "storage/get-temp-file-url" };
+  var Nt$1 = class Nt {
     constructor(e2) {
       if (["spaceId", "clientSecret"].forEach((t2) => {
         if (!Object.prototype.hasOwnProperty.call(e2, t2))
           throw new Error(`${t2} required`);
       }), !e2.endpoint)
         throw new Error("集群空间未配置ApiEndpoint，配置后需要重新关联服务空间后生效");
-      this.config = Object.assign({}, e2), this.config.provider = "dcloud", this.config.requestUrl = this.config.endpoint + "/client", this.config.envType = this.config.envType || "public", this.adapter = re$1;
+      this.config = Object.assign({}, e2), this.config.provider = "dcloud", this.config.requestUrl = this.config.endpoint + "/client", this.config.envType = this.config.envType || "public", this.adapter = ne$1;
     }
     async request(e2, t2 = true) {
       const n2 = t2;
-      return e2 = n2 ? await this.setupLocalRequest(e2) : this.setupRequest(e2), Promise.resolve().then(() => n2 ? this.requestLocal(e2) : fe$1.wrappedRequest(e2, this.adapter.request));
+      return e2 = n2 ? await this.setupLocalRequest(e2) : this.setupRequest(e2), Promise.resolve().then(() => n2 ? this.requestLocal(e2) : de$1.wrappedRequest(e2, this.adapter.request));
     }
     requestLocal(e2) {
       return new Promise((t2, n2) => {
         this.adapter.request(Object.assign(e2, { complete(e3) {
           if (e3 || (e3 = {}), !e3.statusCode || e3.statusCode >= 400) {
             const t3 = e3.data && e3.data.code || "SYS_ERR", s2 = e3.data && e3.data.message || "request:fail";
-            return n2(new se$1({ code: t3, message: s2 }));
+            return n2(new te$1({ code: t3, message: s2 }));
           }
           t2({ success: true, result: e3.data });
         } }));
@@ -22667,15 +22868,15 @@ This will fail in production.`);
     }
     setupRequest(e2) {
       const t2 = Object.assign({}, e2, { spaceId: this.config.spaceId, timestamp: Date.now() }), n2 = { "Content-Type": "application/json" };
-      n2["x-serverless-sign"] = fe$1.sign(t2, this.config.clientSecret);
-      const s2 = pe$1();
+      n2["x-serverless-sign"] = de$1.sign(t2, this.config.clientSecret);
+      const s2 = le$1();
       n2["x-client-info"] = encodeURIComponent(JSON.stringify(s2));
-      const { token: r2 } = oe$1();
+      const { token: r2 } = re$1();
       return n2["x-client-token"] = r2, { url: this.config.requestUrl, method: "POST", data: t2, dataType: "json", header: JSON.parse(JSON.stringify(n2)) };
     }
     async setupLocalRequest(e2) {
-      const t2 = pe$1(), { token: n2 } = oe$1(), s2 = Object.assign({}, e2, { spaceId: this.config.spaceId, timestamp: Date.now(), clientInfo: t2, token: n2 }), { address: r2, servePort: i2 } = this.__dev__ && this.__dev__.debugInfo || {}, { address: o2 } = await Et$1(r2, i2);
-      return { url: `http://${o2}:${i2}/${Lt$1[e2.method]}`, method: "POST", data: s2, dataType: "json", header: JSON.parse(JSON.stringify({ "Content-Type": "application/json" })) };
+      const t2 = le$1(), { token: n2 } = re$1(), s2 = Object.assign({}, e2, { spaceId: this.config.spaceId, timestamp: Date.now(), clientInfo: t2, token: n2 }), { address: r2, servePort: i2 } = this.__dev__ && this.__dev__.debugInfo || {}, { address: o2 } = await Ot$1(r2, i2);
+      return { url: `http://${o2}:${i2}/${xt$1[e2.method]}`, method: "POST", data: s2, dataType: "json", header: JSON.parse(JSON.stringify({ "Content-Type": "application/json" })) };
     }
     callFunction(e2) {
       const t2 = { method: "serverless.function.runtime.invoke", params: JSON.stringify({ functionTarget: e2.name, functionArgs: e2.data || {} }) };
@@ -22691,22 +22892,22 @@ This will fail in production.`);
     }
     uploadFile({ filePath: e2, cloudPath: t2, fileType: n2 = "image", onUploadProgress: s2 }) {
       if (!t2)
-        throw new se$1({ code: "CLOUDPATH_REQUIRED", message: "cloudPath不可为空" });
+        throw new te$1({ code: "CLOUDPATH_REQUIRED", message: "cloudPath不可为空" });
       let r2;
       return this.getUploadFileOptions({ cloudPath: t2 }).then((t3) => {
         const { url: i2, formData: o2, name: a2 } = t3.result;
         return r2 = t3.result.fileUrl, new Promise((t4, r3) => {
           const c2 = this.adapter.uploadFile({ url: i2, formData: o2, name: a2, filePath: e2, fileType: n2, success(e3) {
-            e3 && e3.statusCode < 400 ? t4(e3) : r3(new se$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
+            e3 && e3.statusCode < 400 ? t4(e3) : r3(new te$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
           }, fail(e3) {
-            r3(new se$1({ code: e3.code || "UPLOAD_FAILED", message: e3.message || e3.errMsg || "文件上传失败" }));
+            r3(new te$1({ code: e3.code || "UPLOAD_FAILED", message: e3.message || e3.errMsg || "文件上传失败" }));
           } });
           "function" == typeof s2 && c2 && "function" == typeof c2.onProgressUpdate && c2.onProgressUpdate((e3) => {
             s2({ loaded: e3.totalBytesSent, total: e3.totalBytesExpectedToSend });
           });
         });
       }).then(() => this.reportUploadFile({ cloudPath: t2 })).then((t3) => new Promise((n3, s3) => {
-        t3.success ? n3({ success: true, filePath: e2, fileID: r2 }) : s3(new se$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
+        t3.success ? n3({ success: true, filePath: e2, fileID: r2 }) : s3(new te$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
       }));
     }
     deleteFile({ fileList: e2 }) {
@@ -22714,22 +22915,22 @@ This will fail in production.`);
       return this.request(t2).then((e3) => {
         if (e3.success)
           return e3.result;
-        throw new se$1({ code: "DELETE_FILE_FAILED", message: "删除文件失败" });
+        throw new te$1({ code: "DELETE_FILE_FAILED", message: "删除文件失败" });
       });
     }
     getTempFileURL({ fileList: e2, maxAge: t2 } = {}) {
       if (!Array.isArray(e2) || 0 === e2.length)
-        throw new se$1({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" });
+        throw new te$1({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" });
       const n2 = { method: "serverless.file.resource.getTempFileURL", params: JSON.stringify({ fileList: e2, maxAge: t2 }) };
       return this.request(n2).then((e3) => {
         if (e3.success)
           return { fileList: e3.result.fileList.map((e4) => ({ fileID: e4.fileID, tempFileURL: e4.tempFileURL })) };
-        throw new se$1({ code: "GET_TEMP_FILE_URL_FAILED", message: "获取临时文件链接失败" });
+        throw new te$1({ code: "GET_TEMP_FILE_URL_FAILED", message: "获取临时文件链接失败" });
       });
     }
   };
-  var Ut$1 = { init(e2) {
-    const t2 = new Rt$1(e2), n2 = { signInAnonymously: function() {
+  var Rt$1 = { init(e2) {
+    const t2 = new Nt$1(e2), n2 = { signInAnonymously: function() {
       return Promise.resolve();
     }, getLoginState: function() {
       return Promise.resolve(false);
@@ -22737,77 +22938,77 @@ This will fail in production.`);
     return t2.auth = function() {
       return n2;
     }, t2.customAuth = t2.auth, t2;
-  } }, Nt$1 = n$1(function(e2, t2) {
+  } }, Lt$1 = n$1(function(e2, t2) {
     e2.exports = r$1.enc.Hex;
   });
-  function Dt$1() {
+  function Ut$1() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(e2) {
       var t2 = 16 * Math.random() | 0;
       return ("x" === e2 ? t2 : 3 & t2 | 8).toString(16);
     });
   }
-  function Mt$1(e2 = "", t2 = {}) {
-    const { data: n2, functionName: s2, method: r2, headers: i2, signHeaderKeys: o2 = [], config: a2 } = t2, c2 = String(Date.now()), u2 = Dt$1(), h2 = Object.assign({}, i2, { "x-from-app-id": a2.spaceAppId, "x-from-env-id": a2.spaceId, "x-to-env-id": a2.spaceId, "x-from-instance-id": c2, "x-from-function-name": s2, "x-client-timestamp": c2, "x-alipay-source": "client", "x-request-id": u2, "x-alipay-callid": u2, "x-trace-id": u2 }), l2 = ["x-from-app-id", "x-from-env-id", "x-to-env-id", "x-from-instance-id", "x-from-function-name", "x-client-timestamp"].concat(o2), [d2 = "", p2 = ""] = e2.split("?") || [], f2 = function(e3) {
-      const t3 = e3.signedHeaders.join(";"), n3 = e3.signedHeaders.map((t4) => `${t4.toLowerCase()}:${e3.headers[t4]}
-`).join(""), s3 = Ie$1(e3.body).toString(Nt$1), r3 = `${e3.method.toUpperCase()}
+  function Dt$1(e2 = "", t2 = {}) {
+    const { data: n2, functionName: s2, method: r2, headers: i2, signHeaderKeys: o2 = [], config: a2 } = t2, c2 = String(Date.now()), u2 = Ut$1(), h2 = Object.assign({}, i2, { "x-from-app-id": a2.spaceAppId, "x-from-env-id": a2.spaceId, "x-to-env-id": a2.spaceId, "x-from-instance-id": c2, "x-from-function-name": s2, "x-client-timestamp": c2, "x-alipay-source": "client", "x-request-id": u2, "x-alipay-callid": u2, "x-trace-id": u2 }), l2 = ["x-from-app-id", "x-from-env-id", "x-to-env-id", "x-from-instance-id", "x-from-function-name", "x-client-timestamp"].concat(o2), [d2 = "", p2 = ""] = e2.split("?") || [], f2 = function(e3) {
+      const t3 = "HMAC-SHA256", n3 = e3.signedHeaders.join(";"), s3 = e3.signedHeaders.map((t4) => `${t4.toLowerCase()}:${e3.headers[t4]}
+`).join(""), r3 = we$1(e3.body).toString(Lt$1), i3 = `${e3.method.toUpperCase()}
 ${e3.path}
 ${e3.query}
-${n3}
-${t3}
 ${s3}
-`, i3 = Ie$1(r3).toString(Nt$1), o3 = `HMAC-SHA256
+${n3}
+${r3}
+`, o3 = we$1(i3).toString(Lt$1), a3 = `${t3}
 ${e3.timestamp}
-${i3}
-`, a3 = Se$1(o3, e3.secretKey).toString(Nt$1);
-      return `HMAC-SHA256 Credential=${e3.secretId}, SignedHeaders=${t3}, Signature=${a3}`;
+${o3}
+`, c3 = Ie$1(a3, e3.secretKey).toString(Lt$1);
+      return `${t3} Credential=${e3.secretId}, SignedHeaders=${n3}, Signature=${c3}`;
     }({ path: d2, query: p2, method: r2, headers: h2, timestamp: c2, body: JSON.stringify(n2), secretId: a2.accessKey, secretKey: a2.secretKey, signedHeaders: l2.sort() });
     return { url: `${a2.endpoint}${e2}`, headers: Object.assign({}, h2, { Authorization: f2 }) };
   }
-  function qt$1({ url: e2, data: t2, method: n2 = "POST", headers: s2 = {}, timeout: r2 }) {
+  function Mt$1({ url: e2, data: t2, method: n2 = "POST", headers: s2 = {}, timeout: r2 }) {
     return new Promise((i2, o2) => {
-      re$1.request({ url: e2, method: n2, data: "object" == typeof t2 ? JSON.stringify(t2) : t2, header: s2, dataType: "json", timeout: r2, complete: (e3 = {}) => {
+      ne$1.request({ url: e2, method: n2, data: "object" == typeof t2 ? JSON.stringify(t2) : t2, header: s2, dataType: "json", timeout: r2, complete: (e3 = {}) => {
         const t3 = s2["x-trace-id"] || "";
         if (!e3.statusCode || e3.statusCode >= 400) {
           const { message: n3, errMsg: s3, trace_id: r3 } = e3.data || {};
-          return o2(new se$1({ code: "SYS_ERR", message: n3 || s3 || "request:fail", requestId: r3 || t3 }));
+          return o2(new te$1({ code: "SYS_ERR", message: n3 || s3 || "request:fail", requestId: r3 || t3 }));
         }
         i2({ status: e3.statusCode, data: e3.data, headers: e3.header, requestId: t3 });
       } });
     });
   }
-  function Kt$1(e2, t2) {
-    const { path: n2, data: s2, method: r2 = "GET" } = e2, { url: i2, headers: o2 } = Mt$1(n2, { functionName: "", data: s2, method: r2, headers: { "x-alipay-cloud-mode": "oss", "x-data-api-type": "oss", "x-expire-timestamp": Date.now() + 6e4 }, signHeaderKeys: ["x-data-api-type", "x-expire-timestamp"], config: t2 });
-    return qt$1({ url: i2, data: s2, method: r2, headers: o2 }).then((e3) => {
+  function qt$1(e2, t2) {
+    const { path: n2, data: s2, method: r2 = "GET" } = e2, { url: i2, headers: o2 } = Dt$1(n2, { functionName: "", data: s2, method: r2, headers: { "x-alipay-cloud-mode": "oss", "x-data-api-type": "oss", "x-expire-timestamp": Date.now() + 6e4 }, signHeaderKeys: ["x-data-api-type", "x-expire-timestamp"], config: t2 });
+    return Mt$1({ url: i2, data: s2, method: r2, headers: o2 }).then((e3) => {
       const t3 = e3.data || {};
       if (!t3.success)
-        throw new se$1({ code: e3.errCode, message: e3.errMsg, requestId: e3.requestId });
+        throw new te$1({ code: e3.errCode, message: e3.errMsg, requestId: e3.requestId });
       return t3.data || {};
     }).catch((e3) => {
-      throw new se$1({ code: e3.errCode, message: e3.errMsg, requestId: e3.requestId });
+      throw new te$1({ code: e3.errCode, message: e3.errMsg, requestId: e3.requestId });
     });
   }
   function Ft$1(e2 = "") {
     const t2 = e2.trim().replace(/^cloud:\/\//, ""), n2 = t2.indexOf("/");
     if (n2 <= 0)
-      throw new se$1({ code: "INVALID_PARAM", message: "fileID不合法" });
+      throw new te$1({ code: "INVALID_PARAM", message: "fileID不合法" });
     const s2 = t2.substring(0, n2), r2 = t2.substring(n2 + 1);
     return s2 !== this.config.spaceId && console.warn("file ".concat(e2, " does not belong to env ").concat(this.config.spaceId)), r2;
   }
-  function jt$1(e2 = "") {
+  function Kt$1(e2 = "") {
     return "cloud://".concat(this.config.spaceId, "/").concat(e2.replace(/^\/+/, ""));
   }
-  let $t$1 = class $t {
+  let jt$1 = class jt {
     constructor(e2) {
       this.config = e2;
     }
     signedURL(e2, t2 = {}) {
-      const n2 = `/ws/function/${e2}`, s2 = this.config.wsEndpoint.replace(/^ws(s)?:\/\//, ""), r2 = Object.assign({}, t2, { accessKeyId: this.config.accessKey, signatureNonce: Dt$1(), timestamp: "" + Date.now() }), i2 = [n2, ["accessKeyId", "authorization", "signatureNonce", "timestamp"].sort().map(function(e3) {
+      const n2 = `/ws/function/${e2}`, s2 = this.config.wsEndpoint.replace(/^ws(s)?:\/\//, ""), r2 = Object.assign({}, t2, { accessKeyId: this.config.accessKey, signatureNonce: Ut$1(), timestamp: "" + Date.now() }), i2 = [n2, ["accessKeyId", "authorization", "signatureNonce", "timestamp"].sort().map(function(e3) {
         return r2[e3] ? "".concat(e3, "=").concat(r2[e3]) : null;
-      }).filter(Boolean).join("&"), `host:${s2}`].join("\n"), o2 = ["HMAC-SHA256", Ie$1(i2).toString(Nt$1)].join("\n"), a2 = Se$1(o2, this.config.secretKey).toString(Nt$1), c2 = Object.keys(r2).map((e3) => `${e3}=${encodeURIComponent(r2[e3])}`).join("&");
+      }).filter(Boolean).join("&"), `host:${s2}`].join("\n"), o2 = ["HMAC-SHA256", we$1(i2).toString(Lt$1)].join("\n"), a2 = Ie$1(o2, this.config.secretKey).toString(Lt$1), c2 = Object.keys(r2).map((e3) => `${e3}=${encodeURIComponent(r2[e3])}`).join("&");
       return `${this.config.wsEndpoint}${n2}?${c2}&signature=${a2}`;
     }
   };
-  var Bt$1 = class Bt {
+  var $t$1 = class $t {
     constructor(e2) {
       if (["spaceId", "spaceAppId", "accessKey", "secretKey"].forEach((t2) => {
         if (!Object.prototype.hasOwnProperty.call(e2, t2))
@@ -22819,33 +23020,33 @@ ${i3}
           throw new Error("endpoint must start with https://");
         e2.endpoint = e2.endpoint.replace(/\/$/, "");
       }
-      this.config = Object.assign({}, e2, { endpoint: e2.endpoint || `https://${e2.spaceId}.api-hz.cloudbasefunction.cn`, wsEndpoint: e2.wsEndpoint || `wss://${e2.spaceId}.api-hz.cloudbasefunction.cn` }), this._websocket = new $t$1(this.config);
+      this.config = Object.assign({}, e2, { endpoint: e2.endpoint || `https://${e2.spaceId}.api-hz.cloudbasefunction.cn`, wsEndpoint: e2.wsEndpoint || `wss://${e2.spaceId}.api-hz.cloudbasefunction.cn` }), this._websocket = new jt$1(this.config);
     }
     callFunction(e2) {
       return function(e3, t2) {
         const { name: n2, data: s2, async: r2 = false, timeout: i2 } = e3, o2 = "POST", a2 = { "x-to-function-name": n2 };
         r2 && (a2["x-function-invoke-type"] = "async");
-        const { url: c2, headers: u2 } = Mt$1("/functions/invokeFunction", { functionName: n2, data: s2, method: o2, headers: a2, signHeaderKeys: ["x-to-function-name"], config: t2 });
-        return qt$1({ url: c2, data: s2, method: o2, headers: u2, timeout: i2 }).then((e4) => {
+        const { url: c2, headers: u2 } = Dt$1("/functions/invokeFunction", { functionName: n2, data: s2, method: o2, headers: a2, signHeaderKeys: ["x-to-function-name"], config: t2 });
+        return Mt$1({ url: c2, data: s2, method: o2, headers: u2, timeout: i2 }).then((e4) => {
           let t3 = 0;
           if (r2) {
             const n3 = e4.data || {};
             t3 = "200" === n3.errCode ? 0 : n3.errCode, e4.data = n3.data || {}, e4.errMsg = n3.errMsg;
           }
           if (0 !== t3)
-            throw new se$1({ code: t3, message: e4.errMsg, requestId: e4.requestId });
+            throw new te$1({ code: t3, message: e4.errMsg, requestId: e4.requestId });
           return { errCode: t3, success: 0 === t3, requestId: e4.requestId, result: e4.data };
         }).catch((e4) => {
-          throw new se$1({ code: e4.errCode, message: e4.errMsg, requestId: e4.requestId });
+          throw new te$1({ code: e4.errCode, message: e4.errMsg, requestId: e4.requestId });
         });
       }(e2, this.config);
     }
     uploadFileToOSS({ url: e2, filePath: t2, fileType: n2, formData: s2, onUploadProgress: r2 }) {
       return new Promise((i2, o2) => {
-        const a2 = re$1.uploadFile({ url: e2, filePath: t2, fileType: n2, formData: s2, name: "file", success(e3) {
-          e3 && e3.statusCode < 400 ? i2(e3) : o2(new se$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
+        const a2 = ne$1.uploadFile({ url: e2, filePath: t2, fileType: n2, formData: s2, name: "file", success(e3) {
+          e3 && e3.statusCode < 400 ? i2(e3) : o2(new te$1({ code: "UPLOAD_FAILED", message: "文件上传失败" }));
         }, fail(e3) {
-          o2(new se$1({ code: e3.code || "UPLOAD_FAILED", message: e3.message || e3.errMsg || "文件上传失败" }));
+          o2(new te$1({ code: e3.code || "UPLOAD_FAILED", message: e3.message || e3.errMsg || "文件上传失败" }));
         } });
         "function" == typeof r2 && a2 && "function" == typeof a2.onProgressUpdate && a2.onProgressUpdate((e3) => {
           r2({ loaded: e3.totalBytesSent, total: e3.totalBytesExpectedToSend });
@@ -22853,13 +23054,13 @@ ${i3}
       });
     }
     async uploadFile({ filePath: e2, cloudPath: t2 = "", fileType: n2 = "image", onUploadProgress: s2 }) {
-      if ("string" !== f$1(t2))
-        throw new se$1({ code: "INVALID_PARAM", message: "cloudPath必须为字符串类型" });
+      if ("string" !== g$1(t2))
+        throw new te$1({ code: "INVALID_PARAM", message: "cloudPath必须为字符串类型" });
       if (!(t2 = t2.trim()))
-        throw new se$1({ code: "INVALID_PARAM", message: "cloudPath不可为空" });
+        throw new te$1({ code: "INVALID_PARAM", message: "cloudPath不可为空" });
       if (/:\/\//.test(t2))
-        throw new se$1({ code: "INVALID_PARAM", message: "cloudPath不合法" });
-      const r2 = await Kt$1({ path: "/".concat(t2.replace(/^\//, ""), "?post_url") }, this.config), { file_id: i2, upload_url: o2, form_data: a2 } = r2, c2 = a2 && a2.reduce((e3, t3) => (e3[t3.key] = t3.value, e3), {});
+        throw new te$1({ code: "INVALID_PARAM", message: "cloudPath不合法" });
+      const r2 = await qt$1({ path: "/".concat(t2.replace(/^\//, ""), "?post_url") }, this.config), { file_id: i2, upload_url: o2, form_data: a2 } = r2, c2 = a2 && a2.reduce((e3, t3) => (e3[t3.key] = t3.value, e3), {});
       return this.uploadFileToOSS({ url: o2, filePath: e2, fileType: n2, formData: c2, onUploadProgress: s2 }).then(() => ({ fileID: i2 }));
     }
     async getTempFileURL({ fileList: e2 }) {
@@ -22868,7 +23069,7 @@ ${i3}
         const s2 = [];
         for (const n3 of e2) {
           let e3;
-          "string" !== f$1(n3) && t2({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" });
+          "string" !== g$1(n3) && t2({ code: "INVALID_PARAM", message: "fileList的元素必须是非空的字符串" });
           try {
             e3 = Ft$1.call(this, n3);
           } catch (t3) {
@@ -22876,21 +23077,21 @@ ${i3}
           }
           s2.push({ file_id: e3, expire: 600 });
         }
-        Kt$1({ path: "/?download_url", data: { file_list: s2 }, method: "POST" }, this.config).then((e3) => {
+        qt$1({ path: "/?download_url", data: { file_list: s2 }, method: "POST" }, this.config).then((e3) => {
           const { file_list: n3 = [] } = e3;
-          t2({ fileList: n3.map((e4) => ({ fileID: jt$1.call(this, e4.file_id), tempFileURL: e4.download_url })) });
+          t2({ fileList: n3.map((e4) => ({ fileID: Kt$1.call(this, e4.file_id), tempFileURL: e4.download_url })) });
         }).catch((e3) => n2(e3));
       });
     }
     async connectWebSocket(e2) {
       const { name: t2, query: n2 } = e2;
-      return re$1.connectSocket({ url: this._websocket.signedURL(t2, n2), complete: () => {
+      return ne$1.connectSocket({ url: this._websocket.signedURL(t2, n2), complete: () => {
       } });
     }
   };
-  var Wt$1 = { init: (e2) => {
+  var Bt$1 = { init: (e2) => {
     e2.provider = "alipay";
-    const t2 = new Bt$1(e2);
+    const t2 = new $t$1(e2);
     return t2.auth = function() {
       return { signInAnonymously: function() {
         return Promise.resolve();
@@ -22899,21 +23100,21 @@ ${i3}
       } };
     }, t2;
   } };
-  function Ht$1({ data: e2 }) {
+  function Wt$1({ data: e2 }) {
     let t2;
-    t2 = pe$1();
+    t2 = le$1();
     const n2 = JSON.parse(JSON.stringify(e2 || {}));
     if (Object.assign(n2, { clientInfo: t2 }), !n2.uniIdToken) {
-      const { token: e3 } = oe$1();
+      const { token: e3 } = re$1();
       e3 && (n2.uniIdToken = e3);
     }
     return n2;
   }
-  async function Jt$1(e2 = {}) {
+  async function Ht$1(e2 = {}) {
     await this.__dev__.initLocalNetwork();
     const { localAddress: t2, localPort: n2 } = this.__dev__, s2 = { aliyun: "aliyun", tencent: "tcb", alipay: "alipay", dcloud: "dcloud" }[this.config.provider], r2 = this.config.spaceId, i2 = `http://${t2}:${n2}/system/check-function`, o2 = `http://${t2}:${n2}/cloudfunctions/${e2.name}`;
     return new Promise((t3, n3) => {
-      re$1.request({ method: "POST", url: i2, data: { name: e2.name, platform: A$1, provider: s2, spaceId: r2 }, timeout: 3e3, success(e3) {
+      ne$1.request({ method: "POST", url: i2, data: { name: e2.name, platform: P$1, provider: s2, spaceId: r2 }, timeout: 3e3, success(e3) {
         t3(e3);
       }, fail() {
         t3({ data: { code: "NETWORK_ERROR", message: "连接本地调试服务失败，请检查客户端是否和主机在同一局域网下，自动切换为已部署的云函数。" } });
@@ -22946,38 +23147,37 @@ ${i3}
         return this._callCloudFunction(e2);
       }
       return new Promise((t4, n4) => {
-        const r3 = Ht$1.call(this, { data: e2.data });
-        re$1.request({ method: "POST", url: o2, data: { provider: s2, platform: A$1, param: r3 }, timeout: e2.timeout, success: ({ statusCode: e3, data: s3 } = {}) => !e3 || e3 >= 400 ? n4(new se$1({ code: s3.code || "SYS_ERR", message: s3.message || "request:fail" })) : t4({ result: s3 }), fail(e3) {
-          n4(new se$1({ code: e3.code || e3.errCode || "SYS_ERR", message: e3.message || e3.errMsg || "request:fail" }));
+        const r3 = Wt$1.call(this, { data: e2.data });
+        ne$1.request({ method: "POST", url: o2, data: { provider: s2, platform: P$1, param: r3 }, timeout: e2.timeout, success: ({ statusCode: e3, data: s3 } = {}) => !e3 || e3 >= 400 ? n4(new te$1({ code: s3.code || "SYS_ERR", message: s3.message || "request:fail" })) : t4({ result: s3 }), fail(e3) {
+          n4(new te$1({ code: e3.code || e3.errCode || "SYS_ERR", message: e3.message || e3.errMsg || "request:fail" }));
         } });
       });
     });
   }
-  const zt$1 = [{ rule: /fc_function_not_found|FUNCTION_NOT_FOUND/, content: "，云函数[{functionName}]在云端不存在，请检查此云函数名称是否正确以及该云函数是否已上传到服务空间", mode: "append" }];
-  var Vt$1 = /[\\^$.*+?()[\]{}|]/g, Gt$1 = RegExp(Vt$1.source);
-  function Yt$1(e2, t2, n2) {
-    return e2.replace(new RegExp((s2 = t2) && Gt$1.test(s2) ? s2.replace(Vt$1, "\\$&") : s2, "g"), n2);
+  const Jt$1 = [{ rule: /fc_function_not_found|FUNCTION_NOT_FOUND/, content: "，云函数[{functionName}]在云端不存在，请检查此云函数名称是否正确以及该云函数是否已上传到服务空间", mode: "append" }];
+  var zt$1 = /[\\^$.*+?()[\]{}|]/g, Vt$1 = RegExp(zt$1.source);
+  function Gt$1(e2, t2, n2) {
+    return e2.replace(new RegExp((s2 = t2) && Vt$1.test(s2) ? s2.replace(zt$1, "\\$&") : s2, "g"), n2);
     var s2;
   }
-  const Xt$1 = "request", Zt$1 = "response", en$2 = "both";
-  const Mn$1 = { code: 2e4, message: "System error" }, qn$1 = { code: 20101, message: "Invalid client" };
-  function jn$1(e2) {
+  const Yt$1 = { NONE: "none", REQUEST: "request", RESPONSE: "response", BOTH: "both" }, Qt$1 = "_globalUniCloudStatus", Xt$1 = "_globalUniCloudSecureNetworkCache__{spaceId}", Zt$1 = "uni-secure-network", en$2 = { SYSTEM_ERROR: { code: 2e4, message: "System error" }, APP_INFO_INVALID: { code: 20101, message: "Invalid client" }, GET_ENCRYPT_KEY_FAILED: { code: 20102, message: "Get encrypt key failed" } };
+  function nn$1(e2) {
     const { errSubject: t2, subject: n2, errCode: s2, errMsg: r2, code: i2, message: o2, cause: a2 } = e2 || {};
-    return new se$1({ subject: t2 || n2 || "uni-secure-network", code: s2 || i2 || Mn$1.code, message: r2 || o2, cause: a2 });
+    return new te$1({ subject: t2 || n2 || Zt$1, code: s2 || i2 || en$2.SYSTEM_ERROR.code, message: r2 || o2, cause: a2 });
   }
-  let Bn$1;
-  function Vn$1({ secretType: e2 } = {}) {
-    return e2 === Xt$1 || e2 === Zt$1 || e2 === en$2;
+  let Kn$1;
+  function Hn$1({ secretType: e2 } = {}) {
+    return e2 === Yt$1.REQUEST || e2 === Yt$1.RESPONSE || e2 === Yt$1.BOTH;
   }
-  function Gn$1({ name: e2, data: t2 = {} } = {}) {
+  function Jn$1({ name: e2, data: t2 = {} } = {}) {
     return "DCloud-clientDB" === e2 && "encryption" === t2.redirectTo && "getAppClientKey" === t2.action;
   }
-  function Yn$1({ provider: e2, spaceId: t2, functionName: n2 } = {}) {
-    const { appId: s2, uniPlatform: r2, osName: i2 } = he$1();
+  function zn$1({ provider: e2, spaceId: t2, functionName: n2 } = {}) {
+    const { appId: s2, uniPlatform: r2, osName: i2 } = ce$1();
     let o2 = r2;
     "app" === r2 && (o2 = i2);
     const a2 = function({ provider: e3, spaceId: t3 } = {}) {
-      const n3 = T$1;
+      const n3 = A$1;
       if (!n3)
         return {};
       e3 = /* @__PURE__ */ function(e4) {
@@ -23003,56 +23203,56 @@ ${i3}
       return false;
     if ((c2[h2] || []).find((e3 = {}) => e3.appId === s2 && (e3.platform || "").toLowerCase() === o2.toLowerCase()))
       return true;
-    throw console.error(`此应用[appId: ${s2}, platform: ${o2}]不在云端配置的允许访问的应用列表内，参考：https://uniapp.dcloud.net.cn/uniCloud/secure-network.html#verify-client`), jn$1(qn$1);
+    throw console.error(`此应用[appId: ${s2}, platform: ${o2}]不在云端配置的允许访问的应用列表内，参考：https://uniapp.dcloud.net.cn/uniCloud/secure-network.html#verify-client`), nn$1(en$2.APP_INFO_INVALID);
   }
-  function Qn$1({ functionName: e2, result: t2, logPvd: n2 }) {
+  function Vn$1({ functionName: e2, result: t2, logPvd: n2 }) {
     if (this.__dev__.debugLog && t2 && t2.requestId) {
       const s2 = JSON.stringify({ spaceId: this.config.spaceId, functionName: e2, requestId: t2.requestId });
       console.log(`[${n2}-request]${s2}[/${n2}-request]`);
     }
   }
-  function Xn$1(e2) {
+  function Gn$1(e2) {
     const t2 = e2.callFunction, n2 = function(n3) {
       const s2 = n3.name;
-      n3.data = Ht$1.call(e2, { data: n3.data });
-      const r2 = { aliyun: "aliyun", tencent: "tcb", tcb: "tcb", alipay: "alipay", dcloud: "dcloud" }[this.config.provider], i2 = Vn$1(n3), o2 = Gn$1(n3), a2 = i2 || o2;
-      return t2.call(this, n3).then((e3) => (e3.errCode = 0, !a2 && Qn$1.call(this, { functionName: s2, result: e3, logPvd: r2 }), Promise.resolve(e3)), (e3) => (!a2 && Qn$1.call(this, { functionName: s2, result: e3, logPvd: r2 }), e3 && e3.message && (e3.message = function({ message: e4 = "", extraInfo: t3 = {}, formatter: n4 = [] } = {}) {
+      n3.data = Wt$1.call(e2, { data: n3.data });
+      const r2 = { aliyun: "aliyun", tencent: "tcb", tcb: "tcb", alipay: "alipay", dcloud: "dcloud" }[this.config.provider], i2 = Hn$1(n3), o2 = Jn$1(n3), a2 = i2 || o2;
+      return t2.call(this, n3).then((e3) => (e3.errCode = 0, !a2 && Vn$1.call(this, { functionName: s2, result: e3, logPvd: r2 }), Promise.resolve(e3)), (e3) => (!a2 && Vn$1.call(this, { functionName: s2, result: e3, logPvd: r2 }), e3 && e3.message && (e3.message = function({ message: e4 = "", extraInfo: t3 = {}, formatter: n4 = [] } = {}) {
         for (let s3 = 0; s3 < n4.length; s3++) {
           const { rule: r3, content: i3, mode: o3 } = n4[s3], a3 = e4.match(r3);
           if (!a3)
             continue;
           let c2 = i3;
           for (let e5 = 1; e5 < a3.length; e5++)
-            c2 = Yt$1(c2, `{$${e5}}`, a3[e5]);
+            c2 = Gt$1(c2, `{$${e5}}`, a3[e5]);
           for (const e5 in t3)
-            c2 = Yt$1(c2, `{${e5}}`, t3[e5]);
+            c2 = Gt$1(c2, `{${e5}}`, t3[e5]);
           return "replace" === o3 ? c2 : e4 + c2;
         }
         return e4;
-      }({ message: `[${n3.name}]: ${e3.message}`, formatter: zt$1, extraInfo: { functionName: s2 } })), Promise.reject(e3)));
+      }({ message: `[${n3.name}]: ${e3.message}`, formatter: Jt$1, extraInfo: { functionName: s2 } })), Promise.reject(e3)));
     };
     e2.callFunction = function(t3) {
       const { provider: s2, spaceId: r2 } = e2.config, i2 = t3.name;
       let o2, a2;
-      if (t3.data = t3.data || {}, e2.__dev__.debugInfo && !e2.__dev__.debugInfo.forceRemote && C$1 ? (e2._callCloudFunction || (e2._callCloudFunction = n2, e2._callLocalFunction = Jt$1), o2 = Jt$1) : o2 = n2, o2 = o2.bind(e2), Gn$1(t3))
+      if (t3.data = t3.data || {}, e2.__dev__.debugInfo && !e2.__dev__.debugInfo.forceRemote && O$1 ? (e2._callCloudFunction || (e2._callCloudFunction = n2, e2._callLocalFunction = Ht$1), o2 = Ht$1) : o2 = n2, o2 = o2.bind(e2), Jn$1(t3))
         a2 = n2.call(e2, t3);
-      else if (Vn$1(t3)) {
-        a2 = new Bn$1({ secretType: t3.secretType, uniCloudIns: e2 }).wrapEncryptDataCallFunction(n2.bind(e2))(t3);
-      } else if (Yn$1({ provider: s2, spaceId: r2, functionName: i2 })) {
-        a2 = new Bn$1({ secretType: t3.secretType, uniCloudIns: e2 }).wrapVerifyClientCallFunction(n2.bind(e2))(t3);
+      else if (Hn$1(t3)) {
+        a2 = new Kn$1({ secretType: t3.secretType, uniCloudIns: e2 }).wrapEncryptDataCallFunction(n2.bind(e2))(t3);
+      } else if (zn$1({ provider: s2, spaceId: r2, functionName: i2 })) {
+        a2 = new Kn$1({ secretType: t3.secretType, uniCloudIns: e2 }).wrapVerifyClientCallFunction(n2.bind(e2))(t3);
       } else
         a2 = o2(t3);
-      return Object.defineProperty(a2, "result", { get: () => (console.warn("当前返回结果为Promise类型，不可直接访问其result属性，详情请参考：https://uniapp.dcloud.net.cn/uniCloud/faq?id=promise"), {}) }), a2.then((e3) => ("undefined" != typeof UTSJSONObject && "undefined" != typeof UTS && (e3.result = UTS.JSON.parse(JSON.stringify(e3.result))), e3));
+      return Object.defineProperty(a2, "result", { get: () => (console.warn("当前返回结果为Promise类型，不可直接访问其result属性，详情请参考：https://uniapp.dcloud.net.cn/uniCloud/faq?id=promise"), {}) }), a2.then((e3) => e3);
     };
   }
-  Bn$1 = class {
+  Kn$1 = class {
     constructor() {
-      throw jn$1({ message: `Platform ${A$1} is not enabled, please check whether secure network module is enabled in your manifest.json` });
+      throw nn$1({ message: `Platform ${P$1} is not enabled, please check whether secure network module is enabled in your manifest.json` });
     }
   };
-  const Zn$1 = Symbol("CLIENT_DB_INTERNAL");
-  function es$1(e2, t2) {
-    return e2.then = "DoNotReturnProxyWithAFunctionNamedThen", e2._internalType = Zn$1, e2.inspect = null, e2.__v_raw = void 0, new Proxy(e2, { get(e3, n2, s2) {
+  const Yn$1 = Symbol("CLIENT_DB_INTERNAL");
+  function Qn$1(e2, t2) {
+    return e2.then = "DoNotReturnProxyWithAFunctionNamedThen", e2._internalType = Yn$1, e2.inspect = null, e2.__v_raw = void 0, new Proxy(e2, { get(e3, n2, s2) {
       if ("_uniClient" === n2)
         return null;
       if ("symbol" == typeof n2)
@@ -23064,7 +23264,7 @@ ${i3}
       return t2.get(e3, n2, s2);
     } });
   }
-  function ts$1(e2) {
+  function Xn$1(e2) {
     return { on: (t2, n2) => {
       e2[t2] = e2[t2] || [], e2[t2].indexOf(n2) > -1 || e2[t2].push(n2);
     }, off: (t2, n2) => {
@@ -23073,17 +23273,17 @@ ${i3}
       -1 !== s2 && e2[t2].splice(s2, 1);
     } };
   }
-  const ns$1 = ["db.Geo", "db.command", "command.aggregate"];
-  function ss$1(e2, t2) {
-    return ns$1.indexOf(`${e2}.${t2}`) > -1;
+  const Zn$1 = ["db.Geo", "db.command", "command.aggregate"];
+  function es$1(e2, t2) {
+    return Zn$1.indexOf(`${e2}.${t2}`) > -1;
   }
-  function rs$1(e2) {
-    switch (f$1(e2 = ie$1(e2))) {
+  function ts$1(e2) {
+    switch (g$1(e2 = se$1(e2))) {
       case "array":
-        return e2.map((e3) => rs$1(e3));
+        return e2.map((e3) => ts$1(e3));
       case "object":
-        return e2._internalType === Zn$1 || Object.keys(e2).forEach((t2) => {
-          e2[t2] = rs$1(e2[t2]);
+        return e2._internalType === Yn$1 || Object.keys(e2).forEach((t2) => {
+          e2[t2] = ts$1(e2[t2]);
         }), e2;
       case "regexp":
         return { $regexp: { source: e2.source, flags: e2.flags } };
@@ -23093,10 +23293,10 @@ ${i3}
         return e2;
     }
   }
-  function is$1(e2) {
+  function ns$1(e2) {
     return e2 && e2.content && e2.content.$method;
   }
-  let os$1 = class os {
+  let ss$1 = class ss {
     constructor(e2, t2, n2) {
       this.content = e2, this.prevStage = t2 || null, this.udb = null, this._database = n2;
     }
@@ -23105,7 +23305,7 @@ ${i3}
       const t2 = [e2.content];
       for (; e2.prevStage; )
         e2 = e2.prevStage, t2.push(e2.content);
-      return { $db: t2.reverse().map((e3) => ({ $method: e3.$method, $param: rs$1(e3.$param) })) };
+      return { $db: t2.reverse().map((e3) => ({ $method: e3.$method, $param: ts$1(e3.$param) })) };
     }
     toString() {
       return JSON.stringify(this.toJSON());
@@ -23120,7 +23320,7 @@ ${i3}
     get isAggregate() {
       let e2 = this;
       for (; e2; ) {
-        const t2 = is$1(e2), n2 = is$1(e2.prevStage);
+        const t2 = ns$1(e2), n2 = ns$1(e2.prevStage);
         if ("aggregate" === t2 && "collection" === n2 || "pipeline" === t2)
           return true;
         e2 = e2.prevStage;
@@ -23130,7 +23330,7 @@ ${i3}
     get isCommand() {
       let e2 = this;
       for (; e2; ) {
-        if ("command" === is$1(e2))
+        if ("command" === ns$1(e2))
           return true;
         e2 = e2.prevStage;
       }
@@ -23139,7 +23339,7 @@ ${i3}
     get isAggregateCommand() {
       let e2 = this;
       for (; e2; ) {
-        const t2 = is$1(e2), n2 = is$1(e2.prevStage);
+        const t2 = ns$1(e2), n2 = ns$1(e2.prevStage);
         if ("aggregate" === t2 && "command" === n2)
           return true;
         e2 = e2.prevStage;
@@ -23149,7 +23349,7 @@ ${i3}
     getNextStageFn(e2) {
       const t2 = this;
       return function() {
-        return as$1({ $method: e2, $param: rs$1(Array.from(arguments)) }, t2, t2._database);
+        return rs$1({ $method: e2, $param: ts$1(Array.from(arguments)) }, t2, t2._database);
       };
     }
     get count() {
@@ -23183,22 +23383,22 @@ ${i3}
     }
     _send(e2, t2) {
       const n2 = this.getAction(), s2 = this.getCommand();
-      if (s2.$db.push({ $method: e2, $param: rs$1(t2) }), S$1) {
+      if (s2.$db.push({ $method: e2, $param: ts$1(t2) }), b$1) {
         const e3 = s2.$db.find((e4) => "collection" === e4.$method), t3 = e3 && e3.$param;
         t3 && 1 === t3.length && "string" == typeof e3.$param[0] && e3.$param[0].indexOf(",") > -1 && console.warn("检测到使用JQL语法联表查询时，未使用getTemp先过滤主表数据，在主表数据量大的情况下可能会查询缓慢。\n- 如何优化请参考此文档：https://uniapp.dcloud.net.cn/uniCloud/jql?id=lookup-with-temp \n- 如果主表数据量很小请忽略此信息，项目发行时不会出现此提示。");
       }
       return this._database._callCloudFunction({ action: n2, command: s2 });
     }
   };
-  function as$1(e2, t2, n2) {
-    return es$1(new os$1(e2, t2, n2), { get(e3, t3) {
+  function rs$1(e2, t2, n2) {
+    return Qn$1(new ss$1(e2, t2, n2), { get(e3, t3) {
       let s2 = "db";
-      return e3 && e3.content && (s2 = e3.content.$method), ss$1(s2, t3) ? as$1({ $method: t3 }, e3, n2) : function() {
-        return as$1({ $method: t3, $param: rs$1(Array.from(arguments)) }, e3, n2);
+      return e3 && e3.content && (s2 = e3.content.$method), es$1(s2, t3) ? rs$1({ $method: t3 }, e3, n2) : function() {
+        return rs$1({ $method: t3, $param: ts$1(Array.from(arguments)) }, e3, n2);
       };
     } });
   }
-  function cs$1({ path: e2, method: t2 }) {
+  function is$1({ path: e2, method: t2 }) {
     return class {
       constructor() {
         this.param = Array.from(arguments);
@@ -23211,14 +23411,9 @@ ${i3}
       }
     };
   }
-  function us$1(e2, t2 = {}) {
-    return es$1(new e2(t2), { get: (e3, t3) => ss$1("db", t3) ? as$1({ $method: t3 }, null, e3) : function() {
-      return as$1({ $method: t3, $param: rs$1(Array.from(arguments)) }, null, e3);
-    } });
-  }
-  let hs$1 = class hs extends class {
+  let os$1 = class os {
     constructor({ uniClient: e2 = {}, isJQL: t2 = false } = {}) {
-      this._uniClient = e2, this._authCallBacks = {}, this._dbCallBacks = {}, e2._isDefault && (this._dbCallBacks = R$1("_globalUniCloudDatabaseCallback")), t2 || (this.auth = ts$1(this._authCallBacks)), this._isJQL = t2, Object.assign(this, ts$1(this._dbCallBacks)), this.env = es$1({}, { get: (e3, t3) => ({ $env: t3 }) }), this.Geo = es$1({}, { get: (e3, t3) => cs$1({ path: ["Geo"], method: t3 }) }), this.serverDate = cs$1({ path: [], method: "serverDate" }), this.RegExp = cs$1({ path: [], method: "RegExp" });
+      this._uniClient = e2, this._authCallBacks = {}, this._dbCallBacks = {}, e2._isDefault && (this._dbCallBacks = U$1("_globalUniCloudDatabaseCallback")), t2 || (this.auth = Xn$1(this._authCallBacks)), this._isJQL = t2, Object.assign(this, Xn$1(this._dbCallBacks)), this.env = Qn$1({}, { get: (e3, t3) => ({ $env: t3 }) }), this.Geo = Qn$1({}, { get: (e3, t3) => is$1({ path: ["Geo"], method: t3 }) }), this.serverDate = is$1({ path: [], method: "serverDate" }), this.RegExp = is$1({ path: [], method: "RegExp" });
     }
     getCloudEnv(e2) {
       if ("string" != typeof e2 || !e2.trim())
@@ -23246,7 +23441,13 @@ ${i3}
       });
       return this._callCloudFunction({ multiCommand: t2, queryList: e2 });
     }
-  } {
+  };
+  function as$1(e2, t2 = {}) {
+    return Qn$1(new e2(t2), { get: (e3, t3) => es$1("db", t3) ? rs$1({ $method: t3 }, null, e3) : function() {
+      return rs$1({ $method: t3, $param: ts$1(Array.from(arguments)) }, null, e3);
+    } });
+  }
+  let cs$1 = class cs extends os$1 {
     _parseResult(e2) {
       return this._isJQL ? e2.result : e2;
     }
@@ -23260,22 +23461,22 @@ ${i3}
       }
       const i2 = this, o2 = this._isJQL ? "databaseForJQL" : "database";
       function a2(e3) {
-        return i2._callback("error", [e3]), K$1(F$1(o2, "fail"), e3).then(() => K$1(F$1(o2, "complete"), e3)).then(() => (r2(null, e3), X$1(B$1, { type: J$1, content: e3 }), Promise.reject(e3)));
+        return i2._callback("error", [e3]), j$1($$1(o2, "fail"), e3).then(() => j$1($$1(o2, "complete"), e3)).then(() => (r2(null, e3), Y$1(H$1.RESPONSE, { type: J$1.CLIENT_DB, content: e3 }), Promise.reject(e3)));
       }
-      const c2 = K$1(F$1(o2, "invoke")), u2 = this._uniClient;
-      return c2.then(() => u2.callFunction({ name: "DCloud-clientDB", type: h$1, data: { action: e2, command: t2, multiCommand: n2 } })).then((e3) => {
+      const c2 = j$1($$1(o2, "invoke")), u2 = this._uniClient;
+      return c2.then(() => u2.callFunction({ name: "DCloud-clientDB", type: l$1.CLIENT_DB, data: { action: e2, command: t2, multiCommand: n2 } })).then((e3) => {
         const { code: t3, message: n3, token: s3, tokenExpired: c3, systemInfo: u3 = [] } = e3.result;
         if (u3)
           for (let e4 = 0; e4 < u3.length; e4++) {
-            const { level: t4, message: n4, detail: s4 } = u3[e4], r3 = console["warn" === t4 ? "error" : t4] || console.log;
-            let i3 = "[System Info]" + n4;
-            s4 && (i3 = `${i3}
-详细信息：${s4}`), r3(i3);
+            const { level: t4, message: n4, detail: s4 } = u3[e4];
+            let r3 = "[System Info]" + n4;
+            s4 && (r3 = `${r3}
+详细信息：${s4}`), (console["warn" === t4 ? "error" : t4] || console.log)(r3);
           }
         if (t3) {
-          return a2(new se$1({ code: t3, message: n3, requestId: e3.requestId }));
+          return a2(new te$1({ code: t3, message: n3, requestId: e3.requestId }));
         }
-        e3.result.errCode = e3.result.errCode || e3.result.code, e3.result.errMsg = e3.result.errMsg || e3.result.message, s3 && c3 && (ae$1({ token: s3, tokenExpired: c3 }), this._callbackAuth("refreshToken", [{ token: s3, tokenExpired: c3 }]), this._callback("refreshToken", [{ token: s3, tokenExpired: c3 }]), X$1(H$1, { token: s3, tokenExpired: c3 }));
+        e3.result.errCode = e3.result.errCode || e3.result.code, e3.result.errMsg = e3.result.errMsg || e3.result.message, s3 && c3 && (ie$1({ token: s3, tokenExpired: c3 }), this._callbackAuth("refreshToken", [{ token: s3, tokenExpired: c3 }]), this._callback("refreshToken", [{ token: s3, tokenExpired: c3 }]), Y$1(H$1.REFRESH_TOKEN, { token: s3, tokenExpired: c3 }));
         const h2 = [{ prop: "affectedDocs", tips: "affectedDocs不再推荐使用，请使用inserted/deleted/updated/data.length替代" }, { prop: "code", tips: "code不再推荐使用，请使用errCode替代" }, { prop: "message", tips: "message不再推荐使用，请使用errMsg替代" }];
         for (let t4 = 0; t4 < h2.length; t4++) {
           const { prop: n4, tips: s4 } = h2[t4];
@@ -23285,67 +23486,67 @@ ${i3}
           }
         }
         return function(e4) {
-          return K$1(F$1(o2, "success"), e4).then(() => K$1(F$1(o2, "complete"), e4)).then(() => {
+          return j$1($$1(o2, "success"), e4).then(() => j$1($$1(o2, "complete"), e4)).then(() => {
             r2(e4, null);
             const t4 = i2._parseResult(e4);
-            return X$1(B$1, { type: J$1, content: t4 }), Promise.resolve(t4);
+            return Y$1(H$1.RESPONSE, { type: J$1.CLIENT_DB, content: t4 }), Promise.resolve(t4);
           });
         }(e3);
       }, (e3) => {
         /fc_function_not_found|FUNCTION_NOT_FOUND/g.test(e3.message) && console.warn("clientDB未初始化，请在web控制台保存一次schema以开启clientDB");
-        return a2(new se$1({ code: e3.code || "SYSTEM_ERROR", message: e3.message, requestId: e3.requestId }));
+        return a2(new te$1({ code: e3.code || "SYSTEM_ERROR", message: e3.message, requestId: e3.requestId }));
       });
     }
   };
-  const ls$1 = "token无效，跳转登录页面", ds$1 = "token过期，跳转登录页面", ps$1 = { TOKEN_INVALID_TOKEN_EXPIRED: ds$1, TOKEN_INVALID_INVALID_CLIENTID: ls$1, TOKEN_INVALID: ls$1, TOKEN_INVALID_WRONG_TOKEN: ls$1, TOKEN_INVALID_ANONYMOUS_USER: ls$1 }, fs$1 = { "uni-id-token-expired": ds$1, "uni-id-check-token-failed": ls$1, "uni-id-token-not-exist": ls$1, "uni-id-check-device-feature-failed": ls$1 };
-  function gs$1(e2, t2) {
+  const us$1 = "token无效，跳转登录页面", hs$1 = "token过期，跳转登录页面", ls$1 = { TOKEN_INVALID_TOKEN_EXPIRED: hs$1, TOKEN_INVALID_INVALID_CLIENTID: us$1, TOKEN_INVALID: us$1, TOKEN_INVALID_WRONG_TOKEN: us$1, TOKEN_INVALID_ANONYMOUS_USER: us$1 }, ds$1 = { "uni-id-token-expired": hs$1, "uni-id-check-token-failed": us$1, "uni-id-token-not-exist": us$1, "uni-id-check-device-feature-failed": us$1 }, ps$1 = { ...ls$1, ...ds$1, default: "用户未登录或登录状态过期，自动跳转登录页面" };
+  function fs$1(e2, t2) {
     let n2 = "";
     return n2 = e2 ? `${e2}/${t2}` : t2, n2.replace(/^\//, "");
   }
-  function ms$1(e2 = [], t2 = "") {
+  function gs$1(e2 = [], t2 = "") {
     const n2 = [], s2 = [];
     return e2.forEach((e3) => {
-      true === e3.needLogin ? n2.push(gs$1(t2, e3.path)) : false === e3.needLogin && s2.push(gs$1(t2, e3.path));
+      true === e3.needLogin ? n2.push(fs$1(t2, e3.path)) : false === e3.needLogin && s2.push(fs$1(t2, e3.path));
     }), { needLoginPage: n2, notNeedLoginPage: s2 };
   }
-  function ys$1(e2) {
+  function ms$1(e2) {
     return e2.split("?")[0].replace(/^\//, "");
   }
-  function _s$1() {
+  function ys$1() {
     return function(e2) {
-      let t2 = e2 && e2.$page && e2.$page.fullPath || "";
-      return t2 ? ("/" !== t2.charAt(0) && (t2 = "/" + t2), t2) : t2;
+      let t2 = e2 && e2.$page && e2.$page.fullPath;
+      return t2 ? ("/" !== t2.charAt(0) && (t2 = "/" + t2), t2) : "";
     }(function() {
       const e2 = getCurrentPages();
       return e2[e2.length - 1];
     }());
   }
-  function ws$1() {
-    return ys$1(_s$1());
+  function _s$1() {
+    return ms$1(ys$1());
   }
-  function vs$1(e2 = "", t2 = {}) {
+  function ws$1(e2 = "", t2 = {}) {
     if (!e2)
       return false;
     if (!(t2 && t2.list && t2.list.length))
       return false;
-    const n2 = t2.list, s2 = ys$1(e2);
+    const n2 = t2.list, s2 = ms$1(e2);
     return n2.some((e3) => e3.pagePath === s2);
   }
   const Is$1 = !!e$1.uniIdRouter;
-  const { loginPage: Ss$1, routerNeedLogin: bs$1, resToLogin: ks$1, needLoginPage: Ts$1, notNeedLoginPage: As$1, loginPageInTabBar: Ps$1 } = function({ pages: t2 = [], subPackages: n2 = [], uniIdRouter: s2 = {}, tabBar: r2 = {} } = e$1) {
-    const { loginPage: i2, needLogin: o2 = [], resToLogin: a2 = true } = s2, { needLoginPage: c2, notNeedLoginPage: u2 } = ms$1(t2), { needLoginPage: h2, notNeedLoginPage: l2 } = function(e2 = []) {
+  const { loginPage: vs$1, routerNeedLogin: Ss$1, resToLogin: Ts$1, needLoginPage: bs$1, notNeedLoginPage: Es$1, loginPageInTabBar: ks$1 } = function({ pages: t2 = [], subPackages: n2 = [], uniIdRouter: s2 = {}, tabBar: r2 = {} } = e$1) {
+    const { loginPage: i2, needLogin: o2 = [], resToLogin: a2 = true } = s2, { needLoginPage: c2, notNeedLoginPage: u2 } = gs$1(t2), { needLoginPage: h2, notNeedLoginPage: l2 } = function(e2 = []) {
       const t3 = [], n3 = [];
       return e2.forEach((e3) => {
-        const { root: s3, pages: r3 = [] } = e3, { needLoginPage: i3, notNeedLoginPage: o3 } = ms$1(r3, s3);
+        const { root: s3, pages: r3 = [] } = e3, { needLoginPage: i3, notNeedLoginPage: o3 } = gs$1(r3, s3);
         t3.push(...i3), n3.push(...o3);
       }), { needLoginPage: t3, notNeedLoginPage: n3 };
     }(n2);
-    return { loginPage: i2, routerNeedLogin: o2, resToLogin: a2, needLoginPage: [...c2, ...h2], notNeedLoginPage: [...u2, ...l2], loginPageInTabBar: vs$1(i2, r2) };
+    return { loginPage: i2, routerNeedLogin: o2, resToLogin: a2, needLoginPage: [...c2, ...h2], notNeedLoginPage: [...u2, ...l2], loginPageInTabBar: ws$1(i2, r2) };
   }();
-  if (Ts$1.indexOf(Ss$1) > -1)
-    throw new Error(`Login page [${Ss$1}] should not be "needLogin", please check your pages.json`);
-  function Cs$1(e2) {
-    const t2 = ws$1();
+  if (bs$1.indexOf(vs$1) > -1)
+    throw new Error(`Login page [${vs$1}] should not be "needLogin", please check your pages.json`);
+  function As$1(e2) {
+    const t2 = _s$1();
     if ("/" === e2.charAt(0))
       return e2;
     const [n2, s2] = e2.split("?"), r2 = n2.replace(/^\//, "").split("/"), i2 = t2.split("/");
@@ -23356,68 +23557,68 @@ ${i3}
     }
     return "" === i2[0] && i2.shift(), "/" + i2.join("/") + (s2 ? "?" + s2 : "");
   }
-  function xs$1(e2) {
-    const t2 = ys$1(Cs$1(e2));
-    return !(As$1.indexOf(t2) > -1) && (Ts$1.indexOf(t2) > -1 || bs$1.some((t3) => function(e3, t4) {
+  function Ps$1(e2) {
+    const t2 = ms$1(As$1(e2));
+    return !(Es$1.indexOf(t2) > -1) && (bs$1.indexOf(t2) > -1 || Ss$1.some((t3) => function(e3, t4) {
       return new RegExp(t4).test(e3);
     }(e2, t3)));
   }
-  function Os$1({ redirect: e2 }) {
-    const t2 = ys$1(e2), n2 = ys$1(Ss$1);
-    return ws$1() !== n2 && t2 !== n2;
+  function Cs$1({ redirect: e2 }) {
+    const t2 = ms$1(e2), n2 = ms$1(vs$1);
+    return _s$1() !== n2 && t2 !== n2;
   }
-  function Es$1({ api: e2, redirect: t2 } = {}) {
-    if (!t2 || !Os$1({ redirect: t2 }))
+  function Os$1({ api: e2, redirect: t2 } = {}) {
+    if (!t2 || !Cs$1({ redirect: t2 }))
       return;
     const n2 = function(e3, t3) {
       return "/" !== e3.charAt(0) && (e3 = "/" + e3), t3 ? e3.indexOf("?") > -1 ? e3 + `&uniIdRedirectUrl=${encodeURIComponent(t3)}` : e3 + `?uniIdRedirectUrl=${encodeURIComponent(t3)}` : e3;
-    }(Ss$1, t2);
-    Ps$1 ? "navigateTo" !== e2 && "redirectTo" !== e2 || (e2 = "switchTab") : "switchTab" === e2 && (e2 = "navigateTo");
+    }(vs$1, t2);
+    ks$1 ? "navigateTo" !== e2 && "redirectTo" !== e2 || (e2 = "switchTab") : "switchTab" === e2 && (e2 = "navigateTo");
     const s2 = { navigateTo: uni.navigateTo, redirectTo: uni.redirectTo, switchTab: uni.switchTab, reLaunch: uni.reLaunch };
     setTimeout(() => {
       s2[e2]({ url: n2 });
     }, 0);
   }
-  function Ls$1({ url: e2 } = {}) {
+  function xs$1({ url: e2 } = {}) {
     const t2 = { abortLoginPageJump: false, autoToLoginPage: false }, n2 = function() {
-      const { token: e3, tokenExpired: t3 } = oe$1();
+      const { token: e3, tokenExpired: t3 } = re$1();
       let n3;
       if (e3) {
         if (t3 < Date.now()) {
           const e4 = "uni-id-token-expired";
-          n3 = { errCode: e4, errMsg: fs$1[e4] };
+          n3 = { errCode: e4, errMsg: ps$1[e4] };
         }
       } else {
         const e4 = "uni-id-check-token-failed";
-        n3 = { errCode: e4, errMsg: fs$1[e4] };
+        n3 = { errCode: e4, errMsg: ps$1[e4] };
       }
       return n3;
     }();
-    if (xs$1(e2) && n2) {
+    if (Ps$1(e2) && n2) {
       n2.uniIdRedirectUrl = e2;
-      if (G$1(W$1).length > 0)
+      if (z$1(H$1.NEED_LOGIN).length > 0)
         return setTimeout(() => {
-          X$1(W$1, n2);
+          Y$1(H$1.NEED_LOGIN, n2);
         }, 0), t2.abortLoginPageJump = true, t2;
       t2.autoToLoginPage = true;
     }
     return t2;
   }
-  function Rs$1() {
+  function Ns$1() {
     !function() {
-      const e3 = _s$1(), { abortLoginPageJump: t2, autoToLoginPage: n2 } = Ls$1({ url: e3 });
-      t2 || n2 && Es$1({ api: "redirectTo", redirect: e3 });
+      const e3 = ys$1(), { abortLoginPageJump: t2, autoToLoginPage: n2 } = xs$1({ url: e3 });
+      t2 || n2 && Os$1({ api: "redirectTo", redirect: e3 });
     }();
     const e2 = ["navigateTo", "redirectTo", "reLaunch", "switchTab"];
     for (let t2 = 0; t2 < e2.length; t2++) {
       const n2 = e2[t2];
       uni.addInterceptor(n2, { invoke(e3) {
-        const { abortLoginPageJump: t3, autoToLoginPage: s2 } = Ls$1({ url: e3.url });
-        return t3 ? e3 : s2 ? (Es$1({ api: n2, redirect: Cs$1(e3.url) }), false) : e3;
+        const { abortLoginPageJump: t3, autoToLoginPage: s2 } = xs$1({ url: e3.url });
+        return t3 ? e3 : s2 ? (Os$1({ api: n2, redirect: As$1(e3.url) }), false) : e3;
       } });
     }
   }
-  function Us$1() {
+  function Rs$1() {
     this.onResponse((e2) => {
       const { type: t2, content: n2 } = e2;
       let s2 = false;
@@ -23427,7 +23628,7 @@ ${i3}
             if ("object" != typeof e3)
               return false;
             const { errCode: t3 } = e3 || {};
-            return t3 in fs$1;
+            return t3 in ps$1;
           }(n2);
           break;
         case "clientdb":
@@ -23435,51 +23636,51 @@ ${i3}
             if ("object" != typeof e3)
               return false;
             const { errCode: t3 } = e3 || {};
-            return t3 in ps$1;
+            return t3 in ls$1;
           }(n2);
       }
       s2 && function(e3 = {}) {
-        const t3 = G$1(W$1);
-        te$1().then(() => {
-          const n3 = _s$1();
-          if (n3 && Os$1({ redirect: n3 }))
-            return t3.length > 0 ? X$1(W$1, Object.assign({ uniIdRedirectUrl: n3 }, e3)) : void (Ss$1 && Es$1({ api: "navigateTo", redirect: n3 }));
+        const t3 = z$1(H$1.NEED_LOGIN);
+        Z$1().then(() => {
+          const n3 = ys$1();
+          if (n3 && Cs$1({ redirect: n3 }))
+            return t3.length > 0 ? Y$1(H$1.NEED_LOGIN, Object.assign({ uniIdRedirectUrl: n3 }, e3)) : void (vs$1 && Os$1({ api: "navigateTo", redirect: n3 }));
         });
       }(n2);
     });
   }
-  function Ns$1(e2) {
+  function Ls$1(e2) {
     !function(e3) {
       e3.onResponse = function(e4) {
-        Y$1(B$1, e4);
+        V$1(H$1.RESPONSE, e4);
       }, e3.offResponse = function(e4) {
-        Q$1(B$1, e4);
+        G$1(H$1.RESPONSE, e4);
       };
     }(e2), function(e3) {
       e3.onNeedLogin = function(e4) {
-        Y$1(W$1, e4);
+        V$1(H$1.NEED_LOGIN, e4);
       }, e3.offNeedLogin = function(e4) {
-        Q$1(W$1, e4);
-      }, Is$1 && (R$1("_globalUniCloudStatus").needLoginInit || (R$1("_globalUniCloudStatus").needLoginInit = true, te$1().then(() => {
-        Rs$1.call(e3);
-      }), ks$1 && Us$1.call(e3)));
+        G$1(H$1.NEED_LOGIN, e4);
+      }, Is$1 && (U$1(Qt$1).needLoginInit || (U$1(Qt$1).needLoginInit = true, Z$1().then(() => {
+        Ns$1.call(e3);
+      }), Ts$1 && Rs$1.call(e3)));
     }(e2), function(e3) {
       e3.onRefreshToken = function(e4) {
-        Y$1(H$1, e4);
+        V$1(H$1.REFRESH_TOKEN, e4);
       }, e3.offRefreshToken = function(e4) {
-        Q$1(H$1, e4);
+        G$1(H$1.REFRESH_TOKEN, e4);
       };
     }(e2);
   }
-  let Ds$1;
-  const Ms$1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", qs$1 = /^(?:[A-Za-z\d+/]{4})*?(?:[A-Za-z\d+/]{2}(?:==)?|[A-Za-z\d+/]{3}=?)?$/;
-  function Ks$1() {
-    const e2 = oe$1().token || "", t2 = e2.split(".");
+  let Us$1;
+  const Ds$1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=", Ms$1 = /^(?:[A-Za-z\d+/]{4})*?(?:[A-Za-z\d+/]{2}(?:==)?|[A-Za-z\d+/]{3}=?)?$/;
+  function qs$1() {
+    const e2 = re$1().token || "", t2 = e2.split(".");
     if (!e2 || 3 !== t2.length)
       return { uid: null, role: [], permission: [], tokenExpired: 0 };
     let n2;
     try {
-      n2 = JSON.parse((s2 = t2[1], decodeURIComponent(Ds$1(s2).split("").map(function(e3) {
+      n2 = JSON.parse((s2 = t2[1], decodeURIComponent(Us$1(s2).split("").map(function(e3) {
         return "%" + ("00" + e3.charCodeAt(0).toString(16)).slice(-2);
       }).join(""))));
     } catch (e3) {
@@ -23488,13 +23689,13 @@ ${i3}
     var s2;
     return n2.tokenExpired = 1e3 * n2.exp, delete n2.exp, delete n2.iat, n2;
   }
-  Ds$1 = "function" != typeof atob ? function(e2) {
-    if (e2 = String(e2).replace(/[\t\n\f\r ]+/g, ""), !qs$1.test(e2))
+  Us$1 = "function" != typeof atob ? function(e2) {
+    if (e2 = String(e2).replace(/[\t\n\f\r ]+/g, ""), !Ms$1.test(e2))
       throw new Error("Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded.");
     var t2;
     e2 += "==".slice(2 - (3 & e2.length));
     for (var n2, s2, r2 = "", i2 = 0; i2 < e2.length; )
-      t2 = Ms$1.indexOf(e2.charAt(i2++)) << 18 | Ms$1.indexOf(e2.charAt(i2++)) << 12 | (n2 = Ms$1.indexOf(e2.charAt(i2++))) << 6 | (s2 = Ms$1.indexOf(e2.charAt(i2++))), r2 += 64 === n2 ? String.fromCharCode(t2 >> 16 & 255) : 64 === s2 ? String.fromCharCode(t2 >> 16 & 255, t2 >> 8 & 255) : String.fromCharCode(t2 >> 16 & 255, t2 >> 8 & 255, 255 & t2);
+      t2 = Ds$1.indexOf(e2.charAt(i2++)) << 18 | Ds$1.indexOf(e2.charAt(i2++)) << 12 | (n2 = Ds$1.indexOf(e2.charAt(i2++))) << 6 | (s2 = Ds$1.indexOf(e2.charAt(i2++))), r2 += 64 === n2 ? String.fromCharCode(t2 >> 16 & 255) : 64 === s2 ? String.fromCharCode(t2 >> 16 & 255, t2 >> 8 & 255) : String.fromCharCode(t2 >> 16 & 255, t2 >> 8 & 255, 255 & t2);
     return r2;
   } : atob;
   var Fs$1 = n$1(function(e2, t2) {
@@ -23572,9 +23773,9 @@ ${i3}
         }(t3), t3);
       };
     };
-  }), js$1 = t$2(Fs$1);
-  const $s$1 = "manual";
-  function Bs$1(e2) {
+  }), Ks$1 = t$2(Fs$1);
+  const js$1 = { auto: "auto", onready: "onready", manual: "manual" };
+  function $s$1(e2) {
     return { props: { localdata: { type: Array, default: () => [] }, options: { type: [Object, Array], default: () => ({}) }, spaceInfo: { type: Object, default: () => ({}) }, collection: { type: [String, Array], default: "" }, action: { type: String, default: "" }, field: { type: String, default: "" }, orderby: { type: String, default: "" }, where: { type: [String, Object], default: "" }, pageData: { type: String, default: "add" }, pageCurrent: { type: Number, default: 1 }, pageSize: { type: Number, default: 20 }, getcount: { type: [Boolean, String], default: false }, gettree: { type: [Boolean, String], default: false }, gettreepath: { type: [Boolean, String], default: false }, startwith: { type: String, default: "" }, limitlevel: { type: Number, default: 10 }, groupby: { type: String, default: "" }, groupField: { type: String, default: "" }, distinct: { type: [Boolean, String], default: false }, foreignKey: { type: String, default: "" }, loadtime: { type: String, default: "auto" }, manual: { type: Boolean, default: false } }, data: () => ({ mixinDatacomLoading: false, mixinDatacomHasMore: false, mixinDatacomResData: [], mixinDatacomErrorMessage: "", mixinDatacomPage: {}, mixinDatacomError: null }), created() {
       this.mixinDatacomPage = { current: this.pageCurrent, size: this.pageSize, count: 0 }, this.$watch(() => {
         var e3 = [];
@@ -23582,7 +23783,7 @@ ${i3}
           e3.push(this[t2]);
         }), e3;
       }, (e3, t2) => {
-        if (this.loadtime === $s$1)
+        if (this.loadtime === js$1.manual)
           return;
         let n2 = false;
         const s2 = [];
@@ -23625,7 +23826,7 @@ ${i3}
       return f2 && (m2.getTree = y2), g2 && (m2.getTreePath = y2), n2 = n2.skip(d2 * (l2 - 1)).limit(d2).get(m2), n2;
     } } };
   }
-  function Ws$1(e2) {
+  function Bs$1(e2) {
     return function(t2, n2 = {}) {
       n2 = function(e3, t3 = {}) {
         return e3.customUI = t3.customUI || e3.customUI, e3.parseSystemError = t3.parseSystemError || e3.parseSystemError, Object.assign(e3.loadingOptions, t3.loadingOptions), Object.assign(e3.errorOptions, t3.errorOptions), "object" == typeof t3.secretMethods && (e3.secretMethods = t3.secretMethods), e3;
@@ -23643,32 +23844,32 @@ ${i3}
             const r3 = n3 ? n3({ params: s4 }) : {};
             let i3, o3;
             try {
-              return await K$1(F$1(t3, "invoke"), { ...r3 }), i3 = await e3(...s4), await K$1(F$1(t3, "success"), { ...r3, result: i3 }), i3;
+              return await j$1($$1(t3, "invoke"), { ...r3 }), i3 = await e3(...s4), await j$1($$1(t3, "success"), { ...r3, result: i3 }), i3;
             } catch (e4) {
-              throw o3 = e4, await K$1(F$1(t3, "fail"), { ...r3, error: o3 }), o3;
+              throw o3 = e4, await j$1($$1(t3, "fail"), { ...r3, error: o3 }), o3;
             } finally {
-              await K$1(F$1(t3, "complete"), o3 ? { ...r3, error: o3 } : { ...r3, result: i3 });
+              await j$1($$1(t3, "complete"), o3 ? { ...r3, error: o3 } : { ...r3, result: i3 });
             }
           };
-        }({ fn: async function s4(...h2) {
-          let l2;
+        }({ fn: async function s4(...u2) {
+          let h2;
           a2 && uni.showLoading({ title: r2.title, mask: r2.mask });
-          const d2 = { name: t2, type: u$1, data: { method: c2, params: h2 } };
+          const d2 = { name: t2, type: l$1.OBJECT, data: { method: c2, params: u2 } };
           "object" == typeof n2.secretMethods && function(e3, t3) {
             const n3 = t3.data.method, s5 = e3.secretMethods || {}, r3 = s5[n3] || s5["*"];
             r3 && (t3.secretType = r3);
           }(n2, d2);
           let p2 = false;
           try {
-            l2 = await e2.callFunction(d2);
+            h2 = await e2.callFunction(d2);
           } catch (e3) {
-            p2 = true, l2 = { result: new se$1(e3) };
+            p2 = true, h2 = { result: new te$1(e3) };
           }
-          const { errSubject: f2, errCode: g2, errMsg: m2, newToken: y2 } = l2.result || {};
-          if (a2 && uni.hideLoading(), y2 && y2.token && y2.tokenExpired && (ae$1(y2), X$1(H$1, { ...y2 })), g2) {
+          const { errSubject: f2, errCode: g2, errMsg: m2, newToken: y2 } = h2.result || {};
+          if (a2 && uni.hideLoading(), y2 && y2.token && y2.tokenExpired && (ie$1(y2), Y$1(H$1.REFRESH_TOKEN, { ...y2 })), g2) {
             let e3 = m2;
             if (p2 && o2) {
-              e3 = (await o2({ objectName: t2, methodName: c2, params: h2, errSubject: f2, errCode: g2, errMsg: m2 })).errMsg || m2;
+              e3 = (await o2({ objectName: t2, methodName: c2, params: u2, errSubject: f2, errCode: g2, errMsg: m2 })).errMsg || m2;
             }
             if (a2)
               if ("toast" === i2.type)
@@ -23687,96 +23888,60 @@ ${i3}
                     });
                   }({ title: "提示", content: e3, showCancel: i2.retry, cancelText: "取消", confirmText: i2.retry ? "重试" : "确定" });
                   if (i2.retry && t3)
-                    return s4(...h2);
+                    return s4(...u2);
                 }
               }
-            const n3 = new se$1({ subject: f2, code: g2, message: m2, requestId: l2.requestId });
-            throw n3.detail = l2.result, X$1(B$1, { type: V$1, content: n3 }), n3;
+            const n3 = new te$1({ subject: f2, code: g2, message: m2, requestId: h2.requestId });
+            throw n3.detail = h2.result, Y$1(H$1.RESPONSE, { type: J$1.CLOUD_OBJECT, content: n3 }), n3;
           }
-          return X$1(B$1, { type: V$1, content: l2.result }), l2.result;
+          return Y$1(H$1.RESPONSE, { type: J$1.CLOUD_OBJECT, content: h2.result }), h2.result;
         }, interceptorName: "callObject", getCallbackArgs: function({ params: e3 } = {}) {
           return { objectName: t2, methodName: c2, params: e3 };
         } });
       } });
     };
   }
-  function Hs$1(e2) {
-    return R$1("_globalUniCloudSecureNetworkCache__{spaceId}".replace("{spaceId}", e2.config.spaceId));
+  function Ws$1(e2) {
+    return U$1(Xt$1.replace("{spaceId}", e2.config.spaceId));
   }
-  async function Js$1({ openid: e2, callLoginByWeixin: t2 = false } = {}) {
-    Hs$1(this);
-    throw new Error(`[SecureNetwork] API \`initSecureNetworkByWeixin\` is not supported on platform \`${A$1}\``);
+  async function Hs$1({ openid: e2, callLoginByWeixin: t2 = false } = {}) {
+    Ws$1(this);
+    throw new Error(`[SecureNetwork] API \`initSecureNetworkByWeixin\` is not supported on platform \`${P$1}\``);
   }
-  async function zs$1(e2) {
-    const t2 = Hs$1(this);
-    return t2.initPromise || (t2.initPromise = Js$1.call(this, e2).then((e3) => e3).catch((e3) => {
+  async function Js$1(e2) {
+    const t2 = Ws$1(this);
+    return t2.initPromise || (t2.initPromise = Hs$1.call(this, e2).then((e3) => e3).catch((e3) => {
       throw delete t2.initPromise, e3;
     })), t2.initPromise;
   }
-  function Vs$1(e2) {
+  function zs$1(e2) {
     return function({ openid: t2, callLoginByWeixin: n2 = false } = {}) {
-      return zs$1.call(e2, { openid: t2, callLoginByWeixin: n2 });
+      return Js$1.call(e2, { openid: t2, callLoginByWeixin: n2 });
     };
   }
-  function Gs$1(e2) {
+  function Vs$1(e2) {
     !function(e3) {
-      de$1 = e3;
+      he$1 = e3;
     }(e2);
   }
-  function Ys$1(e2) {
-    const t2 = { getSystemInfo: uni.getSystemInfo, getPushClientId: uni.getPushClientId };
-    return function(n2) {
-      return new Promise((s2, r2) => {
-        t2[e2]({ ...n2, success(e3) {
-          s2(e3);
-        }, fail(e3) {
+  function Gs$1(e2) {
+    const n2 = { getAppBaseInfo: uni.getSystemInfo, getPushClientId: uni.getPushClientId };
+    return function(s2) {
+      return new Promise((r2, i2) => {
+        n2[e2]({ ...s2, success(e3) {
           r2(e3);
+        }, fail(e3) {
+          i2(e3);
         } });
       });
     };
   }
-  let Qs$1 = class Qs extends class {
-    constructor() {
-      this._callback = {};
-    }
-    addListener(e2, t2) {
-      this._callback[e2] || (this._callback[e2] = []), this._callback[e2].push(t2);
-    }
-    on(e2, t2) {
-      return this.addListener(e2, t2);
-    }
-    removeListener(e2, t2) {
-      if (!t2)
-        throw new Error('The "listener" argument must be of type function. Received undefined');
-      const n2 = this._callback[e2];
-      if (!n2)
-        return;
-      const s2 = function(e3, t3) {
-        for (let n3 = e3.length - 1; n3 >= 0; n3--)
-          if (e3[n3] === t3)
-            return n3;
-        return -1;
-      }(n2, t2);
-      n2.splice(s2, 1);
-    }
-    off(e2, t2) {
-      return this.removeListener(e2, t2);
-    }
-    removeAllListener(e2) {
-      delete this._callback[e2];
-    }
-    emit(e2, ...t2) {
-      const n2 = this._callback[e2];
-      if (n2)
-        for (let e3 = 0; e3 < n2.length; e3++)
-          n2[e3](...t2);
-    }
-  } {
+  let Ys$1 = class Ys extends S$1 {
     constructor() {
       super(), this._uniPushMessageCallback = this._receivePushMessage.bind(this), this._currentMessageId = -1, this._payloadQueue = [];
     }
     init() {
-      return Promise.all([Ys$1("getSystemInfo")(), Ys$1("getPushClientId")()]).then(([{ appId: e2 } = {}, { cid: t2 } = {}] = []) => {
+      return Promise.all([Gs$1("getAppBaseInfo")(), Gs$1("getPushClientId")()]).then(([{ appId: e2 } = {}, { cid: t2 } = {}] = []) => {
         if (!e2)
           throw new Error("Invalid appId, please check the manifest.json file");
         if (!t2)
@@ -23832,9 +23997,9 @@ ${i3}
       this._destroy(), this.emit("close");
     }
   };
-  async function Xs$1(e2) {
+  async function Qs$1(e2) {
     {
-      const { osName: e3, osVersion: t3 } = he$1();
+      const { osName: e3, osVersion: t3 } = ce$1();
       "ios" === e3 && function(e4) {
         if (!e4 || "string" != typeof e4)
           return 0;
@@ -23845,16 +24010,16 @@ ${i3}
     const t2 = e2.__dev__;
     if (!t2.debugInfo)
       return;
-    const { address: n2, servePort: s2 } = t2.debugInfo, { address: r2 } = await Et$1(n2, s2);
+    const { address: n2, servePort: s2 } = t2.debugInfo, { address: r2 } = await Ot$1(n2, s2);
     if (r2)
       return t2.localAddress = r2, void (t2.localPort = s2);
     const i2 = console["error"];
     let o2 = "";
-    if ("remote" === t2.debugInfo.initialLaunchType ? (t2.debugInfo.forceRemote = true, o2 = "当前客户端和HBuilderX不在同一局域网下（或其他网络原因无法连接HBuilderX），uniCloud本地调试服务不对当前客户端生效。\n- 如果不使用uniCloud本地调试服务，请直接忽略此信息。\n- 如需使用uniCloud本地调试服务，请将客户端与主机连接到同一局域网下并重新运行到客户端。") : o2 = "无法连接uniCloud本地调试服务，请检查当前客户端是否与主机在同一局域网下。\n- 如需使用uniCloud本地调试服务，请将客户端与主机连接到同一局域网下并重新运行到客户端。", o2 += "\n- 如果在HBuilderX开启的状态下切换过网络环境，请重启HBuilderX后再试\n- 检查系统防火墙是否拦截了HBuilderX自带的nodejs\n- 检查是否错误的使用拦截器修改uni.request方法的参数", 0 === A$1.indexOf("mp-") && (o2 += "\n- 小程序中如何使用uniCloud，请参考：https://uniapp.dcloud.net.cn/uniCloud/publish.html#useinmp"), !t2.debugInfo.forceRemote)
+    if ("remote" === t2.debugInfo.initialLaunchType ? (t2.debugInfo.forceRemote = true, o2 = "当前客户端和HBuilderX不在同一局域网下（或其他网络原因无法连接HBuilderX），uniCloud本地调试服务不对当前客户端生效。\n- 如果不使用uniCloud本地调试服务，请直接忽略此信息。\n- 如需使用uniCloud本地调试服务，请将客户端与主机连接到同一局域网下并重新运行到客户端。") : o2 = "无法连接uniCloud本地调试服务，请检查当前客户端是否与主机在同一局域网下。\n- 如需使用uniCloud本地调试服务，请将客户端与主机连接到同一局域网下并重新运行到客户端。", o2 += "\n- 如果在HBuilderX开启的状态下切换过网络环境，请重启HBuilderX后再试\n- 检查系统防火墙是否拦截了HBuilderX自带的nodejs\n- 检查是否错误的使用拦截器修改uni.request方法的参数", 0 === P$1.indexOf("mp-") && (o2 += "\n- 小程序中如何使用uniCloud，请参考：https://uniapp.dcloud.net.cn/uniCloud/publish.html#useinmp"), !t2.debugInfo.forceRemote)
       throw new Error(o2);
     i2(o2);
   }
-  function Zs$1(e2) {
+  function Xs$1(e2) {
     e2._initPromiseHub || (e2._initPromiseHub = new v$1({ createPromise: function() {
       let t2 = Promise.resolve();
       var n2;
@@ -23867,25 +24032,25 @@ ${i3}
       return t2.then(() => s2.getLoginState()).then((e3) => e3 ? Promise.resolve() : s2.signInAnonymously());
     } }));
   }
-  const er$1 = { tcb: xt$1, tencent: xt$1, aliyun: me$1, private: Ut$1, dcloud: Ut$1, alipay: Wt$1 };
-  let tr$1 = new class {
+  const Zs$1 = { tcb: Pt$1, tencent: Pt$1, aliyun: fe$1, private: Rt$1, dcloud: Rt$1, alipay: Bt$1 };
+  let er$1 = new class {
     init(e2) {
       let t2 = {};
-      const n2 = er$1[e2.provider];
+      const n2 = Zs$1[e2.provider];
       if (!n2)
         throw new Error("未提供正确的provider参数");
       t2 = n2.init(e2), function(e3) {
         const t3 = {};
-        e3.__dev__ = t3, t3.debugLog = "app" === A$1;
-        const n3 = P$1;
+        e3.__dev__ = t3, t3.debugLog = "app" === P$1;
+        const n3 = C$1;
         n3 && !n3.code && (t3.debugInfo = n3);
         const s2 = new v$1({ createPromise: function() {
-          return Xs$1(e3);
+          return Qs$1(e3);
         } });
         t3.initLocalNetwork = function() {
           return s2.exec();
         };
-      }(t2), Zs$1(t2), Xn$1(t2), function(e3) {
+      }(t2), Xs$1(t2), Gn$1(t2), function(e3) {
         const t3 = e3.uploadFile;
         e3.uploadFile = function(e4) {
           return t3.call(this, e4);
@@ -23896,20 +24061,20 @@ ${i3}
             return e3.init(t3).database();
           if (this._database)
             return this._database;
-          const n3 = us$1(hs$1, { uniClient: e3 });
+          const n3 = as$1(cs$1, { uniClient: e3 });
           return this._database = n3, n3;
         }, e3.databaseForJQL = function(t3) {
           if (t3 && Object.keys(t3).length > 0)
             return e3.init(t3).databaseForJQL();
           if (this._databaseForJQL)
             return this._databaseForJQL;
-          const n3 = us$1(hs$1, { uniClient: e3, isJQL: true });
+          const n3 = as$1(cs$1, { uniClient: e3, isJQL: true });
           return this._databaseForJQL = n3, n3;
         };
       }(t2), function(e3) {
-        e3.getCurrentUserInfo = Ks$1, e3.chooseAndUploadFile = js$1.initChooseAndUploadFile(e3), Object.assign(e3, { get mixinDatacom() {
-          return Bs$1(e3);
-        } }), e3.SSEChannel = Qs$1, e3.initSecureNetworkByWeixin = Vs$1(e3), e3.setCustomClientInfo = Gs$1, e3.importObject = Ws$1(e3);
+        e3.getCurrentUserInfo = qs$1, e3.chooseAndUploadFile = Ks$1.initChooseAndUploadFile(e3), Object.assign(e3, { get mixinDatacom() {
+          return $s$1(e3);
+        } }), e3.SSEChannel = Ys$1, e3.initSecureNetworkByWeixin = zs$1(e3), e3.setCustomClientInfo = Vs$1, e3.importObject = Bs$1(e3);
       }(t2);
       return ["callFunction", "uploadFile", "deleteFile", "getTempFileURL", "downloadFile", "chooseAndUploadFile"].forEach((e3) => {
         if (!t2[e3])
@@ -23921,18 +24086,18 @@ ${i3}
           return function(n4) {
             let s2 = false;
             if ("callFunction" === t3) {
-              const e5 = n4 && n4.type || c$1;
-              s2 = e5 !== c$1;
+              const e5 = n4 && n4.type || l$1.DEFAULT;
+              s2 = e5 !== l$1.DEFAULT;
             }
             const r2 = "callFunction" === t3 && !s2, i2 = this._initPromiseHub.exec();
             n4 = n4 || {};
-            const { success: o2, fail: a2, complete: u2 } = ne$1(n4), h2 = i2.then(() => s2 ? Promise.resolve() : K$1(F$1(t3, "invoke"), n4)).then(() => e4.call(this, n4)).then((e5) => s2 ? Promise.resolve(e5) : K$1(F$1(t3, "success"), e5).then(() => K$1(F$1(t3, "complete"), e5)).then(() => (r2 && X$1(B$1, { type: z$1, content: e5 }), Promise.resolve(e5))), (e5) => s2 ? Promise.reject(e5) : K$1(F$1(t3, "fail"), e5).then(() => K$1(F$1(t3, "complete"), e5)).then(() => (X$1(B$1, { type: z$1, content: e5 }), Promise.reject(e5))));
-            if (!(o2 || a2 || u2))
-              return h2;
-            h2.then((e5) => {
-              o2 && o2(e5), u2 && u2(e5), r2 && X$1(B$1, { type: z$1, content: e5 });
+            const { success: o2, fail: a2, complete: c2 } = ee$1(n4), u2 = i2.then(() => s2 ? Promise.resolve() : j$1($$1(t3, "invoke"), n4)).then(() => e4.call(this, n4)).then((e5) => s2 ? Promise.resolve(e5) : j$1($$1(t3, "success"), e5).then(() => j$1($$1(t3, "complete"), e5)).then(() => (r2 && Y$1(H$1.RESPONSE, { type: J$1.CLOUD_FUNCTION, content: e5 }), Promise.resolve(e5))), (e5) => s2 ? Promise.reject(e5) : j$1($$1(t3, "fail"), e5).then(() => j$1($$1(t3, "complete"), e5)).then(() => (Y$1(H$1.RESPONSE, { type: J$1.CLOUD_FUNCTION, content: e5 }), Promise.reject(e5))));
+            if (!(o2 || a2 || c2))
+              return u2;
+            u2.then((e5) => {
+              o2 && o2(e5), c2 && c2(e5), r2 && Y$1(H$1.RESPONSE, { type: J$1.CLOUD_FUNCTION, content: e5 });
             }, (e5) => {
-              a2 && a2(e5), u2 && u2(e5), r2 && X$1(B$1, { type: z$1, content: e5 });
+              a2 && a2(e5), c2 && c2(e5), r2 && Y$1(H$1.RESPONSE, { type: J$1.CLOUD_FUNCTION, content: e5 });
             });
           };
         }(t2[e3], e3)).bind(t2);
@@ -23940,27 +24105,29 @@ ${i3}
     }
   }();
   (() => {
-    const e2 = C$1;
+    const e2 = O$1;
     let t2 = {};
     if (e2 && 1 === e2.length)
-      t2 = e2[0], tr$1 = tr$1.init(t2), tr$1._isDefault = true;
+      t2 = e2[0], er$1 = er$1.init(t2), er$1._isDefault = true;
     else {
-      const t3 = ["auth", "callFunction", "uploadFile", "deleteFile", "getTempFileURL", "downloadFile", "database", "getCurrentUSerInfo", "importObject"];
-      let n2;
-      n2 = e2 && e2.length > 0 ? "应用有多个服务空间，请通过uniCloud.init方法指定要使用的服务空间" : "应用未关联服务空间，请在uniCloud目录右键关联服务空间", t3.forEach((e3) => {
-        tr$1[e3] = function() {
-          return console.error(n2), Promise.reject(new se$1({ code: "SYS_ERR", message: n2 }));
+      const t3 = ["auth", "callFunction", "uploadFile", "deleteFile", "getTempFileURL", "downloadFile"], n2 = ["database", "getCurrentUserInfo", "importObject"];
+      let s2;
+      s2 = e2 && e2.length > 0 ? "应用有多个服务空间，请通过uniCloud.init方法指定要使用的服务空间" : "应用未关联服务空间，请在uniCloud目录右键关联服务空间", [...t3, ...n2].forEach((e3) => {
+        er$1[e3] = function() {
+          if (console.error(s2), -1 === n2.indexOf(e3))
+            return Promise.reject(new te$1({ code: "SYS_ERR", message: s2 }));
+          console.error(s2);
         };
       });
     }
-    if (Object.assign(tr$1, { get mixinDatacom() {
-      return Bs$1(tr$1);
-    } }), Ns$1(tr$1), tr$1.addInterceptor = M$1, tr$1.removeInterceptor = q$1, tr$1.interceptObject = j$1, uni.__uniCloud = tr$1, "app" === A$1) {
-      const e3 = U$1();
-      e3.uniCloud = tr$1, e3.UniCloudError = se$1;
+    if (Object.assign(er$1, { get mixinDatacom() {
+      return $s$1(er$1);
+    } }), Ls$1(er$1), er$1.addInterceptor = F$1, er$1.removeInterceptor = K$1, er$1.interceptObject = B$1, uni.__uniCloud = er$1, "app" === P$1) {
+      const e3 = D$1();
+      e3.uniCloud = er$1, e3.UniCloudError = te$1;
     }
   })();
-  var nr$1 = tr$1;
+  var tr$1 = er$1;
   const en$1 = {
     "uni-load-more.contentdown": "Pull up to show more",
     "uni-load-more.contentrefresh": "loading...",
@@ -24145,10 +24312,10 @@ ${i3}
       )) : vue.createCommentVNode("v-if", true)
     ]);
   }
-  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-9245e42c"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-load-more/components/uni-load-more/uni-load-more.vue"]]);
+  const __easycom_0$1 = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-9245e42c"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-load-more/components/uni-load-more/uni-load-more.vue"]]);
   const _sfc_main$7 = {
     name: "uniDataChecklist",
-    mixins: [nr$1.mixinDatacom || {}],
+    mixins: [tr$1.mixinDatacom || {}],
     emits: ["input", "update:modelValue", "change"],
     props: {
       mode: {
@@ -24706,7 +24873,7 @@ ${i3}
       /* STYLE */
     );
   }
-  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-2f788efd"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue"]]);
+  const __easycom_0 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6], ["__scopeId", "data-v-2f788efd"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue"]]);
   const _sfc_main$6 = {
     name: "uniCollapseItem",
     props: {
@@ -24954,7 +25121,7 @@ ${i3}
       )
     ]);
   }
-  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-3d2dde9f"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-collapse/components/uni-collapse-item/uni-collapse-item.vue"]]);
+  const __easycom_1 = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5], ["__scopeId", "data-v-3d2dde9f"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-collapse/components/uni-collapse-item/uni-collapse-item.vue"]]);
   const _sfc_main$5 = {
     name: "uniCollapse",
     emits: ["change", "activeItem", "input", "update:modelValue"],
@@ -25071,7 +25238,7 @@ ${i3}
       vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
     ]);
   }
-  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-3f050360"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/uni_modules/uni-collapse/components/uni-collapse/uni-collapse.vue"]]);
+  const __easycom_2 = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4], ["__scopeId", "data-v-3f050360"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/uni_modules/uni-collapse/components/uni-collapse/uni-collapse.vue"]]);
   const _sfc_main$4 = {
     __name: "career",
     setup(__props, { expose: __expose }) {
@@ -25250,7 +25417,7 @@ ${i3}
       ])
     ]);
   }
-  const career = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-1daff894"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/auth/components/career.vue"]]);
+  const career = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-1daff894"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/auth/components/career.vue"]]);
   const _imports_0$2 = "/static/auth/remark.png";
   const _imports_2 = "/static/auth/edit.png";
   const _sfc_main$3 = {
@@ -25794,7 +25961,7 @@ ${i3}
       ])
     ]);
   }
-  const certificate = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-67319c65"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/auth/components/certificate.vue"]]);
+  const certificate = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$2], ["__scopeId", "data-v-67319c65"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/auth/components/certificate.vue"]]);
   const _imports_0$1 = "/static/auth/tip.svg";
   const _sfc_main$2 = {
     __name: "auth",
@@ -25966,7 +26133,7 @@ ${i3}
       ])
     ]);
   }
-  const PagesAuthAuth = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-98e148d1"], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/auth/auth.vue"]]);
+  const PagesAuthAuth = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-98e148d1"], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/auth/auth.vue"]]);
   const _imports_0 = "/static/auth/current-address.png";
   const _sfc_main$1 = {
     data() {
@@ -26168,7 +26335,7 @@ ${i3}
       ], 8, ["scroll-into-view"])
     ]);
   }
-  const PagesAuthCityChoose = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/pages/auth/cityChoose.vue"]]);
+  const PagesAuthCityChoose = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render], ["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/pages/auth/cityChoose.vue"]]);
   __definePage("pages/login/login", PagesLoginLogin);
   __definePage("pages/confide/index", PagesConfideIndex);
   __definePage("pages/confide/detail", PagesConfideDetail);
@@ -26318,7 +26485,7 @@ ${i3}
       httpImageUrl: "https://odd.dzjob.net/profile/upload"
     }
   };
-  const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "D:/Project/jiedan/uniapp/uniapp-project-z-main/uniapp-project-z-main/App.vue"]]);
+  const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["__file", "D:/Project/jiedan/uniapp/wheatconfide-uniapp/App.vue"]]);
   var define_process_env_default = {};
   var e, t;
   !function(e5) {

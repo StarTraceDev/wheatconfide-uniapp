@@ -4,7 +4,7 @@
     "iPhone",
     "iPad"
   ],
-  "id": "__UNI__7FF0662",
+  "id": "__UNI__3262174",
   "name": "uniapp-project-z",
   "version": {
     "name": "1.0.0",
@@ -190,7 +190,7 @@
     "uni-app": {
       "control": "uni-v3",
       "vueVersion": "3",
-      "compilerVersion": "4.66",
+      "compilerVersion": "4.75",
       "nvueCompiler": "uni-app",
       "renderer": "auto",
       "nvue": {
