@@ -21,7 +21,9 @@
 					</view>
 					<view class="form-item">
 						<view class="label require">身份证号</view>
-						<view class="content">{{idNum}}</view>
+						<view class="content">
+							<input type="text" v-model="consultantInfo.idNum" />
+						</view>
 					</view>
 					<view class="form-item">
 						<view class="label require">职业</view>
@@ -86,6 +88,7 @@
 	} from 'vue';
 	import cityJson from "@/static/city-json/city-list.js"
 	const cityList = ref(cityJson);
+	const consultantInfo = ref({});
 	const name = ref('张三');
 	const idNum = ref('342312199601122426');
 	const popup = ref(null);
