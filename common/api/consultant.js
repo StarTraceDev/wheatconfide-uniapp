@@ -7,4 +7,7 @@ export const getConsultantList = (params, config = {}) => http.post('/api/consul
 export const getConsultantById = (params, config = {}) => http.post('/api/consultant/consultant/getConsultantById',
 	params, config)
 	
+export const saveConsultant = (params, config = {}) => http.post('/api/consultant/consultant/saveConsultant',
+	params, config)
+	
 	
