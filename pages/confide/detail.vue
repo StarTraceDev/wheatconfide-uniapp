@@ -287,6 +287,7 @@
 		onMounted,
 		ref
 	} from 'vue';
+	import { onLoad,onBackPress } from '@dcloudio/uni-app'
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
@@ -314,6 +315,10 @@
 	const tabId = ref("#tab-1");
 	const consultantInfo = ref();
 	const tab5 = ref(null);
+	onLoad((options) => {
+		getConsultantInfo(options.id)
+		
+	})
 	// 获取路由实例，用于获取参数
 	const route = useRoute();
 	onMounted(() => {
@@ -336,7 +341,6 @@
 			uni.createSelectorQuery().in(this).select(".tab9").boundingClientRect((data) => {
 				detailOffset9.value = data;
 			}).exec();
-			getConsultantInfo(route.query.id)
 		})
 	});
 	const backFn = () => {

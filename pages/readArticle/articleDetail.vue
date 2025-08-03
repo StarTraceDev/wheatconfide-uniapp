@@ -93,6 +93,7 @@
 		ref,
 		reactive
 	} from 'vue';
+	import { onLoad,onBackPress } from '@dcloudio/uni-app'
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
@@ -112,6 +113,7 @@
 	const route = useRoute();
 	const tabActive = ref(0);
 	const replyContent = ref("");
+	let id=ref();
 	const data = reactive({
 		listParams:{
 			"current": 1,
@@ -183,13 +185,13 @@
 
 	const getInfo = async () => {
 		let res = await getArticleDetail({
-			id: route.query.id
+			id: id.value
 		});
 		info.value = res.data;
 	}
 	
 	const getList = async () => {
-		data.listParams.params.articleId = route.query.id
+		data.listParams.params.articleId = id.value
 		let res = await getCommentById(data.listParams);
 		
 		commentList.value = res.data.records;
@@ -198,7 +200,7 @@
 	const onSaveComment = async () => {
 		let res = await saveComment({
 			"content": replyContent.value,
-			"articleId": route.query.id
+			"articleId": id.value
 		});
 		replyContent.value=""
 		uni.showToast({
@@ -208,10 +210,14 @@
 		});
 		console.log(res)
 	}
-	onMounted(() => {
+	
+	onLoad((options) => {
+		id.value = options.id
 		getInfo();
-		
 		getList();
+	})
+	onMounted(() => {
+	
 	})
 </script>
 

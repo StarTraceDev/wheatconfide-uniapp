@@ -313,6 +313,7 @@
 		onMounted,
 		ref,
 	} from 'vue';
+	import { onLoad,onBackPress } from '@dcloudio/uni-app'
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
@@ -345,6 +346,11 @@
 	});
 	// 获取路由实例，用于获取参数
 	const route = useRoute();
+	
+	onLoad((options) => {
+		getConsultantInfo(options.id)
+		
+	})
 	onMounted((e) => {
 		nextTick(() => {
 			uni.createSelectorQuery().in(this).select(".detail-item-line-5").boundingClientRect((data) => {
@@ -367,7 +373,6 @@
 				detailOffset10.value = data;
 			}).exec();
 
-			getConsultantInfo(route.query.id)
 		})
 	});
 	const backFn = () => {
