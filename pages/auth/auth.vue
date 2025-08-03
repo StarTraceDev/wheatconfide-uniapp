@@ -65,16 +65,26 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
+	
+	import {
+		getConsultantById
+	} from "@/common/api/consultant.js";
+	
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	import idCard from './components/idCard.vue';
 	import career from './components/career.vue';
 	import certificate from './components/certificate.vue';
+	import { constant } from 'lodash-es';
 	const currentComponent = ref(idCard);
 
 	const step = ref(1);
 	const popup = ref(null);
 
+	const consultantInfo = ref({
+		name: '',
+		idNum: ''
+	});
 
 	const nextStepHandler = () => {
 		step.value = step.value + 1;
@@ -96,7 +106,16 @@
 	})
 
 	const examineHandler = () => {
-
+		console.log(consultantInfo.value)
+		
+		// let res = await saveConsultant(consultantInfo.value)
+		
+		uni.showToast({
+		    title: '发布成功',
+		    icon: 'none', // 可选值 'success', 'loading', 'none'
+		    duration: 2000 // 持续时长，单位ms
+		});
+		console.log(res)
 	}
 </script>
 

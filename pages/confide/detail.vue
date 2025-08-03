@@ -43,7 +43,7 @@
 						</view>
 					</view>
 					<view class="detail-item-line-2">
-						<text>{{consultantInfo.address}} | {{consultantInfo.education}} | 80后 | {{consultantInfo.constellation}}</text>
+						<text>{{consultantInfo.address}} | {{consultantInfo.education}} | 80后{{consultantInfo.age}} | {{consultantInfo.constellation}}</text>
 					</view>
 					<view class="detail-item-line-3">
 						倾听师寄语倾听师寄语倾听师寄语倾听师寄语。

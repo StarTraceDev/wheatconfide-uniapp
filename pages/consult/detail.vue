@@ -34,14 +34,14 @@
 					<view class="detail-item-line-1">
 						<view class="name">
 							<text class="name-a">{{consultantInfo.consultantName}}</text>
-							<text class="name-b"><!-- {{consultantInfo.major}} -->aaaa</text>
-							<text class="name-c"><!-- {{consultantInfo.age}} -->1111</text>
+							<text class="name-b">{{consultantInfo.major}}</text>
+							<text class="name-c">{{consultantInfo.age}}</text>
 						</view>
 						<view class="money"><text
-								class="num"><!-- {{consultantInfo.consultantPrice}} -->111</text><text>元/50分钟</text></view>
+								class="num">{{consultantInfo.consultantPrice}}</text><text>元/50分钟</text></view>
 					</view>
 					<view class="detail-item-line-2">
-						<text>国家二级心理咨询师 | 师范大学教育 | 巨蟹座</text>
+						<text>国家二级心理咨询师 | {{consultantInfo.school}} {{consultantInfo.major}} | {{consultantInfo.constellation}}</text>
 					</view>
 					<view class="detail-item-line-3">
 						<view class="address">
@@ -141,10 +141,19 @@
 					<view class="detail-item-line-6 detail-item-line-8 tab8" id="tab-3">
 						<view class="content">
 							<view class="info">
+								<view class="certificate-detail" v-for="(item,index) in consultantInfo.careerList" :key="index">
+									<view class="tag">资质</view>
+									<view class="tag-info">
+										<view class="tag-title">{{item.career}}</view>
+										<view class="certificate-info">
+											<view>发证时间：{{item.startTime}} </view>
+										</view>
+									</view>
+								</view>
 								<view class="certificate-detail">
 									<view class="tag">资质</view>
 									<view class="tag-info">
-										<view class="tag-title"><!-- {{consultantInfo.career}} -->1123</view>
+										<view class="tag-title">123</view>
 										<view class="certificate-info">
 											<view>发证机构：国家心理培训</view>
 											<view>发证时间：2025-02-05 </view>
@@ -155,7 +164,7 @@
 								<view class="eduication-detail">
 									<view class="tag">学历</view>
 									<view class="tag-info">
-										<view class="tag-title"><!-- {{consultantInfo.education}} -->11111</view>
+										<view class="tag-title">123</view>
 										<view class="eduication-info">
 											<view></view>
 											<view>发证时间：2025-02-05 </view>

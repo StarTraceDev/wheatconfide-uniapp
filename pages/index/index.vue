@@ -379,7 +379,7 @@
 	}
 	
 	onMounted(() => {
-		// getUserlnfo()
+		getUserlnfo()
 		
 		getList()
 	});
