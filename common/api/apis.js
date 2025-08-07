@@ -3,7 +3,7 @@ import http from "@/utils/request.js"
 export const quickReg = (params, config = {}) => http.post('/api/user/quickReg',
 	params, config)
 
-export const userlnfo = (params, config = {}) => http.post('/api/user/userInfo',
+export const getUserlnfo = (params, config = {}) => http.post('/api/user/userInfo',
 	params, config)
 
 

@@ -6,6 +6,9 @@ export const getArticleList = (params, config = {}) => http.post('/api/article/a
 export const getArticleDetail = (params, config = {}) => http.post('/api/article/article/getArticleDetail',
 	params, config)
 
+export const saveArticle = (params, config = {}) => http.post('/api/article/article/saveArticle',
+	params, config)
+	
 export const getCommentById = (params, config = {}) => http.post('/api/comment/comment/getCommentById',
 	params, config)
 	
