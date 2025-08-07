@@ -17,12 +17,14 @@
 				<view class="id-card-form-content">
 					<view class="form-item">
 						<view class="label require">姓名</view>
-						<view class="content">{{name}}</view>
+						<view class="content">
+							<input type="text" v-model="localData.consultantName" placeholder="请输入姓名" />
+						</view>
 					</view>
 					<view class="form-item">
 						<view class="label require">身份证号</view>
 						<view class="content">
-							<input type="text" v-model="consultantInfo.idNum" />
+							<input type="text" v-model="localData.idNum" />
 						</view>
 					</view>
 					<view class="form-item">
@@ -84,12 +86,11 @@
 <script setup>
 	import {
 		onMounted,
-		ref
+		ref,
+		computed
 	} from 'vue';
 	import cityJson from "@/static/city-json/city-list.js"
 	const cityList = ref(cityJson);
-	const consultantInfo = ref({});
-	const name = ref('张三');
 	const idNum = ref('342312199601122426');
 	const popup = ref(null);
 	const cityPopup = ref(null);
@@ -114,6 +115,17 @@
 	const cityClick = () => {
 
 	}
+
+	const props = defineProps({
+		modelValue: Object
+	});
+
+	const emit = defineEmits(['update:modelValue']);
+
+	const localData = computed({
+		get: () => props.modelValue,
+		set: (value) => emit('update:modelValue', value)
+	});
 </script>
 
 <style scoped lang="scss">
@@ -286,6 +298,7 @@
 				padding: 0rpx 36rpx;
 				height: 490rpx;
 				overflow-y: scroll;
+
 				.career-popup-content-item {
 					color: rgba(0, 0, 0, 0.6);
 					font-size: 28rpx;

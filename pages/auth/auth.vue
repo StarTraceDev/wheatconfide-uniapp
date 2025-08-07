@@ -24,10 +24,10 @@
 							</view>
 						</view>
 						<view class="handler-components-box">
-							<idCard v-show="step==1"></idCard>
+							<idCard v-show="step == 1"  v-model="formData.idCard"></idCard>
 							<career v-show="step==2"></career>
 							<certificate v-show="step==3"></certificate>
-							
+
 							<view class="footer">
 								<view class="tip">
 									<image src="/static/auth/tip.svg" class="img"></image>个人信息安全保障中
@@ -35,12 +35,12 @@
 								<view class="btn" v-if="step==1">
 									<view class="next" @click="nextStepHandler">填好了，下一步</view>
 								</view>
-							
+
 								<view class="btn step-2" v-if="step==2">
 									<view class="next prev" @click="prevStepHandler">上一步</view>
 									<view class="next" @click="nextStepHandler">填好了，下一步</view>
 								</view>
-							
+
 								<view class="btn step-2" v-if="step==3">
 									<view class="next prev" @click="prevStepHandler">上一步</view>
 									<view class="next" @click="examineHandler">提交审核</view>
@@ -52,7 +52,7 @@
 				</view>
 			</scroll-view>
 		</view>
-		
+
 	</view>
 </template>
 <script setup>
@@ -65,25 +65,41 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
-	
+
 	import {
-		getConsultantById
+		getConsultantById,
+		saveConsultant
 	} from "@/common/api/consultant.js";
-	
+
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	import idCard from './components/idCard.vue';
 	import career from './components/career.vue';
 	import certificate from './components/certificate.vue';
-	import { constant } from 'lodash-es';
+	import {
+		constant
+	} from 'lodash-es';
 	const currentComponent = ref(idCard);
 
 	const step = ref(1);
 	const popup = ref(null);
 
-	const consultantInfo = ref({
-		name: '',
-		idNum: ''
+	// 集中管理表单数据
+	const formData = ref({
+		idCard: {
+			consultantName: '',
+			idNum: '',
+			// 其他身份证信息字段
+		},
+		career: {
+			profession: '',
+			experience: '',
+			// 其他职业信息字段
+		},
+		certificate: {
+			files: [],
+			// 其他证书字段
+		}
 	});
 
 	const nextStepHandler = () => {
@@ -105,15 +121,20 @@
 		}
 	})
 
-	const examineHandler = () => {
-		console.log(consultantInfo.value)
-		
-		// let res = await saveConsultant(consultantInfo.value)
-		
+	const examineHandler = async () => {
+		const submitData = {
+			...formData.value.idCard,
+			...formData.value.career,
+			certificates: formData.value.certificate.files
+		};
+
+		console.log(submitData);
+		let res = await saveConsultant(submitData);
+
 		uni.showToast({
-		    title: '发布成功',
-		    icon: 'none', // 可选值 'success', 'loading', 'none'
-		    duration: 2000 // 持续时长，单位ms
+			title: '发布成功',
+			icon: 'none', // 可选值 'success', 'loading', 'none'
+			duration: 2000 // 持续时长，单位ms
 		});
 		console.log(res)
 	}

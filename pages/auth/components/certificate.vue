@@ -263,8 +263,6 @@
 		educationLists.value.splice(index, 1);
 	}
 
-
-
 	const addTrainListsHandler = () => {
 		trainLists.value.push({
 			startDate: null,
