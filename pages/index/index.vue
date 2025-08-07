@@ -122,7 +122,7 @@
 				</view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :show-scrollbar="false">
 					<view class="list">
-						<ConsultTeacherListItem class="list-item" v-for="i in 10" @click="openTeacherFn(1)">
+						<ConsultTeacherListItem class="list-item" v-for="i in data.consultantList" @click="openTeacherFn(1)">
 						</ConsultTeacherListItem>
 					</view>
 				</scroll-view>
@@ -232,8 +232,11 @@
 </template>
 <script setup>
 	import {
-		userlnfo
+		getUserlnfo
 	} from "@/common/api/apis.js"
+	import {
+		getConsultantList
+	} from "@/common/api/consultant.js"
 	import {
 		getArticleList
 	} from "@/common/api/article.js"
@@ -261,7 +264,8 @@
 				
 			}
 		},
-		list:[]
+		consultantList: [],
+		list: []
 	})
 	let iconList = ref([{
 		txt: "人际关系",
@@ -334,7 +338,7 @@
 	const openTeacherFn = (type) => {
 		let url = type == 1 ? '/pages/consult/detail' : '/pages/confide/detail'
 		uni.navigateTo({
-			url
+			url: url + '?id=1'
 		})
 	}
 
@@ -360,10 +364,10 @@
 	/**
 	 * 获取当前用户信息
 	 */
-	const getUserlnfo = async () => {
-		let res = await userlnfo();
+	const getlnfo = async () => {
+		let res = await getUserlnfo();
 		globalStore.setUserInfo(res.data);
-		// console.log(res)
+		console.log(res)
 	}
 	
 	const openArticleDetailFn = (item) => {
@@ -372,14 +376,20 @@
 		})
 	}
 	
+	const getConsultant = async () => {
+		let res = await getConsultantList(data.listParams);
+		data.consultantList = res.data.records
+	}
+	
 	const getList = async () => {
 		let res = await getArticleList(data.listParams);
 		data.list = res.data.records
-		console.log('========================')
 	}
 	
 	onMounted(() => {
-		getUserlnfo()
+		getlnfo()
+		
+		getConsultant()
 		
 		getList()
 	});

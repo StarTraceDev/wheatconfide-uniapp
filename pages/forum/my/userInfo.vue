@@ -23,7 +23,9 @@
 					<view class="content-item">
 						<view class="label">昵称</view>
 						<view class="content">
-							<text class="txt">小鲸鱼</text>
+							<text class="txt">
+								<input type="text" v-model="userlnfo.realName" />
+							</text>
 						</view>
 					</view>
 					<view class="content-item">
@@ -65,6 +67,7 @@
 					</view>
 				</view>
 			</view>
+			<button type="primary" @click="onUpdateUser">提交</button>
 		</view>
 
 		<uni-popup ref="sexPopupRef" type="center" class="sexPopup">
@@ -86,10 +89,15 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		onMounted
 	} from 'vue';
-
-
+	import {
+		getUserlnfo
+	} from "@/common/api/apis.js"
+	import {
+		updateUser
+	} from "@/common/api/user.js"
 	const picUrl = ref("");
 	const nickName = ref("");
 	const birthDate = ref("");
@@ -115,6 +123,32 @@
 	const openPopupHandler = (type) => {
 		type == 1 ? sexPopupRef.value.open() : statusPopupRef.value.open();
 	}
+	
+	const userlnfo = ref({});
+	
+	/**
+	 * 获取当前用户信息
+	 */
+	const getlnfo = async () => {
+		let res = await getUserlnfo();
+		userlnfo.value = res.data;
+		console.log(res)
+	}
+	
+	const onUpdateUser = async () => {
+		let res = await updateUser(userlnfo.value);
+		
+		uni.showToast({
+		    title: '发布成功',
+		    icon: 'none', // 可选值 'success', 'loading', 'none'
+		    duration: 2000 // 持续时长，单位ms
+		});
+		console.log(res)
+	}
+	
+	onMounted(() => {
+		getlnfo()
+	});
 </script>
 
 <style lang="scss" scoped>

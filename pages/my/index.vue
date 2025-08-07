@@ -8,9 +8,9 @@
 				<view class="user-info-content">
 					<image src="@/static/my/profile.png" class="profile"></image>
 					<view>
-						<view class="nick-name">大石头<uni-icons type="right" size="16"></uni-icons></view>
+						<view class="nick-name" @click="toUserInfo">{{userlnfo.realName}}<uni-icons type="right" size="16"></uni-icons></view>
 						<view class="id-num">
-							<text>ID：12367263732</text>
+							<text>ID：{{userlnfo.id}}</text>
 							<image src="/static/my/copy.png" class="copy"></image>
 							</view>
 					</view>
@@ -26,7 +26,7 @@
 					<view class="num">401</view>
 					<view class="txt">我的咨询</view>
 				</view>
-				<view class="item">
+				<view class="item" @click="toPublish">
 					<view class="num">20</view>
 					<view class="txt">我的发布</view>
 				</view>
@@ -95,6 +95,12 @@
 							<image src="/static/my/setting.png"></image> <text>设置</text>
 						</view>
 					</view>
+					<view class="other-item" @click="toLogout">
+						<view class="item-left">
+							<image src="/static/my/setting.png"></image> 
+							<text>退出登录</text>
+						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -103,9 +109,12 @@
 
 <script setup>
 	import {
-		ref
+		ref,
+		onMounted
 	} from 'vue';
-
+	import {
+		getUserlnfo
+	} from "@/common/api/apis.js"
 	const gridList = ref([{
 		url: "/static/my/grid-1.png",
 		txt: "咨询订单"
@@ -132,12 +141,44 @@
 		txt: "邀请有礼"
 	}])
 	
+	const toUserInfo=()=>{
+		uni.navigateTo({
+			url:"/pages/forum/my/userInfo"
+		})
+	}
+	
+	const toPublish=()=>{
+		uni.navigateTo({
+			url:"/pages/forum/my/my"
+		})
+	}
 	
 	const settledFn=()=>{
 		uni.navigateTo({
 			url:"/pages/settled/settled"
 		})
 	}
+	
+	const toLogout=()=>{
+		uni.navigateTo({
+			url:"/pages/login/login"
+		})
+	}
+	
+	const userlnfo = ref({});
+	
+	/**
+	 * 获取当前用户信息
+	 */
+	const getlnfo = async () => {
+		let res = await getUserlnfo();
+		userlnfo.value = res.data;
+		console.log(res)
+	}
+	
+	onMounted(() => {
+		getlnfo()
+	});
 </script>
 
 <style lang="scss" scoped>

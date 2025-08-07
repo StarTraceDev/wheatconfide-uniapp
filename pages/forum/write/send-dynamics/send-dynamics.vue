@@ -6,7 +6,7 @@
 				<uni-icons type="left" size="24" @click="backFn"></uni-icons>
 			</template>
 			<template v-slot:right>
-				<view class="right" @click="onSaveComment">
+				<view class="right" @click="onSaveArticle">
 					发布
 				</view>
 			</template>
@@ -45,8 +45,8 @@
 	} from 'vue';
 	
 	import {
-		saveEmotion
-	} from "@/common/api/worry.js"
+		saveArticle
+	} from "@/common/api/article.js"
 	
 	const backFn = () => {
 		uni.navigateBack({
@@ -55,6 +55,7 @@
 	}
 
 	const content = ref("");
+	const imageUrl = ref("");
 	const tagContent = ref({
 		id: null,
 		label: '添加话题'
@@ -65,6 +66,19 @@
 			count: 1,
 			success: function(res) {
 				imageArr.value.push(res.tempFilePaths[0]);
+				
+				uni.uploadFile({
+					url: 'https://ceshi.maimiaoqingsu.com/api/common/upload',
+					filePath: res.tempFilePaths[0],
+					name: 'file',
+					header: {
+						"token": uni.getStorageSync('token')
+					},
+					success: (res) => {
+						console.log(JSON.parse(res.data));
+						imageUrl.value = JSON.parse(res.data).data.url
+					}
+				});
 			}
 		})
 	}
@@ -79,11 +93,12 @@
 		})
 	}
 	
-	const onSaveComment = async () => {
-		let res = await saveEmotion({
-			"content": content.value
+	const onSaveArticle = async () => {
+		let res = await saveArticle({
+			"content": content.value,
+			"imageUrl": imageUrl.value 
 		});
-		// replyContent.value=""
+		
 		uni.showToast({
 		    title: '发布成功',
 		    icon: 'none', // 可选值 'success', 'loading', 'none'

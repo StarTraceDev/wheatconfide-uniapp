@@ -8,9 +8,9 @@
 				<view class="user-info-content">
 					<image src="@/static/my/profile.png" class="profile"></image>
 					<view>
-						<view class="nick-name">{{ userlnfo1.id}}</view>
+						<view class="nick-name">{{userlnfo1.realName}}</view>
 						<view class="id-num">
-							<text>ID：12367263732</text>
+							<text>ID：{{userlnfo1.id}}</text>
 						</view>
 					</view>
 				</view>
@@ -58,7 +58,7 @@
 </template>
 <script setup>
 	import {
-		userlnfo
+		getUserlnfo
 	} from "@/common/api/apis.js"
 	import {
 		nextTick,
@@ -116,14 +116,12 @@
 	/**
 	 * 获取当前用户信息
 	 */
-	const getUserlnfo = async () => {
-		let res = await userlnfo();
+	const getlnfo = async () => {
+		let res = await getUserlnfo();
 		userlnfo1.value = res.data;
-		globalStore.setUserInfo(res.data);
-		console.log(res.data)
 	}
 	onMounted(() => {
-		getUserlnfo()
+		getlnfo()
 	});
 </script>
 <style lang="scss" scoped>

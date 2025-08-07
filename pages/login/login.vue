@@ -28,7 +28,7 @@
 						placeholder-class="msg" maxlength="11" /></view>
 				<view class="code" v-if="type==1">
 					<input class="code-input" v-model="state.code" placeholder="请输入验证码" placeholder-class="msg" />
-					<text class="send-code" @click="onSendSms">获取验证码</text>
+					<text class="send-code" :disabled="disabled" @click="onSendSms">{{btnText}}</text>
 				</view>
 				<view class="psd" v-else><input class="uni-input" v-model="state.password" placeholder="请输入密码"
 						placeholder-class="msg" />
@@ -94,10 +94,32 @@
 	 * 点击获取验证码
 	 */
 	const onSendSms = async () => {
+		if (disabled.value) return;
+		
+		getCurrentDown();
+
 		let res = await sendSms({
 			phone: state.value.userName
 		})
 		console.log(res)
+	}
+
+	const disabled = ref(false);
+	const btnText = ref('获取验证码');
+	const second = ref(60);
+
+	const getCurrentDown = () => {
+		disabled.value = true;
+		var interval = setInterval(() => {
+			btnText.value = second.value + 's 重新获取';
+			second.value--;
+			if (second.value == 0) {
+				clearInterval(interval);
+				second.value = 60;
+				btnText.value = '获取验证码';
+				disabled.value = false;
+			}
+		}, 1000);
 	}
 </script>
 
