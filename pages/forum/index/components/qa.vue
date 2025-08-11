@@ -20,16 +20,16 @@
 		</view>
 		<view class="forum-index-list">
 			<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
-				<view class="forum-index-list-item" v-for="(item,index) in data.list" :key="index">
+				<view class="forum-index-list-item" v-for="i in data.list" :key="index" @click="openQaDetailFn(i.id)">
 					<view class="question">
 						<image src="/static/forum/question.svg" class="img"></image>
-						<text class="txt">{{item.title}}</text>
+						<text class="txt">{{i.title}}</text>
 					</view>
 					<view class="item-header">
 						<view class="item-header-left">
 							<view class="header-pic">
 								<image src="/static/my/profile.png" class="img"></image>
-								<view class="name">张三</view>
+								<view class="name">{{i.realName}}</view>
 								<text class="tip">咨询师</text>
 							</view>
 						</view>
@@ -102,51 +102,6 @@
 		isZan: 0,
 		zanNum: 536,
 		isFollow: 0
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 1,
-		zanNum: 536,
-		isFollow: 1
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 1
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 1
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 0
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 0
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 0
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 0
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 0
-	}, {
-		content: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",
-		isZan: 0,
-		zanNum: 536,
-		isFollow: 0
 	}]);
 
 	const openShare = () => {
@@ -156,6 +111,13 @@
 	const getList = async () => {
 		let res = await getAnswerList(data.listParams);
 		data.list=res.data.records
+	}
+	
+	const openQaDetailFn = (item) => {
+		console.log('====================' + item)
+		uni.navigateTo({
+			url: "/pages/forum/index/qaDetail?id="+item
+		})
 	}
 	
 	onMounted(()=>{

@@ -66,9 +66,9 @@
 	const store = useGlobalDataStore();
 	let type = ref(1);
 	const state = ref({
-		"userName": "",
-		"password": "",
-		"code": ""
+		"userName": "18805340665",
+		"password": "123456",
+		"code": "6666"
 	})
 
 	const changeLoginTypeFn = (val) => {

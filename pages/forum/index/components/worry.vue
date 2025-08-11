@@ -14,7 +14,7 @@
 								<image src="/static/my/profile.png" class="img"></image>
 							</view>
 							<view class="header-info">
-								<view class="name">张三</view>
+								<view class="name">{{item.realName}}</view>
 								<view class="time">52分钟前</view>
 							</view>
 						</view>

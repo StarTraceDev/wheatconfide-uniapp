@@ -17,7 +17,8 @@
 				</view>
 
 				<view class="change-user-box">
-					<view class="change-user">用户<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
+					<view class="change-user">用户
+						<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
 					</view>
 				</view>
 			</view>

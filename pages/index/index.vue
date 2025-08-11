@@ -122,7 +122,7 @@
 				</view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :show-scrollbar="false">
 					<view class="list">
-						<ConsultTeacherListItem class="list-item" v-for="i in data.consultantList" @click="openTeacherFn(1)">
+						<ConsultTeacherListItem class="list-item" :info="i" v-for="i in data.consultantList" @click="openTeacherFn(1, i.id)">
 						</ConsultTeacherListItem>
 					</view>
 				</scroll-view>
@@ -202,7 +202,7 @@
 					</view>
 				</view>
 				<view class="forum-list">
-					<ForumItem v-for="i in 10" class="forum-content"></ForumItem>
+					<ForumItem :info="i" v-for="i in data.answerlist" class="forum-content"></ForumItem>
 				</view>
 			</view>
 			<view class="remark-box">
@@ -241,6 +241,9 @@
 		getArticleList
 	} from "@/common/api/article.js"
 	import {
+		getAnswerList
+	} from "@/common/api/answer.js"
+	import {
 		ref,
 		onMounted,
 		reactive
@@ -265,7 +268,8 @@
 			}
 		},
 		consultantList: [],
-		list: []
+		list: [],
+		answerlist: []
 	})
 	let iconList = ref([{
 		txt: "人际关系",
@@ -335,10 +339,10 @@
 		})
 	}
 
-	const openTeacherFn = (type) => {
+	const openTeacherFn = (type, id) => {
 		let url = type == 1 ? '/pages/consult/detail' : '/pages/confide/detail'
 		uni.navigateTo({
-			url: url + '?id=1'
+			url: url + '?id=' + id
 		})
 	}
 
@@ -386,12 +390,19 @@
 		data.list = res.data.records
 	}
 	
+	const getAnswer = async () => {
+		let res = await getAnswerList(data.listParams);
+		data.answerlist=res.data.records
+	}
+	
 	onMounted(() => {
 		getlnfo()
 		
 		getConsultant()
 		
 		getList()
+		
+		getAnswer()
 	});
 </script>
 <style lang="scss" scoped>

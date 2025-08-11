@@ -265,10 +265,10 @@
 				<image src="@/static/common/contect.png"></image>
 				<text>客服</text>
 			</view>
-			<view class="message">
+			<view class="message" @click="toChat">
 				<text class="txt">私信ta</text>
 			</view>
-			<view class="reservation">
+			<view class="reservation" @click="openPopupFn">
 				<text>预约咨询</text>
 				<text class="remark">（语音/视频）</text>
 			</view>
@@ -309,7 +309,7 @@
 						<view class="date">5月13日(周三) | 08:45-10:15</view>
 						<view class="name">咨询师：张三</view>
 					</view>
-					<view class="confirm">确认预约</view>
+					<view class="confirm" @click="toPay">确认预约</view>
 				</view>
 			</view>
 		</uni-popup>
@@ -519,7 +519,18 @@
 		});
 		
 		consultantInfo.value = res.data;
-		console.log(res)
+	}
+	
+	const toChat = () => {
+		uni.navigateTo({
+			url: "/pages/message/private-chat"
+		})
+	}
+	
+	const toPay = () => {
+		uni.navigateTo({
+			url: "/pages/payment/payment"
+		})
 	}
 </script>
 

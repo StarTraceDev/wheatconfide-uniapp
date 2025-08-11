@@ -45,11 +45,14 @@
 			<view @click="headerTabsHandler(item)" class="tab-item" v-for="(item,index) in headerTabsList" :key="index"
 				:class="headerTabsActive==item.id?'active':''">{{item.label}}</view>
 		</view>
-		<view class="mood-log-box" v-if="headerTabsActive==0">
+		<view class="mood-log-box" v-if="headerTabsActive == 0">
 			<modeLog></modeLog>
 		</view>
-		<view class="mood-log-box mailbox-box" v-else>
+		<view class="mood-log-box mailbox-box" v-else-if="headerTabsActive == 1">
 			<mailBox></mailBox>
+		</view>
+		<view class="mood-log-box mailbox-box" v-else-if="headerTabsActive == 2">
+			<articleBox></articleBox>
 		</view>
 		<view class="fab-button" @click="openWrite">
 			<image src="/static/common/forum-fab.png" class="img"></image>
@@ -71,6 +74,7 @@
 
 	import modeLog from './components/mood-log.vue'
 	import mailBox from './components/mail-box.vue'
+	import articleBox from './components/article-box.vue'
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	const scrollTop = ref(0);
@@ -81,6 +85,9 @@
 	}, {
 		id: 1,
 		label: "信箱"
+	}, {
+		id: 2,
+		label: "文章"
 	}]);
 
 	const userlnfo1 = ref({
@@ -93,7 +100,6 @@
 			headerTabsActive.value = options.id
 		}
 	}
-
 
 	const openWrite = () => {
 		uni.navigateTo({
