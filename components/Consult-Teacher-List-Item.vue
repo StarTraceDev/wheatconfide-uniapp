@@ -5,7 +5,7 @@
 				<image class="avatar" src="@/static/consult/user.png" mode="aspectFill"></image>
 			</view>
 			<view class="info-wrap">
-				<view class="name-title">王艳红</view>
+				<view class="name-title">{{info.consultantName}}</view>
 				<view class="job-title">心理咨询师</view>
 				<view class="stats">
 					5000+人次·5年从业
@@ -27,7 +27,12 @@
 </template>
 
 <script setup>
-
+	import {defineProps} from "vue";
+	const props=defineProps({
+		info:{
+			type:Object
+		}
+	})
 </script>
 
 <style scoped lang="scss">

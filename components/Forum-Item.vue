@@ -1,7 +1,7 @@
 <template>
 	<view class="forum-Item">
 		<view class="forum-content">
-			<view class="content">谈一段好的爱情，我们需要完成第二次分离谈一段好的爱情，我们需要完成第二次分离谈一段好的爱情，我们需要完成第二次分离谈一段好的爱情，我们需要完成第二次分离</view>
+			<view class="content">{{info.content}}</view>
 			<view class="forum-image">
 				<scroll-view class="scroll-view_H" scroll-x="true">
 					<view class="forum-image-list">
@@ -24,7 +24,12 @@
 </template>
 
 <script setup>
-
+	import {defineProps} from "vue";
+	const props=defineProps({
+		info:{
+			type:Object
+		}
+	})
 </script>
 
 <style lang="scss" scoped>

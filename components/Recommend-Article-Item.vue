@@ -2,21 +2,24 @@
 	<view class="recommend-article-Item">
 		<view class="recommend-article-content">
 			<view class="content" v-if="info">{{info.title}}</view>
+			<view class="content" v-if="info">{{info.content}}</view>
 			<view class="info">
 				<view class="user">
 					<image src="/static/my/profile.png" class="picture"></image>
-					<text class="name">MR.Z</text>
+					<text class="name">{{info.realName}}</text>
 				</view>
 				<view class="view">
 					浏览7876
 				</view>
 				<view class="date">
-					2025/01/02
+					<!-- 2025/01/02 -->
+					{{info.createTime.substring(0, 10)}}
 				</view>
 			</view>
 		</view>
 		<view class="recommend-article-image">
-			<image src="/static/consult/user.png"></image>
+			<!-- <image src="/static/consult/user.png"></image> -->
+			<image :src="info.imageUrl"></image>
 		</view>
 	</view>
 </template>
