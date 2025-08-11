@@ -3,6 +3,9 @@ import http from "@/utils/request.js"
 export const getArticleList = (params, config = {}) => http.post('/api/article/article/getArticleList',
 	params, config)
 
+export const getArticleByUserId = (params, config = {}) => http.post('/api/article/article/getArticleByUserId',
+	params, config)
+	
 export const getArticleDetail = (params, config = {}) => http.post('/api/article/article/getArticleDetail',
 	params, config)
 
