@@ -140,6 +140,12 @@
 			}
 		},
 		{
+			"path": "pages/forum/index/qaDetail",
+			"style": {
+				"navigationBarTitleText": "问答详情"
+			}
+		},
+		{
 			"path": "pages/psychological-test/index/index",
 			"style": {
 				"navigationBarTitleText": "心理测试"
@@ -214,6 +220,14 @@
 			"path": "pages/auth/cityChoose",
 			"style": {
 				"navigationBarTitleText": "城市选择",
+				"navigationBarBackgroundColor": "#F4F6F8",
+				"navigationStyle": "",
+				"navigationBarTextStyle": "black"
+			}
+		}, {
+			"path": "pages/payment/payment",
+			"style": {
+				"navigationBarTitleText": "订单支付",
 				"navigationBarBackgroundColor": "#F4F6F8",
 				"navigationStyle": "",
 				"navigationBarTextStyle": "black"
