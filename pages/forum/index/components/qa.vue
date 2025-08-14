@@ -36,15 +36,15 @@
 					</view>
 					<view class="item-content">
 						<mote-lines-divide :line="5" expandText="展开" foldHint="收起">
-							{{item.content}}
+							{{i.content}}
 						</mote-lines-divide>
 					</view>
 					<view class="item-btn">
-						<view v-if="item.isZan==0">
+						<view v-if="i.isZan==0">
 							<image src="/static/common/zan.png" class="img"></image>点赞
 						</view>
 						<view v-else>
-							<image src="/static/common/zan-active.png" class="img"></image>{{item.zanNum}}
+							<image src="/static/common/zan-active.png" class="img"></image>{{i.zanNum}}
 						</view>
 						<view>
 							<image src="/static/common/msg.png" class="img"></image>评论

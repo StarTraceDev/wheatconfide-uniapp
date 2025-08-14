@@ -16,8 +16,13 @@
 					</view>
 				</view>
 
-				<view class="change-user-box">
+				<view class="change-user-box" @click="changeRole">
 					<view class="change-user">用户
+						<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
+					</view>
+				</view>
+				<view class="change-user-box" @click="changeRole1">
+					<view class="change-user">咨询师
 						<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
 					</view>
 				</view>
@@ -57,14 +62,14 @@
 			<view class="my-server">
 				<view class="title">我的服务</view>
 				<view class="grid-box">
-					<view v-for="(item, index) in gridList" :key="index" class="grid-item">
+					<view v-for="(item, index) in gridList" :key="index" class="grid-item" @click="toNav(index)">
 						<image :src="item.url" class="image"></image>
 						<view class="txt">{{item.txt}}</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="other-server">
+			<view class="other-server" v-if="userlnfo.consultantType === 0">
 				<view class="title">其他服务</view>
 				<view class="other-list">
 					<view class="other-item" @click="settledFn">
@@ -96,14 +101,11 @@
 							<image src="/static/my/setting.png"></image> <text>设置</text>
 						</view>
 					</view>
-					<view class="other-item" @click="toLogout">
-						<view class="item-left">
-							<image src="/static/my/setting.png"></image> 
-							<text>退出登录</text>
-						</view>
-					</view>
 				</view>
 			</view>
+			<button type="primary" @click="toLogout">
+				退出登录
+			</button>
 		</view>
 	</view>
 </template>
@@ -116,6 +118,11 @@
 	import {
 		getUserlnfo
 	} from "@/common/api/apis.js"
+	
+	import {
+		changeConsultant
+	} from "@/common/api/user.js"
+	
 	const gridList = ref([{
 		url: "/static/my/grid-1.png",
 		txt: "咨询订单"
@@ -142,6 +149,28 @@
 		txt: "邀请有礼"
 	}])
 	
+	const changeRole = async () => {
+		let res = await changeConsultant({
+			consultantType: 0
+		});
+		
+		console.log('=======================')
+		console.log(res)
+		
+		userlnfo.value = res.data;
+	}
+	
+	const changeRole1 = async () => {
+		let res = await changeConsultant({
+			consultantType: 1
+		});
+		
+		console.log('=======================')
+		console.log(res)
+		
+		userlnfo.value = res.data;
+	}
+	
 	const toUserInfo=()=>{
 		uni.navigateTo({
 			url:"/pages/forum/my/userInfo"
@@ -152,6 +181,14 @@
 		uni.navigateTo({
 			url:"/pages/forum/my/my"
 		})
+	}
+	
+	const toNav=(index)=>{
+		if(index == 0){
+			uni.navigateTo({
+				url:"/pages/payment/payment-records"
+			})
+		}
 	}
 	
 	const settledFn=()=>{
@@ -174,7 +211,9 @@
 	const getlnfo = async () => {
 		let res = await getUserlnfo();
 		userlnfo.value = res.data;
-		console.log(res)
+		
+		console.log('=======================')
+		console.log(res.data)
 	}
 	
 	onMounted(() => {

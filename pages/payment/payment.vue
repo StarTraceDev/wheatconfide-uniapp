@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="new-recharge-box">
-			<view class="recharge-info">
+			<!-- <view class="recharge-info">
 				<view class="need-recharge">
 					<view>剩余积分：
 						<text>{{lastPoint}}</text>
@@ -16,17 +16,14 @@
 						充值积分：<text>{{point}}</text>积分（可查看<text>{{phoneRate}}</text>个电话号码）
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="recharge-wrap">
-				<view class="recharge-money-tips">请选择充值金额</view>
+				<view class="recharge-money-tips">请选择</view>
 				<view class="recharge-new-choose clearfix">
 					<view class="recharge-new-item" v-for="(item,index) in list" :key="index">
 						<view :class="current == index ? 'recharge-new-box recharge-new-active' : 'recharge-new-box'" @click="handleClick(item,index)">
 							<view class="recharge-new-money">
 								<text>{{item.money}}</text>元
-							</view>
-							<view class="recharge-new-integral">
-								<text>{{item.point}}</text>积分
 							</view>
 						</view>
 					</view>
@@ -54,7 +51,7 @@
 		</view>
 		<view class="recharge-pay-footer">
 			<view style="display: flex;margin-left: 20rpx;">
-				<view class="recharge-pay-text">订单金额：</view>
+				<view class="recharge-pay-text">金额：</view>
 				<view class="recharge-pay-price">
 					￥：<text class="recharge-pay-money">{{money}}</text>
 				</view>
@@ -79,16 +76,16 @@
 		wxPay
 	} from "@/common/api/order.js";
 	const list = ref([{
-			money:'600',
+			money:'30',
 			point:'600'
 		},{
-			money:'800',
+			money:'100',
 			point:'900'
 		},{
-			money:'1200',
+			money:'200',
 			point:'1500'
 		},{
-			money:'2800',
+			money:'800',
 			point:'4500'
 		}
 	])
@@ -313,7 +310,7 @@
 	}
 	.recharge-new-box view{
 		 text-align: center;
-		 line-height: 40rpx;
+		 line-height: 80rpx;
 	}
 	.recharge-new-money{
 		 color: #333;
