@@ -5,7 +5,7 @@ import JSONBig from 'json-bigint'
 // 创建一个配置对象
 const requestConfig = {
 	baseURL: 'https://ceshi.maimiaoqingsu.com', // API基础URL
-	// baseURL: 'http://localhost:8112'
+	// baseURL: 'http://localhost:8112',
 	timeout: 30000, // 请求超时时间
 	header: {
 		'Content-Type': 'application/json'
