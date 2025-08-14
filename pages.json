@@ -232,6 +232,14 @@
 				"navigationStyle": "",
 				"navigationBarTextStyle": "black"
 			}
+		}, {
+			"path": "pages/payment/payment-records",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"navigationBarBackgroundColor": "#F4F6F8",
+				"navigationStyle": "",
+				"navigationBarTextStyle": "black"
+			}
 		}
 	],
 	"tabBar": {
