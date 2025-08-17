@@ -37,7 +37,7 @@
 			</view>
 			<view class="wechat-login">
 				<text class="wechat-msg">第三方登录</text>
-				<view class="wechat-content">
+				<view class="wechat-content" @click="wxAppLogin">
 					<image src="@/static/login/wechat.png" class="wechat"></image>
 				</view>
 			</view>
@@ -51,6 +51,7 @@
 
 <script setup>
 	import {
+		login,
 		quickReg,
 		sendSms,
 		smsLogin
@@ -90,12 +91,69 @@
 		})
 	}
 
+	const userInfo = ref(null);
+
+	const wxAppLogin = async () => {
+		try {
+			// Uni-app login
+			const loginRes = await uni.login({
+				provider: 'weixin'
+			});
+			console.log(JSON.stringify(loginRes));
+
+			// Get user info
+			const infoRes = await uni.getUserInfo({
+				provider: 'weixin'
+			});
+			console.log(JSON.stringify(infoRes.userInfo));
+
+			userInfo.value = {
+				...infoRes.userInfo,
+				openid: infoRes.userInfo.openId,
+				unionid: infoRes.userInfo.unionId
+			};
+
+			// Call login API
+			const res = await login({
+				openid: userInfo.value.openid,
+				logintype: 'wxApp'
+			});
+
+			console.log('======================');
+			console.log(res.data);
+
+			if (res.success) {
+				uni.setStorageSync('token', res.data.token);
+				uni.setStorageSync('currentUser', res.data);
+
+				// If using Vue Router
+				// router.push('/tabBar/mine/mine');
+
+				// Uni-app navigation
+				uni.switchTab({
+					url: '/pages/index/index'
+				});
+			} else {
+				// If using Vue Router
+				// router.push(`/wx-bind/wx-bind?userInfo=${JSON.stringify(userInfo.value)}`);
+
+				// Uni-app navigation
+				uni.navigateTo({
+					url: `../wx-bind/wx-bind?userInfo=${JSON.stringify(userInfo.value)}`
+				});
+			}
+		} catch (error) {
+			console.error('Login failed:', error);
+			// Handle error here
+		}
+	}
+
 	/**
 	 * 点击获取验证码
 	 */
 	const onSendSms = async () => {
 		if (disabled.value) return;
-		
+
 		getCurrentDown();
 
 		let res = await sendSms({

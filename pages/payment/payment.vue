@@ -35,7 +35,7 @@
 						<image class="recharge-pay-wechatimg" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-wechatimg.png"></image>
 						<text>微信支付</text>
 					</view>
-					<image v-if="payType==='wxPay'" class="recharge-pay-selected" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-selected.png"></image>
+					<image v-if="payType==='wxPay'" class="recharge-pay-selected" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
 					<image v-else class="recharge-pay-select" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
 				</view>
 				<view class="recharge-pay-line"></view>
@@ -44,7 +44,7 @@
 						<image class="recharge-pay-alipayimg" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-alipayimg.png"></image>
 						<text>支付宝支付</text>
 					</view>
-					<image v-if="payType==='aliPay'" class="recharge-pay-selected" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-selected.png"></image>
+					<image v-if="payType==='aliPay'" class="recharge-pay-selected" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
 					<image v-else class="recharge-pay-select" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
 				</view>
 			</view>
@@ -92,7 +92,7 @@
 	const current = ref(0)
 	const providerList = ref(['wxpay','alipay'])
 	const lastPoint = ref(0)
-	const money = ref(600)
+	const money = ref(30)
 	const point = ref(600)
 	const rate = ref(1.00)
 	const msgType = ref('info')
@@ -268,7 +268,7 @@
 	.recharge-info .need-recharge{
 		padding: 1rpx 20rpx;
 		font-style: normal;
-		color: #ff6b61;
+		color: #35CA95;
 		line-height: 50rpx;
 		font-size:30rpx;
 	}
@@ -319,8 +319,8 @@
 		 color: #adadad;
 	}
 	.recharge-new-active{
-		 background: #ff6b61;
-		 border-color: #ff6b61;
+		 background: #35CA95;
+		 border-color: #35CA95;
 	}
 	.recharge-new-active view{
 		 color: #fff;
@@ -403,10 +403,10 @@
 	}
 	.recharge-pay-price {
 		font-size: 14px;
-		color: #FB0808;
+		color: #35CA95;
 	}
 	.recharge-sure-price {
-		background-color: #ff6b61;
+		background-color: #35CA95;
 		border: none;
 		color: #fff;
 	}
