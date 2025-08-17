@@ -204,8 +204,8 @@
 			"style": {
 				"navigationBarTitleText": "uni-app",
 				"navigationBarBackgroundColor": "#F1F1F1",
-				"enablePullDownRefresh": true,
-				"navigationStyle": ""
+				"enablePullDownRefresh": true
+				// "navigationStyle": ""
 			}
 		},
 		{
@@ -221,7 +221,7 @@
 			"style": {
 				"navigationBarTitleText": "城市选择",
 				"navigationBarBackgroundColor": "#F4F6F8",
-				"navigationStyle": "",
+				// "navigationStyle": "",
 				"navigationBarTextStyle": "black"
 			}
 		}, {
@@ -229,7 +229,7 @@
 			"style": {
 				"navigationBarTitleText": "订单支付",
 				"navigationBarBackgroundColor": "#F4F6F8",
-				"navigationStyle": "",
+				// "navigationStyle": "",
 				"navigationBarTextStyle": "black"
 			}
 		}, {
@@ -237,7 +237,7 @@
 			"style": {
 				"navigationBarTitleText": "我的订单",
 				"navigationBarBackgroundColor": "#F4F6F8",
-				"navigationStyle": "",
+				// "navigationStyle": "",
 				"navigationBarTextStyle": "black"
 			}
 		}
