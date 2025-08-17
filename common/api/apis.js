@@ -1,5 +1,9 @@
 import http from "@/utils/request.js"
+
 // 登录
+export const login = (params, config = {}) => http.post('/api/user/login',
+	params, config)
+	
 export const quickReg = (params, config = {}) => http.post('/api/user/quickReg',
 	params, config)
 
