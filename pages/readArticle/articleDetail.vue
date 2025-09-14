@@ -37,8 +37,19 @@
 				</view>
 				<view class="contact">文章转载/侵权，请联系邮箱：<text class="txt">6757567@163.com</text></view>
 			</view>
-			<view v-for="(item,index) in commentList" :key="index">
-				{{ item.content }}
+			<view style="background-color: white;margin: 30rpx;padding: 18rpx;">
+				<view style="margin-bottom: 30rpx;"><text style="font-size: 42rpx;font-weight: bold;">热门评论</text></view>
+			<view v-for="(item,index) in commentList" :key="index" style="margin-bottom: 20rpx;">
+				<view style="display: flex;flex-direction: row;">
+					<image style="width: 48rpx;height: 48rpx;border-radius: 24rpx;" :src="item.avatar==null?'/static/my/profile.png':item.avatar"></image>
+					<view style="margin-left: 20rpx;display: flex;flex-direction: column;">
+					<text style="font-size: 26rpx;">{{item.nickname}}</text>
+					<text style="margin-top: 10rpx;font-size: 28rpx;color: #666666;">{{ item.content }}</text>
+					</view>
+				</view>
+				
+
+			</view>
 			</view>
 			<view class="hot-psychological-box">
 				<view class="hot-psychological-header">
@@ -65,7 +76,7 @@
 					</view>
 				</view>
 				<view class="article-list">
-					<RecommendArticleItem v-for="i in 5" class="article-item" @click="openArticleFn(2)">
+					<RecommendArticleItem :info="i" v-for="i in recommendArticles" class="article-item" @click="openArticleFn(i)">
 					</RecommendArticleItem>
 				</view>
 			</view>
@@ -100,7 +111,8 @@
 	import {
 		getArticleDetail,
 		getCommentById,
-		saveComment
+		saveComment,
+		relativeArticle
 	} from "@/common/api/article.js"
 	import RecommendArticleItem from '@/components/Recommend-Article-Item';
 	import ConsultTeacherListItem from '@/components/Consult-Teacher-List-Item.vue';
@@ -111,6 +123,7 @@
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	// 获取路由实例，用于获取参数
 	const route = useRoute();
+	const recommendArticles = ref([])
 	const tabActive = ref(0);
 	const replyContent = ref("");
 	let id=ref();
@@ -152,6 +165,13 @@
 	const info = ref()
 	
 	const commentList = ref()
+	const getRecommend =  async()=>{
+		let res = await relativeArticle()
+		// console.log(res);
+		recommendArticles.value =res.data
+		console.log(recommendArticles.value);
+	}
+	getRecommend()
 	
 	const changeTabHandler = (index) => {
 		tabActive.value = index
@@ -176,10 +196,13 @@
 
 	}
 
-	const openArticleFn = (type) => {
-		let url = type == '1' ? '/pages/readArticle/readArticle' : ''
+	const openArticleFn = (item) => {
+		// let url = type == '1' ? '/pages/readArticle/readArticle' : ''
+		// uni.navigateTo({
+		// 	url
+		// })
 		uni.navigateTo({
-			url
+			url: "/pages/readArticle/articleDetail?id="+item.id
 		})
 	}
 

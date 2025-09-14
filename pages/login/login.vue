@@ -76,15 +76,52 @@
 		console.log(val);
 		type.value = val;
 	}
+	let GoEasy = uni.$GoEasy
 
 	const loginFn = async () => {
 		if (type.value == "2") {
 			let res = await quickReg(state.value);
+			console.log(res);
 			uni.setStorageSync('token', res.data.token)
 			store.setToken(res.data.token);
+			uni.setStorageSync("currentUser",res.data)
+			let user = res.data
+			GoEasy.connect({
+				id: user.id,
+				data: {
+					"avatar": "",
+					"nickname": user.realName
+				},
+				onSuccess: function() {
+					console.log("GoEasy connect successfully.") //连接成功
+				},
+				onFailed: function(error) { //连接失败
+					console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+				},
+				onProgress: function(attempts) { //连接或自动重连中
+					console.log("GoEasy is connecting", attempts);
+				}
+			})
 		}
 		if (type.value == "1") {
 			let res = await smsLogin(state.value);
+			let user = res.data
+			GoEasy.connect({
+				id: user.id,
+				data: {
+					"avatar": user.avatar,
+					"nickname": user.realName
+				},
+				onSuccess: function() {
+					console.log("GoEasy connect successfully.") //连接成功
+				},
+				onFailed: function(error) { //连接失败
+					console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+				},
+				onProgress: function(attempts) { //连接或自动重连中
+					console.log("GoEasy is connecting", attempts);
+				}
+			})
 		}
 		uni.switchTab({
 			url: '/pages/index/index'
@@ -125,6 +162,7 @@
 			if (res.success) {
 				uni.setStorageSync('token', res.data.token);
 				uni.setStorageSync('currentUser', res.data);
+				let user = res.data;
 
 				// If using Vue Router
 				// router.push('/tabBar/mine/mine');

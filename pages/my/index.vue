@@ -5,27 +5,36 @@
 		</view>
 		<view class="container">
 			<view class="user-info">
+				<view>
+					<image :src="userlnfo.avatar==null?'/static/my/profile.png':userlnfo.avatar" mode="aspectFill" class="profile"></image>
+				</view>
 				<view class="user-info-content">
-					<image src="@/static/my/profile.png" class="profile"></image>
 					<view>
-						<view class="nick-name" @click="toUserInfo">{{userlnfo.realName}}<uni-icons type="right" size="16"></uni-icons></view>
-						<view class="id-num">
+						<view class="nick-name" @click="toUserInfo">{{userlnfo.realName}}<uni-icons type="right"
+								size="16"></uni-icons></view>
+					</view>
+					<view style="display: flex;flex-direction: row;align-items: center;justify-content: space-between;">
+						<view class="id-num" style="flex: 1;">
 							<text>ID：{{userlnfo.id}}</text>
 							<image src="/static/my/copy.png" class="copy"></image>
+						</view>
+						<picker :range="userRole" @change="changeRoleFunc" style="margin-right: 50rpx;">
+							<!--  @click="changeRole" -->
+							<view class="change-user-box">
+								<view class="change-user">{{currRole}}
+									<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
+								</view>
 							</view>
+						</picker>
+						<!-- <view class="change-user-box" @click="changeRole1">
+							<view class="change-user">咨询师
+								<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
+							</view>
+						</view> -->
 					</view>
 				</view>
 
-				<view class="change-user-box" @click="changeRole">
-					<view class="change-user">用户
-						<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
-					</view>
-				</view>
-				<view class="change-user-box" @click="changeRole1">
-					<view class="change-user">咨询师
-						<image src="@/static/my/bottom-arrow.png" class="bottom-arrow"></image>
-					</view>
-				</view>
+
 			</view>
 			<view class="my-record-number">
 				<view class="item">
@@ -103,9 +112,12 @@
 					</view>
 				</view>
 			</view>
-			<button type="primary" @click="toLogout">
-				退出登录
-			</button>
+			<view style="margin-left: 30rpx;margin-right: 30rpx;margin-top: 30rpx;">
+				<button type="primary" @click="toLogout">
+					退出登录
+				</button>
+			</view>
+
 		</view>
 	</view>
 </template>
@@ -116,13 +128,13 @@
 		onMounted
 	} from 'vue';
 	import {
-		getUserlnfo
+		getUserInfo
 	} from "@/common/api/apis.js"
-	
+
 	import {
 		changeConsultant
 	} from "@/common/api/user.js"
-	
+
 	const gridList = ref([{
 		url: "/static/my/grid-1.png",
 		txt: "咨询订单"
@@ -148,74 +160,86 @@
 		url: "/static/my/grid-8.png",
 		txt: "邀请有礼"
 	}])
-	
+
 	const changeRole = async () => {
 		let res = await changeConsultant({
 			consultantType: 0
 		});
-		
+
 		console.log('=======================')
 		console.log(res)
-		
+
 		userlnfo.value = res.data;
 	}
-	
+
 	const changeRole1 = async () => {
 		let res = await changeConsultant({
 			consultantType: 1
 		});
-		
+
 		console.log('=======================')
 		console.log(res)
-		
+
 		userlnfo.value = res.data;
 	}
 	
-	const toUserInfo=()=>{
+	const userRole = ref(['用户','咨询师'])
+	const currRole = ref('用户')
+	const changeRoleFunc = (e)=>{
+		console.log(e);
+		currRole.value = userRole.value[e.detail.value]
+		if(currRole.value=='用户'){
+			changeRole()
+		}else{
+			changeRole1()
+		}
+	}
+
+	const toUserInfo = () => {
 		uni.navigateTo({
-			url:"/pages/forum/my/userInfo"
+			url: "/pages/forum/my/userInfo"
 		})
 	}
-	
-	const toPublish=()=>{
+
+	const toPublish = () => {
 		uni.navigateTo({
-			url:"/pages/forum/my/my"
+			url: "/pages/forum/my/my"
 		})
 	}
-	
-	const toNav=(index)=>{
-		if(index == 0){
+
+	const toNav = (index) => {
+		if (index == 0) {
 			uni.navigateTo({
-				url:"/pages/payment/payment-records"
+				url: "/pages/payment/payment-records"
 			})
 		}
 	}
-	
-	const settledFn=()=>{
+
+	const settledFn = () => {
 		uni.navigateTo({
-			url:"/pages/settled/settled"
+			url: "/pages/settled/settled"
 		})
 	}
-	
-	const toLogout=()=>{
+
+	const toLogout = () => {
 		uni.navigateTo({
-			url:"/pages/login/login"
+			url: "/pages/login/login"
 		})
 	}
-	
+
 	const userlnfo = ref({});
-	
+
 	/**
 	 * 获取当前用户信息
 	 */
 	const getlnfo = async () => {
-		let res = await getUserlnfo();
+		let res = await getUserInfo();
 		userlnfo.value = res.data;
-		
+
 		console.log('=======================')
 		console.log(res.data)
 	}
-	
+
 	onMounted(() => {
 		getlnfo()
 	});
@@ -245,10 +269,10 @@
 
 			.change-user-box {
 				position: relative;
-
+				margin-left: 20rpx;
 				display: flex;
 				justify-content: right;
-				padding-right: 46rpx;
+				padding-right: 20rpx;
 
 				.change-user {
 					width: 120rpx;
@@ -272,19 +296,23 @@
 			}
 
 			.user-info {
+				flex-direction: row;
 				display: flex;
-				align-items: center;
 				color: #000000;
+				width: 750rpx;
 				margin-top: 152rpx;
-                justify-content: space-between;
-			 .user-info-content{
-				 display: flex;
-				 align-items: center;
-			 }
+
+				.user-info-content {
+					flex: 1;
+					display: flex;
+					flex-direction: column;
+				}
+
 				.profile {
 					width: 128rpx;
 					height: 128rpx;
 					margin-right: 20rpx;
+					border-radius: 64rpx;
 					margin-left: 64rpx;
 				}
 
@@ -296,8 +324,12 @@
 				.id-num {
 					font-size: 26rpx;
 					margin-top: 12rpx;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
 					font-weight: 400;
-					.copy{
+
+					.copy {
 						width: 25rpx;
 						height: 25rpx;
 						padding-left: 16rpx;

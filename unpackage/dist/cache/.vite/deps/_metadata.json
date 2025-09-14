@@ -1,15 +1,43 @@
 {
-  "hash": "3db0d787",
-  "configHash": "d9c2ebb1",
-  "lockfileHash": "bdd05ae3",
-  "browserHash": "0e8e7d56",
+  "hash": "f25ee374",
+  "configHash": "bd17d299",
+  "lockfileHash": "f2d48dd5",
+  "browserHash": "a5984889",
   "optimized": {
     "json-bigint": {
       "src": "../../../../../node_modules/json-bigint/index.js",
       "file": "json-bigint.js",
-      "fileHash": "79531511",
+      "fileHash": "1bc9ad64",
+      "needsInterop": true
+    },
+    "lodash-es": {
+      "src": "../../../../../node_modules/lodash-es/lodash.js",
+      "file": "lodash-es.js",
+      "fileHash": "d973c4af",
+      "needsInterop": false
+    },
+    "recorder-core": {
+      "src": "../../../../../node_modules/recorder-core/src/recorder-core.js",
+      "file": "recorder-core.js",
+      "fileHash": "234b53cf",
+      "needsInterop": true
+    },
+    "recorder-core/src/engine/mp3": {
+      "src": "../../../../../node_modules/recorder-core/src/engine/mp3.js",
+      "file": "recorder-core_src_engine_mp3.js",
+      "fileHash": "581d7ea7",
+      "needsInterop": true
+    },
+    "recorder-core/src/engine/mp3-engine": {
+      "src": "../../../../../node_modules/recorder-core/src/engine/mp3-engine.js",
+      "file": "recorder-core_src_engine_mp3-engine.js",
+      "fileHash": "a473d74e",
       "needsInterop": true
     }
   },
-  "chunks": {}
+  "chunks": {
+    "chunk-Y2F7D3TJ": {
+      "file": "chunk-Y2F7D3TJ.js"
+    }
+  }
 }

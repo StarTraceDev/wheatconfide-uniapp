@@ -17,3 +17,5 @@ export const getCommentById = (params, config = {}) => http.post('/api/comment/c
 	
 export const saveComment = (params, config = {}) => http.post('/api/comment/comment/saveComment',
 	params, config)
+	
+	export const relativeArticle = (params,config={}) => http.get('/api/article/article/relativeArticle')

@@ -15,7 +15,7 @@ export default function({path,query}){
 	if(config.loginPath){
 		path='/'+path;
 		const uInfo=uni.getStorageSync(config.uInfo);
-		console.log(uInfo)
+		// console.log(uInfo)
 		if(!uInfo){
 			if(config.whiteList && !config.whiteList.includes(path)){
 				handleInit(path,query)
@@ -23,7 +23,7 @@ export default function({path,query}){
 				handleInit(path,query)
 			}
 		}else{
-			console.log("ssssssssssssssssssssssssxxxxxxxxx")
+			// console.log("ssssssssssssssssssssssssxxxxxxxxx")
 			if(path=="/pages/login/login"){
 				uni.reLaunch({
 					url:"/pages/home/home"

@@ -7,7 +7,7 @@ export const login = (params, config = {}) => http.post('/api/user/login',
 export const quickReg = (params, config = {}) => http.post('/api/user/quickReg',
 	params, config)
 
-export const getUserlnfo = (params, config = {}) => http.post('/api/user/userInfo',
+export const getUserInfo = (params, config = {}) => http.post('/api/user/userInfo',
 	params, config)
 
 

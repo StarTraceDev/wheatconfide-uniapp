@@ -19,7 +19,7 @@
 				<view class="add">立即加入</view>
 			</view>
 			<view class="settled_2">
-				<view class="title">我是咨询师</view>
+				<view class="title">我是倾听师</view>
 				<view class="use-public">2.5万同行 已服务了439万用户和家庭</view>
 				<view class="add">立即加入</view>
 			</view>
@@ -48,7 +48,7 @@
 	
 	const joinTeamHandler=()=>{
 		uni.navigateTo({
-			url:"/pages/auth/auth"
+			url:"/pages/auth/auth?type=1"
 		})
 	}
 </script>

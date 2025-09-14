@@ -15,22 +15,27 @@
 					<view class="id-card-form-content" v-for="(item,index) in certificateLists" :key="index">
 						<view class="form-item">
 							<view class="label require">资质类别</view>
-							<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
-									color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+							<picker :range="certificates" @change="changeCertificate($event,index)">
+								<view class="content" :class="!value?'weight':''">
+									{{item.type==null?'请选择':item.type}}<uni-icons type="right" size="14"
+										color="rgba(0, 0, 0, 0.3)"></uni-icons>
+								</view>
+							</picker>
 						</view>
 						<view class="form-item">
 							<view class="label require">发证时间</view>
 							<view class="content" :class="!value?'weight':''">
-								<uni-datetime-picker type="date" :clear-icon="false" v-model="single"
-									@maskClick="maskClick">请选择<uni-icons type="right" size="14"
-										color="rgba(0, 0, 0, 0.3)"></uni-icons></uni-datetime-picker>
+								<uni-datetime-picker @change="certificateDateChange($event,item,index)" type="date"
+									:clear-icon="false" v-model="item.date"
+									@maskClick="maskClick">{{item.date==null?'请选择':item.date}}<uni-icons type="right"
+										size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></uni-datetime-picker>
 							</view>
 						</view>
 						<view class="form-item user-sign">
 							<view class="label require">证书编号</view>
 							<view class="content-input" style="width: 400rpx;">
 								<uni-easyinput trim="all" type="text" placeholder="请输入证书编号" :inputBorder="false"
-									:clearable="false" :placeholderStyle="{'text-align':'right'}">
+									:clearable="false" v-model="item.number" :placeholderStyle="{'text-align':'right'}">
 								</uni-easyinput>
 							</view>
 						</view>
@@ -38,14 +43,15 @@
 							<view class="label require">证件照片</view>
 							<view class="introduction-content">
 								<view class="img-list">
-									<view class="img-item">
-										<image src="/static/login/logo.png" class="img"></image>
-										<view class="delete-item-img">
-											删除
+
+									<view class="img-item" v-for="(pic,i) in item.imgUrl" :key="i">
+										<image :src="pic" class="img"></image>
+										<view class="delete-item-img" @click="deletePic(item,i)">
+											删除({{i}})
 										</view>
 									</view>
 								</view>
-								<view class="upload-image" v-if="certificateImgs.length<3">
+								<view class="upload-image" v-if="item.imgUrl.length<3" @click="uploadPics(item)">
 									<view class="icon">
 										<uni-icons type="plusempty" size="30" color="rgba(0,0,0,.3)"></uni-icons>
 									</view>
@@ -84,20 +90,22 @@
 					<view class="id-card-form-content" v-for="(item,index) in educationLists" :key="index">
 						<view class="form-item">
 							<view class="label">起始时间</view>
-							<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
+							<view class="content" :class="!value?'weight':''">
+								{{item.startDate==null?"请选择":item.startDate}}<uni-icons type="right" size="14"
 									color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
 						</view>
 						<view class="form-item">
 							<view class="label">截止时间</view>
-							<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
+							<view class="content" :class="!value?'weight':''">
+								{{item.endDate==null?'请选择':item.endDate}}<uni-icons type="right" size="14"
 									color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
 						</view>
 
 						<view class="form-item user-sign">
 							<view class="label">毕业院校</view>
 							<view class="content-input" style="width: 400rpx;">
-								<uni-easyinput trim="all" type="text" placeholder="请输入毕业院校" :inputBorder="false"
-									:clearable="false" :placeholderStyle="{'text-align':'right'}">
+								<uni-easyinput trim="all" type="text" placeholder="请输入毕业院校" v-model="item.schoolName"
+									:inputBorder="false" :clearable="false" :placeholderStyle="{'text-align':'right'}">
 								</uni-easyinput>
 							</view>
 						</view>
@@ -105,8 +113,8 @@
 						<view class="form-item user-sign">
 							<view class="label">证书编号</view>
 							<view class="content-input" style="width: 400rpx;">
-								<uni-easyinput trim="all" type="text" placeholder="请输入证书编号" :inputBorder="false"
-									:clearable="false" :placeholderStyle="{'text-align':'right'}">
+								<uni-easyinput trim="all" type="text" placeholder="请输入证书编号" v-model="item.number"
+									:inputBorder="false" :clearable="false" :placeholderStyle="{'text-align':'right'}">
 								</uni-easyinput>
 							</view>
 						</view>
@@ -115,14 +123,14 @@
 							<view class="label">证件照片</view>
 							<view class="introduction-content">
 								<view class="img-list">
-									<view class="img-item">
-										<image src="/static/login/logo.png" class="img"></image>
+									<view class="img-item" v-for="(pic,i) in item.imgUrl">
+										<image :src="pic" class="img"></image>
 										<view class="delete-item-img">
 											删除
 										</view>
 									</view>
 								</view>
-								<view class="upload-image" v-if="certificateImgs.length<3">
+								<view class="upload-image" v-if="item.imgUrl.length<3">
 									<view class="icon">
 										<uni-icons type="plusempty" size="30" color="rgba(0,0,0,.3)"></uni-icons>
 									</view>
@@ -221,26 +229,71 @@
 
 <script setup>
 	import {
+		reactive,
 		ref
 	} from 'vue';
 
+	import {
+		uploadFile
+	} from '@/utils/common';
+	import {
+		registerConsultantStep3
+	} from '@/common/api/consultant';
 	const certificateImgs = ref([]);
 
-	const certificateLists = ref([{
-		type: 0,
-		date: "2022-02-02 02:02:02",
-		number: "9527",
+	const certificateLists = reactive([{
+		type: null,
+		date: null,
+		number: null,
 		imgUrl: []
 	}]);
 
+	const certificateDateChange = (e, data, i) => {
+		console.log(e, data);
+		certificateLists[i].date = e
+		// this.$forceUpdate()
+	}
+
 	const educationLists = ref([]);
 	const trainLists = ref([]);
+	const uploadPics = (item) => {
+		uni.chooseImage({
+			count: 1,
+			success: async function(res) {
+				// item.imgUrl.push(res.tempFilePaths[0])
+				let resp = await uploadFile('/api/common/upload', res.tempFilePaths[0]);
+				item.imgUrl.push(resp.data.url)
+			}
+		})
+	}
+
+	const deletePic = (item, i) => {
+		item.imgUrl.splice(i, 1)
+	}
+
+	const submit = async () => {
+		let data = {
+			certificateList: certificateLists.value,
+			educationList: educationLists.value,
+			careerList: trainLists.value
+		}
+		let res = await registerConsultantStep3(data)
+		if (res.code == 0) {
+			emit("commited", "")
+		}
+	}
+
+	defineExpose({
+		submit
+	})
+
+
 
 	const addCertificateListHandler = () => {
 		certificateLists.value.push({
-			type: 0,
-			date: "2022-02-02 02:02:02",
-			number: "9527",
+			type: null,
+			date: null,
+			number: null,
 			imgUrl: []
 		});
 	}
@@ -272,6 +325,11 @@
 		});
 	}
 
+	const certificates = ref(['资质一', '资质二', '资质三'])
+
+	const changeCertificate = (e, i) => {
+		certificateLists[i].type = certificates.value[e.detail.value]
+	}
 	const removeTrainListsHandler = (index) => {
 		trainLists.value.splice(index, 1);
 	}
@@ -365,6 +423,7 @@
 							::v-deep .uni-calendar-item--checked {
 								background-color: #35CA95 !important;
 							}
+
 							::v-deep .uni-datetime-picker--btn {
 								background-color: #35CA95 !important;
 							}

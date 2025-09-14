@@ -232,7 +232,7 @@
 </template>
 <script setup>
 	import {
-		getUserlnfo
+		getUserInfo
 	} from "@/common/api/apis.js"
 	import {
 		getConsultantList
@@ -369,7 +369,7 @@
 	 * 获取当前用户信息
 	 */
 	const getlnfo = async () => {
-		let res = await getUserlnfo();
+		let res = await getUserInfo();
 		globalStore.setUserInfo(res.data);
 		console.log(res)
 	}

@@ -483,11 +483,13 @@
 		});
 		
 		consultantInfo.value = res.data;
+		console.log(consultantInfo.value);
 	}
 	
 	const toChat = () => {
+		console.log(consultantInfo.value);
 		uni.navigateTo({
-			url: "/pages/message/private-chat"
+			url: "/pages/message/private-chat?to="+consultantInfo.value.userId+"&name="+consultantInfo.value.consultantName
 		})
 	}
 	

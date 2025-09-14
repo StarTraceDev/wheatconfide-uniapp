@@ -153,7 +153,9 @@
 			//城市条目点击
 			cityItemClick(index) {
 				var data = this.allCityList[index]
-				uni.$emit('data', data);
+				console.log(data);
+				// uni.$emit('data', data);
+				uni.setStorageSync("verifyAddress",data.city)
 				uni.navigateBack({
 					delta: 1,
 				})

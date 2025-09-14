@@ -5,12 +5,14 @@
 				<view class="title">身份认证</view>
 				<view class="remark">仅用于身份实名核验，信息会严格保密</view>
 				<view class="unload-card-box">
-					<view class="upload-card-item">
-						<image src="@/static/auth/id-card-front.png" class="img"></image>
+					<view class="upload-card-item" @click="uploadPhoto(1)">
+						<image :src="frontPhoto==null?'/static/auth/id-card-front.png':frontPhoto" v-model="frontPhoto"
+							class="img"></image>
 						<view class="txt">身份证人像面</view>
 					</view>
-					<view class="upload-card-item">
-						<image src="@/static/auth/id-card-back.png" class="img"></image>
+					<view class="upload-card-item" @click="uploadPhoto(2)">
+						<image :src="backendPhoto==null?'/static/auth/id-card-back.png':backendPhoto" class="img">
+						</image>
 						<view class="txt">身份证国徽面</view>
 					</view>
 				</view>
@@ -18,34 +20,42 @@
 					<view class="form-item">
 						<view class="label require">姓名</view>
 						<view class="content">
-							<input type="text" v-model="localData.consultantName" placeholder="请输入姓名" />
+							<input type="text" style="font-size: 28rpx;" v-model="localData.consultantName"
+								placeholder="请输入姓名" />
 						</view>
 					</view>
 					<view class="form-item">
 						<view class="label require">身份证号</view>
 						<view class="content">
-							<input type="text" v-model="localData.idNum" />
+							<input type="text" v-model="localData.idcardNum" style="font-size: 28rpx;"
+								placeholder="请输入身份证号" />
 						</view>
 					</view>
 					<view class="form-item">
 						<view class="label require">职业</view>
-						<view class="content" :class="!value?'weight':''" @click="openPopupHandler">请选择<uni-icons
-								type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+						<view class="content" :class="!value?'weight':''" @click="openPopupHandler">
+							{{profession}}<uni-icons type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons>
+						</view>
 					</view>
 					<view class="form-item">
 						<view class="label require">星座</view>
-						<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
-								color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+						<picker :range="stars" @change="starChange">
+							<view class="content" :class="!value?'weight':''">{{localData.constellation==null?'请选择':localData.constellation}}<uni-icons type="right"
+									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+						</picker>
 					</view>
 					<view class="form-item">
 						<view class="label require">所在地区</view>
-						<view class="content" :class="!value?'weight':''" @click="openCityHandler">请选择<uni-icons
+
+						<view class="content" :class="!value?'weight':''" @click="openCityHandler">{{localData.address}}<uni-icons
 								type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
 					</view>
 					<view class="form-item">
 						<view class="label require">服务类型</view>
-						<view class="content" :class="!value?'weight':''">请选择<uni-icons type="right" size="14"
-								color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+						<picker :range="serviceType" @change="serviceTypeChange">
+							<view class="content" :class="!value?'weight':''">{{service}}<uni-icons type="right"
+									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+						</picker>
 					</view>
 					<view class="form-item user-sign">
 						<view class="label">个人签名</view>
@@ -76,7 +86,8 @@
 					</view>
 				</view>
 				<view class="career-popup-content-list">
-					<view class="career-popup-content-item" v-for="i in 20" :key="i">心理咨询师{{i}}</view>
+					<view class="career-popup-content-item" v-for="i in 20" @click="selectPosition(i)" :key="i">
+						心理咨询师{{i}}</view>
 				</view>
 			</view>
 		</uni-popup>
@@ -87,22 +98,133 @@
 	import {
 		onMounted,
 		ref,
-		computed
+		computed,
+		defineProps
 	} from 'vue';
 	import cityJson from "@/static/city-json/city-list.js"
+	import {
+		uploadFile
+	} from '@/utils/common';
+	import {
+		onShow,
+		onUnload
+	} from '@dcloudio/uni-app'
+	import {
+		registerConsultantStep1
+	} from '@/common/api/consultant.js'
 	const cityList = ref(cityJson);
-	const idNum = ref('342312199601122426');
+	const idNum = ref('');
 	const popup = ref(null);
 	const cityPopup = ref(null);
+	const profession = ref('请选择');
+	const address = ref('请选择')
+	const frontPhoto = ref(null)
+	const backendPhoto = ref(null)
+	const service = ref('请选择')
+	const stars = ref(['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座'])
 	const openPopupHandler = () => {
-		console.log(123);
 		popup.value.open();
 	}
 
+	const serviceType = ref(['心理健康评估和诊断', '情绪和压力管理', '人际关系咨询', '学业和职业困扰', '个人成长和身份认同', '应对哀伤丧失和创伤事件'])
+	// const constellation = ref('请选择')
+	const emit = defineEmits(['update:modelValue', 'committed']);
+	const starChange = (e) => {
+		constellation.value = stars.value[e.detail.value]
+		// console.log(e);
+	}
+
+	const serviceTypeChange = (e) => {
+		console.log(e);
+		service.value = serviceType.value[e.detail.value]
+	}
+
+	const props = defineProps({
+		consultantType: String,
+		modelValue: Object
+	})
+	const selectPosition = (i) => {
+		profession.value = '心理咨询师' + i
+		popup.value.close()
+	}
+	const submit = async () => {
+		console.log("子组件收到父组件调用，");
+		if (frontPhoto.value == null) {
+			uni.showToast({
+				title: "请上传身份证人像页",
+				icon: 'none'
+			})
+			return
+		}
+		if (backendPhoto.value == null) {
+			uni.showToast({
+				title: "请上传身份证国徽页",
+				icon: 'error'
+			})
+			return
+		}
+		if (localData.value.consultantName == null) {
+			uni.showToast({
+				title: "请输入姓名",
+				icon: 'error'
+			})
+			return
+		}
+		if (localData.value.idcardNum == null) {
+			uni.showToast({
+				title: "请输入身份证号",
+				icon: 'error'
+			})
+			return
+		}
+		let frontUrl = await uploadFile('/api/common/upload', frontPhoto.value)
+		// console.log(frontUrl);
+		if (frontUrl.code == 0) {
+			localData.value.idcardFront = frontUrl.data.url
+		}
+		let backUrl = await uploadFile('/api/common/upload', backendPhoto.value)
+		if (backUrl.code == 0) {
+			localData.value.idcardBackend = backUrl.data.url
+		}
+		localData.value.consultantType = props.consultantType
+		uni.showLoading({
+			title:"提交中"
+		})
+		let res = await registerConsultantStep1(localData.value)
+		uni.hideLoading()
+		console.log(res);
+		localData.value = res.data
+		emit("committed", "")
+	}
+
+	defineExpose({
+		submit
+	})
+
+	const areaChange = (e) => {
+		console.log(e);
+	}
 	const openCityHandler = () => {
 		uni.navigateTo({
 			url: "/pages/auth/cityChoose"
 		})
+	}
+
+	onShow(() => {
+		const city = uni.getStorageSync("verifyAddress")
+		console.log(city);
+		if (city) {
+			address.value = city
+		}
+	})
+
+	onUnload(() => {
+		uni.removeStorageSync("verifyAddress")
+	})
+
+	const setAddress = (addr) => {
+		console.log(addr);
+		// address.value = addr
 	}
 
 	const closeCareerHandler = () => {
@@ -116,11 +238,24 @@
 
 	}
 
-	const props = defineProps({
-		modelValue: Object
-	});
+	const uploadPhoto = (type) => {
+		uni.chooseImage({
+			count: 1,
+			success: function(res) {
+				if (type == 1) {
+					frontPhoto.value = res.tempFilePaths[0];
+				} else {
+					backendPhoto.value = res.tempFilePaths[0];
+				}
+			}
+		})
+	}
 
-	const emit = defineEmits(['update:modelValue']);
+	// const props = defineProps({
+
+	// });
+
+
 
 	const localData = computed({
 		get: () => props.modelValue,

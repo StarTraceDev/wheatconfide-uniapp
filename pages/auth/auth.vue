@@ -24,9 +24,9 @@
 							</view>
 						</view>
 						<view class="handler-components-box">
-							<idCard v-show="step == 1"  v-model="formData.idCard"></idCard>
-							<career v-show="step==2"></career>
-							<certificate v-show="step==3"></certificate>
+							<idCard v-show="step == 1" :modelValue="consultant" :consultantType="consultantType" @committed="step1Commit" ref="idCardRef" v-model="formData.idCard"></idCard>
+							<career v-show="step==2" :modelValue="consultant"></career>
+							<certificate v-show="step==3" @commited="finalCommit" ref="finalStep"></certificate>
 
 							<view class="footer">
 								<view class="tip">
@@ -65,10 +65,14 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
-
+	
+	import { onLoad } from '@dcloudio/uni-app'
+	
 	import {
 		getConsultantById,
-		saveConsultant
+		getConsultantByUserId,
+		saveConsultant,
+		registerConsultantStep2
 	} from "@/common/api/consultant.js";
 
 	const globalStore = useGlobalDataStore();
@@ -81,8 +85,25 @@
 	} from 'lodash-es';
 	const currentComponent = ref(idCard);
 
-	const step = ref(1);
+	const step = ref(2);
 	const popup = ref(null);
+	const consultant = ref(null)
+	
+	const idCardRef = ref(null)
+	const finalStep = ref(null)
+	const consultantType = ref('')
+	onLoad((e)=>{
+		console.log(e);
+		consultantType.value = e.type
+		getConsultantDetail()
+	})
+	
+	const getConsultantDetail = ()=>{
+		getConsultantByUserId({consultantType:consultantType.value}).then(res=>{
+			console.log(res);
+			consultant.value = res.data
+		})
+	}
 
 	// 集中管理表单数据
 	const formData = ref({
@@ -103,7 +124,30 @@
 	});
 
 	const nextStepHandler = () => {
+		if(step.value==1){
+			idCardRef.value?.submit()
+		}
+		if(step.value==2){
+			
+			consultant.value.consultantType = consultantType.value
+			console.log(consultant);
+			registerConsultantStep2(consultant.value).then(res=>{
+				// console.log(res);
+				step.value = step.value+1
+			})
+			// step.value = step.value+1
+		}
+		
+	}
+	
+	const step1Commit = ()=>{
 		step.value = step.value + 1;
+	}
+	
+	const finalCommit = ()=>{
+		uni.showToast({
+			title:"资料已提交，请等待审核"
+		})
 	}
 
 	const prevStepHandler = () => {
@@ -129,7 +173,8 @@
 		};
 
 		console.log(submitData);
-		let res = await saveConsultant(submitData);
+		// let res = await saveConsultant(submitData);
+		finalStep.value?.submit()
 
 		uni.showToast({
 			title: '发布成功',

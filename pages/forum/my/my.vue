@@ -6,7 +6,8 @@
 			</view>
 			<view class="user-info">
 				<view class="user-info-content">
-					<image src="@/static/my/profile.png" class="profile"></image>
+					<image :src="userlnfo1.avatar==null?'/static/my/profile.png':userlnfo1.avatar" class="profile"></image>
+					{{userlnfo1.avatar}}
 					<view>
 						<view class="nick-name">{{userlnfo1.realName}}</view>
 						<view class="id-num">
@@ -125,6 +126,7 @@
 	const getlnfo = async () => {
 		let res = await getUserlnfo();
 		userlnfo1.value = res.data;
+		console.log('userInfo',userlnfo1.value);
 	}
 	onMounted(() => {
 		getlnfo()

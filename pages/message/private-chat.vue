@@ -274,13 +274,16 @@
 	onLoad((options) => {
 		//聊天对象
 		let id = options.to;
-		friend = restApi.findUserById(id);
+		console.log(id);
+		let name = options.name
+		friend = {id:id,name:name,avatar:options.avatar}
+		// friend = restApi.findUserById(id);
 		to = {
-			id: friend.id,
+			id: id,
 			type: GoEasy.IM_SCENE.PRIVATE,
 			data: {
-				name: friend.name,
-				avatar: friend.avatar
+				name: name,
+				avatar: ""
 			}
 		};
 

@@ -4,8 +4,8 @@ import JSONBig from 'json-bigint'
 
 // 创建一个配置对象
 const requestConfig = {
-	baseURL: 'https://ceshi.maimiaoqingsu.com', // API基础URL
-	// baseURL: 'http://localhost:8112',
+	// baseURL: 'https://ceshi.maimiaoqingsu.com', // API基础URL
+	baseURL: '/',
 	timeout: 30000, // 请求超时时间
 	header: {
 		'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ const requestConfig = {
 // 创建一个封装后的请求方法
 const request = (options) => {
 	// 合并默认配置和用户配置
-	console.log('请求配置:', options)
+	// console.log('请求配置:', options)
 	const config = {
 		...requestConfig,
 		...options
@@ -42,14 +42,14 @@ const request = (options) => {
 			}
 		}
 	}
-	console.log('处理后的配置:', config)
+	// console.log('处理后的配置:', config)
 
 	// 返回一个Promise
 	return new Promise((resolve, reject) => {
 		uni.request({
 			...config,
 			success: (res) => {
-				console.log('原始响应数据:', res.data)
+				// console.log('原始响应数据:', res.data)
 
 				// 处理响应数据
 				let data = res.data
@@ -68,10 +68,10 @@ const request = (options) => {
 					console.error('JSON解析失败:', e)
 					data = res.data // 解析失败时使用原始数据
 				}
-				console.log(data)
+				// console.log(data)
 
 				// 根据业务逻辑处理响应
-				console.log('响应状态码:', data.code)
+				// console.log('响应状态码:', data.code)
 
 				// 优化：使用更清晰的条件判断
 				if (data.code !== 0 && data.code !== 409999) {
