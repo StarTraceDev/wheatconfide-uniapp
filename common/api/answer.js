@@ -11,3 +11,5 @@ export const getCommentById = (params, config = {}) => http.post('/api/comment/c
 	
 export const saveComment = (params, config = {}) => http.post('/api/comment/comment/saveComment',
 	params, config)
+	
+export const getHotQa = (params,config={}) => http.get('/api/answer/answer/hotList',params,config)

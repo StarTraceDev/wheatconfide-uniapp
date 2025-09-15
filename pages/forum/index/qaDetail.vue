@@ -37,8 +37,20 @@
 				</view>
 				<view class="contact">文章转载/侵权，请联系邮箱：<text class="txt">6757567@163.com</text></view>
 			</view>
-			<view v-for="(item,index) in commentList" :key="index">
-				{{ item.content }}
+			<view style="background-color: white;margin: 20rpx 30rpx;border-radius: 20rpx;padding: 20rpx;">
+				<view style="margin-bottom: 30rpx;"><text style="font-size: 42rpx;font-weight: bold;">热门评论</text></view>
+				<view v-for="(item,index) in commentList" :key="index" style="margin-bottom: 20rpx;" v-if="commentList.length>0">
+					<view style="display: flex;flex-direction: row;">
+						<image style="width: 48rpx;height: 48rpx;border-radius: 24rpx;" :src="item.avatar==null?'/static/my/profile.png':item.avatar"></image>
+						<view style="margin-left: 20rpx;display: flex;flex-direction: column;">
+						<text style="font-size: 26rpx;">{{item.nickname}}</text>
+						<text style="margin-top: 10rpx;font-size: 28rpx;color: #666666;">{{ item.content }}</text>
+						</view>
+					</view>
+				</view>
+				<view v-else>
+					<view style="text-align: center;"><text>暂无数据</text></view>
+				</view>
 			</view>
 			<view class="hot-psychological-box">
 				<view class="hot-psychological-header">
@@ -49,8 +61,8 @@
 				</view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :show-scrollbar="false">
 					<view class="list">
-					<!-- 	<ConsultTeacherListItem class="list-item" v-for="i in 10" @click="switchTabsFn(2)">
-						</ConsultTeacherListItem> -->
+						<ConsultTeacherListItem class="list-item" v-for="i in 10" @click="switchTabsFn(2)">
+						</ConsultTeacherListItem> 
 					</view>
 				</scroll-view>
 			</view>
@@ -93,7 +105,10 @@
 		ref,
 		reactive
 	} from 'vue';
-	import { onLoad,onBackPress } from '@dcloudio/uni-app'
+	import {
+		onLoad,
+		onBackPress
+	} from '@dcloudio/uni-app'
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
@@ -113,16 +128,16 @@
 	const route = useRoute();
 	const tabActive = ref(0);
 	const replyContent = ref("");
-	let id=ref();
+	let id = ref();
 	const data = reactive({
-		listParams:{
+		listParams: {
 			"current": 1,
 			"size": 10,
-			"params":{
-				
+			"params": {
+
 			}
 		},
-		list:[]
+		list: []
 	})
 	const tabLists = ref([{
 		txt: "推荐",
@@ -150,9 +165,9 @@
 		id: 7
 	}]);
 	const info = ref()
-	
-	const commentList = ref()
-	
+
+	const commentList = ref([])
+
 	const changeTabHandler = (index) => {
 		tabActive.value = index
 	}
@@ -190,35 +205,35 @@
 		});
 		info.value = res.data;
 	}
-	
+
 	const getList = async () => {
 		data.listParams.params.articleId = id.value
 		let res = await getCommentById(data.listParams);
-		
 		commentList.value = res.data.records;
 	}
 
 	const onSaveComment = async () => {
 		let res = await saveComment({
 			"content": replyContent.value,
-			"articleId": id.value
+			"articleId": id.value,
+			"type":2
 		});
-		replyContent.value=""
+		replyContent.value = ""
 		uni.showToast({
-		    title: '发布成功',
-		    icon: 'none', // 可选值 'success', 'loading', 'none'
-		    duration: 2000 // 持续时长，单位ms
+			title: '发布成功',
+			icon: 'none', // 可选值 'success', 'loading', 'none'
+			duration: 2000 // 持续时长，单位ms
 		});
 		console.log(res)
 	}
-	
+
 	onLoad((options) => {
 		id.value = options.id
 		getInfo();
 		getList();
 	})
 	onMounted(() => {
-	
+
 	})
 </script>
 
@@ -345,8 +360,12 @@
 			}
 
 			.hot-psychological-box {
-				padding: 0rpx 32rpx;
 				margin-top: 60rpx;
+				background-color: white;
+				margin-left: 30rpx;
+				margin-right: 30rpx;
+				padding: 20rpx;
+				border-radius: 20rpx;
 
 				.hot-psychological-header {
 					display: flex;

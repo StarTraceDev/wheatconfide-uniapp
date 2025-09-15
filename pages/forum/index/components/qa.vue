@@ -3,10 +3,10 @@
 		<view class="header"><text class="num">172,567</text> 个问题在这里收获了答案</view>
 		<scroll-view scroll-x="true" class="scroll-content-x" :show-scrollbar="false">
 			<view class="qa-content-list">
-				<view class="qa-content-item" v-for="i in 10" :key="i">
+				<view class="qa-content-item" v-for="(item,index) in hotQas" :key="index">
 					<view class="item-box">
-						<view class="title">我像不像友情里的舔狗？</view>
-						<view class="content"><text class="txt">12 个回答</text><uni-icons type="help-filled" size="14"
+						<view class="title">{{item.title}}</view>
+						<view class="content"><text class="txt">{{item.totalComment==null?0:item.totalComment}} 个回答</text><uni-icons type="help-filled" size="14"
 								color="rgba(104, 117, 129, 1)"></uni-icons>
 						</view>
 					</view>
@@ -28,7 +28,7 @@
 					<view class="item-header">
 						<view class="item-header-left">
 							<view class="header-pic">
-								<image src="/static/my/profile.png" class="img"></image>
+								<image :src="i.avatar==null?'/static/my/profile.png':i.avatar" class="img"></image>
 								<view class="name">{{i.realName}}</view>
 								<text class="tip">咨询师</text>
 							</view>
@@ -68,7 +68,8 @@
 		reactive
 	} from 'vue';
 	import {
-		getAnswerList
+		getAnswerList,
+		getHotQa
 	} from "@/common/api/answer.js"
 	import share from '@/components/share/share.vue'
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
@@ -83,6 +84,8 @@
 		},
 		list:[]
 	})
+	const hotQas = ref([])
+	
 	const contentTabsList = ref([{
 		id: 0,
 		label: "最新"
@@ -110,8 +113,16 @@
 	
 	const getList = async () => {
 		let res = await getAnswerList(data.listParams);
+		console.log(res);
 		data.list=res.data.records
 	}
+	
+	const getRecommendList = async ()=>{
+		let res = await getHotQa()
+		console.log(res);
+		hotQas.value = res.data
+	}
+	getRecommendList()
 	
 	const openQaDetailFn = (item) => {
 		console.log('====================' + item)
@@ -275,6 +286,7 @@
 								.img {
 									width: 48rpx;
 									height: 48rpx;
+									border-radius: 24rpx;
 								}
 
 								.name {
