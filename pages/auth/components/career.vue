@@ -11,8 +11,8 @@
 								:key="index">
 								<template v-slot:title>
 									<view class="collapse-item-title">
-										<uni-data-checkbox multiple :localdata="[item]"
-											selectedColor="#35CA95" selectedTextColor="#212528"></uni-data-checkbox>
+										<uni-data-checkbox multiple :localdata="[item]" selectedColor="#35CA95"
+											selectedTextColor="#212528"></uni-data-checkbox>
 									</view>
 								</template>
 								<view class="content">
@@ -32,7 +32,6 @@
 					<view class="career-collapse-item">
 						<view class="uni-collapse-item__wrap">
 							<view class="content">
-								<checkbox-group>
 								<uni-data-checkbox multiple v-model="modelValue.therapies" :localdata="multipleCheckBox"
 									selectedColor="#35CA95" selectedTextColor="#212528"></uni-data-checkbox>
 							</view>
@@ -114,9 +113,9 @@
 	}]);
 
 
-const props = defineProps({
-	modelValue:Object
-})
+	const props = defineProps({
+		modelValue: Object
+	})
 
 
 	const multipleValues = ref([]);
@@ -190,9 +189,11 @@ const props = defineProps({
 								color: #212528 !important;
 							}
 						}
+
 						.uni-collapse-item__wrap {
 							padding-left: 32rpx;
 							margin: 8rpx 0rpx 0rpx 0rpx;
+
 							.content {
 								.uni-data-checklist {
 									.checklist-group {

@@ -6,7 +6,7 @@
 				<uni-icons type="left" size="24" @click="backFn"></uni-icons>
 			</template>
 			<template v-slot:right>
-				<view class="right">
+				<view class="right" @click="releaseQuestion">
 					发布
 				</view>
 			</template>
@@ -14,12 +14,12 @@
 		<view class="question-content">
 			<view class="question-title">
 				<input class="uni-input" maxlength="25" placeholder="请说出您的问题（5-25字）"
-					placeholder-class="placeholder-title" />
+					placeholder-class="placeholder-title" v-model="form.title" />
 			</view>
 			<view class="content">
-				<textarea class="uni-textarea" placeholder="示例：25岁女孩，近期情绪很焦虑，怎么去缓解？
+				<textarea class="uni-textarea" v-model="form.content" placeholder="示例：25岁女孩，近期情绪很焦虑，怎么去缓解？
 包含年龄、性别信息
-明确具体困扰与症状，以便得到更专业解答？" placeholder-class="placeholder-content" maxlength="1000" v-model="content" />
+明确具体困扰与症状，以便得到更专业解答？" placeholder-class="placeholder-content" maxlength="1000"  />
 				<view class="char-count">{{content.length}}/1000</view>
 			</view>
 		</view>
@@ -69,12 +69,18 @@
 		onMounted,
 		ref
 	} from 'vue';
+	
+	import {
+		publishQuestion
+	} from '@/common/api/answer.js'
 
 	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
 		})
 	}
+	
+	const form = ref({})
 
 	const content = ref("");
 
@@ -85,6 +91,19 @@
 
 	const tagPopupRef = ref(null);
 
+	const releaseQuestion = async() => {
+		let resp =  await publishQuestion(form.value)
+		console.log(resp);
+		if(resp.code==0){
+			uni.showToast({
+				title:"发布成功",
+				icon:"success",
+				success(res) {
+					uni.navigateBack()
+				}
+			})
+		}
+	}
 
 
 	const tabActive = ref(1);

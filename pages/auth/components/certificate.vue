@@ -4,7 +4,7 @@
 			<view class="certificate-content">
 				<view class="title">
 					<view>
-						资质信息<text class="require">(必填)</text>
+						我的资质<text class="require">(必填)</text>
 					</view>
 					<view class="tips">
 						<image src="/static/auth/remark.png" class="img"></image>说明
@@ -14,7 +14,77 @@
 				<view class="id-card-form-box">
 					<view class="id-card-form-content" v-for="(item,index) in certificateLists" :key="index">
 						<view class="form-item">
-							<view class="label require">资质类别</view>
+							<view class="label require">证书名称</view>
+							<view class="content" :class="!value?'weight':''">
+								<uni-easyinput trim="all" type="text" placeholder="请输入证书名称" :inputBorder="false"
+									:clearable="false" style="text-align: end;" v-model="item.name">
+								</uni-easyinput>
+							</view>
+						</view>
+						<view class="form-item">
+							<view class="label require">发证机构</view>
+							<view class="content" :class="!value?'weight':''">
+								<uni-easyinput trim="all" type="text" placeholder="请输入发证机构" :inputBorder="false"
+									:clearable="false" style="text-align: end;" v-model="item.authority">
+								</uni-easyinput>
+							</view>
+						</view>
+						<view class="form-item user-sign">
+							<view class="label require">证书编号</view>
+							<view class="content-input" style="width: 400rpx;">
+								<uni-easyinput trim="all" type="text" placeholder="请输入证书编号" :inputBorder="false"
+									:clearable="false" v-model="item.number" style="text-align: end;">
+								</uni-easyinput>
+							</view>
+						</view>
+						<view class="form-item user-sign">
+							<view class="label require">发证日期</view>
+							<view class="content" :class="!value?'weight':''">
+								<uni-datetime-picker @change="certificateDateChange($event,item,index)" type="date"
+									:clear-icon="false" v-model="item.date"
+									@maskClick="maskClick">{{item.date==''?'请选择':item.date}}<uni-icons type="right"
+										size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></uni-datetime-picker>
+							</view>
+						</view>
+						<view class="form-item user-introduction">
+							<view class="label require">证件照片</view>
+							<view class="introduction-content">
+								<u-upload :fileList="item.photoList" :before-upload="beforeUpload" :header="headers"
+									@on-success="(data, i, lists, name) => uploadComplete(data, i, lists, name, index)" @on-remove="deletePic" name="file" :action="uploadUrl"
+									multiple :maxCount="3"></u-upload>
+							</view>
+						</view>
+
+						
+						<view class="line-box">
+							<view class="line" :class="index>0?'line-delete':''"></view>
+							<view v-if="index>0" class="delete-item" @click="removeCertificateListHandler(index)">
+								<uni-icons type="minus-filled" size="30" color="#FA5151"></uni-icons>
+								移除
+							</view>
+						</view>
+
+					</view>
+					<view class="add-certificate-btn" @click="addCertificateListHandler">
+						<view class="btn"><uni-icons type="plus-filled" size="18"
+								color="rgba(0,0,0,.85)"></uni-icons>增加一项</view>
+					</view>
+				</view>
+			</view>
+			<!-- <view class="certificate-content">
+				<view class="title">
+					<view>
+						经历信息<text class="require">(选填)</text>
+					</view>
+					<view class="tips">
+						<image src="/static/auth/remark.png" class="img"></image>说明
+					</view>
+				</view>
+				<view class="remark">此项信息正式上线后会公开展示在个人资料</view>
+				<view class="id-card-form-box">
+					<view class="id-card-form-content" v-for="(item,index) in certificateLists" :key="index">
+						<view class="form-item">
+							<view class="label require">类别</view>
 							<picker :range="certificates" @change="changeCertificate($event,index)">
 								<view class="content" :class="!value?'weight':''">
 									{{item.type==null?'请选择':item.type}}<uni-icons type="right" size="14"
@@ -23,7 +93,7 @@
 							</picker>
 						</view>
 						<view class="form-item">
-							<view class="label require">发证时间</view>
+							<view class="label require">时间</view>
 							<view class="content" :class="!value?'weight':''">
 								<uni-datetime-picker @change="certificateDateChange($event,item,index)" type="date"
 									:clear-icon="false" v-model="item.date"
@@ -39,7 +109,15 @@
 								</uni-easyinput>
 							</view>
 						</view>
-						<view class="form-item user-introduction">
+						<view class="form-item user-sign">
+							<view class="label require">内容</view>
+							<view class="content-input" style="width: 400rpx;">
+								<uni-easyinput trim="all" type="text" placeholder="请输入证书编号" :inputBorder="false"
+									:clearable="false" v-model="item.content" :placeholderStyle="{'text-align':'right'}">
+								</uni-easyinput>
+							</view>
+						</view>
+						<!-- <view class="form-item user-introduction">
 							<view class="label require">证件照片</view>
 							<view class="introduction-content">
 								<view class="img-list">
@@ -58,8 +136,8 @@
 									<view class="txt">最多三张</view>
 								</view>
 							</view>
-						</view>
-						<view class="line-box">
+						</view> -->
+			<!-- <view class="line-box">
 							<view class="line" :class="index>0?'line-delete':''"></view>
 							<view v-if="index>0" class="delete-item" @click="removeCertificateListHandler(index)">
 								<uni-icons type="minus-filled" size="30" color="#FA5151"></uni-icons>
@@ -73,13 +151,13 @@
 								color="rgba(0,0,0,.85)"></uni-icons>增加一项</view>
 					</view>
 				</view>
-			</view>
+			</view> -->
 
 
 			<view class="certificate-content">
 				<view class="title">
 					<view>
-						教育背景<text class="require">(选填)</text>
+						学历信息<text class="require">(选填)</text>
 					</view>
 					<view class="tips">
 						<image src="/static/auth/remark.png" class="img"></image>说明
@@ -92,13 +170,15 @@
 							<view class="label">起始时间</view>
 							<view class="content" :class="!value?'weight':''">
 								{{item.startDate==null?"请选择":item.startDate}}<uni-icons type="right" size="14"
-									color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+									color="rgba(0, 0, 0, 0.3)"></uni-icons>
+							</view>
 						</view>
 						<view class="form-item">
 							<view class="label">截止时间</view>
 							<view class="content" :class="!value?'weight':''">
 								{{item.endDate==null?'请选择':item.endDate}}<uni-icons type="right" size="14"
-									color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+									color="rgba(0, 0, 0, 0.3)"></uni-icons>
+							</view>
 						</view>
 
 						<view class="form-item user-sign">
@@ -159,7 +239,7 @@
 			<view class="certificate-content">
 				<view class="title">
 					<view>
-						伦理培训<text class="require">(选填)</text>
+						我的经历<text class="require">(选填)</text>
 					</view>
 					<view class="tips">
 						<image src="/static/auth/remark.png" class="img"></image>说明
@@ -241,12 +321,15 @@
 	} from '@/common/api/consultant';
 	const certificateImgs = ref([]);
 
-	const certificateLists = reactive([{
-		type: null,
-		date: null,
-		number: null,
-		imgUrl: []
+	let certificateLists = reactive([{
+		name: '',
+		date: '',
+		photoList: [],
+		authority: '',
+		number: ''
 	}]);
+
+	const uploadUrl = ref('/api/common/upload')
 
 	const certificateDateChange = (e, data, i) => {
 		console.log(e, data);
@@ -267,39 +350,99 @@
 		})
 	}
 
-	const deletePic = (item, i) => {
-		item.imgUrl.splice(i, 1)
+	const deletePic = (index, lists) => {
+		console.log('图片已被移除')
 	}
 
+	const beforeUpload = (index, list) => {
+		// 只上传偶数索引的文件
+		// uni.showLoading({
+		// 	title:"上传中..."
+		// })
+	}
+	// const deletePic = (item, i) => {
+	// 	item.imgUrl.splice(i, 1)
+	// }
+	const token = uni.getStorageSync('token')
+	const headers = ref({
+		'token': token
+	})
+	const emit = defineEmits(['commited'])
 	const submit = async () => {
+		//判断certificate中是否有files为空的情况
+		let containEmpty = false
+		console.log(certificateLists);
+		certificateLists.forEach(c => {
+			console.log(c);
+			if (c.photoList.length == 0) {
+				uni.showToast({
+					title: "您还有证件照片没有上传",
+					icon: "none"
+				})
+				containEmpty = true;
+				return
+			}
+		})
+		console.log(containEmpty);
+		if (containEmpty) {
+			return
+		}
+		certificateLists.forEach(e => {
+			e.photos = JSON.stringify(e.photoList)
+		})
+
 		let data = {
-			certificateList: certificateLists.value,
+			...props.modelValue,
+			certificateList: certificateLists,
 			educationList: educationLists.value,
-			careerList: trainLists.value
+			careerList: trainLists.value,
+			consultantType: props.consultantType
 		}
 		let res = await registerConsultantStep3(data)
 		if (res.code == 0) {
+			uni.showToast({
+				title: "提交成功"
+			})
 			emit("commited", "")
 		}
 	}
+	const props = defineProps({
+		consultantType: String,
+		modelValue: Object
+	})
+	certificateLists = props.modelValue.certificateList
 
 	defineExpose({
 		submit
 	})
 
 
+	const uploadComplete = (data, i, lists, name,index) => {
+		console.log("上传成功");
+		console.log(data);
+		console.log(index);
+		console.log(lists);
+		console.log(name);
+		certificateLists[index].photoList.push(data.data.url)
+		// uni.hideLoading()
+		// uni.showToast({
+		// 	title:"上传成功"
+		// })
+	}
+
 
 	const addCertificateListHandler = () => {
-		certificateLists.value.push({
-			type: null,
-			date: null,
-			number: null,
-			imgUrl: []
+		certificateLists.push({
+			name: '',
+			date: '',
+			photoList: [],
+			authority: '',
+			number: ''
 		});
 	}
 
 	const removeCertificateListHandler = (index) => {
-		certificateLists.value.splice(index, 1);
+		certificateLists.splice(index, 1);
 	}
 
 	const addEducationListsHandler = () => {
@@ -325,7 +468,7 @@
 		});
 	}
 
-	const certificates = ref(['资质一', '资质二', '资质三'])
+	const certificates = ref(['学历', '工作经历', '培训经历'])
 
 	const changeCertificate = (e, i) => {
 		certificateLists[i].type = certificates.value[e.detail.value]

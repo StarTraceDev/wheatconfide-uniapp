@@ -12,7 +12,6 @@ const requestConfig = {
 	},
 	dataType: 'text' // 关键：设置为text确保以字符串形式返回
 }
-
 // 创建一个封装后的请求方法
 const request = (options) => {
 	// 合并默认配置和用户配置
@@ -71,14 +70,14 @@ const request = (options) => {
 				// console.log(data)
 
 				// 根据业务逻辑处理响应
-				// console.log('响应状态码:', data.code)
+				console.log('响应状态码:', data.code)
 
 				// 优化：使用更清晰的条件判断
 				if (data.code !== 0 && data.code !== 409999) {
 					// 如果没有显式定义custom的toast参数为false的话，默认对报错进行toast弹出提示
 					if (custom.toast !== false) {
 						uni.showToast(data.message || '请求失败')
-						if (data.code == 401) {
+						if (data.code == 401 || data.code==10010002) {
 							uni.removeStorageSync("logoInfo")
 							uni.reLaunch({
 								url: "/pages/login/login"

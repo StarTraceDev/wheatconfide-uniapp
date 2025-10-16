@@ -14,33 +14,35 @@
 			</uni-nav-bar>
 			<view class="charge-test-content-box">
 				<view class="content-box">
+					<!-- :style="{backgroundImage:'url('+examDetail.icon==null?'/static/forum/bg.png':examDetail.icon+')'}" -->
 					<view class="content-banner">
-						<image src="/static/forum/bg.png" class="img"></image>
+						<image :src="examDetail.icon==null?'/static/forum/bg.png':examDetail.icon" mode="aspectFill"
+							class="img"></image>
+						<view class="banner-text">
+							<text style="color: white;font-size: 42rpx;">{{examDetail.title}}</text>
+							<text style="color: white;font-size: 28rpx;">{{examDetail.oneWord}}</text>
+						</view>
 					</view>
 					<view class="charge-test-options">
 						<view class="option-item">
-							<text class="weight">23.4W</text>人已测
+							<text class="weight">{{examDetail.examNum}}</text>人已测
 						</view>
 						<view class="option-item">
-							<text class="weight">49道</text>精选问题
+							<text class="weight">{{examDetail.examOptionNum}}道</text>精选问题
 						</view>
 						<view class="option-item">
 							<text class="weight">16页</text>专业报告
 						</view>
 					</view>
 					<view class="content-info">
-						很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
-						很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
-						很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
-						很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
-						很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
+						{{examDetail.description}}
 					</view>
 				</view>
 				<view class="test-notice">
 					<view class="test-notice-content">
 						<view class="title">评测须知</view>
 						<view class="info">
-							很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
+							<rich-text :nodes="rule"></rich-text>
 						</view>
 					</view>
 				</view>
@@ -51,7 +53,7 @@
 							<view class="title">
 								相关推荐
 							</view>
-							<view class="label">更多<uni-icons type="right" size="12"></uni-icons>
+							<view class="label" @click="gotoChargeList">更多<uni-icons type="right" size="12"></uni-icons>
 							</view>
 						</view>
 						<view class="content-list">
@@ -127,10 +129,11 @@
 
 		<view class="footer">
 			<view class="price-box">
-				<view class="price">
-					<text class="use-price">¥59.9</text>
-					<text class="under-price">¥79.9</text>
+				<view class="price" v-if="examDetail.payType==1">
+					<text class="use-price">¥{{examDetail.discountPrice}}</text>
+					<text class="under-price">¥{{examDetail.price}}</text>
 				</view>
+				<view class="price" v-else>免费</view>
 				<view class="txt">开通会员享受免费测试</view>
 			</view>
 			<view class="member">会员免费</view>
@@ -140,16 +143,62 @@
 </template>
 
 <script setup>
-const backFn = () => {
+	import {
+		ref
+	} from 'vue'
+	import {
+		onLoad
+	} from '@dcloudio/uni-app'
+
+	import {
+		getExamDetail,
+		getExamRule
+	} from '@/common/api/exam.js'
+	const id = ref(0)
+
+	const rule = ref('')
+	const examDetail = ref({})
+	onLoad((e) => {
+		id.value = e.id
+		console.log(id.value);
+		getDetail()
+		getRule()
+	})
+	
+	const gotoChargeList = ()=>{
+		uni.navigateTo({
+			url:"/pages/psychological-test/test-type/test-type"
+		})
+	}
+
+	const getRule = async () => {
+		let resp = await getExamRule();
+		rule.value = resp.data
+	}
+
+	const getDetail = async () => {
+		let resp = await getExamDetail({
+			id: id.value
+		})
+		console.log(resp);
+		examDetail.value = resp.data
+	}
+
+	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
 		})
 	}
-	
-	const startTestHandler=()=>{
-		uni.navigateTo({
-			url:'/pages/psychological-test/start-test/start-test'
-		})
+
+	const startTestHandler = () => {
+		if (examDetail.value.payType == 0) {
+			uni.navigateTo({
+				url: '/pages/psychological-test/start-test/start-test?title='+examDetail.value.title+"&id="+examDetail.value.id
+			})
+		}else{
+			//支付
+			
+		}
 	}
 </script>
 
@@ -159,8 +208,10 @@ const backFn = () => {
 		width: 750rpx;
 		background: #f4f6f8;
 		background: linear-gradient(180deg, #9DDDC7 0%, #FFFFFF 63%);
+
 		.scroll-content {
 			height: 100vh;
+
 			.charge-test-content-box {
 
 				width: 750rpx;
@@ -172,10 +223,35 @@ const backFn = () => {
 					width: 686rpx;
 
 					.content-banner {
+						position: relative;
+						width: 686rpx;
+						height: 280rpx;
+						display: flex;
+						justify-content: center;
+						/* 水平居中 */
+						align-items: center;
+
+						// margin-left: 30rpx;
+						// margin-right: 30rpx;
+						// height: 300rpx;
+						// background-size: 100% 100%;
+						// background-repeat: no-repeat;
 						.img {
-							width: 686rpx;
-							height: 280rpx;
+							width: 100%;
+							height: 100%;
 							border-radius: 16rpx;
+							position: absolute;
+							top: 0;
+						}
+
+						.banner-text {
+							text-align: center;
+							margin-top: 30rpx;
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: center;
+							position: relative;
 						}
 					}
 
@@ -186,6 +262,7 @@ const backFn = () => {
 						color: rgba(0, 0, 0, 0.5);
 						height: 80rpx;
 						align-items: center;
+						margin-top: 30rpx;
 						border-radius: 16rpx;
 						background: rgba(255, 255, 255, 0.85);
 						box-shadow: 0rpx 8rpx 20rpx 0rpx rgba(0, 0, 0, 0.06);
@@ -232,7 +309,7 @@ const backFn = () => {
 					display: flex;
 					justify-content: center;
 					padding-top: 128rpx;
-                    
+
 					.test-notice-content {
 						width: 686rpx;
 
@@ -498,35 +575,39 @@ const backFn = () => {
 				color: #fff;
 				background: #FF8F1F;
 				font-size: 32rpx;
-				line-height:108rpx;
+				line-height: 108rpx;
 				text-align: center;
 			}
-			.start-test{
+
+			.start-test {
 				background: #35CA95;
 			}
-			.price-box{
+
+			.price-box {
 				width: 290rpx;
 				height: 108rpx;
 				padding-left: 30rpx;
 				display: flex;
 				flex-direction: column;
 				justify-content: center;
-				.txt{
+
+				.txt {
 					font-size: 20rpx;
 					font-weight: normal;
 					line-height: normal;
 					letter-spacing: normal;
 					color: rgba(0, 0, 0, 0.6);
 				}
-				
-				.price{
-					.use-price{
+
+				.price {
+					.use-price {
 						font-size: 36rpx;
 						font-weight: 500;
 						letter-spacing: normal;
 						color: #FA5151;
 					}
-					.under-price{
+
+					.under-price {
 						font-size: 24rpx;
 						font-weight: normal;
 						text-decoration: line-through;
@@ -534,7 +615,7 @@ const backFn = () => {
 						padding-left: 20rpx;
 					}
 				}
-				
+
 			}
 		}
 	}

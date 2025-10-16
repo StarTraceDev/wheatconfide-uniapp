@@ -7,13 +7,13 @@
 
 		<view class="operate-list-box">
 			<view class="operate-first">
-				<view class="first-item green">
-					<view class="title" @click="openPageHandler('/pages/forum/write/send-dynamics/send-dynamics')">发心事</view>
+				<view class="first-item green" @click="openPageHandler('/pages/forum/write/send-dynamics/send-dynamics')">
+					<view class="title" >发心事</view>
 					<view class="content">此时此刻，随时记录收获爱与温暖</view>
 					<image src="@/static/forum/send.svg" class="img"></image>
 				</view>
-				<view class="first-item yellow">
-					<view class="title" @click="openPageHandler('/pages/forum/write/ask-question/ask-question')">提问题</view>
+				<view class="first-item yellow" @click="openPageHandler('/pages/forum/write/ask-question/ask-question')">
+					<view class="title" >提问题</view>
 					<view class="content">7万+7万+专业咨询师为你答疑解惑</view>
 					<image src="@/static/forum/qa.svg" class="img"></image>
 				</view>

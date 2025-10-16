@@ -1,6 +1,6 @@
 <template>
 	<view class="start-test-box">
-		<uni-nav-bar :backgroundColor="'#F4F6F8'" :border="false" title="潜意识投射测试" class="header-bar" :statusBar="true"
+		<uni-nav-bar :backgroundColor="'#F4F6F8'" :border="false" :title="title" class="header-bar" :statusBar="true"
 			fixed>
 			<template v-slot:left>
 				<uni-icons type="left" size="24" @click="backFn"></uni-icons>
@@ -16,10 +16,13 @@
 			<view class="process-box">
 				<view class="process-content">
 					<view class="process-txt">评测进度</view>
-					<view class="process-percent">
+					<!-- <view class="process-percent">
 						<view class="use-process" :style="{'width':width+'rpx'}"></view>
+					</view> -->
+					<u-line-progress active-color="#38CC98" inactive-color="#ffffff" :percent="progressPercent"
+						:show-percent="false"></u-line-progress>
+					<view class="process-num"><text class="use-num">{{examIndex+1}}</text>/{{examOptionList.length}}
 					</view>
-					<view class="process-num"><text class="use-num">1</text>/13</view>
 				</view>
 			</view>
 
@@ -29,24 +32,26 @@
 				</view>
 				<view class="q-content">
 					<view class="content">
-						您从上床到睡着所消耗的时间 是多少
+						{{examOptionList[examIndex].question}}
 					</view>
 				</view>
 			</view>
 			<view class="answer-box">
 				<view class="answer-content">
 					<view class="answer-list">
-						<view class="answer-item" v-for="i in 4" :key="i" @click="answerHandler"
-							:class="answerActive==i?'active':''">
+						<view class="answer-item" v-for="(item,index) in JSON.parse(examOptionList[examIndex].options)"
+							:key="index" @click="answerHandler(index)" :class="answerActive==index?'active':''">
 							<view class="dot"></view>
-							<view class="txt">入睡时间从来没有超过30分钟</view>
+							<view class="txt">{{item.text}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
 
 			<view class="pre-btn-box">
-				<view class="pre">上一题</view>
+				<view class="pre" v-if="examIndex>0" @click="prevOption">上一题</view>
+				<view class="pre" v-if="examIndex<examOptionList.length-1" @click="nextOption">下一题</view>
+				<view class="pre" v-if="examIndex==examOptionList.length-1" @click="getResult">查看结果</view>
 			</view>
 		</view>
 	</view>
@@ -54,14 +59,158 @@
 
 <script setup>
 	import {
+		computed,
 		onMounted,
-		ref
+		ref,
+		watch
 	} from 'vue';
+
+	import {
+		onLoad
+	} from '@dcloudio/uni-app'
+
+	import {
+		getExamOptions,
+		saveExamRecord,
+		updateUserAnswer,
+		examResult
+	} from '@/common/api/exam.js'
 
 	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
 		})
+	}
+
+	const title = ref('')
+	const id = ref(0)
+
+	const examOptionList = ref([])
+	const examIndex = ref(0)
+	const examId = ref(0)
+	const userAnswer = ref([])
+	const recordId = ref(0)
+	onLoad((e) => {
+		title.value = e.title
+		id.value = e.id
+		examId.value = e.examId
+		if (!examId.value) {
+			//需要创建测试记录
+			createExamRecord()
+			getOptionList()
+		} else {
+			getExamOptionRecordDetail()
+		}
+	})
+
+	const createExamRecord = async () => {
+		let resp = await saveExamRecord({
+			examId: id.value
+		})
+		console.log(resp);
+		recordId.value = resp.data
+	}
+
+	const nextOption = () => {
+		// if(userAnswer.value.length<=0){
+		// 	uni.showToast({
+		// 		title:"请选择选项",
+		// 		icon:"error"
+		// 	})
+		// 	return
+		// }
+		if (answerActive.value === -1 || answerActive.value === undefined) {
+			uni.showToast({
+				title: "请选择选项",
+				icon: 'error'
+			})
+			return
+		}
+		// if (userAnswer.value.length < examIndex.value) {
+		// 	uni.showToast({
+		// 		title: "请选择选项",
+		// 		icon: 'error'
+		// 	})
+		// 	return
+		// }
+		//查找是否已存在该试题
+		const existIndex = userAnswer.value.findIndex(
+			(item) => item.optionIndex === examIndex.value
+		)
+		if (existIndex !== -1) {
+			// ✅ 已存在 → 替换答案
+			userAnswer.value[existIndex].result = answerActive.value
+		} else {
+			userAnswer.value.push({
+				optionIndex: examIndex.value,
+				result: answerActive.value
+			})
+		}
+		updateAnswer()
+		examIndex.value = examIndex.value + 1
+		if (userAnswer.value[examIndex.value]) {
+			let answer = userAnswer.value[examIndex.value]
+			answerActive.value = answer.result
+		} else {
+			answerActive.value = -1
+		}
+	}
+
+	const updateAnswer = async () => {
+		let resp = await updateUserAnswer({
+			id: recordId.value,
+			options: JSON.stringify(userAnswer.value),
+			currentIndex: examIndex.value
+		})
+	}
+
+	const getResult = async () => {
+		if (answerActive.value === -1 || answerActive.value === undefined) {
+			uni.showToast({
+				title: "请先选择选项",
+				icon: "error"
+			})
+			return
+		}
+		// 2️⃣ 更新最后一题的答案（如果未保存）
+		const existIndex = userAnswer.value.findIndex(
+			(item) => item.optionIndex === examIndex.value
+		)
+		if (existIndex !== -1) {
+			userAnswer.value[existIndex].result = answerActive.value
+		} else {
+			userAnswer.value.push({
+				optionIndex: examIndex.value,
+				result: answerActive.value
+			})
+		}
+		uni.showLoading({
+			title: "正在获取结果，请稍后..."
+		})
+		updateAnswer()
+		getExamResult()
+	}
+	
+	const getExamResult = async()=>{
+		let resp = await examResult({id:recordId.value})
+		console.log(resp);
+	}
+
+	const prevOption = () => {
+		examIndex.value = examIndex.value - 1
+		let answer = userAnswer.value[examIndex.value]
+		answerActive.value = answer.result
+	}
+	const getExamOptionRecordDetail = async () => {
+
+	}
+
+	const getOptionList = async () => {
+		let resp = await getExamOptions({
+			id: id.value
+		})
+		console.log(resp);
+		examOptionList.value = resp.data
 	}
 
 	const width = ref(0);
@@ -70,18 +219,25 @@
 		width.value = (436 / 13 * 2);
 	};
 
+
 	onMounted(() => {
 		countProcessHandler();
 	})
-	const answerActive = ref(1);
+
+	const progressPercent = computed(() => {
+		return Math.round(((examIndex.value + 1) / examOptionList.value.length) * 100)
+	})
+
+	watch(progressPercent, (newVal, oldVal) => {
+		console.log(`进度从 ${oldVal}% → ${newVal}%`)
+	})
+	const answerActive = ref(-1);
 	const answerHandler = (i) => {
 		answerActive.value != i ? answerActive.value = i : ''
-		uni.navigateTo({
-			url:'/pages/psychological-test/test-result/test-result'
-		})
+		// uni.navigateTo({
+		// 	url: '/pages/psychological-test/test-result/test-result'
+		// })
 	}
-	
-	
 </script>
 
 <style lang="scss" scoped>
@@ -109,8 +265,9 @@
 					justify-content: space-between;
 					padding-top: 40rpx;
 
-					.process-text {
-						font-size: 28rpx;
+					.process-txt {
+						font-size: 26rpx;
+						width: 160rpx;
 						color: rgba(0, 0, 0, 0.85);
 					}
 
@@ -204,17 +361,20 @@
 			}
 
 			.pre-btn-box {
-				width: 750rpx;
+				margin-left: 30rpx;
+				margin-right: 30rpx;
 				display: flex;
-				justify-content: center;
+				justify-content: space-between;
 				margin-top: 80rpx;
 
 				.pre {
-					width: 430rpx;
+					width: 300rpx;
 					height: 92rpx;
 					line-height: 92rpx;
 					text-align: center;
 					color: #fff;
+					margin-left: 20rpx;
+					flex: 1;
 					font-size: 30rpx;
 					background: #35CA95;
 					border-radius: 80rpx;

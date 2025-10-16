@@ -1,7 +1,7 @@
 <template>
 	<view class="auth-box">
 		<view class="children-component">
-			<scroll-view scroll-y="true" :show-scrollbar="false" class="scroll-content">
+			<scroll-view scroll-y="true" v-if="certificate.verifyStatus==null || certificate.verifyStatus==0"  :show-scrollbar="false" class="scroll-content">
 				<view class="children-content">
 					<view class="top-bg"></view>
 					<view class="current-component">
@@ -26,7 +26,7 @@
 						<view class="handler-components-box">
 							<idCard v-show="step == 1" :modelValue="consultant" :consultantType="consultantType" @committed="step1Commit" ref="idCardRef" v-model="formData.idCard"></idCard>
 							<career v-show="step==2" :modelValue="consultant"></career>
-							<certificate v-show="step==3" @commited="finalCommit" ref="finalStep"></certificate>
+							<certificate v-show="step==3" @commited="finalCommit" :modelValue="consultant" :consultantType="consultantType" ref="finalStep"></certificate>
 
 							<view class="footer">
 								<view class="tip">
@@ -51,6 +51,22 @@
 					</view>
 				</view>
 			</scroll-view>
+			<view v-else-if="consultant.verifyStatus==1"> -->
+				<!--认证审核中-->
+				<!--图标-->
+				<view>
+					<u-icon name="info-circle-fill"></u-icon>
+				</view>
+				<view><text>认证审核中，请稍后查看</text></view>
+				<view><text @click="recheck" style="color: red;">重新审核</text></view>
+			</view>
+			<view v-else-if="consultant.verifyStatus==2">
+				<!--审核通过-->
+				<view><text>您已认证成为心理咨询师</text></view>
+			</view>
+			<view v-else>
+				<view><text>您的资料未通过审核~</text></view>
+			</view>
 		</view>
 
 	</view>
@@ -85,9 +101,9 @@
 	} from 'lodash-es';
 	const currentComponent = ref(idCard);
 
-	const step = ref(2);
+	const step = ref(1);
 	const popup = ref(null);
-	const consultant = ref(null)
+	const consultant = ref({})
 	
 	const idCardRef = ref(null)
 	const finalStep = ref(null)
@@ -176,12 +192,12 @@
 		// let res = await saveConsultant(submitData);
 		finalStep.value?.submit()
 
-		uni.showToast({
-			title: '发布成功',
-			icon: 'none', // 可选值 'success', 'loading', 'none'
-			duration: 2000 // 持续时长，单位ms
-		});
-		console.log(res)
+		// uni.showToast({
+		// 	title: '发布成功',
+		// 	icon: 'none', // 可选值 'success', 'loading', 'none'
+		// 	duration: 2000 // 持续时长，单位ms
+		// });
+		// console.log(res)
 	}
 </script>
 

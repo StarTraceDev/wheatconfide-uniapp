@@ -5,6 +5,7 @@ import {
 import GoEasy from '@/uni_modules/GOEASY-IM/js_sdk/goeasy-2.13.21.esm.min.js'
 // import GRTC from './lib/goeasy-rtc-0.3.7.esm.min.js'
 import GRTC from './lib/goeasy-rtc-0.4.1.esm.min.js'
+import uView from './uni_modules/vk-uview-ui';
 
 GoEasy.init({
 	host: "hangzhou.goeasy.io", //应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
@@ -16,24 +17,24 @@ GoEasy.init({
 GRTC.init(GoEasy);
 let user = uni.getStorageSync("currentUser")
 // console.log(user);
-if (user) {
-	GoEasy.connect({
-		id: user.id,
-		data: {
-			"avatar": user.avatar,
-			"nickname": user.nickname
-		},
-		onSuccess: function() {
-			console.log("GoEasy connect successfully.") //连接成功
-		},
-		onFailed: function(error) { //连接失败
-			console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
-		},
-		onProgress: function(attempts) { //连接或自动重连中
-			console.log("GoEasy is connecting", attempts);
-		}
-	})
-}
+// if (user) {
+// 	GoEasy.connect({
+// 		id: user.id,
+// 		data: {
+// 			"avatar": user.avatar,
+// 			"nickname": user.nickname
+// 		},
+// 		onSuccess: function() {
+// 			console.log("GoEasy connect successfully.") //连接成功
+// 		},
+// 		onFailed: function(error) { //连接失败
+// 			console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
+// 		},
+// 		onProgress: function(attempts) { //连接或自动重连中
+// 			console.log("GoEasy is connecting", attempts);
+// 		}
+// 	})
+// }
 uni.$GoEasy = GoEasy;
 uni.$GRTC = GRTC;
 
@@ -85,6 +86,7 @@ import {
 export function createApp() {
 	const app = createSSRApp(App);
 	const pinia = createPinia();
+	app.use(uView);
 	app.use(pinia);
 	return {
 		app

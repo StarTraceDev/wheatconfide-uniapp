@@ -18,10 +18,10 @@
 				<view class="article-user">
 					<view class="user">
 						<view>
-							<image src="/static/my/profile.png" class="picture"></image>
+							<image :src="info.avatar==null?'/static/my/profile.png':info.avatar" class="picture"></image>
 						</view>
 						<view class="name-box">
-							<view class="name">咨询师</view>
+							<view class="name">{{info.realName}}</view>
 							<view class="auth">咨询师 | 认证作家</view>
 						</view>
 					</view>
@@ -298,6 +298,7 @@
 						.picture {
 							width: 72rpx;
 							height: 72rpx;
+							border-radius: 36rpx;
 						}
 
 						.name-box {

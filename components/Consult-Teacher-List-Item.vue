@@ -2,7 +2,7 @@
 	<view class="teacher-container">
 		<view class="card">
 			<view class="avatar-wrap">
-				<image class="avatar" src="@/static/consult/user.png" mode="aspectFill"></image>
+				<image class="avatar" :src="info.avatar" mode="aspectFill"></image>
 			</view>
 			<view class="info-wrap">
 				<view class="name-title">{{info.consultantName}}</view>
@@ -52,6 +52,7 @@
 				align-items: center;
 
 				.avatar {
+					border-radius: 15rpx;
 					width: 168rpx;
 					height: 168rpx;
 				}

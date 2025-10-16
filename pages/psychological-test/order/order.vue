@@ -57,12 +57,23 @@
 import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
+	
+	import {onShow} from '@dcloudio/uni-app';
+	import {} from '@/common/api/exam.js'
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
 		})
+	}
+	
+	onShow(()=>{
+		getExamRecord()
+	})
+	
+	const getExamRecord = ()=>{
+		
 	}
 
 	const tabsList = ref([{
@@ -79,6 +90,7 @@ import {
 		isDot: true
 	}]);
 	const tabActive = ref(1);
+	
 	const tabHandler = (item) => {
 		item.id != tabActive.value ? tabActive.value = item.id : ''
 	}

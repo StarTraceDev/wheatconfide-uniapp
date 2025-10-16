@@ -17,7 +17,7 @@ export default {
 	
 	// 黑名单，需要登录的页面路径
 	blackList:[
-		'/pages/home/home',
+		'/pages/index/index',
 		// '/pages/index/detail',
 		{'pattern':RegExp(/detail/)}
 	],

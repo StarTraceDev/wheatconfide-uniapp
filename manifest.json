@@ -1,6 +1,6 @@
 {
     "name" : "uniapp-project-z",
-    "appid" : "__UNI__3262174",
+    "appid" : "__UNI__FB9F487",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -152,17 +152,27 @@
     },
     /* 快应用特有相关 */
     "quickapp" : {},
-	"h5": {
-	  "devServer": {
-	    "proxy": {
-	      "/api": {
-	        "target": "https://ceshi.maimiaoqingsu.com/",
-	        "changeOrigin": true
-	        // "pathRewrite": { "^/api": "" }
-	      }
-	    }
-	  }
-	},
+    "h5" : {
+        "router" : {
+            "base" : "/"
+        },
+        "devServer" : {
+            "https" : false,
+            "disableHostCheck" : true,
+            "proxy" : {
+                "/api" : {
+                    // "target" : "https://ceshi.maimiaoqingsu.com/",
+                    "target" : "http://localhost:8112",
+                    "changeOrigin" : true,
+                    "secure" : false,
+                    "pathRewrite" : {
+                        "^/api" : ""
+                    }
+                }
+            }
+        }
+    },
+    // "pathRewrite": { "^/api": "" }
     /* 小程序特有相关 */
     "mp-weixin" : {
         "appid" : "wx5e271af078cf3204",
@@ -174,7 +184,6 @@
         },
         "usingComponents" : true
     },
-
     "mp-alipay" : {
         "usingComponents" : true
     },
@@ -187,25 +196,5 @@
     "uniStatistics" : {
         "enable" : false
     },
-    "vueVersion" : "3",
-	"h5" : {
-	    "router" : {
-	        "base" : "/"
-	    },
-	    "devServer" : {
-	        "https" : false,
-	        "disableHostCheck" : true,
-	        "proxy" : {
-	            "/api" : {
-	                // "target" : "https://ceshi.maimiaoqingsu.com/",
-					"target":"http://localhost:8112",
-	                "changeOrigin" : true,
-	                "secure" : false,
-	                "pathRewrite" : {
-	                    "^/api" : ""
-	                }
-	            }
-	        }
-	    }
-	}
+    "vueVersion" : "3"
 }

@@ -22,7 +22,7 @@
 			</view>
 		</view>
 		<view class="send-content-box">
-			<view class="send-content-btn">发布</view>
+			<view class="send-content-btn" @click="publishComment">发布</view>
 		</view>
 	</view>
 </template>
@@ -33,12 +33,23 @@
 		ref
 	} from 'vue';
 
+	import {onLoad} from '@dcloudio/uni-app'
+	import {publishExamComment} from '@/common/api/exam.js'
 	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
 		})
 	}
 	const content = ref("");
+	const examId = ref(0)
+	onLoad((e)=>{
+		examId.value = e.examId
+	})
+	
+	const publishComment = async ()=>{
+		await publishExamComment({type:3,content:content.value,articleId:examId.value})
+	}
+	
 </script>
 
 <style lang="scss" scoped>

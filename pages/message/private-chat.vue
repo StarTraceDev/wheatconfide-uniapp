@@ -28,7 +28,7 @@
 						</view>
 						<view class="message-item-content" :class="{'self' : message.senderId ===  currentUser.id}">
 							<view class="avatar">
-								<image :src="message.senderId === currentUser.id? '/static/consult/user.png' : friend.avatar">
+								<image :src="message.senderId === currentUser.id? currentUser.avatar==null?'/static/consult/user.png':currentUser.avatar : friend.avatar">
 								</image>
 							</view>
 
@@ -202,14 +202,7 @@
 	import RecorderManager from '@/lib/RecorderManager';
 
 	const GoEasy = uni.$GoEasy;
-	const currentUser = ref({
-		id: '33c3693b-dbb0-4bc9-99c6-fa77b9eb763f',
-		name: 'Juanita',
-		password: '123',
-		avatar: '/static/images/Avatar-2.png',
-		email: 'Wallace@goeasy.io',
-		phone: '138xxxxxxxx',
-	});
+	const currentUser = uni.$currentUser
 
 	const IMAGE_MAX_WIDTH = 200;
 	const IMAGE_MAX_HEIGHT = 150;
@@ -279,11 +272,11 @@
 		friend = {id:id,name:name,avatar:options.avatar}
 		// friend = restApi.findUserById(id);
 		to = {
-			id: id,
+			id: friend.id,
 			type: GoEasy.IM_SCENE.PRIVATE,
 			data: {
-				name: name,
-				avatar: ""
+				name: friend.name,
+				avatar: friend.avatar
 			}
 		};
 

@@ -26,7 +26,7 @@ export default function({path,query}){
 			// console.log("ssssssssssssssssssssssssxxxxxxxxx")
 			if(path=="/pages/login/login"){
 				uni.reLaunch({
-					url:"/pages/home/home"
+					url:"/pages/index/index"
 				})
 			}
 			

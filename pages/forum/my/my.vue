@@ -6,8 +6,7 @@
 			</view>
 			<view class="user-info">
 				<view class="user-info-content">
-					<image :src="userlnfo1.avatar==null?'/static/my/profile.png':userlnfo1.avatar" class="profile"></image>
-					{{userlnfo1.avatar}}
+					<u-avatar :src="userlnfo1.avatar==null?'/static/my/profile.png':userlnfo1.avatar" class="profile"></u-avatar>
 					<view>
 						<view class="nick-name">{{userlnfo1.realName}}</view>
 						<view class="id-num">
@@ -62,7 +61,7 @@
 </template>
 <script setup>
 	import {
-		getUserlnfo
+		getUserInfo
 	} from "@/common/api/apis.js"
 	import {
 		nextTick,
@@ -124,7 +123,7 @@
 	 * 获取当前用户信息
 	 */
 	const getlnfo = async () => {
-		let res = await getUserlnfo();
+		let res = await getUserInfo();
 		userlnfo1.value = res.data;
 		console.log('userInfo',userlnfo1.value);
 	}

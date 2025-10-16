@@ -39,62 +39,68 @@
 					</view>
 				</view>
 			</view>
+			<u-sticky offset-top="140">
+				<view>
+					<view class="filter-box" :class="scrollTop>137?'fixedFilter':''">
+						<view class="filter-box-1">
+							<view class="filter-box-1-item" >困扰<uni-icons type="down" size="12" class="icon"></uni-icons>
+							</view>
+							<view class="filter-box-1-item">城市<uni-icons type="down" size="12" class="icon"></uni-icons>
+							</view>
+							<view class="filter-box-1-item">价格<uni-icons type="down" size="12" class="icon"></uni-icons>
+							</view>
+							<view class="filter-box-1-item">筛选<image src="/static/consult/filter.png"
+									class="filter icon">
+								</image>
+							</view>
+							<view class="filter-box-1-item">
+								<image src="/static/consult/order.png" class="order"></image>
+							</view>
+						</view>
+						<view class="filter-box-2">
+							<text class="filter-box-2-item" v-for="i in 100" :key="i">咨询数优先</text>
+						</view>
+					</view>
 
-			<view class="filter-box" :class="scrollTop>137?'fixedFilter':''">
-				<view class="filter-box-1">
-					<view class="filter-box-1-item">困扰<uni-icons type="down" size="12" class="icon"></uni-icons>
-					</view>
-					<view class="filter-box-1-item">城市<uni-icons type="down" size="12" class="icon"></uni-icons>
-					</view>
-					<view class="filter-box-1-item">价格<uni-icons type="down" size="12" class="icon"></uni-icons>
-					</view>
-					<view class="filter-box-1-item">筛选<image src="/static/consult/filter.png" class="filter icon">
-						</image>
-					</view>
-					<view class="filter-box-1-item">
-						<image src="/static/consult/order.png" class="order"></image>
-					</view>
-				</view>
-				<view class="filter-box-2">
-					<text class="filter-box-2-item" v-for="i in 100" :key="i">咨询数优先</text>
-				</view>
-			</view>
-
-			<view class="doctor-list">
-				<view class="doctor-item" v-for="(item,index) in data.list" :key="index" @click="openDetail(item)">
-					<view class="doctor-auture">
-						<image src="/static/consult/user.png"></image>
-					</view>
-					<view class="doctor-info">
-						<view class="doctor-info-1">
-							<view class="name">{{item.consultantName}}</view>
-							<view class="date">今天20:00可约</view>
-						</view>
-						<view class="doctor-info-1">
-							<view class="job">{{item.major}}</view>
-							<view class="address">
-								<image src="/static/consult/address.png"></image><text>{{item.address}}</text>
+					<view class="doctor-list">
+						<view class="doctor-item" v-for="(item,index) in data.list" :key="index"
+							@click="openDetail(item)">
+							<view class="doctor-auture">
+								<image src="/static/consult/user.png"></image>
 							</view>
-						</view>
-						<view class="doctor-info-1">
-							<view class="exprise">
-								<text>1700+</text> 小时经验 <text>{{item.experience}}</text> 从业<text> {{item.evaluateNum}}+ </text>评价
+							<view class="doctor-info">
+								<view class="doctor-info-1">
+									<view class="name">{{item.consultantName}}</view>
+									<view class="date">今天20:00可约</view>
+								</view>
+								<view class="doctor-info-1">
+									<view class="job">{{item.major}}</view>
+									<view class="address">
+										<image src="/static/consult/address.png"></image><text>{{item.address}}</text>
+									</view>
+								</view>
+								<view class="doctor-info-1">
+									<view class="exprise">
+										<text>1700+</text> 小时经验 <text>{{item.experience}}</text> 从业<text>
+											{{item.evaluateNum}}+ </text>评价
+									</view>
+								</view>
+								<view class="doctor-info-1">
+									<view class="point-list">
+										<view class="point-item">自我探索</view>
+										<view class="point-item">压力管理</view>
+										<view class="point-item">婚姻家庭</view>
+									</view>
+								</view>
+								<view class="doctor-info-1">
+									<view class="discount">5节起立减200元</view>
+									<view class="price"><text class="unit">¥</text>{{item.consultantPrice}}</view>
+								</view>
 							</view>
-						</view>
-						<view class="doctor-info-1">
-							<view class="point-list">
-								<view class="point-item">自我探索</view>
-								<view class="point-item">压力管理</view>
-								<view class="point-item">婚姻家庭</view>
-							</view>
-						</view>
-						<view class="doctor-info-1">
-							<view class="discount">5节起立减200元</view>
-							<view class="price"><text class="unit">¥</text>{{item.consultantPrice}}</view>
 						</view>
 					</view>
 				</view>
-			</view>
+			</u-sticky>
 		</scroll-view>
 	</view>
 </template>
@@ -138,7 +144,7 @@
 
 	const openDetail = (item) => {
 		uni.navigateTo({
-			url: "/pages/consult/detail?id="+item.id
+			url: "/pages/consult/detail?id=" + item.id
 		})
 	}
 	onMounted(() => {

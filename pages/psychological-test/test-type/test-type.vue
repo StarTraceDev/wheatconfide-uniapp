@@ -23,7 +23,7 @@
 					{{item.label}}
 				</view>
 			</view>
-			<view class="sort-box">综合排序<uni-icons type="down" size="14" color="#999999"></uni-icons></view>
+			<!-- <view class="sort-box">综合排序<uni-icons type="down" size="14" color="#999999"></uni-icons></view> -->
 		</view>
 
 
@@ -31,9 +31,9 @@
 			<view class="tag-content">
 				<view class="tag-left">
 					<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
-						<view class="tag-item" v-for="i in 20" :key="i" :class="typeActive==i?'active':''"
-							@click="changeTabHandler(i)">
-							健康
+						<view class="tag-item" v-for="(item,index) in types" :key="index" :class="typeActive==index?'active':''"
+							@click="changeTabHandler(index)">
+							{{item}}
 						</view>
 					</scroll-view>
 				</view>
@@ -85,6 +85,8 @@
 			delta: 1
 		})
 	}
+	
+	const types = ref(['情感','性格','健康','家庭','人际','职业'])
 	const searchHandler = () => {}
 	const myOrderHandler = () => {
 		uni.navigateTo({
@@ -114,7 +116,7 @@
 		})
 	}
 
-	const typeActive = ref(1);
+	const typeActive = ref(0);
 
 	const changeTabHandler = (item) => {
 		typeActive.value != item ? typeActive.value = item : ''

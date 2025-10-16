@@ -14,11 +14,9 @@
 					</view>
 					<view class="result-analysis-box">
 						<view class="tip">结果分析</view>
-						<view class="title">潜意识投射测试</view>
+						<view class="title">{{title}}</view>
 						<view class="result">
-							很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
-							很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
-							很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人很多人在谈恋爱,但病是不是说每个人
+							{{result}}
 						</view>
 					</view>
 				</view>
@@ -28,7 +26,7 @@
 
 		<view class="footer-box">
 			<view class="footer-content">
-				<view @click="openHandler('/pages/psychological-test/comment/comment')">
+				<view @click="openHandler('/pages/psychological-test/comment/comment?examId='+examId)">
 					<image src="/static/psychological-test/comment.svg"></image>
 					<text>去评价</text>
 				</view>
@@ -75,11 +73,24 @@
 		onMounted,
 		ref
 	} from 'vue'
+	
+	import {
+		onLoad
+	} from '@dcloudio/uni-app'
 	const backFn = () => {
 		uni.navigateBack({
 			delta: 1
 		})
 	}
+	const examId = ref(0)
+	const result = ref('')
+	onLoad((e)=>{
+		title.value = e.title
+		examId.value = e.examId
+		result.value = e.result
+	})
+	
+	const title = ref('')
 
 	const openHandler = (url) => {
 		uni.navigateTo({

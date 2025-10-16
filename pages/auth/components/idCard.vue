@@ -6,12 +6,14 @@
 				<view class="remark">仅用于身份实名核验，信息会严格保密</view>
 				<view class="unload-card-box">
 					<view class="upload-card-item" @click="uploadPhoto(1)">
-						<image :src="frontPhoto==null?'/static/auth/id-card-front.png':frontPhoto" v-model="frontPhoto"
-							class="img"></image>
+						<image :src="localData.idcardFront==null?'/static/auth/id-card-front.png':localData.idcardFront"
+							 class="img"></image>
 						<view class="txt">身份证人像面</view>
 					</view>
 					<view class="upload-card-item" @click="uploadPhoto(2)">
-						<image :src="backendPhoto==null?'/static/auth/id-card-back.png':backendPhoto" class="img">
+						<image
+							:src="localData.idcardBackend==null?'/static/auth/id-card-back.png':localData.idcardBackend"
+							class="img">
 						</image>
 						<view class="txt">身份证国徽面</view>
 					</view>
@@ -40,41 +42,62 @@
 					<view class="form-item">
 						<view class="label require">星座</view>
 						<picker :range="stars" @change="starChange">
-							<view class="content" :class="!value?'weight':''">{{localData.constellation==null?'请选择':localData.constellation}}<uni-icons type="right"
-									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+							<view class="content" :class="!value?'weight':''">
+								{{localData.constellation==null?'请选择':localData.constellation}}<uni-icons type="right"
+									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons>
+							</view>
 						</picker>
 					</view>
 					<view class="form-item">
 						<view class="label require">所在地区</view>
 
-						<view class="content" :class="!value?'weight':''" @click="openCityHandler">{{localData.address}}<uni-icons
-								type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
+						<view class="content" :class="!value?'weight':''" @click="openCityHandler">
+							{{localData.address}}<uni-icons type="right" size="14"
+								color="rgba(0, 0, 0, 0.3)"></uni-icons>
+						</view>
 					</view>
-					<view class="form-item">
+					<view class="form-item" @click="serviceShow = true">
 						<view class="label require">服务类型</view>
-						<picker :range="serviceType" @change="serviceTypeChange">
-							<view class="content" :class="!value?'weight':''">{{service}}<uni-icons type="right"
+						<!-- <picker :range="serviceType" @change="serviceTypeChange">
+							<view class="content weight">{{service}}<uni-icons type="right"
 									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
-						</picker>
+						</picker> -->
+						<view @click="">{{service}}</view>
+						<!-- <u-picker mode="selector" v-model="serviceShow" :range="serviceType" :default-selector="[0]" :range-key="'name'"></u-picker> -->
 					</view>
 					<view class="form-item user-sign">
 						<view class="label">个人签名</view>
 						<view class="content-input" style="width: 400rpx;">
 							<uni-easyinput trim="all" type="text" placeholder="请输入个人签名" :inputBorder="false"
-								:clearable="false" :placeholderStyle="{'text-align':'right'}">
+								:clearable="false" v-model="localData.signature" :style="{'text-align':'right'}">
 							</uni-easyinput>
 						</view>
 					</view>
 					<view class="form-item user-introduction">
 						<view class="label">个人简介</view>
 						<view class="introduction-content">
-							<uni-easyinput type="textarea" placeholder="请输入个人简介" :inputBorder="false" :clearable="false"
-								:styles="{'background-color':'#f6f6f6'}" />
+							<uni-easyinput type="textarea" placeholder="请输入个人简介" v-model="localData.profile"
+								:inputBorder="false" :clearable="false" :styles="{'background-color':'#f6f6f6'}" ></uni-easyinput>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		
+		<u-popup v-model="serviceShow" mode="bottom">
+			<view style="padding: 30rpx;">
+				<view class="title">请选择服务类型</view>
+				<u-checkbox-group @change="serviceTypeChange">
+					<view v-for="(item,index) in serviceType" :key="index" style="height: 60rpx;margin-left: 30rpx;">
+					<u-checkbox v-model="item.checked" :name="item.id">{{item.name}}</u-checkbox>
+					</view>
+				</u-checkbox-group>
+				<view style="display: flex;flex-direction: row;">
+					<u-button size="medium" type="primary" plain>确定</u-button>
+					<u-button size="medium" @click="serviceShow=false">取消</u-button>
+				</view>
+			</view>
+		</u-popup>
 
 		<uni-popup ref="popup" type="bottom" border-radius="24rpx 24rpx 0 0" class="career-popup">
 			<view class="career-popup-box">
@@ -125,8 +148,11 @@
 	const openPopupHandler = () => {
 		popup.value.open();
 	}
+	
+	
+	const serviceShow = ref(false)
 
-	const serviceType = ref(['心理健康评估和诊断', '情绪和压力管理', '人际关系咨询', '学业和职业困扰', '个人成长和身份认同', '应对哀伤丧失和创伤事件'])
+	const serviceType = ref([])
 	// const constellation = ref('请选择')
 	const emit = defineEmits(['update:modelValue', 'committed']);
 	const starChange = (e) => {
@@ -136,7 +162,7 @@
 
 	const serviceTypeChange = (e) => {
 		console.log(e);
-		service.value = serviceType.value[e.detail.value]
+		// service.value = serviceType.value[e.detail.value]
 	}
 
 	const props = defineProps({
@@ -147,16 +173,17 @@
 		profession.value = '心理咨询师' + i
 		popup.value.close()
 	}
+	
 	const submit = async () => {
 		console.log("子组件收到父组件调用，");
-		if (frontPhoto.value == null) {
+		if (localData.value.idcardFront == null) {
 			uni.showToast({
 				title: "请上传身份证人像页",
 				icon: 'none'
 			})
 			return
 		}
-		if (backendPhoto.value == null) {
+		if (localData.value.idcardBackend == null) {
 			uni.showToast({
 				title: "请上传身份证国徽页",
 				icon: 'error'
@@ -177,18 +204,17 @@
 			})
 			return
 		}
-		let frontUrl = await uploadFile('/api/common/upload', frontPhoto.value)
-		// console.log(frontUrl);
-		if (frontUrl.code == 0) {
-			localData.value.idcardFront = frontUrl.data.url
-		}
-		let backUrl = await uploadFile('/api/common/upload', backendPhoto.value)
-		if (backUrl.code == 0) {
-			localData.value.idcardBackend = backUrl.data.url
-		}
+		// if (!localData.value.idcardFront.startsWith('http')) {
+			
+		// }
+		// if (!localData.value.idcardBackend.startsWith('http')) {
+		// 	console.log(localData.value.idcardBackend);
+			
+		// }
 		localData.value.consultantType = props.consultantType
+
 		uni.showLoading({
-			title:"提交中"
+			title: "提交中"
 		})
 		let res = await registerConsultantStep1(localData.value)
 		uni.hideLoading()
@@ -216,6 +242,8 @@
 		if (city) {
 			address.value = city
 		}
+		serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
+		console.log(serviceType.value);
 	})
 
 	onUnload(() => {
@@ -241,11 +269,20 @@
 	const uploadPhoto = (type) => {
 		uni.chooseImage({
 			count: 1,
-			success: function(res) {
+			success: async function(res) {
 				if (type == 1) {
-					frontPhoto.value = res.tempFilePaths[0];
+					let frontUrl = await uploadFile('/api/common/upload', res.tempFilePaths[0])
+					// console.log(frontUrl);
+					if (frontUrl.code == 0) {
+						localData.value.idcardFront = frontUrl.data.url
+					}
+					// localData.value.idcardFront = res.tempFilePaths[0];
 				} else {
-					backendPhoto.value = res.tempFilePaths[0];
+					let backUrl = await uploadFile('/api/common/upload', res.tempFilePaths[0])
+					if (backUrl.code == 0) {
+						localData.value.idcardBackend = backUrl.data.url
+					}
+					// localData.value.idcardBackend = res.tempFilePaths[0];
 				}
 			}
 		})

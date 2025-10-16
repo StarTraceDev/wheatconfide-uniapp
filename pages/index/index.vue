@@ -22,10 +22,9 @@
 						<view class="uni-margin-wrap">
 							<swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="5000"
 								:duration="500">
-								<swiper-item v-for="i in 2" :key="i" class="swiper-item">
+								<swiper-item v-for="(i,index) in banners" :key="index" class="swiper-item">
 									<view class="swiper-item uni-bg-red">
-										<image src="https://odd.dzjob.net/profile/upload/20250519/20250520113143.png"
-											class="img"></image>
+										<image :src="i.image" mode="aspectFill" class="img"></image>
 									</view>
 								</swiper-item>
 							</swiper>
@@ -64,15 +63,15 @@
 				</view>
 				<!-- 图标网格 -->
 				<view class="icon-grid">
-					<view class="icon-item" v-for="(item,index) in iconList" :key="index">
+					<view class="icon-item" v-for="(item,index) in consultantMenuList" :key="index">
 						<view class="icon-circle">
-							<image :src="item.url" class="img"></image>
+							<image :src="item.icon==''?'/static/index/icon1.png':item.icon" class="img"></image>
 						</view>
-						<text class="icon-text">{{item.txt}}</text>
+						<text class="icon-text">{{item.name}}</text>
 					</view>
 				</view>
 				<view class="test-item-box">
-					<view class="test-item pink">
+					<view class="test-item pink" @click="openPsyTestHandler">
 						<view class="title">心理测试</view>
 						<view class="txt">看看能打几分</view>
 					</view>
@@ -98,8 +97,10 @@
 
 				</view>
 				<view class="listening-content-box">
-					<view class="content-box" v-for="i in 3">
-						<view class="content-item first-content-item">
+					<view class="content-box" v-for="(item,index) in listenerMenu" :key="index" :style="{backgroundColor:colors[index]}">
+						<view>{{item.name}}</view>
+						<view style="text-align: end;margin-right: 15rpx;"><image :src="item.icon" style="width: 60rpx;" mode="widthFix"></image></view>
+						<!-- <view class="content-item first-content-item">
 							<view class="txt">文案</view>
 							<image src="/static/index/listening-content-box-img.png" class="content-img"></image>
 						</view>
@@ -108,7 +109,7 @@
 						</view>
 						<view class="content-item">
 							<view class="txt">文案</view>
-						</view>
+						</view> -->
 					</view>
 				</view>
 			</view>
@@ -122,7 +123,8 @@
 				</view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :show-scrollbar="false">
 					<view class="list">
-						<ConsultTeacherListItem class="list-item" :info="i" v-for="i in data.consultantList" @click="openTeacherFn(1, i.id)">
+						<ConsultTeacherListItem class="list-item" :info="i" v-for="i in data.consultantList"
+							@click="openTeacherFn(1, i.id)">
 						</ConsultTeacherListItem>
 					</view>
 				</scroll-view>
@@ -161,13 +163,13 @@
 					</view>
 
 					<view class="content-list">
-						<view class="content-item" v-for="i in 8">
+						<view class="content-item" v-for="(item,index) in homeExams" :key="index" @click="gotoDetail(item)">
 							<view class="lock">
 								<image src="@/static/index/lock.png" class="lock-img"></image>
 							</view>
 							<view class="info">
-								<div class="title">抑郁测评</div>
-								<div class="num">39W 人已测</div>
+								<div class="title">{{item.title}}</div>
+								<div class="num">{{item.examNum}} 人已测</div>
 								<div class="test-btn">开始测试</div>
 							</view>
 							<image src="/static/index/psychology-content-icon.png" class="content-item-img"></image>
@@ -187,7 +189,8 @@
 					</view>
 				</view>
 				<view class="article-list">
-					<RecommendArticleItem :info="i" v-for="i in data.list" class="article-item" @click="openArticleDetailFn(i)">
+					<RecommendArticleItem :info="i" v-for="i in data.list" class="article-item"
+						@click="openArticleDetailFn(i)">
 					</RecommendArticleItem>
 				</view>
 			</view>
@@ -243,65 +246,116 @@
 	import {
 		getAnswerList
 	} from "@/common/api/answer.js"
+
+	import {
+		bannerList,
+		getConsultantMenus,
+		listHomeExams
+	} from '@/common/api/index.js'
 	import {
 		ref,
 		onMounted,
 		reactive
 	} from 'vue';
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
 	import ConfideTeacherListItem from '@/components/Confide-Teacher-List-Item.vue';
 	import ConsultTeacherListItem from '@/components/Consult-Teacher-List-Item.vue';
 	import RecommendArticleItem from '@/components/Recommend-Article-Item'
 	import ForumItem from '@/components/Forum-Item'
+	import GoEasy from '@/uni_modules/GOEASY-IM/js_sdk/goeasy-2.13.21.esm.min.js'
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
+	const banners = ref([])
+	const homeExams = ref([])
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 20 + 'rpx');
 	const searchContentHeight = ref(globalStore.statusBarHeight + 56 + 'rpx');
 	let scrollTop = ref(0);
+	const listenerMenu = ref([])
+	// uni.$currentUser = uni.getStorageSync("currentUser")
+	let currentUser = ref()
+
+	onShow(() => {
+		uni.$currentUser = uni.getStorageSync('currentUser');
+		if (!uni.$currentUser.id) {
+			uni.navigateTo({
+				url: './login'
+			});
+			return;
+		}
+		currentUser.value = uni.$currentUser
+		if (GoEasy.getConnectionStatus() === 'disconnected') {
+			connectGoEasy(); //连接goeasy
+			subscribeGroup(); //建立连接后，就应该订阅群聊消息，避免漏掉
+		}
+		getBanners()
+
+	})
+
+	const getBanners = async () => {
+		let res = await bannerList()
+		// console.log(res);
+		banners.value = res.data
+	}
+
+	function subscribeGroup() {
+		// let groups = restApi.findGroups(currentUser.value);
+		// let groupIds = groups.map(item => item.id);
+		// GoEasy.im.subscribeGroup({
+		//   groupIds: groupIds,
+		//   onSuccess: function () {
+		//     console.log('订阅群消息成功');
+		//   },
+		//   onFailed: function (error) {
+		//     console.log('订阅群消息失败:', error);
+		//   }
+		// });
+	}
+	
+	const gotoDetail = (data)=>{
+		uni.navigateTo({
+			url:`/pages/psychological-test/charge-test/charge-test?id=${data.id}`
+		})
+	}
+
+	function connectGoEasy() {
+		console.log("Connecting...");
+		// uni.showLoading({});
+		GoEasy.connect({
+			id: currentUser.value.id,
+			data: {
+				name: currentUser.value.realName,
+				avatar: currentUser.value.avatar
+			},
+			onSuccess: () => {
+				console.log('GoEasy connect successfully.')
+			},
+			onFailed: (error) => {
+				console.log('Failed to connect GoEasy, code:' + error.code + ',error:' + error.content);
+			},
+			onProgress: (attempts) => {
+				console.log('GoEasy is connecting', attempts);
+			}
+		});
+	}
+
 	const data = reactive({
-		listParams:{
+		listParams: {
 			"current": 1,
 			"size": 10,
-			"params":{
-				
+			"params": {
+
 			}
 		},
 		consultantList: [],
 		list: [],
 		answerlist: []
 	})
-	let iconList = ref([{
-		txt: "人际关系",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "情绪管理",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "心理健康",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "婚姻家庭",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "恋爱心理",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "人际关系",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "情绪管理",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "心理健康",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "婚姻家庭",
-		url: "/static/index/icon1.png"
-	}, {
-		txt: "恋爱心理",
-		url: "/static/index/icon1.png"
-	}]);
+	let consultantMenuList = ref([]);
+
 
 	const serverList = ref([{
 			icon: '/static/index/remark-icon1.png',
@@ -371,38 +425,102 @@
 	const getlnfo = async () => {
 		let res = await getUserInfo();
 		globalStore.setUserInfo(res.data);
-		console.log(res)
 	}
-	
+
 	const openArticleDetailFn = (item) => {
 		uni.navigateTo({
-			url: "/pages/readArticle/articleDetail?id="+item.id
+			url: "/pages/readArticle/articleDetail?id=" + item.id
 		})
 	}
-	
+
 	const getConsultant = async () => {
 		let res = await getConsultantList(data.listParams);
-		data.consultantList = res.data.records
+		data.consultantList = res.data
 	}
-	
+
 	const getList = async () => {
 		let res = await getArticleList(data.listParams);
 		data.list = res.data.records
 	}
-	
+
 	const getAnswer = async () => {
 		let res = await getAnswerList(data.listParams);
-		data.answerlist=res.data.records
+		data.answerlist = res.data.records
 	}
 	
+	const colors = ref(['#E7F1F9','#F6E5EB','#F0E6FD','#FDF9D6','#F6E5EB','#DFFDF3','#DFFDF3','#F0E6FD','#E7F1F9'])
+
+	const getConsultantMenu = async () => {
+		let resp = await getConsultantMenus({
+			type: 0
+		})
+		console.log('menu1',resp);
+		uni.setStorageSync("consultantMenu", JSON.stringify(resp.data))
+		//截取9个菜单
+		let menus = resp.data
+		let showMenus = menus.slice(0, 9)
+		showMenus.push({
+			name: '全部',
+			icon: '/static/index/menu_all.png'
+		})
+		consultantMenuList.value = showMenus
+	}
+
+	const getListenerMenu = async () => {
+		let resp = await getConsultantMenus({
+			type: 1
+		})
+		console.log('menu2',resp);
+		uni.setStorageSync("listenerMenu", JSON.stringify(resp.data))
+		//截取9个菜单
+		let menus = resp.data
+		let showMenus = menus.slice(0, 8)
+		showMenus.push({
+			name: '全部',
+			icon: '/static/index/l_menu_all.png'
+		})
+		listenerMenu.value = showMenus
+	}
+	
+	const getHomeExams = async ()=>{
+		let resp = await listHomeExams()
+		console.log(resp);
+		homeExams.value = resp.data
+	}
 	onMounted(() => {
 		getlnfo()
-		
+
 		getConsultant()
-		
+
 		getList()
 		
+		getHomeExams()
+
 		getAnswer()
+		let cMenuList = uni.getStorageSync("consultantMenu")
+		if (!cMenuList) {
+			getConsultantMenu()
+		} else {
+			let menus = JSON.parse(cMenuList)
+			let showMenus = menus.slice(0, 9)
+			showMenus.push({
+				name: '全部',
+				icon: '/static/index/menu_all.png'
+			})
+			consultantMenuList.value = showMenus
+		}
+		let lMenuList = uni.getStorageSync("listenerMenu")
+		if (!lMenuList) {
+			getListenerMenu()
+		} else {
+			let menus = JSON.parse(lMenuList)
+			let showMenus = menus.slice(0, 8)
+			showMenus.push({
+				name: '全部',
+				icon: '/static/index/l_menu_all.png'
+			})
+			listenerMenu.value = showMenus
+		}
 	});
 </script>
 <style lang="scss" scoped>
@@ -416,7 +534,7 @@
 
 			.header {
 				width: 100vw;
-				height: 712rpx;
+				// height: 712rpx;
 				background: linear-gradient(180deg, #5FC484 4%, #F5F9FA 100%);
 				position: relative;
 
@@ -433,7 +551,7 @@
 				}
 
 				.contaior {
-					position: absolute;
+					// position: absolute;
 					z-index: 2;
 
 					.search-content {
@@ -472,11 +590,12 @@
 					}
 
 					.swiper-content {
-						margin: 212rpx 32rpx 0rpx 32rpx;
+						margin: 0rpx 32rpx 0rpx 32rpx;
+						padding-top: 100rpx;
 
 						.uni-margin-wrap {
-							width: 686rpx;
-							height: 240rpx;
+							width: 690rpx;
+							height: 280rpx;
 
 							.swiper {
 								height: 100%;
@@ -486,9 +605,9 @@
 									border-radius: 20rpx;
 
 									.img {
-										width: 686rpx;
-										height: 240rpx;
-										border-radius: 20rpx;
+										width: 720rpx;
+										height: 280rpx;
+
 									}
 								}
 
@@ -584,7 +703,7 @@
 			}
 
 			.psychological-box {
-				margin-top: 120rpx;
+				margin-top: 30rpx;
 
 				.psychological-header {
 					display: flex;
@@ -658,21 +777,24 @@
 				.icon-grid {
 					display: flex;
 					flex-wrap: wrap;
+					justify-content: space-evenly;
+					margin-left: 30rpx;
+					margin-right: 30rpx;
 
 					.icon-item {
-						width: 150rpx;
 						display: flex;
+
 						flex-direction: column;
 						align-items: center;
 						margin-bottom: 20rpx;
 
 						.icon-circle {
-							width: 88rpx;
-							height: 88rpx;
+							width: 120rpx;
+							height: 120rpx;
 
 							.img {
-								width: 88rpx;
-								height: 88rpx;
+								width: 120rpx;
+								height: 120rpx;
 							}
 						}
 
@@ -754,14 +876,22 @@
 				}
 
 				.listening-content-box {
-					padding: 0rpx 32rpx;
+					margin-left: 30rpx;
+					margin-right: 30rpx;
 					margin-top: 40rpx;
-
+					display: flex;
+					justify-content: space-evenly;
+					flex-direction: row;
+					flex-wrap: wrap;
 					.content-box {
-						display: flex;
-						justify-content: space-between;
+						border-radius: 20rpx;
 						margin-top: 20rpx;
-
+						flex-shrink: 0;
+						width: 200rpx;
+						margin-right: 30rpx;
+						padding-left: 30rpx;
+						padding-top: 30rpx;
+						
 						.content-item {
 							width: 182rpx;
 							height: 120rpx;
