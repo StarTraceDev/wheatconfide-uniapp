@@ -1,6 +1,6 @@
 <template>
 	<view class="psychological-box">
-		<scroll-view scroll-y="true" class="scroll-y" :show-scrollbar="false">
+		<scroll-view scroll-y="true" class="scroll-y" :show-scrollbar="false" @scrolltolower="reachBottom">
 			<view class="psychological-header">
 				<view class="header-nav-bar">
 					<view class="header-left">
@@ -20,10 +20,12 @@
 				<view class="scroll-content">
 					<scroll-view scroll-x="true" class="scroll-x" :show-scrollbar="false">
 						<view class="test-list">
-							<view class="test-item" v-for="i in 10" :key="i">
-								<image src="/static/forum/bg.png" class="img"></image>
-								<view class="test-title">抑郁测试</view>
-								<view class="use-test">23W人已测</view>
+							<view class="test-item" v-for="(item,index) in recommend" :key="index"
+								@click="gotoDetail(item)">
+								<image :src="item.icon?item.icon:'/static/forum/bg.png'" mode="aspectFill" class="img">
+								</image>
+								<view class="test-title">{{item.title}}</view>
+								<view class="use-test">{{item.examNum}}人已测</view>
 								<view class="start-test">开始测试<uni-icons type="right" size="12"
 										color="#35CA95"></uni-icons>
 								</view>
@@ -39,9 +41,18 @@
 					</view>
 					<view class="emotion-room-content">
 						<div class="danmu-container">
-							<div v-for="(danmu, index) in danmuList" :key="index" class="danmu-item">
+							<!-- <div v-for="(danmu, index) in danmuList" :key="index" class="danmu-item">
 								{{ danmu.text }}
-							</div>
+							</div> -->
+							<gp-danmu ref="danmuRef" :danmuList="danmuList" :config="danmuConfig">
+								<template #danmu="{ danmu }">
+									<view class="custom-danmu">
+										<image v-if="danmu.avatar" :src="danmu.avatar" class="avatar" />
+										<text class="username">{{danmu.username}}</text>
+										<text class="content">{{danmu.text}}</text>
+									</view>
+								</template>
+							</gp-danmu>
 						</div>
 					</view>
 					<view class="send-msg">
@@ -55,7 +66,8 @@
 
 			<view class="tabs">
 				<view class="tabs-list">
-					<view class="tab-item" v-for="(item,index) in tabLists" :key="index" @click="openAllTypeHandler">
+					<view class="tab-item" v-for="(item,index) in tabLists" :key="index"
+						@click="openAllTypeHandler(item)">
 						<image :src="item.url" class="img"></image>
 						<text class="txt">{{item.text}}</text>
 					</view>
@@ -66,18 +78,22 @@
 				<view class="day-recommend-content">
 					<view class="recommend-heaader">
 						<view class="title">每日推荐</view>
-						<view class="label">换一换<uni-icons type="reload" size="12" color="#38CC98"></uni-icons>
+						<view class="label" @click="getDailyRecommend">换一换<uni-icons type="reload" size="12"
+								color="#38CC98"></uni-icons>
 						</view>
 					</view>
 					<view class="content-list">
-						<view class="content-item" v-for="i in 4" :key="i">
-							<image src="/static/forum/bg.png" class="img"></image>
+						<view class="content-item" v-for="(item,index) in dailyRecommendExams" :key="index"
+							@click="gotoDetail(item)">
+							<image :src="item.icon?item.icon:'/static/forum/bg.png'" mode="aspectFill" class="img">
+							</image>
 							<view>
-								<view class="title">潜意识投射测试</view>
+								<view class="title">{{item.title}}</view>
 								<view class="price-box">
-									<view class="price">免费</view>
+									<view class="price">{{item.payType==0?'免费':'￥'+item.discountPrice}}</view>
 									<view class="use-test"><uni-icons type="fire-filled" size="18"
-											color="#FA5151"></uni-icons><text class="num">1W</text>人已测</view>
+											color="#FA5151"></uni-icons><text class="num">{{item.examNum}}</text>人已测
+									</view>
 								</view>
 							</view>
 						</view>
@@ -93,24 +109,28 @@
 								@click="menuTabHandler(index)" :class="menuTabActive==index?'active':''">{{item.txt}}
 							</view>
 						</view>
-						<view class="label">更多<uni-icons type="right" size="12"></uni-icons>
+						<view class="label" @click="gotoPage()">更多<uni-icons type="right" size="12"></uni-icons>
 						</view>
 					</view>
 					<view class="content-list">
-						<view class="content-item" v-for="i in 10" :key="i">
+						<view class="content-item" v-for="(item,index) in examList" :key="index">
 							<view class="content-item-content">
 								<view>
-									<view class="title">潜意识投射测试</view>
-									<view class="remark">14张图片，揭露你的潜意识</view>
-									<view class="price-box"><text class="price">￥19.9</text><text
-											class="under-price">￥59.9</text></view>
+									<view class="title">{{item.title}}</view>
+									<view class="remark">{{item.oneWord}}</view>
+									<view class="price-box" v-if="item.payType==1"><text
+											class="price">￥{{item.discountPrice}}</text><text
+											class="under-price">￥{{item.price}}</text></view>
+											<view class="price-box">
+												<text class="price"></text>免费</view>
 									<view class="test-handler">
 										<view class="handler-btn">去测试</view>
-										<view class="use-test"><text class="num">23.4W</text>人已测</view>
+										<view class="use-test"><text class="num">{{item.examNum}}</text>人已测</view>
 									</view>
 								</view>
 								<view class="img-box">
-									<image src="/static/consult/user.png" class="img"></image>
+									<image :src="item.icon?item.icon:'/static/consult/user.png'" mode="aspectFill"
+										class="img"></image>
 								</view>
 							</view>
 
@@ -125,15 +145,50 @@
 <script setup>
 	import {
 		onMounted,
-		ref
+		ref,
+		reactive
 	} from 'vue';
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
 	import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide"
+	import {
+		recommendExams,
+		dailyRecommend,
+		examListData
+	} from '@/common/api/exam.js'
+
+	import {
+		onLoad,
+		onReachBottom
+	} from '@dcloudio/uni-app'
 	// import Danmaku from "@/components/danma/danma.vue"
 	const globalStore = useGlobalDataStore();
+	const danmuRef = ref(null)
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
+	// 弹幕配置
+	const danmuConfig = reactive({
+		trackHeight: 40, // 轨道高度
+		trackNumber: 3, // 轨道数量
+		speed: 100, // 弹幕速度
+		fontSize: 16, // 默认字体大小
+		fontColor: '#000000', // 默认字体颜色
+		backgroundColor: 'white', // 弹幕背景色
+		trackMode: 'separate', // 轨道模式：overlap(重叠)、separate(分离)
+		looping: true, // 是否循环播放
+		direction: 'rtl', // 弹幕方向：rtl(从右到左)、ltr(从左到右)
+		duration: 1000, // 弹幕动画持续时间（毫秒）
+		density: 0.5, // 弹幕密度(0-1)
+		randomTrack: true, // 是否随机选择轨道
+		opacity: 1, // 弹幕透明度
+		hoverPause: true
+	});
+
+	const gotoDetail = (item) => {
+		uni.navigateTo({
+			url: "/pages/psychological-test/charge-test/charge-test?id=" + item.id
+		})
+	}
 
 
 
@@ -143,6 +198,15 @@
 		})
 	}
 
+	const gotoPage = () => {
+		uni.navigateTo({
+			url: '/pages/psychological-test/test-type/test-type'
+		})
+	}
+
+
+
+	const dailyRecommendExams = ref([])
 	const searchHandler = () => {}
 
 	const tabLists = ref([{
@@ -159,7 +223,7 @@
 		url: "/static/login/logo.png"
 	}, {
 		id: 4,
-		text: "职场",
+		text: "职业",
 		url: "/static/login/logo.png"
 	}, {
 		id: 5,
@@ -175,19 +239,126 @@
 		txt: "付费测试"
 	}])
 
+	const recommend = ref([])
 	const menuTabActive = ref(0);
 
 	const menuTabHandler = (i) => {
 		menuTabActive.value != i ? menuTabActive.value = i : '';
+		examList.value = []
+		getExamList()
 	}
 
+	const getRecommendExams = async () => {
+		let resp = await recommendExams()
+		recommend.value = resp.data
 
+	}
+
+	const getDailyRecommend = async () => {
+		let resp = await dailyRecommend()
+		console.log(resp);
+		dailyRecommendExams.value = resp.data
+	}
+
+	const playDanmu = () => {
+		danmuRef.value.play()
+	}
+
+	const freePage = ref(1)
+	const pageSize = ref(10)
+	const payPage = ref(1)
+
+	const examList = ref([])
+	const freeExamList = ref([])
+
+	const payExamList = ref([])
+
+	const freeHasMore = ref(false)
+	const payHasMore = ref(false)
+	const getExamList = async () => {
+		let page = menuTabActive.value == 0 ? freePage.value : payPage.value
+		let resp = await examListData({
+			payType: menuTabActive.value,
+			page: page,
+			size: pageSize.value
+		})
+		console.log(resp);
+		if (menuTabActive.value == 0) {
+			if (freePage.value == 1) {
+				freeExamList.value = resp.data.records
+			} else {
+				freeExamList.value = freeExamList.value.concat(resp.data.records)
+			}
+			console.log(freeExamList.value.length);
+			if (resp.data.total <= freeExamList.value.length) {
+				freeHasMore.value = false
+			} else {
+				freeHasMore.value = true
+			}
+			examList.value = freeExamList.value
+		} else {
+			if (payPage.value == 1) {
+				payExamList.value = resp.data.records
+			} else {
+				payExamList.value = payExamList.value.concat(resp.data.records)
+			}
+			if (resp.data.total <= payExamList.value.length) {
+				payHasMore.value = false
+			} else {
+				payHasMore.value = true
+			}
+			examList.value = payExamList.value
+		}
+	}
+
+	onLoad(() => {
+		// playDanmu()
+		getRecommendExams()
+		getDailyRecommend()
+		getExamList()
+
+	})
+
+	const reachBottom = () => {
+		console.log("reach bottom");
+		if (menuTabActive.value == 0) {
+			if (freeHasMore.value) {
+				freePage.value++
+				getExamList()
+			}
+		} else {
+			if (payHasMore.value) {
+				payPage++
+				getExamList()
+			}
+		}
+	}
 	const myOrderHandler = () => {
 		uni.navigateTo({
 			url: "/pages/psychological-test/order/order"
 		})
 	}
-	const danmuList = ref([]);
+	const danmuList = ref([{
+			id: 1,
+			text: '这是一条普通弹幕',
+			color: '#000000'
+		},
+		{
+			id: 2,
+			text: '这是一条彩色弹幕',
+			color: '#FF6600'
+		},
+		{
+			id: 3,
+			text: '这是一条顶部弹幕',
+			color: '#00FFFF'
+		},
+		{
+			id: 4,
+			text: '这是一条底部弹幕',
+			color: '#FFFF00'
+		},
+	]);
 
 	onMounted(() => {
 		// setInterval(() => {
@@ -200,11 +371,19 @@
 			text
 		}); // 添加新的弹幕到列表末尾
 	}
-	
-	const openAllTypeHandler=()=>{
-		uni.navigateTo({
-			url:"/pages/psychological-test/test-type/test-type"
-		})
+
+	const openAllTypeHandler = (item) => {
+		if (item.id < 5) {
+
+
+			uni.navigateTo({
+				url: `/pages/psychological-test/test-type/test-type?type=${item.text}`
+			})
+		} else {
+			uni.navigateTo({
+				url: `/pages/psychological-test/test-type/test-type`
+			})
+		}
 	}
 </script>
 
@@ -295,11 +474,11 @@
 						.test-title,
 						.use-test,
 						.start-test {
-							padding-left: 22rpx;
+							padding-left: 15rpx;
 						}
 
 						.test-title {
-							font-size: 28rpx;
+							font-size: 24rpx;
 							font-weight: 500;
 							line-height: normal;
 							letter-spacing: normal;
@@ -615,9 +794,13 @@
 		.danmu-container {
 			position: relative;
 			width: 100%;
-			height: 50px;
 			/* 根据需要调整 */
 			overflow: hidden;
+
+			.custom-danmu {
+				background-color: white;
+				border-radius: 50rpx;
+			}
 		}
 
 		.danmu-item {

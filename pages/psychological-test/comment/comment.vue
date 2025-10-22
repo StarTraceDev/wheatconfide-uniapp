@@ -17,7 +17,7 @@
 			<view class="upload-image">
 				<view class="upload-image-content">
 					<text class="txt">满意度打分</text>
-					<view><uni-rate :value="4" activeColor="#38CC98" size=16 /></view>
+					<view><uni-rate :value="star" @change="starChange" activeColor="#38CC98" size=16 /></view>
 				</view>
 			</view>
 		</view>
@@ -42,12 +42,30 @@
 	}
 	const content = ref("");
 	const examId = ref(0)
+	const id = ref(0)
+	const star = ref(0)
 	onLoad((e)=>{
 		examId.value = e.examId
+		id.value = e.id
 	})
-	
+	const starChange = (e)=>{
+		console.log(e);
+		star.value = e.value
+	}
 	const publishComment = async ()=>{
-		await publishExamComment({type:3,content:content.value,articleId:examId.value})
+		if(star.value==0){
+			uni.showToast({
+				title:"请选择星级",
+				icon:"error"
+			})
+			return
+		}
+		let resp = await publishExamComment({type:3,content:content.value,articleId:examId.value,star:star.value,referenceId:id.value})
+		uni.showToast({
+			title:"发布成功",
+			icon:"success"
+		})
+		uni.navigateBack()
 	}
 	
 </script>

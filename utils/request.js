@@ -2,10 +2,17 @@
 
 import JSONBig from 'json-bigint'
 
+// #ifdef APP
+let baseURL = 'https://192.168.1.13:8112/'
+// #endif
+// #ifdef VUE3
+let baseURL = '/'
+// #endif
 // 创建一个配置对象
 const requestConfig = {
 	// baseURL: 'https://ceshi.maimiaoqingsu.com', // API基础URL
-	baseURL: '/',
+	
+	baseURL: baseURL,
 	timeout: 30000, // 请求超时时间
 	header: {
 		'Content-Type': 'application/json'

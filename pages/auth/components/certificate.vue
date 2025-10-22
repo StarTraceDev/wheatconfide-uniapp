@@ -50,12 +50,13 @@
 							<view class="label require">证件照片</view>
 							<view class="introduction-content">
 								<u-upload :fileList="item.photoList" :before-upload="beforeUpload" :header="headers"
-									@on-success="(data, i, lists, name) => uploadComplete(data, i, lists, name, index)" @on-remove="deletePic" name="file" :action="uploadUrl"
-									multiple :maxCount="3"></u-upload>
+									@on-success="(data, i, lists, name) => uploadComplete(data, i, lists, name, index)"
+									@on-remove="deletePic" name="file" :action="uploadUrl" multiple
+									:maxCount="3"></u-upload>
 							</view>
 						</view>
 
-						
+
 						<view class="line-box">
 							<view class="line" :class="index>0?'line-delete':''"></view>
 							<view v-if="index>0" class="delete-item" @click="removeCertificateListHandler(index)">
@@ -319,6 +320,10 @@
 	import {
 		registerConsultantStep3
 	} from '@/common/api/consultant';
+
+	import {
+		registerListenerStep3
+	} from '@/common/api/listener.js'
 	const certificateImgs = ref([]);
 
 	let certificateLists = reactive([{
@@ -370,44 +375,66 @@
 	const emit = defineEmits(['commited'])
 	const submit = async () => {
 		//判断certificate中是否有files为空的情况
-		let containEmpty = false
-		console.log(certificateLists);
-		certificateLists.forEach(c => {
-			console.log(c);
-			if (c.photoList.length == 0) {
-				uni.showToast({
-					title: "您还有证件照片没有上传",
-					icon: "none"
-				})
-				containEmpty = true;
+		if (props.consultantType == 1) {
+
+
+			let containEmpty = false
+			certificateLists.forEach(c => {
+				console.log(c);
+				if (c.photoList.length == 0) {
+					uni.showToast({
+						title: "您还有证件照片没有上传",
+						icon: "none"
+					})
+					containEmpty = true;
+					return
+				}
+			})
+			if (containEmpty) {
 				return
 			}
-		})
-		console.log(containEmpty);
-		if (containEmpty) {
-			return
-		}
-		certificateLists.forEach(e => {
-			e.photos = JSON.stringify(e.photoList)
-		})
-
-		let data = {
-			...props.modelValue,
-			certificateList: certificateLists,
-			educationList: educationLists.value,
-			careerList: trainLists.value,
-			consultantType: props.consultantType
-		}
-		let res = await registerConsultantStep3(data)
-		if (res.code == 0) {
-			uni.showToast({
-				title: "提交成功"
+			certificateLists.forEach(e => {
+				e.photos = JSON.stringify(e.photoList)
 			})
-			emit("commited", "")
+
+			let data = {
+				...props.modelValue,
+				certificateList: certificateLists,
+				educationList: educationLists.value,
+				careerList: trainLists.value,
+				consultantType: props.consultantType
+			}
+			let res = await registerConsultantStep3(data)
+			if (res.code == 0) {
+				uni.showToast({
+					title: "提交成功"
+				})
+				emit("commited", "")
+			}
+		}else{
+			
+			certificateLists.forEach(e => {
+				e.photos = JSON.stringify(e.photoList)
+			})
+			
+			let data = {
+				...props.modelValue,
+				certificateList: certificateLists,
+				educationList: educationLists.value,
+				careerList: trainLists.value,
+				consultantType: props.consultantType
+			}
+			let res = await registerListenerStep3(data)
+			if (res.code == 0) {
+				uni.showToast({
+					title: "提交成功"
+				})
+				emit("commited", "")
+			}
 		}
 	}
 	const props = defineProps({
-		consultantType: String,
+		consultantType: Number,
 		modelValue: Object
 	})
 	certificateLists = props.modelValue.certificateList
@@ -417,7 +444,7 @@
 	})
 
 
-	const uploadComplete = (data, i, lists, name,index) => {
+	const uploadComplete = (data, i, lists, name, index) => {
 		console.log("上传成功");
 		console.log(data);
 		console.log(index);

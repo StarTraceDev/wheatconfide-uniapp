@@ -73,13 +73,11 @@
 		getExamOptions,
 		saveExamRecord,
 		updateUserAnswer,
-		examResult
+		examResult,recordDetail
 	} from '@/common/api/exam.js'
 
 	const backFn = () => {
-		uni.navigateBack({
-			delta: 1
-		})
+		uni.navigateBack()
 	}
 
 	const title = ref('')
@@ -92,14 +90,19 @@
 	const recordId = ref(0)
 	onLoad((e) => {
 		title.value = e.title
-		id.value = e.id
+		
 		examId.value = e.examId
 		if (!examId.value) {
+			id.value = e.id
 			//需要创建测试记录
 			createExamRecord()
 			getOptionList()
 		} else {
+			recordId.value = e.id
+			id.value = e.examId
+			answerActive.value = -1
 			getExamOptionRecordDetail()
+			examIndex.value = parseInt(e.currentIndex)+1
 		}
 	})
 
@@ -134,9 +137,11 @@
 		// 	return
 		// }
 		//查找是否已存在该试题
+		console.log(userAnswer.value);
 		const existIndex = userAnswer.value.findIndex(
-			(item) => item.optionIndex === examIndex.value
+			(item) => parseInt(item.optionIndex) === parseInt(examIndex.value)
 		)
+		console.log(existIndex);
 		if (existIndex !== -1) {
 			// ✅ 已存在 → 替换答案
 			userAnswer.value[existIndex].result = answerActive.value
@@ -148,6 +153,8 @@
 		}
 		updateAnswer()
 		examIndex.value = examIndex.value + 1
+		console.log(examIndex.value);
+		console.log(userAnswer.value);
 		if (userAnswer.value[examIndex.value]) {
 			let answer = userAnswer.value[examIndex.value]
 			answerActive.value = answer.result
@@ -194,6 +201,11 @@
 	const getExamResult = async()=>{
 		let resp = await examResult({id:recordId.value})
 		console.log(resp);
+		uni.hideLoading()
+		uni.navigateTo({
+			url:`/pages/psychological-test/test-result/test-result?title=${title.value}&examId=${id.value}&result=${resp.data.examResult}`
+		})
+		
 	}
 
 	const prevOption = () => {
@@ -202,7 +214,13 @@
 		answerActive.value = answer.result
 	}
 	const getExamOptionRecordDetail = async () => {
-
+		let resp = await recordDetail({id:recordId.value})
+		console.log(resp);
+		examOptionList.value = resp.data.options
+		if(resp.data.result){
+			let result = JSON.parse(resp.data.result)
+			userAnswer.value = result
+		}
 	}
 
 	const getOptionList = async () => {

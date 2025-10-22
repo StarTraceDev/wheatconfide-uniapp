@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "components/**/*.vue"
+, "../../pages/danmu/basic-usage.vue", "../../pages/danmu/advanced-usage.vue"  ],
+  "exclude": [
+    "node_modules"
+  ]
+} 

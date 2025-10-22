@@ -1,7 +1,8 @@
 <template>
 	<view class="auth-box">
 		<view class="children-component">
-			<scroll-view scroll-y="true" v-if="certificate.verifyStatus==null || certificate.verifyStatus==0"  :show-scrollbar="false" class="scroll-content">
+			<scroll-view scroll-y="true" v-if="certificate.verifyStatus==null || certificate.verifyStatus==0"
+				:show-scrollbar="false" class="scroll-content">
 				<view class="children-content">
 					<view class="top-bg"></view>
 					<view class="current-component">
@@ -24,9 +25,11 @@
 							</view>
 						</view>
 						<view class="handler-components-box">
-							<idCard v-show="step == 1" :modelValue="consultant" :consultantType="consultantType" @committed="step1Commit" ref="idCardRef" v-model="formData.idCard"></idCard>
-							<career v-show="step==2" :modelValue="consultant"></career>
-							<certificate v-show="step==3" @commited="finalCommit" :modelValue="consultant" :consultantType="consultantType" ref="finalStep"></certificate>
+							<idCard v-show="step == 1" :modelValue="consultant" :consultantType="consultantType"
+								@committed="step1Commit" ref="idCardRef" v-model="formData.idCard"></idCard>
+							<career v-show="step==2" :modelValue="consultant" :consultantType="consultantType"></career>
+							<certificate v-show="step==3" @commited="finalCommit" :modelValue="consultant"
+								:consultantType="consultantType" ref="finalStep"></certificate>
 
 							<view class="footer">
 								<view class="tip">
@@ -81,15 +84,24 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
-	
-	import { onLoad } from '@dcloudio/uni-app'
-	
+
+	import {
+		onLoad
+	} from '@dcloudio/uni-app'
+
 	import {
 		getConsultantById,
 		getConsultantByUserId,
 		saveConsultant,
 		registerConsultantStep2
 	} from "@/common/api/consultant.js";
+
+	import {
+		getListenerById,
+		getListenerByUserId,
+		saveListener,
+		registerListenerStep2
+	} from "@/common/api/listener.js";
 
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
@@ -104,18 +116,31 @@
 	const step = ref(1);
 	const popup = ref(null);
 	const consultant = ref({})
-	
+
+	const type = ref(0)
+
 	const idCardRef = ref(null)
 	const finalStep = ref(null)
 	const consultantType = ref('')
-	onLoad((e)=>{
+	onLoad((e) => {
 		console.log(e);
 		consultantType.value = e.type
+		if (e.type == 1) {
+			uni.setNavigationBarTitle({
+				title: "咨询师认证"
+			})
+		} else {
+			uni.setNavigationBarTitle({
+				title: "倾听师认证"
+			})
+		}
 		getConsultantDetail()
 	})
-	
-	const getConsultantDetail = ()=>{
-		getConsultantByUserId({consultantType:consultantType.value}).then(res=>{
+
+	const getConsultantDetail = () => {
+		getConsultantByUserId({
+			consultantType: consultantType.value
+		}).then(res => {
 			console.log(res);
 			consultant.value = res.data
 		})
@@ -140,29 +165,29 @@
 	});
 
 	const nextStepHandler = () => {
-		if(step.value==1){
+		if (step.value == 1) {
 			idCardRef.value?.submit()
 		}
-		if(step.value==2){
-			
+		if (step.value == 2) {
+
 			consultant.value.consultantType = consultantType.value
 			console.log(consultant);
-			registerConsultantStep2(consultant.value).then(res=>{
+			registerConsultantStep2(consultant.value).then(res => {
 				// console.log(res);
-				step.value = step.value+1
+				step.value = step.value + 1
 			})
 			// step.value = step.value+1
 		}
-		
+
 	}
-	
-	const step1Commit = ()=>{
+
+	const step1Commit = () => {
 		step.value = step.value + 1;
 	}
-	
-	const finalCommit = ()=>{
+
+	const finalCommit = () => {
 		uni.showToast({
-			title:"资料已提交，请等待审核"
+			title: "资料已提交，请等待审核"
 		})
 	}
 

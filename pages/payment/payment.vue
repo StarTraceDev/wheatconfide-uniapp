@@ -237,10 +237,10 @@
 </script>
 
 <style scoped>
-	* {
+	/* * {
 		-webkit-box-sizing: border-box;
 		box-sizing: border-box;
-	}
+	} */
 	/*伪类清除浮动*/
 	.clearfix::after{
 		display:block;

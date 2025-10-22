@@ -175,7 +175,7 @@
     // "pathRewrite": { "^/api": "" }
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx5e271af078cf3204",
+        "appid" : "wxd41aed284a3e4657",
         "setting" : {
             "urlCheck" : false,
             "postcss" : true,

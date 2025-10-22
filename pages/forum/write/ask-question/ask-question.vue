@@ -17,9 +17,7 @@
 					placeholder-class="placeholder-title" v-model="form.title" />
 			</view>
 			<view class="content">
-				<textarea class="uni-textarea" v-model="form.content" placeholder="示例：25岁女孩，近期情绪很焦虑，怎么去缓解？
-包含年龄、性别信息
-明确具体困扰与症状，以便得到更专业解答？" placeholder-class="placeholder-content" maxlength="1000"  />
+				<textarea class="uni-textarea" v-model="form.content" placeholder="示例：25岁女孩，近期情绪很焦虑，怎么去缓解？包含年龄、性别信息,明确具体困扰与症状，以便得到更专业解答？" placeholder-class="placeholder-content" maxlength="1000"  />
 				<view class="char-count">{{content.length}}/1000</view>
 			</view>
 		</view>

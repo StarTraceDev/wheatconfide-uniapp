@@ -18,7 +18,7 @@
 				<view class="use-public">2.5万同行 已服务了439万用户和家庭</view>
 				<view class="add">立即加入</view>
 			</view>
-			<view class="settled_2">
+			<view class="settled_2" @click="listenerVerify">
 				<view class="title">我是倾听师</view>
 				<view class="use-public">2.5万同行 已服务了439万用户和家庭</view>
 				<view class="add">立即加入</view>
@@ -35,9 +35,26 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
+	import {onLoad} from '@dcloudio/uni-app'
+	import {getVerifyStatus} from '@/common/api/user.js'
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	
+	
+	
+	onLoad(()=>{
+		userStatus()
+	})
+	
+	const role = ref(0)
+	
+	const verifyStatus = ref(0)
+	const userStatus = async()=>{
+		let resp = await getVerifyStatus()
+		console.log(resp);
+		role.value = resp.data.role
+		verifyStatus.value = resp.data.verifyStatus
+	}
 	
 	const backFn=()=>{
 		uni.navigateBack({
@@ -45,10 +62,46 @@
 		})
 	}
 	
+	//此处需要请求接口，看是否已提交认证某种类型，如果已提交，需要先撤销申请，才能再申请别的，或者点不进去，提示正在认证某项
+	
 	
 	const joinTeamHandler=()=>{
+		if(role.value==1 && verifyStatus.value==1){
+			uni.showToast({
+				title:"咨询师正在认证",
+				icon:"error"
+			})
+			return
+		}
+		if(role.value ==2 && verifyStatus.value==1){
+			uni.showToast({
+				title:"倾听师正在认证审核",
+				icon:"error"
+			})
+			return
+		}
 		uni.navigateTo({
 			url:"/pages/auth/auth?type=1"
+		})
+	}
+	
+	const listenerVerify = ()=>{
+		if(role.value==1 && verifyStatus.value==1){
+			uni.showToast({
+				title:"咨询师正在认证",
+				icon:"error"
+			})
+			return
+		}
+		if(role.value ==2 && verifyStatus.value==1){
+			uni.showToast({
+				title:"倾听师正在认证审核",
+				icon:"error"
+			})
+			return
+		}
+		uni.navigateTo({
+			url:"/pages/auth/auth?type=2"
 		})
 	}
 </script>

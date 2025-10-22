@@ -114,7 +114,8 @@
 
 
 	const props = defineProps({
-		modelValue: Object
+		modelValue: Object,
+		consultantType: Number
 	})
 
 

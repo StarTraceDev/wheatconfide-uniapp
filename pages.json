@@ -213,7 +213,7 @@
 			"style": {
 				"navigationBarTitleText": "认证",
 				"navigationBarBackgroundColor": "#F4F6F8",
-				"navigationStyle": "",
+				"navigationStyle":"default",
 				"navigationBarTextStyle": "black"
 			}
 		}, {

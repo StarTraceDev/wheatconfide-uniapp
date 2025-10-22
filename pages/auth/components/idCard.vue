@@ -7,7 +7,7 @@
 				<view class="unload-card-box">
 					<view class="upload-card-item" @click="uploadPhoto(1)">
 						<image :src="localData.idcardFront==null?'/static/auth/id-card-front.png':localData.idcardFront"
-							 class="img"></image>
+							class="img"></image>
 						<view class="txt">身份证人像面</view>
 					</view>
 					<view class="upload-card-item" @click="uploadPhoto(2)">
@@ -33,12 +33,12 @@
 								placeholder="请输入身份证号" />
 						</view>
 					</view>
-					<view class="form-item">
+					<!-- <view class="form-item">
 						<view class="label require">职业</view>
 						<view class="content" :class="!value?'weight':''" @click="openPopupHandler">
 							{{profession}}<uni-icons type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons>
 						</view>
-					</view>
+					</view> -->
 					<view class="form-item">
 						<view class="label require">星座</view>
 						<picker :range="stars" @change="starChange">
@@ -62,7 +62,8 @@
 							<view class="content weight">{{service}}<uni-icons type="right"
 									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
 						</picker> -->
-						<view @click="">{{service}}</view>
+						<view @click="">{{services}}<uni-icons type="right" size="14"
+								color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
 						<!-- <u-picker mode="selector" v-model="serviceShow" :range="serviceType" :default-selector="[0]" :range-key="'name'"></u-picker> -->
 					</view>
 					<view class="form-item user-sign">
@@ -77,23 +78,24 @@
 						<view class="label">个人简介</view>
 						<view class="introduction-content">
 							<uni-easyinput type="textarea" placeholder="请输入个人简介" v-model="localData.profile"
-								:inputBorder="false" :clearable="false" :styles="{'background-color':'#f6f6f6'}" ></uni-easyinput>
+								:inputBorder="false" :clearable="false"
+								:styles="{'background-color':'#f6f6f6'}"></uni-easyinput>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-		
+
 		<u-popup v-model="serviceShow" mode="bottom">
 			<view style="padding: 30rpx;">
 				<view class="title">请选择服务类型</view>
 				<u-checkbox-group @change="serviceTypeChange">
 					<view v-for="(item,index) in serviceType" :key="index" style="height: 60rpx;margin-left: 30rpx;">
-					<u-checkbox v-model="item.checked" :name="item.id">{{item.name}}</u-checkbox>
+						<u-checkbox v-model="item.checked" :name="item.id">{{item.name}}</u-checkbox>
 					</view>
 				</u-checkbox-group>
 				<view style="display: flex;flex-direction: row;">
-					<u-button size="medium" type="primary" plain>确定</u-button>
+					<u-button size="medium" type="primary" plain @click="chooseServiceType">确定</u-button>
 					<u-button size="medium" @click="serviceShow=false">取消</u-button>
 				</view>
 			</view>
@@ -135,6 +137,10 @@
 	import {
 		registerConsultantStep1
 	} from '@/common/api/consultant.js'
+
+	import {
+		registerListenerStep1
+	} from '@/common/api/listener.js'
 	const cityList = ref(cityJson);
 	const idNum = ref('');
 	const popup = ref(null);
@@ -143,25 +149,30 @@
 	const address = ref('请选择')
 	const frontPhoto = ref(null)
 	const backendPhoto = ref(null)
-	const service = ref('请选择')
+	const services = ref('请选择')
 	const stars = ref(['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座', '水瓶座', '双鱼座'])
 	const openPopupHandler = () => {
 		popup.value.open();
 	}
-	
-	
+
+
 	const serviceShow = ref(false)
 
 	const serviceType = ref([])
 	// const constellation = ref('请选择')
 	const emit = defineEmits(['update:modelValue', 'committed']);
 	const starChange = (e) => {
-		constellation.value = stars.value[e.detail.value]
+		localData.value.constellation = stars.value[e.detail.value]
 		// console.log(e);
+	}
+
+	const chooseServiceType = () => {
+
 	}
 
 	const serviceTypeChange = (e) => {
 		console.log(e);
+		console.log(e.length);
 		// service.value = serviceType.value[e.detail.value]
 	}
 
@@ -173,7 +184,7 @@
 		profession.value = '心理咨询师' + i
 		popup.value.close()
 	}
-	
+
 	const submit = async () => {
 		console.log("子组件收到父组件调用，");
 		if (localData.value.idcardFront == null) {
@@ -205,22 +216,30 @@
 			return
 		}
 		// if (!localData.value.idcardFront.startsWith('http')) {
-			
+
 		// }
 		// if (!localData.value.idcardBackend.startsWith('http')) {
 		// 	console.log(localData.value.idcardBackend);
-			
+
 		// }
 		localData.value.consultantType = props.consultantType
 
 		uni.showLoading({
 			title: "提交中"
 		})
-		let res = await registerConsultantStep1(localData.value)
-		uni.hideLoading()
-		console.log(res);
-		localData.value = res.data
-		emit("committed", "")
+		if (props.consultantType == 1) {
+			let res = await registerConsultantStep1(localData.value)
+			uni.hideLoading()
+			console.log(res);
+			localData.value = res.data
+			emit("committed", "")
+		} else {
+			let res = await registerListenerStep1(localData.value)
+			uni.hideLoading()
+			console.log(res);
+			localData.value = res.data
+			emit("committed", "")
+		}
 	}
 
 	defineExpose({
@@ -240,10 +259,14 @@
 		const city = uni.getStorageSync("verifyAddress")
 		console.log(city);
 		if (city) {
-			address.value = city
+			localData.value.address = city
 		}
-		serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
-		console.log(serviceType.value);
+		if (props.consultantType == 1) { //是咨询师认证
+			serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
+			console.log(serviceType.value);
+		} else { //倾听师认证
+			serviceType.value = JSON.parse(uni.getStorageSync("listenerMenu"))
+		}
 	})
 
 	onUnload(() => {

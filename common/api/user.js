@@ -5,3 +5,6 @@ export const updateUser = (params, config = {}) => http.post('/api/user/update',
 	
 export const changeConsultant = (params, config = {}) => http.post('/api/user/changeConsultant',
 	params, config)
+	
+	
+export const getVerifyStatus = (params,config={}) =>http.get('/api/user/verifyStatus',params,config)

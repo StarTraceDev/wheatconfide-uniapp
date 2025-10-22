@@ -10,7 +10,7 @@
 			<view class="test-result-content">
 				<view class="content">
 					<view class="banner">
-						<image src="/static/forum/bg.png" class="img"></image>
+						<image :src="icon?icon:'/static/forum/bg.png'" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="result-analysis-box">
 						<view class="tip">结果分析</view>
@@ -26,9 +26,9 @@
 
 		<view class="footer-box">
 			<view class="footer-content">
-				<view @click="openHandler('/pages/psychological-test/comment/comment?examId='+examId)">
+				<view @click="openHandler(`/pages/psychological-test/comment/comment?examId=${examId}&id=${id}`)">
 					<image src="/static/psychological-test/comment.svg"></image>
-					<text>去评价</text>
+					<text>{{status==0?'去评价':'已评价'}}</text>
 				</view>
 				<view @click="shareHandler">
 					<image src="/static/psychological-test/save-share.svg"></image>
@@ -75,20 +75,38 @@
 	} from 'vue'
 	
 	import {
-		onLoad
+		onLoad,
+		onShow
 	} from '@dcloudio/uni-app'
+	
+	import {commentSatus} from '@/common/api/exam.js'
 	const backFn = () => {
-		uni.navigateBack({
-			delta: 1
-		})
+		uni.navigateBack()
 	}
 	const examId = ref(0)
 	const result = ref('')
+	const icon = ref('')
+	const id = ref(0)
+	
+	const status = ref(0)
 	onLoad((e)=>{
 		title.value = e.title
 		examId.value = e.examId
 		result.value = e.result
+		icon.value = e.icon
+		id.value = e.id
 	})
+	
+	onShow(()=>{
+		console.log(id.value);
+		getCommentStatus()
+	
+	})
+	
+	const getCommentStatus = async()=>{
+		let resp = await commentSatus({id:id.value,type:3})
+		status.value = resp.data
+	}
 	
 	const title = ref('')
 

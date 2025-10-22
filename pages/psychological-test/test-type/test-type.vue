@@ -6,7 +6,7 @@
 					<uni-icons type="left" size="24" @click="backFn"></uni-icons>
 				</view>
 				<view class="header-title">
-					<uni-search-bar class="uni-mt-10" radius="90" placeholder="请输入搜索内容" clearButton="auto"
+					<uni-search-bar class="uni-mt-10" @input="input" @clear="reset" radius="90" placeholder="请输入搜索内容" clearButton="auto"
 						cancelButton="none" @confirm="searchHandler" />
 				</view>
 				<view class="header-right" @click="myOrderHandler">
@@ -31,8 +31,8 @@
 			<view class="tag-content">
 				<view class="tag-left">
 					<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
-						<view class="tag-item" v-for="(item,index) in types" :key="index" :class="typeActive==index?'active':''"
-							@click="changeTabHandler(index)">
+						<view class="tag-item" v-for="(item,index) in types" :key="index"
+							:class="typeActive==index?'active':''" @click="changeTabHandler(index)">
 							{{item}}
 						</view>
 					</scroll-view>
@@ -40,22 +40,25 @@
 				<view class="tag-right">
 					<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
 						<view class="tag-right-content">
-							<view class="content-item" v-for="i in 10" :key="i" @click="openTestHandler(i)">
+							<view class="content-item" v-for="(item,index) in exams" :key="index" @click="openTestHandler(item)">
 								<view class="content-item-content">
 									<view class="content-txt">
-										<view class="title">潜意识投射测试</view>
-										<view class="remark">14张图片，揭露你的潜意识</view>
+										<view class="title">{{item.title}}</view>
+										<view class="remark">{{item.oneWord}}</view>
 										<view class="price-box">
-											<view>
-												<text class="price">￥19.9</text><text class="under-price">￥59.9</text>
+											<view v-if="item.payType==1">
+												<text class="price">￥{{item.discountPrice}}</text><text class="under-price">￥{{item.price}}</text>
+											</view>
+											<view v-else>
+												<text class="price">免费</text>
 											</view>
 											<view class="use-test">
-												<text class="use-num">23.4W</text>人已测
+												<text class="use-num">{{item.examNum}}</text>人已测
 											</view>
 										</view>
 									</view>
 									<view class="img-box">
-										<image src="/static/consult/user.png" class="img"></image>
+										<image :src="item.icon?item.icon:'/static/consult/user.png'" class="img"></image>
 									</view>
 								</view>
 
@@ -77,6 +80,13 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
+
+	import {
+		onLoad,
+		onReachBottom
+	} from '@dcloudio/uni-app'
+	
+	import {examListByTypes} from '@/common/api/exam.js'
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 
@@ -86,14 +96,64 @@
 		})
 	}
 	
-	const types = ref(['情感','性格','健康','家庭','人际','职业'])
-	const searchHandler = () => {}
+	const hasMore = ref(false)
+	
+	const page = ref(1)
+	const payType = ref(-1)
+	const count = ref(12)
+
+
+	const types = ref(['情感', '性格', '健康', '家庭', '人际', '职业'])
+	const searchHandler = () => {
+		getExamListByType()
+	}
+	
+	const reset = ()=>{
+		getExamListByType()
+	}
 	const myOrderHandler = () => {
 		uni.navigateTo({
 			url: "/pages/psychological-test/order/order"
 		})
 	}
+
 	const tabActive = ref(1);
+	const exams = ref([])
+
+	onLoad((e) => {
+		let type = e.type
+		if (type) {
+			const index = types.value.findIndex(e => e == type)
+			typeActive.value = index
+		}
+		getExamListByType()
+	})
+	
+	onReachBottom(()=>{
+		if(hasMore){
+			page.value++
+			getExamListByType()
+		}
+	})
+	const searchContent = ref('')
+
+	const input = (e)=>{
+		console.log(e);
+		searchContent.value = e
+	}
+	const total = ref(0)
+	
+	const getExamListByType = async ()=>{
+		let resp = await examListByTypes({type:types.value[typeActive.value],page:page.value,count:count.value,payType:payType.value,keyword:searchContent.value})
+		console.log(resp);
+		total.value = resp.data.total
+		exams.value = resp.data.records
+		if(exams.value.length>=total.value){
+			hasMore.value = false
+		}else{
+			hasMore.value = true
+		}
+	}
 	const tabsList = ref([{
 		id: 1,
 		label: "全部"
@@ -104,13 +164,23 @@
 		id: 3,
 		label: "免费"
 	}]);
+	
+	
 	const tabHandler = (item) => {
 		item.id != tabActive.value ? tabActive.value = item.id : ''
+		if(item.id==1){
+			payType.value = -1
+		}else if(item.id==2){
+			payType.value = 1
+		}else{
+			payType.value = 0
+		}
+		getExamListByType()
 	}
 
 	const openTestHandler = (i) => {
-		let url = i % 2 == '0' ? '/pages/psychological-test/free-test/free-test' :
-			'/pages/psychological-test/charge-test/charge-test'
+		let url = `/pages/psychological-test/charge-test/charge-test?id=${i.id}` //i % 2 == '0' ? '/pages/psychological-test/free-test/free-test' :
+			
 		uni.navigateTo({
 			url
 		})
@@ -120,6 +190,8 @@
 
 	const changeTabHandler = (item) => {
 		typeActive.value != item ? typeActive.value = item : ''
+		page.value = 1
+		getExamListByType()
 	}
 </script>
 
@@ -342,6 +414,7 @@
 						.img {
 							width: 160rpx;
 							height: 160rpx;
+							border-radius: 16rpx;
 						}
 					}
 

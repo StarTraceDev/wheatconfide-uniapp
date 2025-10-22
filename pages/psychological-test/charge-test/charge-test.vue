@@ -1,6 +1,6 @@
 <template>
 	<view class="charge-test-box">
-		<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false">
+		<scroll-view scroll-y="true" class="scroll-content" :show-scrollbar="false" @scrolltolower="reachBottom">
 			<uni-nav-bar :backgroundColor="'#9DDDC7'" :border="false" title="" class="header-bar" :statusBar="true"
 				fixed>
 				<template v-slot:left>
@@ -57,20 +57,20 @@
 							</view>
 						</view>
 						<view class="content-list">
-							<view class="content-item" v-for="i in 2" :key="i">
+							<view class="content-item" v-for="(item,index) in recommendList" :key="index">
 								<view class="content-item-content">
 									<view>
-										<view class="title">潜意识投射测试</view>
-										<view class="remark">14张图片，揭露你的潜意识</view>
-										<view class="price-box"><text class="price">￥19.9</text><text
-												class="under-price">￥59.9</text></view>
+										<view class="title">{{item.title}}</view>
+										<view class="remark">{{item.oneWord}}</view>
+										<view class="price-box" v-if="item.payType==1"><text class="price">￥{{item.discountPrice}}</text><text
+												class="under-price">￥{{item.price}}</text></view>
 										<view class="test-handler">
 											<view class="handler-btn">去测试</view>
-											<view class="use-test"><text class="num">23.4W</text>人已测</view>
+											<view class="use-test"><text class="num">{{item.examNum}}</text>人已测</view>
 										</view>
 									</view>
 									<view class="img-box">
-										<image src="/static/consult/user.png" class="img"></image>
+										<image :src="item.icon?item.icon:'/static/consult/user.png'" mode="aspectFill" class="img"></image>
 									</view>
 								</view>
 
@@ -91,35 +91,38 @@
 							<view class="comment-list-header">
 								<view class="left">
 									<view class="star">
-										<text>4.9</text><uni-rate :readonly="true" :value="4" size="12" />
+										<text>{{commentInfo.rating}}</text><uni-rate :readonly="true" :value="commentInfo.rating" size="12" />
 									</view>
 									<view class="txt">评分</view>
 								</view>
 								<view class="right">
 									<view class="comment-num">
-										<view class="num">2000+</view>
+										<view class="num">{{commentInfo.num>2000?'2000+':commentInfo.num}}</view>
 										<view class="txt">真实评价</view>
 									</view>
 									<view class="percent">
-										<view class="num">99%</view>
+										<view class="num">{{commentInfo.ratio}}%</view>
 										<view class="txt">满意度</view>
 									</view>
 								</view>
 							</view>
-							<view class="comment-content-item" v-for="i in 10" :key="i">
+							<view class="comment-content-item" v-if="commentList.length>0" v-for="(item,index) in commentList" :key="index">
 								<view class="content-item-header">
 									<view class="left">
 										<view>
-											<image src="/static/my/profile.png" class="img"></image>
+											<image :src="item.avatar?item.avatar:'/static/my/profile.png'" mode="aspectFill" class="img"></image>
 										</view>
-										<view>匿名</view>
+										<view>{{item.real_name}}</view>
 									</view>
-									<view class="right">2024-04-03</view>
+									<view class="right"><uni-dateformat format="yyyy-MM-dd hh:mm:ss" :date="item.create_time"></uni-dateformat></view>
 								</view>
 								<view class="content">
-									评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论
+									{{item.content}}
 								</view>
 
+							</view>
+							<view style="height: 200rpx;display: flex;justify-content: center;align-items: center;" v-else>
+								<text>暂无数据~</text>
 							</view>
 						</view>
 					</view>
@@ -152,18 +155,52 @@
 
 	import {
 		getExamDetail,
-		getExamRule
+		getExamRule,dailyRecommend,
+		articleComment,
+		articleCommentList
 	} from '@/common/api/exam.js'
 	const id = ref(0)
 
 	const rule = ref('')
+	const recommendList = ref([])
 	const examDetail = ref({})
+	const commentInfo = ref({rating:1,ratio:80,num:100})
+	const commentList = ref([])
 	onLoad((e) => {
 		id.value = e.id
-		console.log(id.value);
 		getDetail()
 		getRule()
+		getRecommendList()
+		getCommentInfo()
+		getCommentList()
 	})
+	
+	const getCommentInfo = async()=>{
+		let resp = await articleComment({id:id.value})
+		commentInfo.value = resp.data
+	}
+	
+	const page = ref(1)
+	const size = ref(20)
+	
+	const hasMore = ref(true)
+	
+	const getCommentList = async ()=>{
+		let resp = await articleCommentList({id:id.value,page:page.value,count:size.value})
+		console.log(resp);
+		commentList.value = resp.data.records
+		if(resp.total<=commentList.value.length){
+			hasMore.value = false
+		}else{
+			hasMore.value = true
+		}
+		
+	}
+	
+	const getRecommendList = async ()=>{
+		let resp = await dailyRecommend({size:2})
+		recommendList.value = resp.data
+	}
 	
 	const gotoChargeList = ()=>{
 		uni.navigateTo({
@@ -171,11 +208,19 @@
 		})
 	}
 
+	const reachBottom = ()=>{
+		console.log('reach bottom');
+		if(hasMore.value){
+			page.value++
+			getCommentList()
+		}
+		
+	}
 	const getRule = async () => {
 		let resp = await getExamRule();
 		rule.value = resp.data
 	}
-
+	
 	const getDetail = async () => {
 		let resp = await getExamDetail({
 			id: id.value
@@ -430,6 +475,7 @@
 								.img {
 									width: 240rpx;
 									height: 240rpx;
+									border-radius: 16rpx;
 								}
 							}
 						}
@@ -527,6 +573,7 @@
 										.img {
 											width: 48rpx;
 											height: 48rpx;
+											border-radius: 24rpx;
 											margin-right: 10rpx;
 										}
 									}
