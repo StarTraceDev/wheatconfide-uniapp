@@ -7,7 +7,7 @@
 			<view class="bg-top-content">
 				<image src="/static/login/logo.png" class="logo"></image>
 				<view class="welcome"><text>欢迎来到</text> <text class="txt">「麦苗倾诉」</text></view>
-				<view class="msg">未注册手机号验证后自动创建账号</view>
+				<view class="msg">欢迎登录麦苗App</view>
 			</view>
 		</view>
 		<view class="login-area">
@@ -34,6 +34,8 @@
 						placeholder-class="msg" />
 				</view>
 				<view class="login-btn" @click="loginFn">立即登录</view>
+				<view style="text-align: center;margin-top: 15rpx;"><text>还没有账号？现在去</text><text @click="gotoRegister"
+						style="color: #34A755;">注册>></text></view>
 			</view>
 			<view class="wechat-login">
 				<text class="wechat-msg">第三方登录</text>
@@ -44,7 +46,8 @@
 
 		</view>
 		<view class="agree">
-			注册即代表同意 <text class="txt">《用户注册协议》</text>和<text class="txt">《隐私协议》</text>
+			注册即代表同意 <text class="txt" @click="gotoPrivacy(1)">《用户注册协议》</text>和<text class="txt"
+				@click="gotoPrivacy(2)">《隐私协议》</text>
 		</view>
 	</view>
 </template>
@@ -67,10 +70,14 @@
 	const store = useGlobalDataStore();
 	let type = ref(1);
 	const state = ref({
-		"userName": "18805340665",
-		"password": "123456",
-		"code": "6666"
+		"userName": "",
+		"password": "",
+		"code": ""
 	})
+
+	const gotoPrivacy = () => {
+
+	}
 
 	const changeLoginTypeFn = (val) => {
 		console.log(val);
@@ -79,45 +86,40 @@
 	let GoEasy = uni.$GoEasy
 
 	const loginFn = async () => {
-		if (type.value == "2") {
+		if (type.value == 2) {
 			let res = await quickReg(state.value);
-			console.log('userInfo1',res);
+			console.log('userInfo1', res);
 			uni.setStorageSync('token', res.data.token)
 			store.setToken(res.data.token);
-			uni.setStorageSync("currentUser",res.data)
+			uni.setStorageSync("currentUser", res.data)
 			let user = res.data
-			
+
 			uni.switchTab({
 				url: '/pages/index/index'
 			})
 		}
-		if (type.value == "1") {
+		if (type.value == 1) {
 			let res = await smsLogin(state.value);
-			let user = res.data
-			console.log("userInfo2",user);
-			GoEasy.connect({
-				id: user.id,
-				data: {
-					"avatar": user.avatar,
-					"nickname": user.realName
-				},
-				onSuccess: function() {
-					console.log("GoEasy connect successfully.") //连接成功
-				},
-				onFailed: function(error) { //连接失败
-					console.log("Failed to connect GoEasy, code:" + error.code + ",error:" + error.content);
-				},
-				onProgress: function(attempts) { //连接或自动重连中
-					console.log("GoEasy is connecting", attempts);
-				}
-			})
-			uni.switchTab({
-				url: '/pages/index/index'
-			})
+			if (res.code == 0) {
+				uni.setStorageSync('token', res.data.token)
+				store.setToken(res.data.token);
+				uni.setStorageSync("currentUser", res.data)
+				let user = res.data
+				console.log("userInfo2", user);
+
+				uni.switchTab({
+					url: '/pages/index/index'
+				})
+			}
 		}
-		
+
 	}
 
+	const gotoRegister = () => {
+		uni.navigateTo({
+			url: "/pages/register/register"
+		})
+	}
 	const userInfo = ref(null);
 
 	const wxAppLogin = async () => {
@@ -182,11 +184,13 @@
 	const onSendSms = async () => {
 		if (disabled.value) return;
 
-		getCurrentDown();
-
 		let res = await sendSms({
-			phone: state.value.userName
+			phone: state.value.userName,
+			type:1
 		})
+		if (res.code == 0) {
+			getCurrentDown();
+		}
 		console.log(res)
 	}
 

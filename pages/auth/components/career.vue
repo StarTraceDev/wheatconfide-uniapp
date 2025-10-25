@@ -6,7 +6,12 @@
 				<view class="remark">专业信息展示在个人资料（多选）</view>
 				<view class="career-collapse-box">
 					<view class="career-collapse-item">
-						<uni-collapse v-model="collapseValue">
+						<u-checkbox-group @change="serviceChanged" :max="5"
+							wrap>
+							<u-checkbox v-for="(item,index) in serviceType" v-model="item.checked"  :key="index" shape="circle"
+								:name="item.name">{{item.name}}</u-checkbox>
+						</u-checkbox-group>
+						<!-- <uni-collapse v-model="collapseValue">
 							<uni-collapse-item :border="false" title-border="none" v-for="(item,index) in classifyLists"
 								:key="index">
 								<template v-slot:title>
@@ -20,12 +25,12 @@
 										selectedColor="#35CA95" selectedTextColor="#212528"></uni-data-checkbox>
 								</view>
 							</uni-collapse-item>
-						</uni-collapse>
+						</uni-collapse> -->
 					</view>
 				</view>
 			</view>
 
-			<view class="career-content">
+			<view class="career-content" style="display: none;">
 				<view class="title">擅长疗法</view>
 				<view class="remark">专业信息展示在个人资料（多选）</view>
 				<view class="career-collapse-box">
@@ -49,73 +54,129 @@
 		ref
 	} from 'vue';
 
+	import {
+		onShow
+	} from '@dcloudio/uni-app'
+	
+	import {
+		registerConsultantStep2
+	} from '@/common/api/consultant.js'
+	
+	import {
+		registerListenerStep2
+	} from '@/common/api/listener.js'
+
+	const serviceType = ref([])
+
+	const t = ref([])
+	const serviceChanged = (e) => {
+		console.log('serviceChanged:', e);
+		// uView 的 max 属性会自动限制选择数量
+		checkedList.value = e;
+		console.log('list',checkedList);
+		// e.value = e
+	}
+	const emit = defineEmits(['update:modelValue', 'committed']);
+	
+	const submit = async ()=>{
+		props.modelValue.serviceType = checkedList.value.join(',')
+		console.log(props.modelValue.serviceType);
+		if(props.consultantType==1){
+			let resp = await registerConsultantStep2(props.modelValue)
+			emit("committed","")
+		}else{
+			let resp = await registerListenerStep2(props.modelValue)
+			emit("committed","")
+		}
+	}
+	
+	defineExpose({
+		submit
+	})
+	
+	const checkedList = ref([])
 	const collapseValue = ref(['0']);
-	const classifyLists = ref([{
-		text: "婚姻关系",
-		value: 1,
-		modelValue: [],
-		children: [{
-			text: "婚姻关系1",
-			value: "1",
-		}, {
-			text: "婚姻关系2",
-			value: "2",
-		}, {
-			text: "婚姻关系3",
-			value: "3",
-		}, {
-			text: "婚姻关系4",
-			value: "4",
-		}, {
-			text: "婚姻关系5",
-			value: "5",
-		}]
-	}, {
-		text: "人际关系",
-		value: "rjgx",
-		modelValue: [],
-		children: [{
-			text: "人际关系1",
-			value: "1",
-		}, {
-			text: "人际关系2",
-			value: "2",
-		}, {
-			text: "人际关系3",
-			value: "3",
-		}, {
-			text: "人际关系4",
-			value: "4",
-		}, {
-			text: "人际关系5",
-			value: "5",
-		}]
-	}, {
-		text: "人际关系",
-		value: "rjgx",
-		modelValue: [],
-		children: [{
-			text: "人际关系1",
-			value: "1",
-		}, {
-			text: "人际关系2",
-			value: "2",
-		}, {
-			text: "人际关系3",
-			value: "3",
-		}, {
-			text: "人际关系4",
-			value: "4",
-		}, {
-			text: "人际关系5",
-			value: "5",
-		}]
-	}]);
+	// const classifyLists = ref([{
+	// 	text: "婚姻关系",
+	// 	value: 1,
+	// 	modelValue: [],
+	// 	children: [{
+	// 		text: "婚姻关系1",
+	// 		value: "1",
+	// 	}, {
+	// 		text: "婚姻关系2",
+	// 		value: "2",
+	// 	}, {
+	// 		text: "婚姻关系3",
+	// 		value: "3",
+	// 	}, {
+	// 		text: "婚姻关系4",
+	// 		value: "4",
+	// 	}, {
+	// 		text: "婚姻关系5",
+	// 		value: "5",
+	// 	}]
+	// }, {
+	// 	text: "人际关系",
+	// 	value: "rjgx",
+	// 	modelValue: [],
+	// 	children: [{
+	// 		text: "人际关系1",
+	// 		value: "1",
+	// 	}, {
+	// 		text: "人际关系2",
+	// 		value: "2",
+	// 	}, {
+	// 		text: "人际关系3",
+	// 		value: "3",
+	// 	}, {
+	// 		text: "人际关系4",
+	// 		value: "4",
+	// 	}, {
+	// 		text: "人际关系5",
+	// 		value: "5",
+	// 	}]
+	// }, {
+	// 	text: "人际关系",
+	// 	value: "rjgx",
+	// 	modelValue: [],
+	// 	children: [{
+	// 		text: "人际关系1",
+	// 		value: "1",
+	// 	}, {
+	// 		text: "人际关系2",
+	// 		value: "2",
+	// 	}, {
+	// 		text: "人际关系3",
+	// 		value: "3",
+	// 	}, {
+	// 		text: "人际关系4",
+	// 		value: "4",
+	// 	}, {
+	// 		text: "人际关系5",
+	// 		value: "5",
+	// 	}]
+	// }]);
 
 
 	const props = defineProps({
 		modelValue: Object,
-		consultantType: Number
+		consultantType: String
+	})
+
+	onShow(() => {
+		console.log('111');
+		if (props.consultantType == '1') { //是咨询师认证
+			serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
+		} else { //倾听师认证
+			serviceType.value = JSON.parse(uni.getStorageSync("listenerMenu"))
+		}
+		// 为每个项目添加 checked 属性
+		serviceType.value = serviceType.value.map(item => ({
+			...item,
+			checked: false
+		}));
+		console.log(serviceType.value);
 	})
 
 

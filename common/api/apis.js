@@ -16,3 +16,6 @@ export const sendSms = (params, config = {}) => http.post('/api/sms/sms/sendSms'
 
 export const smsLogin = (params, config = {}) => http.post('/api/user/smsLogin',
 	params, config)
+	
+	
+export const register = (params,config={})=>http.post('/api/user/register',params,config)

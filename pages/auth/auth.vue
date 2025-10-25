@@ -27,7 +27,8 @@
 						<view class="handler-components-box">
 							<idCard v-show="step == 1" :modelValue="consultant" :consultantType="consultantType"
 								@committed="step1Commit" ref="idCardRef" v-model="formData.idCard"></idCard>
-							<career v-show="step==2" :modelValue="consultant" :consultantType="consultantType"></career>
+							<career v-show="step==2" ref="careerRef" :modelValue="consultant"
+								:consultantType="consultantType" @committed="setp2Commit"></career>
 							<certificate v-show="step==3" @commited="finalCommit" :modelValue="consultant"
 								:consultantType="consultantType" ref="finalStep"></certificate>
 
@@ -120,6 +121,7 @@
 	const type = ref(0)
 
 	const idCardRef = ref(null)
+	const careerRef = ref(null)
 	const finalStep = ref(null)
 	const consultantType = ref('')
 	onLoad((e) => {
@@ -169,19 +171,28 @@
 			idCardRef.value?.submit()
 		}
 		if (step.value == 2) {
+			careerRef.value?.submit()
 
-			consultant.value.consultantType = consultantType.value
-			console.log(consultant);
-			registerConsultantStep2(consultant.value).then(res => {
-				// console.log(res);
-				step.value = step.value + 1
-			})
+			// if (consultantType.value == 1) {
+			// 	consultant.value.consultantType = consultantType.value
+			// 	console.log(consultant);
+			// 	registerConsultantStep2(consultant.value).then(res => {
+			// 		// console.log(res);
+			// 		step.value = step.value + 1
+			// 	})
+			// }else{
+
+			// }
 			// step.value = step.value+1
 		}
 
 	}
 
 	const step1Commit = () => {
+		step.value = step.value + 1;
+	}
+
+	const setp2Commit = () => {
 		step.value = step.value + 1;
 	}
 

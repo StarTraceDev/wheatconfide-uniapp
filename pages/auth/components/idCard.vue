@@ -56,16 +56,16 @@
 								color="rgba(0, 0, 0, 0.3)"></uni-icons>
 						</view>
 					</view>
-					<view class="form-item" @click="serviceShow = true">
+					<!-- <view class="form-item" @click="serviceShow = true">
 						<view class="label require">服务类型</view>
-						<!-- <picker :range="serviceType" @change="serviceTypeChange">
+						 <picker :range="serviceType" @change="serviceTypeChange">
 							<view class="content weight">{{service}}<uni-icons type="right"
 									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
-						</picker> -->
-						<view @click="">{{services}}<uni-icons type="right" size="14"
-								color="rgba(0, 0, 0, 0.3)"></uni-icons></view>
-						<!-- <u-picker mode="selector" v-model="serviceShow" :range="serviceType" :default-selector="[0]" :range-key="'name'"></u-picker> -->
-					</view>
+						</picker> 
+						<view @click="">{{services}}<uni-icons type="right" size="14" 
+								 color="rgba(0, 0, 0, 0.3)"></uni-icons></view> 
+						 <u-picker mode="selector" v-model="serviceShow" :range="serviceType" :default-selector="[0]" :range-key="'name'"></u-picker> 
+					</view> -->
 					<view class="form-item user-sign">
 						<view class="label">个人签名</view>
 						<view class="content-input" style="width: 400rpx;">
@@ -86,7 +86,7 @@
 			</view>
 		</view>
 
-		<u-popup v-model="serviceShow" mode="bottom">
+		<!-- <u-popup v-model="serviceShow" mode="bottom">
 			<view style="padding: 30rpx;">
 				<view class="title">请选择服务类型</view>
 				<u-checkbox-group @change="serviceTypeChange">
@@ -99,7 +99,7 @@
 					<u-button size="medium" @click="serviceShow=false">取消</u-button>
 				</view>
 			</view>
-		</u-popup>
+		</u-popup> -->
 
 		<uni-popup ref="popup" type="bottom" border-radius="24rpx 24rpx 0 0" class="career-popup">
 			<view class="career-popup-box">
@@ -230,7 +230,7 @@
 		if (props.consultantType == 1) {
 			let res = await registerConsultantStep1(localData.value)
 			uni.hideLoading()
-			console.log(res);
+			// console.log(res);
 			localData.value = res.data
 			emit("committed", "")
 		} else {
@@ -257,13 +257,12 @@
 
 	onShow(() => {
 		const city = uni.getStorageSync("verifyAddress")
-		console.log(city);
+		// console.log(city);
 		if (city) {
 			localData.value.address = city
 		}
 		if (props.consultantType == 1) { //是咨询师认证
 			serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
-			console.log(serviceType.value);
 		} else { //倾听师认证
 			serviceType.value = JSON.parse(uni.getStorageSync("listenerMenu"))
 		}

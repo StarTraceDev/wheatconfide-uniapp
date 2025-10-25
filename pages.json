@@ -209,6 +209,14 @@
 			}
 		},
 		{
+			"path" : "pages/supplementInfo/supplementInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "补充资料",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/auth/auth",
 			"style": {
 				"navigationBarTitleText": "认证",
@@ -239,6 +247,14 @@
 				"navigationBarBackgroundColor": "#F4F6F8",
 				// "navigationStyle": "",
 				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path" : "pages/register/register",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
 			}
 		}
 	],

@@ -315,6 +315,10 @@
 	} from 'vue';
 
 	import {
+		onShow
+	} from '@dcloudio/uni-app'
+
+	import {
 		uploadFile
 	} from '@/utils/common';
 	import {
@@ -437,7 +441,13 @@
 		consultantType: Number,
 		modelValue: Object
 	})
-	certificateLists = props.modelValue.certificateList
+	
+	onShow(()=>{
+		if(props.modelValue.certificateList){
+			certificateLists = props.modelValue.certificateList
+		}
+	})
+	
 
 	defineExpose({
 		submit

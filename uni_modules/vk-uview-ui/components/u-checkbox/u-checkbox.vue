@@ -234,7 +234,7 @@ export default {
 			if (this.parent && this.parent.children) {
 				// 只要父组件的某一个子元素的value为true，就加1(已有的选中数量)
 				this.parent.children.map(val => {
-					if (val.value) checkedNum++;
+					if (val.valueCom || val.value) checkedNum++;
 				});
 			}
 			// 如果原来为选中状态，那么可以取消

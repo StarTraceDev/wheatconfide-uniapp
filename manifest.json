@@ -154,7 +154,8 @@
     "quickapp" : {},
     "h5" : {
         "router" : {
-            "base" : "/"
+            "base" : "/",
+			"mode": "hash"
         },
         "devServer" : {
             "https" : false,
