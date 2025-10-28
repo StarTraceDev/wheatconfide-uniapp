@@ -6,9 +6,9 @@ import JSONBig from 'json-bigint'
 let baseURL = 'https://ceshi.maimiaoqingsu.com'
 // 创建一个配置对象
 const requestConfig = {
-	// baseURL: 'https://ceshi.maimiaoqingsu.com', // API基础URL
-	
-	baseURL: 'https://ceshi.maimiaoqingsu.com',
+	baseURL: '/', // API基础URL
+
+	// baseURL: 'https://ceshi.maimiaoqingsu.com',
 	timeout: 30000, // 请求超时时间
 	header: {
 		'Content-Type': 'application/json'
@@ -79,16 +79,27 @@ const request = (options) => {
 				if (data.code !== 0 && data.code !== 409999) {
 					// 如果没有显式定义custom的toast参数为false的话，默认对报错进行toast弹出提示
 					if (custom.toast !== false) {
-						uni.showToast(data.message || '请求失败')
-						if (data.code == 401 || data.code==10010002) {
-							uni.removeStorageSync("logoInfo")
-							uni.reLaunch({
-								url: "/pages/login/login"
+						console.log(data);
+						uni.showToast({
+							title:data.msg || '请求失败',
+							icon:'error'
 							})
+						if (data.code == 401 || data.code == 10010002) {
+							uni.showToast({
+								title: data.message || '登录已过期，请重新登录',
+								icon: 'none'
+							})
+							uni.removeStorageSync("logoInfo")
+							setTimeout(() => {
+								uni.reLaunch({
+									url: "/pages/login/login"
+								})
+							}, 1000)
+							return
 						}
 					}
 					// 拒绝Promise并传递错误数据
-					return reject({
+					reject({
 						statusCode: res.statusCode,
 						data: data,
 						message: data.message || '请求失败'

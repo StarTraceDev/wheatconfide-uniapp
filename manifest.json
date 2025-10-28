@@ -47,7 +47,8 @@
             },
             /* ios打包配置 */
             "ios" : {
-                "dSYMs" : false
+                "dSYMs" : false,
+                "idfa" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {
@@ -155,7 +156,7 @@
     "h5" : {
         "router" : {
             "base" : "/",
-			"mode": "hash"
+            "mode" : "hash"
         },
         "devServer" : {
             "https" : false,

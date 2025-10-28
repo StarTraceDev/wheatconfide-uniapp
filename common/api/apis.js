@@ -19,3 +19,6 @@ export const smsLogin = (params, config = {}) => http.post('/api/user/smsLogin',
 	
 	
 export const register = (params,config={})=>http.post('/api/user/register',params,config)
+
+
+export const articleByType = (params,config={}) => http.get('/api/agreement/getByTitle',params,config)

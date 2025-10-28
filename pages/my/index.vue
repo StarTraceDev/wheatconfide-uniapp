@@ -105,18 +105,18 @@
 							<image src="/static/my/contect.png"></image> <text>联系客服</text>
 						</view>
 					</view>
-					<view class="other-item">
+					<view class="other-item" @click="toPage('/pages/settings/settings')">
 						<view class="item-left">
 							<image src="/static/my/setting.png"></image> <text>设置</text>
 						</view>
 					</view>
 				</view>
 			</view>
-			<view style="margin-left: 30rpx;margin-right: 30rpx;margin-top: 30rpx;">
+			<!-- <view style="margin-left: 30rpx;margin-right: 30rpx;margin-top: 30rpx;">
 				<button type="primary" @click="toLogout">
 					退出登录
 				</button>
-			</view>
+			</view> -->
 
 		</view>
 	</view>
@@ -134,6 +134,12 @@
 	import {
 		changeConsultant
 	} from "@/common/api/user.js"
+
+	const toPage = (url)=>{
+		uni.navigateTo({
+			url:url
+		})
+	}
 
 	const gridList = ref([{
 		url: "/static/my/grid-1.png",

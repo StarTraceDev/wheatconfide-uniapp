@@ -256,6 +256,30 @@
 				"navigationBarTitleText" : "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/settings/settings",
+			"style" : 
+			{
+				"navigationBarTitleText" : "设置",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/account/security",
+			"style": {
+				"navigationBarTitleText": "账号安全",
+				"navigationStyle": "default"
+				
+			}
+		},
+		{
+			"path" : "pages/webview/webview",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "default"
+			}
 		}
 	],
 	"tabBar": {

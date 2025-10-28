@@ -75,8 +75,16 @@
 		"code": ""
 	})
 
-	const gotoPrivacy = () => {
-
+	const gotoPrivacy = (type) => {
+		if(type==1){
+			uni.navigateTo({
+				url:"/pages/webview/webview?type=用户协议"
+			})
+		}else{
+			uni.navigateTo({
+				url:"/pages/webview/webview?type=隐私政策"
+			})
+		}
 	}
 
 	const changeLoginTypeFn = (val) => {
