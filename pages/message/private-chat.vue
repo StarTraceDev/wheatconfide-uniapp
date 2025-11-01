@@ -269,6 +269,9 @@
 		let id = options.to;
 		console.log(id);
 		let name = options.name
+		uni.setNavigationBarTitle({
+			title:name
+		})
 		friend = {id:id,name:name,avatar:options.avatar}
 		// friend = restApi.findUserById(id);
 		to = {

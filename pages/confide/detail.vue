@@ -3,7 +3,7 @@
 	<view class="consult-detail-box">
 		<scroll-view scroll-y class="scroll-content" @scroll="onPageScroll" :scroll-top="top" :show-scrollbar="false">
 			<uni-nav-bar :backgroundColor="scrollTop>15?'#fff':'transparent'" :border="false"
-				:title="scrollTop>15?consultantInfo.consultantName:''" class="header-bar" :statusBar="true" fixed>
+				:title="scrollTop>15?listenerInfo.name:''" class="header-bar" :statusBar="true" fixed>
 				<template v-slot:left>
 					<view class="right">
 						<uni-icons type="left" size="24" v-if="scrollTop>15" @click="backFn"></uni-icons>
@@ -25,7 +25,8 @@
 					<view class="uni-margin-wrap">
 						<swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="5000"
 							:duration="500">
-							<swiper-item v-for="i in 6" :key="i" class="swiper-item">
+							<swiper-item v-for="(item,index) in [listenerInfo.avatar]" :key="index" class="swiper-item">
+								<image :src="item" mode="aspectFill" style="width: 100%;height: 100%;"></image>
 							</swiper-item>
 						</swiper>
 					</view>
@@ -33,8 +34,8 @@
 				<view class="consult-detail-info">
 					<view class="detail-item-line-1">
 						<view class="name">
-							<text class="name-a">{{consultantInfo.consultantName}}</text>
-							<text class="name-b">{{consultantInfo.major}}</text>
+							<text class="name-a">{{listenerInfo.name}}</text>
+							<text class="name-b">{{listenerInfo.major}}</text>
 							<!-- <text class="name-c">90后</text> -->
 						</view>
 						<view class="money">
@@ -43,10 +44,10 @@
 						</view>
 					</view>
 					<view class="detail-item-line-2">
-						<text>{{consultantInfo.address}} | {{consultantInfo.education}} | 80后{{consultantInfo.age}} | {{consultantInfo.constellation}}</text>
+						<text>{{listenerInfo.address}} | {{listenerInfo.education}} | 80后{{listenerInfo.age}} | {{listenerInfo.constellation}}</text>
 					</view>
 					<view class="detail-item-line-3">
-						倾听师寄语倾听师寄语倾听师寄语倾听师寄语。
+						{{listenerInfo.signature}}
 					</view>
 
 					<view class="detail-item-line-4">
@@ -292,8 +293,8 @@
 		useGlobalDataStore
 	} from '@/stores/global.js';
 	import {
-		getConsultantById
-	} from "@/common/api/consultant.js";
+		getListenerById
+	} from "@/common/api/listener.js";
 	import {
 		useRoute
 	} from 'vue-router'; // 引入路由钩子
@@ -313,10 +314,11 @@
 	const fixedActive = ref(false);
 	const popup = ref(null);
 	const tabId = ref("#tab-1");
-	const consultantInfo = ref();
+	const listenerInfo = ref();
 	const tab5 = ref(null);
 	onLoad((options) => {
-		getConsultantInfo(options.id)
+		console.log(options.id);
+		getListenerInfo(options.id)
 		
 	})
 	// 获取路由实例，用于获取参数
@@ -468,11 +470,11 @@
 	/**
 	 * 获取详情
 	 */
-	const getConsultantInfo = async (id) => {
-		let res = await getConsultantById({
+	const getListenerInfo = async (id) => {
+		let res = await getListenerById({
 			id: id
 		});
-		consultantInfo.value = res.data;
+		listenerInfo.value = res.data;
 		console.log(res)
 	}
 </script>

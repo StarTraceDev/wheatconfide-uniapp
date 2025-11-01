@@ -6,10 +6,9 @@
 				<view class="remark">专业信息展示在个人资料（多选）</view>
 				<view class="career-collapse-box">
 					<view class="career-collapse-item">
-						<u-checkbox-group @change="serviceChanged" :max="5"
-							wrap>
-							<u-checkbox v-for="(item,index) in serviceType" v-model="item.checked"  :key="index" shape="circle"
-								:name="item.name">{{item.name}}</u-checkbox>
+						<u-checkbox-group @change="serviceChanged" :max="5" wrap>
+							<u-checkbox v-for="(item,index) in serviceType" v-model="item.checked" :key="index"
+								shape="circle" :name="item.name">{{item.name}}</u-checkbox>
 						</u-checkbox-group>
 						<!-- <uni-collapse v-model="collapseValue">
 							<uni-collapse-item :border="false" title-border="none" v-for="(item,index) in classifyLists"
@@ -57,11 +56,13 @@
 	import {
 		onShow
 	} from '@dcloudio/uni-app'
-	
+	import {
+		getConsultantMenus,
+	} from '@/common/api/index.js'
 	import {
 		registerConsultantStep2
 	} from '@/common/api/consultant.js'
-	
+
 	import {
 		registerListenerStep2
 	} from '@/common/api/listener.js'
@@ -73,90 +74,29 @@
 		console.log('serviceChanged:', e);
 		// uView 的 max 属性会自动限制选择数量
 		checkedList.value = e;
-		console.log('list',checkedList);
+		console.log('list', checkedList);
 		// e.value = e
 	}
 	const emit = defineEmits(['update:modelValue', 'committed']);
-	
-	const submit = async ()=>{
+
+	const submit = async () => {
 		props.modelValue.serviceType = checkedList.value.join(',')
 		console.log(props.modelValue.serviceType);
-		if(props.consultantType==1){
+		if (props.consultantType == 1) {
 			let resp = await registerConsultantStep2(props.modelValue)
-			emit("committed","")
-		}else{
+			emit("committed", "")
+		} else {
 			let resp = await registerListenerStep2(props.modelValue)
-			emit("committed","")
+			emit("committed", "")
 		}
 	}
-	
+
 	defineExpose({
 		submit
 	})
-	
+
 	const checkedList = ref([])
 	const collapseValue = ref(['0']);
-	// const classifyLists = ref([{
-	// 	text: "婚姻关系",
-	// 	value: 1,
-	// 	modelValue: [],
-	// 	children: [{
-	// 		text: "婚姻关系1",
-	// 		value: "1",
-	// 	}, {
-	// 		text: "婚姻关系2",
-	// 		value: "2",
-	// 	}, {
-	// 		text: "婚姻关系3",
-	// 		value: "3",
-	// 	}, {
-	// 		text: "婚姻关系4",
-	// 		value: "4",
-	// 	}, {
-	// 		text: "婚姻关系5",
-	// 		value: "5",
-	// 	}]
-	// }, {
-	// 	text: "人际关系",
-	// 	value: "rjgx",
-	// 	modelValue: [],
-	// 	children: [{
-	// 		text: "人际关系1",
-	// 		value: "1",
-	// 	}, {
-	// 		text: "人际关系2",
-	// 		value: "2",
-	// 	}, {
-	// 		text: "人际关系3",
-	// 		value: "3",
-	// 	}, {
-	// 		text: "人际关系4",
-	// 		value: "4",
-	// 	}, {
-	// 		text: "人际关系5",
-	// 		value: "5",
-	// 	}]
-	// }, {
-	// 	text: "人际关系",
-	// 	value: "rjgx",
-	// 	modelValue: [],
-	// 	children: [{
-	// 		text: "人际关系1",
-	// 		value: "1",
-	// 	}, {
-	// 		text: "人际关系2",
-	// 		value: "2",
-	// 	}, {
-	// 		text: "人际关系3",
-	// 		value: "3",
-	// 	}, {
-	// 		text: "人际关系4",
-	// 		value: "4",
-	// 	}, {
-	// 		text: "人际关系5",
-	// 		value: "5",
-	// 	}]
-	// }]);
 
 
 	const props = defineProps({
@@ -164,11 +104,26 @@
 		consultantType: String
 	})
 
-	onShow(() => {
+	onShow(async () => {
 		console.log('111');
 		if (props.consultantType == '1') { //是咨询师认证
+			let consultMenu = uni.getStorageSync("consultantMenu")
+			if(!consultMenu){
+				let resp = await getConsultantMenus({
+					type: 0
+				})
+				uni.setStorageSync("consultantMenu", JSON.stringify(resp.data))
+			}
 			serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
+			
 		} else { //倾听师认证
+			let listenerMenu = uni.getStorageSync("listenerMenu")
+			if (!listenerMenu) {
+				let resp = await getConsultantMenus({
+					type: 1
+				})
+				uni.setStorageSync("listenerMenu",JSON.stringify(resp.data))
+			}
 			serviceType.value = JSON.parse(uni.getStorageSync("listenerMenu"))
 		}
 		// 为每个项目添加 checked 属性

@@ -87,7 +87,7 @@
 					</view>
 					<view class="doctor-info">
 						<view class="doctor-info-1">
-							<view class="name">{{item.consultantName}}</view>
+							<view class="name">{{item.name}}</view>
 							<!-- <view class="date">今天20:00可约</view> -->
 						</view>
 						<view class="doctor-info-1">
@@ -110,13 +110,14 @@
 						</view>
 						<view class="doctor-info-1">
 							<view class="point-list">
-								<view class="point-item">自我探索</view>
-								<view class="point-item">压力管理</view>
-								<view class="point-item">婚姻家庭</view>
+								<view class="point-item" v-for="(item,index) in item.serviceType.split(',')" :key="index">{{item}}</view>
+								<!-- <view class="point-item">压力管理</view> -->
+								<!-- <view class="point-item">婚姻家庭</view> -->
 							</view>
 						</view>
 						<view class="doctor-info-1">
-							<view class="price"><text class="unit">¥</text>{{item.consultantPrice}}</view>、
+							<view class="price" v-if="item.price"><text class="unit" v-if="item.price">¥</text>{{item.price}}</view>
+							<view class="price" v-else>免费</view>
 							<view class="address">
 								<image src="/static/consult/address.png"></image><text>{{item.address}}</text>
 							</view>
@@ -142,8 +143,8 @@
 		useGlobalDataStore
 	} from '@/stores/global.js';
 	import {
-		getConsultantList
-	} from "@/common/api/consultant.js"
+		getListenerList
+	} from "@/common/api/listener.js"
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	const scrollTop = ref(0);
@@ -186,7 +187,7 @@
 	 * 获取列表
 	 */
 	const getList = async () => {
-		let res = await getConsultantList(data.listParpms);
+		let res = await getListenerList(data.listParpms);
 		data.list = res.data.records;
 		console.log(res)
 	}

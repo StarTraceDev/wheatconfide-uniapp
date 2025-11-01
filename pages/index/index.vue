@@ -63,7 +63,7 @@
 				</view>
 				<!-- 图标网格 -->
 				<view class="icon-grid">
-					<view class="icon-item" v-for="(item,index) in consultantMenuList" :key="index">
+					<view class="icon-item" v-for="(item,index) in consultantMenuList" @click="gotoListPage(item)" :key="index">
 						<view class="icon-circle">
 							<image :src="item.icon==''?'/static/index/icon1.png':item.icon" class="img"></image>
 						</view>
@@ -97,9 +97,12 @@
 
 				</view>
 				<view class="listening-content-box">
-					<view class="content-box" v-for="(item,index) in listenerMenu" :key="index" :style="{backgroundColor:colors[index]}">
+					<view class="content-box" v-for="(item,index) in listenerMenu" :key="index"
+						:style="{backgroundColor:colors[index]}" @click="gotoConfidePage(item)">
 						<view>{{item.name}}</view>
-						<view style="text-align: end;margin-right: 15rpx;"><image :src="item.icon" style="width: 60rpx;" mode="widthFix"></image></view>
+						<view style="text-align: end;margin-right: 15rpx;">
+							<image :src="item.icon" style="width: 60rpx;" mode="widthFix"></image>
+						</view>
 						<!-- <view class="content-item first-content-item">
 							<view class="txt">文案</view>
 							<image src="/static/index/listening-content-box-img.png" class="content-img"></image>
@@ -123,8 +126,8 @@
 				</view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :show-scrollbar="false">
 					<view class="list">
-						<ConsultTeacherListItem class="list-item" :info="i" v-for="i in data.consultantList"
-							@click="openTeacherFn(1, i.id)">
+						<ConsultTeacherListItem class="list-item" :key="index" :info="consultant"
+							v-for="(consultant,index) in data.consultantList" @click="openTeacherFn(1, consultant.id)">
 						</ConsultTeacherListItem>
 					</view>
 				</scroll-view>
@@ -140,7 +143,8 @@
 				</view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="0" :show-scrollbar="false">
 					<view class="list">
-						<ConfideTeacherListItem class="list-item" v-for="i in 10" @click="openTeacherFn(2)">
+						<ConfideTeacherListItem class="list-item" v-for="(item,index) in data.listenerList" :info="item"
+							@click="openTeacherFn(2,item.id)" :key="index">
 						</ConfideTeacherListItem>
 					</view>
 				</scroll-view>
@@ -163,7 +167,8 @@
 					</view>
 
 					<view class="content-list">
-						<view class="content-item" v-for="(item,index) in homeExams" :key="index" @click="gotoDetail(item)">
+						<view class="content-item" v-for="(item,index) in homeExams" :key="index"
+							@click="gotoDetail(item)">
 							<view class="lock">
 								<image src="@/static/index/lock.png" class="lock-img"></image>
 							</view>
@@ -243,6 +248,10 @@
 	import {
 		getArticleList
 	} from "@/common/api/article.js"
+
+	import {
+		getListenerList
+	} from '@/common/api/listener.js'
 	import {
 		getAnswerList
 	} from "@/common/api/answer.js"
@@ -277,6 +286,18 @@
 	const listenerMenu = ref([])
 	// uni.$currentUser = uni.getStorageSync("currentUser")
 	let currentUser = ref()
+	
+	const gotoListPage=(menu)=>{
+		uni.switchTab({
+			url:'/pages/consult/index?type='+menu.title
+		})
+	}
+	
+	const gotoConfidePage = (menu)=>{
+		uni.switchTab({
+			url:"/pages/confide/index?type="+menu.title
+		})
+	}
 
 	onShow(() => {
 		uni.$currentUser = uni.getStorageSync('currentUser');
@@ -314,10 +335,10 @@
 		//   }
 		// });
 	}
-	
-	const gotoDetail = (data)=>{
+
+	const gotoDetail = (data) => {
 		uni.navigateTo({
-			url:`/pages/psychological-test/charge-test/charge-test?id=${data.id}`
+			url: `/pages/psychological-test/charge-test/charge-test?id=${data.id}`
 		})
 	}
 
@@ -352,7 +373,8 @@
 		},
 		consultantList: [],
 		list: [],
-		answerlist: []
+		answerlist: [],
+		listenerList: []
 	})
 	let consultantMenuList = ref([]);
 
@@ -435,7 +457,14 @@
 
 	const getConsultant = async () => {
 		let res = await getConsultantList(data.listParams);
-		data.consultantList = res.data
+		console.log(res.data);
+		data.consultantList = res.data.records
+	}
+
+	const getListener = async () => {
+		let res = await getListenerList(data.listParams);
+		console.log(res.data);
+		data.listenerList = res.data.records
 	}
 
 	const getList = async () => {
@@ -447,14 +476,14 @@
 		let res = await getAnswerList(data.listParams);
 		data.answerlist = res.data.records
 	}
-	
-	const colors = ref(['#E7F1F9','#F6E5EB','#F0E6FD','#FDF9D6','#F6E5EB','#DFFDF3','#DFFDF3','#F0E6FD','#E7F1F9'])
+
+	const colors = ref(['#E7F1F9', '#F6E5EB', '#F0E6FD', '#FDF9D6', '#F6E5EB', '#DFFDF3', '#DFFDF3', '#F0E6FD', '#E7F1F9'])
 
 	const getConsultantMenu = async () => {
 		let resp = await getConsultantMenus({
 			type: 0
 		})
-		console.log('menu1',resp);
+		console.log('menu1', resp);
 		uni.setStorageSync("consultantMenu", JSON.stringify(resp.data))
 		//截取9个菜单
 		let menus = resp.data
@@ -470,7 +499,7 @@
 		let resp = await getConsultantMenus({
 			type: 1
 		})
-		console.log('menu2',resp);
+		console.log('menu2', resp);
 		uni.setStorageSync("listenerMenu", JSON.stringify(resp.data))
 		//截取9个菜单
 		let menus = resp.data
@@ -481,8 +510,8 @@
 		})
 		listenerMenu.value = showMenus
 	}
-	
-	const getHomeExams = async ()=>{
+
+	const getHomeExams = async () => {
 		let resp = await listHomeExams()
 		console.log(resp);
 		homeExams.value = resp.data
@@ -491,9 +520,9 @@
 		getlnfo()
 
 		getConsultant()
-
+		getListener()
 		getList()
-		
+
 		getHomeExams()
 
 		getAnswer()
@@ -883,6 +912,7 @@
 					justify-content: space-evenly;
 					flex-direction: row;
 					flex-wrap: wrap;
+
 					.content-box {
 						border-radius: 20rpx;
 						margin-top: 20rpx;
@@ -891,7 +921,7 @@
 						margin-right: 30rpx;
 						padding-left: 30rpx;
 						padding-top: 30rpx;
-						
+
 						.content-item {
 							width: 182rpx;
 							height: 120rpx;

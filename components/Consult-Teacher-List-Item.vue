@@ -2,21 +2,22 @@
 	<view class="teacher-container">
 		<view class="card">
 			<view class="avatar-wrap">
-				<image class="avatar" :src="info.avatar" mode="aspectFill"></image>
+				<image class="avatar" :src="info.avatar?info.avatar:'@/static/consult/user.png'" mode="aspectFill"></image>
 			</view>
 			<view class="info-wrap">
-				<view class="name-title">{{info.consultantName}}</view>
+				<view class="name-title">{{info.name}}</view>
 				<view class="job-title">心理咨询师</view>
 				<view class="stats">
 					5000+人次·5年从业
 				</view>
 				<view class="tags">
-					<text class="tag">自我探索</text>
-					<text class="tag">压力管理</text>
-					<text class="tag">婚姻家庭</text>
+					<text class="tag" v-for="(item,index) in info.serviceType.split(',')">{{item}}</text>
+					<!-- <text class="tag">压力管理</text> -->
+					<!-- <text class="tag">婚姻家庭</text> -->
 				</view>
 				<view class="price-button">
-					<view class="price"><text class="unit">¥</text>19.9<text class="txt">起</text></view>
+					<view class="price" v-if="info.price"><text class="unit">¥</text>{{info.price}}<text class="txt">起</text></view>
+					<view style="font-size: 26rpx;color: red;" v-else>限时免费</view>
 					<view class="contact">找ta聊</view>
 				</view>
 			</view>

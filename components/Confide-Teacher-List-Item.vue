@@ -2,22 +2,23 @@
 	<view class="teacher-container">
 		<view class="card">
 			<view class="avatar-wrap">
-				<image class="avatar" src="@/static/consult/user.png" mode="aspectFill"></image>
+				<image class="avatar" :src="info.avatar?info.avatar:'@/static/consult/user.png'" mode="aspectFill"></image>
 				<text class="txt">现在有空</text>
 			</view>
 			<view class="info-wrap">
-				<view class="name-title">王艳红</view>
+				<view class="name-title">{{info.name}}</view>
 				<view class="job-title">70后/白羊座/社会心理师</view>
 				<view class="stats">
 					5000+人次·500+时长
 				</view>
 				<view class="tags">
-					<text class="tag">自我探索</text>
-					<text class="tag">压力管理</text>
-					<text class="tag">婚姻家庭</text>
+					<text class="tag" v-for="(item,index) in info.serviceType.split(',')">{{item}}</text>
+					<!-- <text class="tag">压力管理</text> -->
+					<!-- <text class="tag">婚姻家庭</text> -->
 				</view>
 				<view class="price-button">
-					<view class="price"><text class="unit">¥</text>19.9<text class="txt">起</text></view>
+					<view class="price" v-if="info.price"><text class="unit">¥</text>19.9<text class="txt">起</text></view>
+					<view style="font-size: 26rpx;color: red;" v-else>限时免费</view>
 					<view class="contact">找ta聊</view>
 				</view>
 			</view>
@@ -28,7 +29,13 @@
 </template>
 
 <script setup>
-
+	
+	import {defineProps} from "vue";
+	const props=defineProps({
+		info:{
+			type:Object
+		}
+	})
 </script>
 
 <style scoped lang="scss">

@@ -140,12 +140,20 @@
 	})
 
 	const getConsultantDetail = () => {
-		getConsultantByUserId({
-			consultantType: consultantType.value
-		}).then(res => {
-			console.log(res);
-			consultant.value = res.data
-		})
+		if (consultantType.value == 1) {
+			getConsultantByUserId({
+				consultantType: consultantType.value
+			}).then(res => {
+				console.log(res);
+				consultant.value = res.data
+			})
+		}else{
+			getListenerByUserId({
+				consultantType:1
+			}).then(res=>{
+				consultant.value = res.data
+			})
+		}
 	}
 
 	// 集中管理表单数据
@@ -200,6 +208,7 @@
 		uni.showToast({
 			title: "资料已提交，请等待审核"
 		})
+		uni.navigateBack()
 	}
 
 	const prevStepHandler = () => {
@@ -213,6 +222,7 @@
 		} else if (newVal == 2) {
 			currentComponent.value = career;
 		} else if (newVal == 3) {
+			finalStep.value?.refreshData()
 			currentComponent.value = certificate;
 		}
 	})

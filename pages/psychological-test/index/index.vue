@@ -113,7 +113,7 @@
 						</view>
 					</view>
 					<view class="content-list">
-						<view class="content-item" v-for="(item,index) in examList" :key="index">
+						<view class="content-item" v-for="(item,index) in examList" :key="index" @click="gotoDetail(item)">
 							<view class="content-item-content">
 								<view>
 									<view class="title">{{item.title}}</view>

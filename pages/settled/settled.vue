@@ -35,14 +35,14 @@
 	import {
 		useGlobalDataStore
 	} from '@/stores/global.js';
-	import {onLoad} from '@dcloudio/uni-app'
+	import {onLoad,onShow} from '@dcloudio/uni-app'
 	import {getVerifyStatus} from '@/common/api/user.js'
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	
 	
 	
-	onLoad(()=>{
+	onShow(()=>{
 		userStatus()
 	})
 	
@@ -88,15 +88,15 @@
 	const listenerVerify = ()=>{
 		if(role.value==1 && verifyStatus.value==1){
 			uni.showToast({
-				title:"咨询师正在认证",
-				icon:"error"
+				title:"咨询师正在认证审核，请稍后尝试",
+				icon:"none"
 			})
 			return
 		}
 		if(role.value ==2 && verifyStatus.value==1){
 			uni.showToast({
-				title:"倾听师正在认证审核",
-				icon:"error"
+				title:"倾听师正在认证审核,请稍后尝试",
+				icon:"none"
 			})
 			return
 		}

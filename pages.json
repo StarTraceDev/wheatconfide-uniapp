@@ -202,7 +202,8 @@
 		{
 			"path": "pages/message/private-chat",
 			"style": {
-				"navigationBarTitleText": "uni-app",
+				"navigationStyle": "default",
+				"navigationBarTitleText": "",
 				"navigationBarBackgroundColor": "#F1F1F1",
 				"enablePullDownRefresh": true
 				// "navigationStyle": ""

@@ -172,18 +172,13 @@
 	const GoEasy = uni.$GoEasy;
 	// const GRTC = uni.$GRTC;
 	const conversations = ref([]);
-	const currentUser = ref({
-		id: '33c3693b-dbb0-4bc9-99c6-fa77b9eb763f',
-		name: 'Juanita',
-		password: '123',
-		avatar: '/static/message/Avatar-2.png',
-		email: 'Wallace@goeasy.io',
-		phone: '138xxxxxxxx',
-	});
+	const currentUser = ref({});
+	
 	onShow(() => {
 		if (GoEasy.getConnectionStatus() === 'disconnected') {
 			connectGoEasy(); //连接goeasy
 		}
+		currentUser.value = uni.getStorageSync("currentUser")
 		loadConversations(); //加载会话列表
 		initGoEasyListeners();
 	});

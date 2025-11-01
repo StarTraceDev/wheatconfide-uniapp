@@ -311,7 +311,8 @@
 <script setup>
 	import {
 		reactive,
-		ref
+		ref,
+		onMounted
 	} from 'vue';
 
 	import {
@@ -328,9 +329,12 @@
 	import {
 		registerListenerStep3
 	} from '@/common/api/listener.js'
+	import {
+		baseURL
+	} from '@/utils/request';
 	const certificateImgs = ref([]);
 
-	let certificateLists = reactive([{
+	let certificateLists = ref([{
 		name: '',
 		date: '',
 		photoList: [],
@@ -338,11 +342,12 @@
 		number: ''
 	}]);
 
-	const uploadUrl = ref('/api/common/upload')
+	const uploadUrl = ref("")
+	uploadUrl.value = baseURL+'/api/common/upload'
 
 	const certificateDateChange = (e, data, i) => {
 		console.log(e, data);
-		certificateLists[i].date = e
+		certificateLists.value[i].date = e
 		// this.$forceUpdate()
 	}
 
@@ -353,7 +358,7 @@
 			count: 1,
 			success: async function(res) {
 				// item.imgUrl.push(res.tempFilePaths[0])
-				let resp = await uploadFile('/api/common/upload', res.tempFilePaths[0]);
+				let resp = await uploadFile(baseURL+'/api/common/upload', res.tempFilePaths[0]);
 				item.imgUrl.push(resp.data.url)
 			}
 		})
@@ -380,10 +385,8 @@
 	const submit = async () => {
 		//判断certificate中是否有files为空的情况
 		if (props.consultantType == 1) {
-
-
 			let containEmpty = false
-			certificateLists.forEach(c => {
+			certificateLists.value.forEach(c => {
 				console.log(c);
 				if (c.photoList.length == 0) {
 					uni.showToast({
@@ -397,13 +400,20 @@
 			if (containEmpty) {
 				return
 			}
-			certificateLists.forEach(e => {
+			if (certificateLists.value.length == 0) {
+				uni.showToast({
+					title: "请上传至少一张资质证书",
+					icon: 'error'
+				})
+				return
+			}
+			certificateLists.value.forEach(e => {
 				e.photos = JSON.stringify(e.photoList)
 			})
 
 			let data = {
 				...props.modelValue,
-				certificateList: certificateLists,
+				certificateList: certificateLists.value,
 				educationList: educationLists.value,
 				careerList: trainLists.value,
 				consultantType: props.consultantType
@@ -415,15 +425,15 @@
 				})
 				emit("commited", "")
 			}
-		}else{
-			
-			certificateLists.forEach(e => {
+		} else {
+
+			certificateLists.value.forEach(e => {
 				e.photos = JSON.stringify(e.photoList)
 			})
-			
+
 			let data = {
 				...props.modelValue,
-				certificateList: certificateLists,
+				certificateList: certificateLists.value,
 				educationList: educationLists.value,
 				careerList: trainLists.value,
 				consultantType: props.consultantType
@@ -442,15 +452,57 @@
 		modelValue: Object
 	})
 	
-	onShow(()=>{
-		if(props.modelValue.certificateList){
-			certificateLists = props.modelValue.certificateList
-		}
-	})
 	
+	const refreshData = () => {
+	  console.log('refreshData called:', props.modelValue)
+	  if (props.modelValue?.certificateList && props.modelValue?.certificateList.length>0) {
+	    certificateLists.value = props.modelValue.certificateList.map(e => {
+			let photos = JSON.parse(e.photos)
+			let ps = []
+			photos.forEach(p=>{
+				ps.push({url:p})
+			})
+			e.photoList = ps
+	      return e
+	    })
+	  }
+	}
+
+	onMounted(()=>{
+		refreshData()
+		// if (props.modelValue && props.modelValue.certificateList) {
+		// 	// 先清空原数组（保持响应式）
+		// 	certificateLists.value.splice(0, certificateLists.value.length);
+		
+		// 	// 重新填充数据
+		// 	props.modelValue.certificateList.forEach(e => {
+		// 		let item = {
+		// 			name: e.name || '',
+		// 			date: e.date || '',
+		// 			authority: e.authority || '',
+		// 			number: e.number || '',
+		// 			photoList: []
+		// 		};
+		// 		if (e.photos) {
+		// 			try {
+		// 				item.photoList = JSON.parse(e.photos);
+		// 			} catch (err) {
+		// 				item.photoList = [];
+		// 			}
+		// 		}
+		// 		certificateLists.push(item);
+		// 	});
+		
+		// 	console.log("回显后的 certificateLists:", JSON.parse(JSON.stringify(certificateLists)));
+		// }
+		
+	})
+
+
 
 	defineExpose({
-		submit
+		submit,
+		refreshData
 	})
 
 
@@ -460,7 +512,9 @@
 		console.log(index);
 		console.log(lists);
 		console.log(name);
-		certificateLists[index].photoList.push(data.data.url)
+		let t = certificateLists.value[index]
+		console.log(t);
+		t.photoList.push(data.data.url)
 		// uni.hideLoading()
 		// uni.showToast({
 		// 	title:"上传成功"

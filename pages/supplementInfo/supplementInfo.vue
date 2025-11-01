@@ -50,6 +50,7 @@
 	import {
 		uploadFile
 	} from '@/utils/common';
+	import { baseURL } from '@/utils/request';
 
 	import {
 		updateUser
@@ -111,7 +112,7 @@
 			})
 			return
 		}
-		let resp = await uploadFile('/api/common/upload',avatar.value)
+		let resp = await uploadFile(baseURL+'/api/common/upload',avatar.value)
 		let userInfo = uni.getStorageSync("currentUser")
 		userInfo.avatar = resp.data.url
 		console.log(resp.data.url);

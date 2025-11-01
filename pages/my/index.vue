@@ -78,7 +78,7 @@
 				</view>
 			</view>
 
-			<view class="other-server" v-if="userlnfo.consultantType === 0">
+			<view class="other-server">
 				<view class="title">其他服务</view>
 				<view class="other-list">
 					<view class="other-item" @click="settledFn">
@@ -134,7 +134,8 @@
 	import {
 		changeConsultant
 	} from "@/common/api/user.js"
-
+	
+	import {onShow} from '@dcloudio/uni-app'
 	const toPage = (url)=>{
 		uni.navigateTo({
 			url:url
@@ -247,7 +248,7 @@
 		console.log(res.data)
 	}
 
-	onMounted(() => {
+	onShow(() => {
 		getlnfo()
 	});
 </script>

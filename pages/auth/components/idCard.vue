@@ -22,7 +22,7 @@
 					<view class="form-item">
 						<view class="label require">姓名</view>
 						<view class="content">
-							<input type="text" style="font-size: 28rpx;" v-model="localData.consultantName"
+							<input type="text" style="font-size: 28rpx;" v-model="localData.name"
 								placeholder="请输入姓名" />
 						</view>
 					</view>
@@ -141,6 +141,7 @@
 	import {
 		registerListenerStep1
 	} from '@/common/api/listener.js'
+import { baseURL } from '@/utils/request';
 	const cityList = ref(cityJson);
 	const idNum = ref('');
 	const popup = ref(null);
@@ -201,7 +202,7 @@
 			})
 			return
 		}
-		if (localData.value.consultantName == null) {
+		if (localData.value.name == null) {
 			uni.showToast({
 				title: "请输入姓名",
 				icon: 'error'
@@ -215,13 +216,6 @@
 			})
 			return
 		}
-		// if (!localData.value.idcardFront.startsWith('http')) {
-
-		// }
-		// if (!localData.value.idcardBackend.startsWith('http')) {
-		// 	console.log(localData.value.idcardBackend);
-
-		// }
 		localData.value.consultantType = props.consultantType
 
 		uni.showLoading({
@@ -293,14 +287,14 @@
 			count: 1,
 			success: async function(res) {
 				if (type == 1) {
-					let frontUrl = await uploadFile('/api/common/upload', res.tempFilePaths[0])
+					let frontUrl = await uploadFile(baseURL+'/api/common/upload', res.tempFilePaths[0])
 					// console.log(frontUrl);
 					if (frontUrl.code == 0) {
 						localData.value.idcardFront = frontUrl.data.url
 					}
 					// localData.value.idcardFront = res.tempFilePaths[0];
 				} else {
-					let backUrl = await uploadFile('/api/common/upload', res.tempFilePaths[0])
+					let backUrl = await uploadFile(baseURL+'/api/common/upload', res.tempFilePaths[0])
 					if (backUrl.code == 0) {
 						localData.value.idcardBackend = backUrl.data.url
 					}

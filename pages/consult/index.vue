@@ -70,7 +70,7 @@
 							</view>
 							<view class="doctor-info">
 								<view class="doctor-info-1">
-									<view class="name">{{item.consultantName}}</view>
+									<view class="name">{{item.name}}</view>
 									<view class="date">今天20:00可约</view>
 								</view>
 								<view class="doctor-info-1">
@@ -86,10 +86,10 @@
 									</view>
 								</view>
 								<view class="doctor-info-1">
-									<view class="point-list">
-										<view class="point-item">自我探索</view>
-										<view class="point-item">压力管理</view>
-										<view class="point-item">婚姻家庭</view>
+									<view class="point-list" v-if="item.serviceType">
+										<view class="point-item" v-for="(item,index) in item.serviceType.split(',')">{{item}}</view>
+										<!-- <view class="point-item">压力管理</view> -->
+										<!-- <view class="point-item">婚姻家庭</view> -->
 									</view>
 								</view>
 								<view class="doctor-info-1">
@@ -126,12 +126,9 @@
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	const scrollTop = ref(0);
 	const data = reactive({
-		listParpms: {
+		listParams: {
 			"current": 1,
-			"size": 10,
-			"params": {
-				"consultantType": 1,
-			}
+			"size": 10
 		},
 		list: []
 	})
@@ -154,7 +151,7 @@
 	 * 获取列表
 	 */
 	const getList = async () => {
-		let res = await getConsultantList(data.listParpms);
+		let res = await getConsultantList(data.listParams);
 		data.list = res.data.records;
 		console.log(res)
 	}
