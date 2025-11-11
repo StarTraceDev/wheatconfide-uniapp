@@ -139,20 +139,17 @@
 		getConsultantDetail()
 	})
 
-	const getConsultantDetail = () => {
+	const getConsultantDetail = async() => {
 		if (consultantType.value == 1) {
-			getConsultantByUserId({
+			let resp = await getConsultantByUserId({
 				consultantType: consultantType.value
-			}).then(res => {
-				console.log(res);
-				consultant.value = res.data
 			})
+			consultant.value = resp.data
 		}else{
-			getListenerByUserId({
+			let resp = await getListenerByUserId({
 				consultantType:1
-			}).then(res=>{
-				consultant.value = res.data
 			})
+			consultant.value = resp.data
 		}
 	}
 
@@ -361,7 +358,7 @@
 			background: #F4F6F8;
 			position: fixed;
 			bottom: 0rpx;
-			z-index: 0;
+			z-index: 99;
 
 			.tip {
 				font-size: 24rpx;

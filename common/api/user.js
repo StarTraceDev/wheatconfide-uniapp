@@ -8,3 +8,5 @@ export const changeConsultant = (params, config = {}) => http.post('/api/user/ch
 	
 	
 export const getVerifyStatus = (params,config={}) =>http.get('/api/user/verifyStatus',params,config)
+
+export const saveRoleInfo = (params,config={})=>http.post('/api/user/saveRoleInfo',params,config)

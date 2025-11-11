@@ -22,8 +22,7 @@
 					<view class="form-item">
 						<view class="label require">姓名</view>
 						<view class="content">
-							<input type="text" style="font-size: 28rpx;" v-model="localData.name"
-								placeholder="请输入姓名" />
+							<input type="text" style="font-size: 28rpx;" v-model="localData.name" placeholder="请输入姓名" />
 						</view>
 					</view>
 					<view class="form-item">
@@ -33,6 +32,23 @@
 								placeholder="请输入身份证号" />
 						</view>
 					</view>
+					<view class="form-item">
+						<view class="label require">出生年月</view>
+						<view class="content">
+							<text @click="showTimePicker">{{localData.birthdate?localData.birthdate:'请选择'}}<u-icon name="arrow-right"></u-icon></text>
+							<u-picker type="text" v-model="birthdayShow" :params="timeParams" mode="time" @confirm="confirmBirthday"></u-picker>
+						</view>
+					</view>
+					<view style="display: flex;flex-direction: column;margin-top: 25rpx;">
+						<view class="label require">个人形象照<text
+								style="font-size: 22rpx;">（用于个人主页封面，格式jpg/png，大小2M内）</text></view>
+						<view>
+							<u-upload :fileList="localData.galleryList" :before-upload="beforeUpload" :header="headers"
+								@on-success="uploadComplete"
+								@on-remove="deletePic" name="file" :action="uploadUrl" multiple
+								:maxCount="5"></u-upload>
+						</view>
+					</view>	
 					<!-- <view class="form-item">
 						<view class="label require">职业</view>
 						<view class="content" :class="!value?'weight':''" @click="openPopupHandler">
@@ -42,18 +58,32 @@
 					<view class="form-item">
 						<view class="label require">星座</view>
 						<picker :range="stars" @change="starChange">
-							<view class="content" :class="!value?'weight':''">
+							<view class="content">
 								{{localData.constellation==null?'请选择':localData.constellation}}<uni-icons type="right"
-									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons>
+									size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons> 
 							</view>
 						</picker>
 					</view>
 					<view class="form-item">
 						<view class="label require">所在地区</view>
-
-						<view class="content" :class="!value?'weight':''" @click="openCityHandler">
-							{{localData.address}}<uni-icons type="right" size="14"
+						<view @click="chooseArea">
+							{{localData.address?localData.address:'请选择'}}<uni-icons type="right" size="14"
 								color="rgba(0, 0, 0, 0.3)"></uni-icons>
+						</view>
+						<u-picker v-model="regionPicker" @confirm="confirmRegion" mode="region"></u-picker>
+						<!-- <view class="content" :class="!value?'weight':''" @click="openCityHandler">
+							{{localData.address}}<uni-icons type="right" size="14"
+								color="rgba(0, 0, 0, 0.3)"></uni-icons> 
+						</view> -->
+					</view>
+					<view class="form-item">
+						<view class="label">从业时间</view>
+						<view>
+							<view @click="chooseWorkTime">
+								{{localData.workTime?localData.workTime:'请选择'}}<uni-icons type="right" size="14"
+									color="rgba(0, 0, 0, 0.3)"></uni-icons>
+							</view>
+							<u-picker mode="time" @confirm="confirmWorkTime" :params="timePickerParams" v-model="workTimeShow"></u-picker>
 						</view>
 					</view>
 					<!-- <view class="form-item" @click="serviceShow = true">
@@ -77,9 +107,10 @@
 					<view class="form-item user-introduction">
 						<view class="label">个人简介</view>
 						<view class="introduction-content">
-							<uni-easyinput type="textarea" placeholder="请输入个人简介" v-model="localData.profile"
+							<!-- <uni-easyinput type="textarea" placeholder="请输入个人简介" v-model="localData.profile"
 								:inputBorder="false" :clearable="false"
-								:styles="{'background-color':'#f6f6f6'}"></uni-easyinput>
+								:styles="{'background-color':'#f6f6f6'}"></uni-easyinput> -->
+								<u-input type="textarea" border v-model="localData.profile" auto-height :height="height" placeholder="请输入个人简介"></u-input>
 						</view>
 					</view>
 				</view>
@@ -124,7 +155,8 @@
 		onMounted,
 		ref,
 		computed,
-		defineProps
+		defineProps,
+		watch
 	} from 'vue';
 	import cityJson from "@/static/city-json/city-list.js"
 	import {
@@ -132,7 +164,8 @@
 	} from '@/utils/common';
 	import {
 		onShow,
-		onUnload
+		onUnload,
+		onLoad
 	} from '@dcloudio/uni-app'
 	import {
 		registerConsultantStep1
@@ -141,13 +174,64 @@
 	import {
 		registerListenerStep1
 	} from '@/common/api/listener.js'
-import { baseURL } from '@/utils/request';
+	import {
+		baseURL
+	} from '@/utils/request';
 	const cityList = ref(cityJson);
+	
+	const birthdayShow = ref(false)
+	const showTimePicker = ()=>{
+		birthdayShow.value = true
+	}
+	const timePickerParams = ref({
+		year: true,
+			month: true,
+			day: false,
+			hour: false,
+			minute: false,
+			second: false,
+			// 选择时间的时间戳
+			timestamp: true,
+	})
+	
+	const confirmBirthday = (e)=>{
+		console.log(e);
+		localData.value.birthdate = e.year+"-"+e.month
+	}
+	
+	const timeParams = ref({
+					year: true,
+					month: true,
+					day: false,
+					hour: false,
+					minute: false,
+					second: false
+				}) 
+	
+	const workTimeShow = ref(false)
+	const chooseWorkTime = ()=>{
+		workTimeShow.value = true
+	}
+	
+	const height = ref(150)
+	
+	const confirmWorkTime = (e)=>{
+		console.log(e);
+		localData.value.workTime = e.year+"-"+e.month
+	}
 	const idNum = ref('');
 	const popup = ref(null);
 	const cityPopup = ref(null);
+	const regionPicker = ref(false)
 	const profession = ref('请选择');
-	const address = ref('请选择')
+	const address = ref('')
+	const token = uni.getStorageSync('token')
+	const headers = ref({
+		'token': token
+	})
+	
+	const uploadUrl = ref("")
+	uploadUrl.value = baseURL+'/api/common/upload'
 	const frontPhoto = ref(null)
 	const backendPhoto = ref(null)
 	const services = ref('请选择')
@@ -155,7 +239,45 @@ import { baseURL } from '@/utils/request';
 	const openPopupHandler = () => {
 		popup.value.open();
 	}
+	
+	
+	const uploadComplete = (data, i, lists) => {
+	  lists[i].url = data.data.url;
+	  localData.value.galleryList = lists;
+	  console.log(localData.value.galleryList);
+	};
+	const confirmRegion = (e) => {
+		localData.value.address = e.province.name + e.city.name + e.area.name
+	}
+	const chooseArea = () => {
+		regionPicker.value = true
+	}
+const deletePic = (index, lists) => {
+		console.log('图片已被移除')
+	}
 
+	const beforeUpload = (index, list) => {
+		// 只上传偶数索引的文件
+		// uni.showLoading({
+		// 	title:"上传中..."
+		// })
+	}
+	
+	onMounted(() => {
+	  // 当 modelValue.gallery 有值时
+	  
+	});
+	
+	const uploadPics = (item) => {
+		uni.chooseImage({
+			count: 1,
+			success: async function(res) {
+				// item.imgUrl.push(res.tempFilePaths[0])
+				let resp = await uploadFile(baseURL+'/api/common/upload', res.tempFilePaths[0]);
+				item.imgUrl.push(resp.data.url)
+			}
+		})
+	}
 
 	const serviceShow = ref(false)
 
@@ -179,12 +301,18 @@ import { baseURL } from '@/utils/request';
 
 	const props = defineProps({
 		consultantType: String,
-		modelValue: Object
+		modelValue: {
+			type:Object,
+			default: {},
+			
+		}
 	})
 	const selectPosition = (i) => {
 		profession.value = '心理咨询师' + i
 		popup.value.close()
 	}
+	
+	
 
 	const submit = async () => {
 		console.log("子组件收到父组件调用，");
@@ -216,6 +344,21 @@ import { baseURL } from '@/utils/request';
 			})
 			return
 		}
+		console.log(localData.value.galleryList);
+		if(!localData.value.galleryList || localData.value.galleryList.length==0){
+			uni.showToast({
+				title:"请上传个人形象照"
+			})
+			return
+		}
+		console.log(localData.value.galleryList);
+		let galleryList = localData.value.galleryList
+		let t = []
+		galleryList.forEach(e=>{
+			t.push(e.url)
+		})
+		console.log(t);
+		localData.value.galleryList = t
 		localData.value.consultantType = props.consultantType
 
 		uni.showLoading({
@@ -248,22 +391,32 @@ import { baseURL } from '@/utils/request';
 			url: "/pages/auth/cityChoose"
 		})
 	}
-
-	onShow(() => {
-		const city = uni.getStorageSync("verifyAddress")
-		// console.log(city);
-		if (city) {
-			localData.value.address = city
-		}
-		if (props.consultantType == 1) { //是咨询师认证
-			serviceType.value = JSON.parse(uni.getStorageSync("consultantMenu"))
-		} else { //倾听师认证
-			serviceType.value = JSON.parse(uni.getStorageSync("listenerMenu"))
-		}
+	
+	// 计算属性：处理 gallery -> galleryList
+	const galleryList = computed({
+	  get() {
+	    try {
+	      // 如果 props.modelValue.gallery 是 JSON 字符串，就解析它
+	      const parsed = JSON.parse(props.modelValue.gallery || '[]')
+	      // 格式化成 { url: 'xxx' }
+	      return parsed.map(item => ({ url: item }))
+	    } catch (e) {
+	      return []
+	    }
+	  },
+	  set(val) {
+	    // 同步回父组件
+	    const newModel = {
+	      ...props.modelValue,
+	      gallery: JSON.stringify(val.map(i => i.url)),
+	      galleryList: val
+	    }
+	    emit('update:modelValue', newModel)
+	  }
 	})
 
 	onUnload(() => {
-		uni.removeStorageSync("verifyAddress")
+		// uni.removeStorageSync("verifyAddress")
 	})
 
 	const setAddress = (addr) => {
@@ -303,11 +456,19 @@ import { baseURL } from '@/utils/request';
 			}
 		})
 	}
-
-	// const props = defineProps({
-
-	// });
-
+	
+	watch(()=>props.modelValue,(newVal,oldVal)=>{
+		try {
+		  // 解析字符串为数组
+		  // 格式化为 [{url:'xxx'}]
+		  let galleryList = JSON.parse(newVal.gallery)
+		  const formatted = galleryList.map(url => ({ url }));
+		  // 写回到 localData（即更新 modelValue.galleryList）
+		  localData.value.galleryList = formatted;
+		} catch (e) {
+		  localData.value.galleryList = [];
+		}
+	},{immediate:true,deep:true})
 
 
 	const localData = computed({
@@ -325,7 +486,6 @@ import { baseURL } from '@/utils/request';
 
 		.id-card-content-box {
 			width: 686rpx;
-			height: 1444rpx;
 			background: #fff;
 			border-radius: 20rpx;
 			display: flex;
@@ -389,20 +549,7 @@ import { baseURL } from '@/utils/request';
 					align-items: start;
 					margin-top: 52rpx;
 
-					.label {
-						position: relative;
-						font-size: 28rpx;
-						color: rgba(0, 0, 0, 0.85)
-					}
 
-					.require {
-						&::after {
-							content: '*';
-							color: #FA5151;
-							position: absolute;
-							right: -20rpx;
-						}
-					}
 
 					.content {
 						font-size: 28rpx;
@@ -415,6 +562,21 @@ import { baseURL } from '@/utils/request';
 
 					.weight {
 						color: rgba(0, 0, 0, 0.65);
+					}
+				}
+
+				.label {
+					position: relative;
+					font-size: 28rpx;
+					color: rgba(0, 0, 0, 0.85)
+				}
+
+				.require {
+					&::after {
+						content: '*';
+						color: #FA5151;
+						position: absolute;
+						right: -20rpx;
 					}
 				}
 
@@ -433,11 +595,11 @@ import { baseURL } from '@/utils/request';
 
 				.user-introduction {
 					flex-direction: column;
+					margin-bottom: 30rpx;
 
 					.introduction-content {
-						width: 630rpx;
-						height: 190rpx;
 						margin-top: 24rpx;
+						width: 100%;
 
 						::v-deep .uni-easyinput__content-textarea {
 							padding: 0rpx 12rpx !important;

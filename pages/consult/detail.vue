@@ -25,8 +25,8 @@
 					<view class="uni-margin-wrap">
 						<swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="5000"
 							:duration="500">
-							<swiper-item v-for="i in 6" :key="i" class="swiper-item">
-								<image src="http://s.maimiaoqingsu.com/open/20250807/eaf6036d-c2e4-458a-a03b-48ea7b5cb458.png"></image>
+							<swiper-item v-for="(item,index) in JSON.parse(consultantInfo.gallery)" :key="index" class="swiper-item">
+								<image :src="item" style="height: 590rpx;" mode="heightFix"></image>
 							</swiper-item>
 						</swiper>
 					</view>
@@ -34,15 +34,15 @@
 				<view class="consult-detail-info">
 					<view class="detail-item-line-1">
 						<view class="name">
-							<text class="name-a">{{consultantInfo.consultantName}}</text>
-							<text class="name-b">{{consultantInfo.major}}</text>
-							<text class="name-c">{{consultantInfo.age}}</text>
+							<text class="name-a">{{consultantInfo.name}}</text>
+							<!-- <text class="name-b">{{consultantInfo.major}}</text> -->
+							<!-- <text class="name-c">{{consultantInfo.age}}</text> -->
 						</view>
-						<view class="money"><text
-								class="num">{{consultantInfo.consultantPrice}}</text><text>元/50分钟</text></view>
+						<!-- <view class="money"><text
+								class="num">{{consultantInfo.consultantPrice}}</text><text>元/50分钟</text></view> -->
 					</view>
 					<view class="detail-item-line-2">
-						<text>国家二级心理咨询师 | {{consultantInfo.school}} {{consultantInfo.major}} | {{consultantInfo.constellation}}</text>
+						<text>{{consultantInfo.certificateList[0].name}} |  {{consultantInfo.major}} | {{consultantInfo.constellation}}</text>
 					</view>
 					<view class="detail-item-line-3">
 						<view class="address">
@@ -60,9 +60,10 @@
 					<view class="detail-item-line-4">
 						<view class="content">
 							<view class="list">
-								<view class="item" v-for="i in 10" :key="i">
+								<!-- <view class="item" v-for="i in 10" :key="i"> -->
+								<view class="item">
 									<view>
-										<text class="num">3</text>
+										<text class="num">{{consultantInfo.workTime}}</text>
 										<text class="unit">年</text>
 									</view>
 									<view class="txt">从业年限</view>
@@ -94,19 +95,22 @@
 						<view class="content">
 							<view class="title">擅长领域</view>
 							<view class="info">
-								<view class="detail">
-									<view class="detail-title">人际交往</view>
+								<view style="display: flex;flex-direction: row;flex-wrap: wrap;">
+									<!-- <view class="detail-title">人际交往</view>
 									<view class="detail-content">沟通不畅、社交恐惧、社交技巧、人际冲突、不合群、
-										人际边界、社会适应难、信任危机、设有关系</view>
+										人际边界、社会适应难、信任危机、设有关系</view> -->
+									<text style="padding: 5rpx 15rpx;background-color: bisque;border-radius: 8rpx;margin-right: 10rpx;margin-bottom: 10rpx;" v-for="item,index in consultantInfo.serviceTypes">
+										{{item}}
+									</text>
 								</view>
 							</view>
 
-							<view class="title">擅长疗法</view>
+						<!-- 	<view class="title">擅长疗法</view>
 							<view class="tags">
 								<text class="tag-item">沙盘疗法</text>
 								<text class="tag-item">心理动力取向</text>
 								<text class="tag-item">心理动力取向</text>
-							</view>
+							</view> -->
 
 						</view>
 					</view>
@@ -114,14 +118,14 @@
 					<view class="detail-item-line-6 detail-item-line-8 tab8" id="tab-3">
 						<view class="content">
 							<view class="info">
-								<view class="certificate-detail" v-for="(item,index) in consultantInfo.careerList" :key="index">
+								<view class="certificate-detail" v-for="(item,index) in consultantInfo.certificateList" :key="index">
 									<view class="tag">{{item.type}}</view>
 									<view class="tag-info">
-										<view class="tag-title">{{item.career}}</view>
+										<view class="tag-title">{{item.name}}</view>
 										<view class="certificate-info">
-											<view>发证机构：国家心理培训 </view>
-											<view>发证时间：{{item.startTime}} </view>
-											<view>证书编号：45478121548151548415125</view>
+											<view>发证机构：{{item.authority}} </view>
+											<view>发证时间：{{item.date}} </view>
+											<view>证书编号：{{item.number}}</view>
 										</view>
 									</view>
 								</view>
@@ -136,7 +140,7 @@
 										</view>
 									</view>
 								</view> -->
-								<view class="step-detail">
+								<view class="step-detail" style="display: none;">
 									<view class="training">
 										<view class="training-title">伦理培训</view>
 										<view class="training-timer">2项培训，累计40小时</view>
@@ -151,7 +155,7 @@
 						<!-- <view class="more">查看更多</view> -->
 					</view>
 
-					<view class="detail-item-line-6 detail-item-line-9 tab9" id="tab-4">
+					<view class="detail-item-line-6 detail-item-line-9 tab9" id="tab-4" style="display: none;">
 						<view class="content">
 							<view class="title">咨询感受</view>
 							<view class="info">
@@ -182,7 +186,7 @@
 						</view>
 					</view>
 
-					<view class="detail-item-line-6 detail-item-line-10 tab10" id="tab-5" @click="openPopupFn">
+					<view class="detail-item-line-6 detail-item-line-10 tab10" id="tab-5" @click="openPopupFn" style="display: none;">
 						<view class="content">
 							<view class="title">可约时间<text class="remark">（北京时间）</text></view>
 							<view class="info">
@@ -315,7 +319,8 @@
 	const tabId = ref("#tab-1");
 
 	const consultantInfo = ref({
-		consultantName: ''
+		consultantName: '',
+		gallery:''
 	});
 	// 获取路由实例，用于获取参数
 	const route = useRoute();

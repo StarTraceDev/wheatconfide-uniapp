@@ -37,21 +37,24 @@
 								</uni-easyinput>
 							</view>
 						</view>
-						<view class="form-item user-sign">
+						<view class="form-item ">
 							<view class="label require">发证日期</view>
-							<view class="content" :class="!value?'weight':''">
-								<uni-datetime-picker @change="certificateDateChange($event,item,index)" type="date"
+							<view class="content">
+								<view @click="showCertificateTimePicker"><text style="font-size: 24rpx;">{{item.date?item.date:'请选择'}}<u-icon name="arrow-right"></u-icon></text></view>
+								
+								<!-- <uni-datetime-picker @change="certificateDateChange($event,item,index)" type="date"
 									:clear-icon="false" v-model="item.date"
 									@maskClick="maskClick">{{item.date==''?'请选择':item.date}}<uni-icons type="right"
-										size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></uni-datetime-picker>
+										size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons></uni-datetime-picker> -->
 							</view>
 						</view>
+						<u-picker mode="time" v-model="certificatePickerShow" @confirm="confirmCertificateDate(item,$event)" :params="certificateDateParam"></u-picker>
 						<view class="form-item user-introduction">
 							<view class="label require">证件照片</view>
 							<view class="introduction-content">
 								<u-upload :fileList="item.photoList" :before-upload="beforeUpload" :header="headers"
 									@on-success="(data, i, lists, name) => uploadComplete(data, i, lists, name, index)"
-									@on-remove="deletePic" name="file" :action="uploadUrl" multiple
+									@on-remove="(event, i, lists, name) => deletePic(event, i, lists, name, index)" name="file" :action="uploadUrl" multiple
 									:maxCount="3"></u-upload>
 							</view>
 						</view>
@@ -137,8 +140,8 @@
 									<view class="txt">最多三张</view>
 								</view>
 							</view>
-						</view> -->
-			<!-- <view class="line-box">
+						</view> 
+			<view class="line-box">
 							<view class="line" :class="index>0?'line-delete':''"></view>
 							<view v-if="index>0" class="delete-item" @click="removeCertificateListHandler(index)">
 								<uni-icons type="minus-filled" size="30" color="#FA5151"></uni-icons>
@@ -169,24 +172,26 @@
 					<view class="id-card-form-content" v-for="(item,index) in educationLists" :key="index">
 						<view class="form-item">
 							<view class="label">起始时间</view>
-							<view class="content" :class="!value?'weight':''">
-								{{item.startDate==null?"请选择":item.startDate}}<uni-icons type="right" size="14"
+							<view class="content"  @click="showTimePicker(item,index,1)">
+								{{item.startTime==null?"请选择":item.startTime}}<uni-icons type="right" size="14"
 									color="rgba(0, 0, 0, 0.3)"></uni-icons>
 							</view>
 						</view>
 						<view class="form-item">
 							<view class="label">截止时间</view>
-							<view class="content" :class="!value?'weight':''">
-								{{item.endDate==null?'请选择':item.endDate}}<uni-icons type="right" size="14"
+							<view class="content"  @click="showTimePicker(item,index,2)">
+								{{item.endTime==null?'请选择':item.endTime}}<uni-icons type="right" size="14"
 									color="rgba(0, 0, 0, 0.3)"></uni-icons>
 							</view>
 						</view>
+						<u-picker mode="time" v-model="timePickerShow" @confirm="confirmSchoolTime(item,$event)"
+							:params="timePickerParams"></u-picker>
 
 						<view class="form-item user-sign">
 							<view class="label">毕业院校</view>
 							<view class="content-input" style="width: 400rpx;">
 								<uni-easyinput trim="all" type="text" placeholder="请输入毕业院校" v-model="item.schoolName"
-									:inputBorder="false" :clearable="false" :placeholderStyle="{'text-align':'right'}">
+									:inputBorder="false" :clearable="false">
 								</uni-easyinput>
 							</view>
 						</view>
@@ -194,8 +199,8 @@
 						<view class="form-item user-sign">
 							<view class="label">证书编号</view>
 							<view class="content-input" style="width: 400rpx;">
-								<uni-easyinput trim="all" type="text" placeholder="请输入证书编号" v-model="item.number"
-									:inputBorder="false" :clearable="false" :placeholderStyle="{'text-align':'right'}">
+								<uni-easyinput trim="all" style="text-align: end;" type="text" placeholder="请输入证书编号" v-model="item.number"
+									:inputBorder="false" :clearable="false">
 								</uni-easyinput>
 							</view>
 						</view>
@@ -203,20 +208,10 @@
 						<view class="form-item user-introduction">
 							<view class="label">证件照片</view>
 							<view class="introduction-content">
-								<view class="img-list">
-									<view class="img-item" v-for="(pic,i) in item.imgUrl">
-										<image :src="pic" class="img"></image>
-										<view class="delete-item-img">
-											删除
-										</view>
-									</view>
-								</view>
-								<view class="upload-image" v-if="item.imgUrl.length<3">
-									<view class="icon">
-										<uni-icons type="plusempty" size="30" color="rgba(0,0,0,.3)"></uni-icons>
-									</view>
-									<view class="txt">最多三张</view>
-								</view>
+								<u-upload :fileList="item.photoList" :before-upload="beforeUpload" :header="headers"
+									@on-success="(data, i, lists, name) => uploadComplete1(data, i, lists, name, index)"
+									@on-remove="(event, i, lists, name) => deletePic1(event, i, lists, name, index)" name="file" :action="uploadUrl" multiple
+									:maxCount="1"></u-upload>
 							</view>
 						</view>
 						<view class="line-box">
@@ -237,7 +232,7 @@
 				</view>
 			</view>
 
-			<view class="certificate-content">
+			<view class="certificate-content" style="display: none;">
 				<view class="title">
 					<view>
 						我的经历<text class="require">(选填)</text>
@@ -333,15 +328,19 @@
 		baseURL
 	} from '@/utils/request';
 	const certificateImgs = ref([]);
+	const certificatePickerShow = ref(false)
 
 	let certificateLists = ref([{
-		name: '',
-		date: '',
+		name: null,
+		date: null,
 		photoList: [],
-		authority: '',
-		number: ''
+		authority: null,
+		number: null
 	}]);
 
+	const confirmCertificateDate = (item,e)=>{
+		item.date = e.year+"-"+e.month+"-"+e.day
+	}
 	const uploadUrl = ref("")
 	uploadUrl.value = baseURL+'/api/common/upload'
 
@@ -351,7 +350,8 @@
 		// this.$forceUpdate()
 	}
 
-	const educationLists = ref([]);
+	let educationLists = ref([]);
+
 	const trainLists = ref([]);
 	const uploadPics = (item) => {
 		uni.chooseImage({
@@ -363,9 +363,85 @@
 			}
 		})
 	}
+	
+	const showCertificateTimePicker = ()=>{
+		certificatePickerShow.value = true
+	}
 
-	const deletePic = (index, lists) => {
-		console.log('图片已被移除')
+	
+	/** 删除图片后同步更新 */
+	const deletePic = (event, i, lists, name, index) => {
+	  console.log('图片已被移除', index, lists)
+	
+	  // lists 是删除后的列表（u-upload 已处理好）
+	  certificateLists.value[index].photoList = lists
+	
+	  // 如果你需要同步后端字段（例如 photo 字段）
+	  certificateLists.value[index].photos = JSON.stringify(lists.map(v => v.url))
+	}
+	
+	const deletePic1 = (event, i, lists, name, index) => {
+	  console.log('图片已被移除', index, lists)
+	
+	  // lists 是删除后的列表（u-upload 已处理好）
+	  educationLists.value[index].photoList = lists
+	
+	  // 如果你需要同步后端字段（例如 photo 字段）
+	  educationLists.value[index].photo = JSON.stringify(lists.map(v => v.url))
+	}
+	const timePickerParams = ref({
+		year: true,
+		month: true,
+		day: false,
+		hour: false,
+		minute: false,
+		second: false,
+		// 选择时间的时间戳
+		timestamp: true,
+	})
+	
+	const certificateDateParam = ref({
+		year: true,
+		month: true,
+		day: true,
+		hour: false,
+		minute: false,
+		second: false,
+		// 选择时间的时间戳
+		timestamp: true,
+	})
+	const currentIndex = ref(-1)
+	const confirmSchoolTime = (item, e) => {
+		console.log("schoolTime", item, e);
+		const date = `${e.year}-${String(e.month).padStart(2, '0')}`
+		console.log(date);
+		console.log(currentIndex.value);
+		if (currentIndex.value === -1) return
+		
+			if (type.value === 1) {
+					// ✅ 通过 .value 改动 ref 数组的某个对象字段，确保响应式
+					educationLists.value[currentIndex.value].startTime = date
+				} else {
+					educationLists.value[currentIndex.value].endTime = date
+				}
+			
+				// ✅ 确保视图更新
+				educationLists.value = [...educationLists.value]
+		
+
+				// timePickerShow.value = false
+		// if (type.value == 1) { //开始时间
+		// 	item.startTime = e.year + '-' + e.month
+		// } else {
+		// 	item.endTime = e.year + '-' + e.month
+		// }
+	}
+	const timePickerShow = ref(false)
+
+	const showTimePicker = (item, index, t) => {
+		type.value = t
+		currentIndex.value = index
+		timePickerShow.value = true
 	}
 
 	const beforeUpload = (index, list) => {
@@ -377,10 +453,14 @@
 	// const deletePic = (item, i) => {
 	// 	item.imgUrl.splice(i, 1)
 	// }
+
+
 	const token = uni.getStorageSync('token')
 	const headers = ref({
 		'token': token
 	})
+	const type = ref(0)
+
 	const emit = defineEmits(['commited'])
 	const submit = async () => {
 		//判断certificate中是否有files为空的情况
@@ -410,6 +490,12 @@
 			certificateLists.value.forEach(e => {
 				e.photos = JSON.stringify(e.photoList)
 			})
+			educationLists.value.forEach(e => {
+				if (e.photoList && e.photoList.length > 0) {
+					e.photo = JSON.stringify(e.photoList)
+				}
+			})
+			console.log(educationLists.value);
 
 			let data = {
 				...props.modelValue,
@@ -451,54 +537,47 @@
 		consultantType: Number,
 		modelValue: Object
 	})
-	
-	
+
+
 	const refreshData = () => {
-	  console.log('refreshData called:', props.modelValue)
-	  if (props.modelValue?.certificateList && props.modelValue?.certificateList.length>0) {
-	    certificateLists.value = props.modelValue.certificateList.map(e => {
-			let photos = JSON.parse(e.photos)
-			let ps = []
-			photos.forEach(p=>{
-				ps.push({url:p})
+
+		if (props.modelValue?.certificateList && props.modelValue?.certificateList.length > 0) {
+			certificateLists.value = props.modelValue.certificateList.map(e => {
+				let photos = JSON.parse(e.photos)
+				let ps = []
+				photos.forEach(p => {
+					ps.push({
+						url: p
+					})
+				})
+				e.photoList = ps
+				return e
 			})
-			e.photoList = ps
-	      return e
-	    })
-	  }
+
+		}
+		if (props.modelValue?.educationList && props.modelValue?.educationList.length > 0) {
+			console.log('refreshData called:', props.modelValue.educationList)
+			props.modelValue.educationList.forEach(e => {
+				if (e.photo) {
+					let photos = JSON.parse(e.photo)
+					let ps = []
+					photos.forEach(p => {
+						ps.push({
+							url: p
+						})
+					})
+					e.photoList = ps
+				}
+			})
+			educationLists.value = props.modelValue.educationList
+
+
+		}
 	}
 
-	onMounted(()=>{
+	onMounted(() => {
 		refreshData()
-		// if (props.modelValue && props.modelValue.certificateList) {
-		// 	// 先清空原数组（保持响应式）
-		// 	certificateLists.value.splice(0, certificateLists.value.length);
-		
-		// 	// 重新填充数据
-		// 	props.modelValue.certificateList.forEach(e => {
-		// 		let item = {
-		// 			name: e.name || '',
-		// 			date: e.date || '',
-		// 			authority: e.authority || '',
-		// 			number: e.number || '',
-		// 			photoList: []
-		// 		};
-		// 		if (e.photos) {
-		// 			try {
-		// 				item.photoList = JSON.parse(e.photos);
-		// 			} catch (err) {
-		// 				item.photoList = [];
-		// 			}
-		// 		}
-		// 		certificateLists.push(item);
-		// 	});
-		
-		// 	console.log("回显后的 certificateLists:", JSON.parse(JSON.stringify(certificateLists)));
-		// }
-		
 	})
-
-
 
 	defineExpose({
 		submit,
@@ -507,23 +586,22 @@
 
 
 	const uploadComplete = (data, i, lists, name, index) => {
-		console.log("上传成功");
-		console.log(data);
-		console.log(index);
-		console.log(lists);
-		console.log(name);
 		let t = certificateLists.value[index]
-		console.log(t);
 		t.photoList.push(data.data.url)
-		// uni.hideLoading()
-		// uni.showToast({
-		// 	title:"上传成功"
-		// })
+	}
+
+
+	const uploadComplete1 = (data, i, lists, name, index) => {
+		let t = educationLists.value[index]
+		if (!t.photoList) {
+			t.photoList = []
+		}
+		t.photoList.push(data.data.url)
 	}
 
 
 	const addCertificateListHandler = () => {
-		certificateLists.push({
+		certificateLists.value.push({
 			name: '',
 			date: '',
 			photoList: [],
@@ -533,16 +611,18 @@
 	}
 
 	const removeCertificateListHandler = (index) => {
-		certificateLists.splice(index, 1);
+		certificateLists.value.splice(index, 1);
 	}
 
 	const addEducationListsHandler = () => {
 		educationLists.value.push({
-			startDate: null,
-			endDate: null,
+			startTime: null,
+			endTime: null,
 			schoolName: null,
 			idNumber: null,
-			imgUrl: []
+			photoList: [],
+			code: null,
+
 		});
 	}
 
@@ -550,14 +630,6 @@
 		educationLists.value.splice(index, 1);
 	}
 
-	const addTrainListsHandler = () => {
-		trainLists.value.push({
-			startDate: null,
-			endDate: null,
-			courseName: null,
-			imgUrl: []
-		});
-	}
 
 	const certificates = ref(['学历', '工作经历', '培训经历'])
 
@@ -688,7 +760,6 @@
 
 						.introduction-content {
 							width: 630rpx;
-							height: 190rpx;
 							margin-top: 24rpx;
 							display: flex;
 							align-items: center;

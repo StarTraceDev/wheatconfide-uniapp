@@ -25,7 +25,7 @@
 					<view class="uni-margin-wrap">
 						<swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="5000"
 							:duration="500">
-							<swiper-item v-for="(item,index) in [listenerInfo.avatar]" :key="index" class="swiper-item">
+							<swiper-item v-for="(item,index) in JSON.parse(listenerInfo.gallery)" :key="index" class="swiper-item">
 								<image :src="item" mode="aspectFill" style="width: 100%;height: 100%;"></image>
 							</swiper-item>
 						</swiper>
@@ -119,65 +119,38 @@
 						<view class="content">
 							<view class="title">个人介绍</view>
 							<view class="info">
-								二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长二级心理咨询师，教师，巨蟹座。擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤擅长帮助来访者抚平创伤，树立自信，促进个人成长进个人成长进个人成长进个人成长进个.成长进个
-								擅长帮助来访者抚平创伤，树立自信</view>
+								{{listenerInfo.profile}}</view>
 						</view>
 					</view>
 
 
 
-					<view class="detail-item-line-6 detail-item-line-8 tab7" id="tab-3">
+					<view class="detail-item-line-6 detail-item-line-8 tab7" id="tab-3" v-if="listenerInfo.certificateList && listenerInfo.certificateList.length>0 && listenerInfo.educationList && listenerInfo.educationList.length>0">
 						<view class="content">
 							<view class="info">
-								<view class="certificate-detail">
+								<view class="certificate-detail" v-if="listenerInfo.certificateList" v-for="(item,index) in listenerInfo.certificateList" :key="index">
 									<view class="tag">资质</view>
 									<view class="tag-info">
-										<view class="tag-title">国家二级咨询师</view>
+										<view class="tag-title">{{item.name}}</view>
 										<view class="certificate-info">
-											<view>发证机构：国家心理培训</view>
-											<view>发证时间：2025-02-05 </view>
-											<view>证书编号：45478121548151548415125</view>
+											<view>发证机构：{{item.authority}}</view>
+											<view>发证时间：{{item.date}} </view>
+											<view>证书编号：{{item.number}}</view>
 										</view>
 									</view>
 								</view>
-								<view class="eduication-detail">
+								<view class="eduication-detail" v-if="listenerInfo.educationList" v-for="(item,index) in listenerInfo.educationList" :key="index">
 									<view class="tag">学历</view>
 									<view class="tag-info">
-										<view class="tag-title">本科</view>
-										<view class="eduication-info">
+										<view class="tag-title">{{item.schoolName}}</view>
+										<!-- <view class="eduication-info">
 											<view></view>
-											<view>发证时间：2025-02-05 </view>
+											<view>发证时间：{{item.startTime}} </view>
 											<view>证书编号：45478121548151548415125</view>
-										</view>
+										</view> -->
 									</view>
 								</view>
-								<view class="step-detail">
+								<view class="step-detail" style="display: none;">
 									<view class="training">
 										<view class="training-title">伦理培训</view>
 										<view class="training-timer">2项培训，累计40小时</view>
@@ -196,24 +169,30 @@
 						<view class="content">
 							<view class="title">擅长领域</view>
 							<view class="info">
-								<view class="detail">
-									<view class="detail-title">人际交往</view>
-									<view class="detail-content">沟通不畅、社交恐惧、社交技巧、人际冲突、不合群、
-										人际边界、社会适应难、信任危机、设有关系</view>
-								</view>
+								<!-- <view style="display: flex;flex-direction: row;" v-for="(item,index) in listenerInfo.serviceTypes" :key="index"> -->
+									<!-- {{item}} -->
+									<!-- <view class="detail-title"></view> -->
+									<!-- 
+									<view class="detail-content" style="display: none;">沟通不畅、社交恐惧、社交技巧、人际冲突、不合群、
+										人际边界、社会适应难、信任危机、设有关系</view> -->
+								<!-- </view> -->
+								<text style="padding: 5rpx 15rpx;background-color: bisque;border-radius: 8rpx;margin-right: 10rpx;margin-bottom: 10rpx;" v-for="item,index in listenerInfo.serviceTypes">
+									{{item}}
+								</text>
 							</view>
-
+							<view style="display: none;">
 							<view class="title">擅长疗法</view>
 							<view class="tags">
 								<text class="tag-item">沙盘疗法</text>
 								<text class="tag-item">心理动力取向</text>
 								<text class="tag-item">心理动力取向</text>
 							</view>
+							</view>
 
 						</view>
 					</view>
 
-					<view class="detail-item-line-6 detail-item-line-9 tab9" id="tab-5">
+					<view class="detail-item-line-6 detail-item-line-9 tab9" id="tab-5" style="display: none;">
 						<view class="content">
 							<view class="title">
 								<view class="txt">评价<text>(24)</text></view>
@@ -306,7 +285,7 @@
 	const tabIndex = ref(0);
 	const tabsOffsetTop = ref(0);
 	const top = ref(0);
-	const detailOffset5 = ref(null);
+	const detailOffset5 = ref(0);
 	const detailOffset6 = ref(null);
 	const detailOffset7 = ref(null);
 	const detailOffset8 = ref(null);
@@ -401,11 +380,13 @@
 		label: "擅长",
 		id: "tab-4",
 		class: "tab9"
-	}, {
-		label: "评价(24)",
-		id: "tab-5",
-		class: "tab10"
-	}])
+	},
+	// {
+	// 	label: "评价(24)",
+	// 	id: "tab-5",
+	// 	class: "tab10",
+	// },
+	])
 
 	const stepList = ref([{
 		title: '2024.10-2024.12',
@@ -792,7 +773,7 @@
 
 					.detail-item-line-6 {
 						margin-top: 60rpx;
-						width: 100vw;
+
 
 						display: flex;
 						justify-content: center;
@@ -907,7 +888,6 @@
 
 							.info {
 								.detail {
-									width: 576rpx;
 									height: auto;
 									border-radius: 12px;
 									background: rgba(235, 149, 22, 0.1);

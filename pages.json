@@ -218,6 +218,38 @@
 			}
 		},
 		{
+			"path": "pages/settings/serviceSettings",
+			"style": {
+				"navigationStyle": "default",
+				"navigationBarTitleText": "服务设置"
+			}
+		},
+		{
+			"path": "pages/payment/order/consult-order",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/order/exam-order",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/order/listener-order",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/services",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "服务资料"
+			}
+		},
+		{
 			"path": "pages/auth/auth",
 			"style": {
 				"navigationBarTitleText": "认证",

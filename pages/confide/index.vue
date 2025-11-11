@@ -1,7 +1,8 @@
 <template>
 	<view class="confide-box">
-		<scroll-view scroll-y @scroll="onPageScroll" class="scroll-content" :show-scrollbar="false">
-			<view class="search-content" :class="scrollTop>15?'activeClass':''">
+		<scroll-view scroll-y @scroll="onPageScroll" :scroll-top="scrollTop" class="scroll-content" style="height: 100vh;" scroll-with-animation
+			:show-scrollbar="false">
+			<view class="search-content" :class="fixed?'activeClass':''">
 				<view class="search">
 					<uni-search-bar class="uni-mt-10" radius="100" placeholder="请输入倾听师姓名" clearButton="auto"
 						cancelButton="none" @confirm="searchFn" />
@@ -30,7 +31,7 @@
 			</view>
 			<view class="filter-box">
 				<view class="filter-box-2">
-					<view v-for="i in 50" class="filter-box-2-item" :key="index">
+					<view v-for="i in 10" class="filter-box-2-item" :key="index">
 						<image src="/static/confide/iocn-1.png" class="img"></image>
 						<text class="txt">情感陪伴</text>
 					</view>
@@ -58,37 +59,46 @@
 						<image src="/static/confide/green.png" class="logo"></image>
 					</view>
 				</view>
-				<view :class="scrollTop > 200?'fixedFilter':''">
-					<view class="filter-box-1 filter-m">
-						<view class="filter-box-1-item">倾听方向<uni-icons type="down" size="12" class="icon"></uni-icons>
+			</view>
+
+			<u-sticky offset-top="50" @fixed="fixedTop" @unfixed="unFixedTop">
+				<view id="stickyBox">
+					<view class="sticky-box">
+						<view class="sticky-box-1 filter-m">
+							<view style="display: flex;flex-direction: row;flex: 1;">
+								<view class="sticky-box-1-item" style="margin-right: 30rpx;" @click="showBox(1)">倾听方向<uni-icons type="down"
+										size="12" class="icon"></uni-icons>
+								</view>
+								<view class="sticky-box-1-item" @click="showBox(2)">价格<uni-icons type="down" size="12"
+										class="icon"></uni-icons>
+								</view>
+							</view>
+							<view style="display: flex;flex-direction: row;">
+								<view class="sticky-box-1-item" style="margin-right: 30rpx;">筛选
+									<image src="/static/consult/filter.png" style="width: 32rpx;height: 32rpx;" class="filter icon img"></image>
+								</view>
+								<view class="sticky-box-1-item" style="margin-right: 60rpx;">
+									<image src="/static/consult/order.png" style="width: 32rpx;height: 32rpx;" class="order img"></image>
+								</view>
+							</view>
 						</view>
-						<view class="filter-box-1-item">价格<uni-icons type="down" size="12" class="icon"></uni-icons>
-						</view>
-						<view class="filter-box-1-item">筛选
-							<image src="/static/consult/filter.png" class="filter icon"></image>
-						</view>
-						<view class="filter-box-1-item">
-							<image src="/static/consult/order.png" class="order"></image>
-						</view>
-					</view>
-					<view class="filter-box-2 item-m">
-						<view v-for="i in 50" class="filter-box-2-item-txt">
-							<text class="txt">情感咨询</text>
+						<view class="sticky-box-2 item-m">
+							<view v-for="i in 50" class="sticky-box-2-item-txt">
+								<text class="txt">情感咨询</text>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-
+			</u-sticky>
 
 			<view class="doctor-list">
-				<view class="doctor-item" v-for="(item,index) in data.list" :key="index"  @click="openDetail(item)">
+				<view class="doctor-item" v-for="(item,index) in data.list" :key="index" @click="openDetail(item)">
 					<view class="doctor-auture">
 						<image src="/static/consult/user.png"></image>
 					</view>
 					<view class="doctor-info">
 						<view class="doctor-info-1">
 							<view class="name">{{item.name}}</view>
-							<!-- <view class="date">今天20:00可约</view> -->
 						</view>
 						<view class="doctor-info-1">
 							<view class="info">
@@ -110,13 +120,15 @@
 						</view>
 						<view class="doctor-info-1">
 							<view class="point-list">
-								<view class="point-item" v-for="(item,index) in item.serviceType.split(',')" :key="index">{{item}}</view>
+								<view class="point-item" v-for="(item,index) in item.serviceType.split(',')"
+									:key="index">{{item}}</view>
 								<!-- <view class="point-item">压力管理</view> -->
 								<!-- <view class="point-item">婚姻家庭</view> -->
 							</view>
 						</view>
 						<view class="doctor-info-1">
-							<view class="price" v-if="item.price"><text class="unit" v-if="item.price">¥</text>{{item.price}}</view>
+							<view class="price" v-if="item.price"><text class="unit"
+									v-if="item.price">¥</text>{{item.price}}</view>
 							<view class="price" v-else>免费</view>
 							<view class="address">
 								<image src="/static/consult/address.png"></image><text>{{item.address}}</text>
@@ -137,7 +149,8 @@
 		nextTick,
 		onMounted,
 		ref,
-		reactive
+		reactive,
+		getCurrentInstance
 	} from 'vue';
 	import {
 		useGlobalDataStore
@@ -148,8 +161,14 @@
 	const globalStore = useGlobalDataStore();
 	const statusBarHeight = ref(globalStore.statusBarHeight + 'px');
 	const scrollTop = ref(0);
+	const currentScroll = ref(0)
+	const fixed = ref(false)
 	const filterTopHeight = ref(0);
 	const filterBox = ref(null);
+	const showFilterBox = ref(false)
+	const currentFilter = ref(null)
+	const instance = getCurrentInstance() // ✅ 在顶层声明
+	const proxy = instance?.proxy // ✅ 安全引用
 	const data = reactive({
 		listParpms: {
 			"current": 1,
@@ -161,8 +180,15 @@
 		list: []
 	})
 	const onPageScroll = (e) => {
+		currentScroll.value = e.detail.scrollTop;
+	}
 
-		scrollTop.value = e.detail.scrollTop;
+	const fixedTop = () => {
+		fixed.value = true
+	}
+	const unFixedTop = () => {
+		fixed.value = false;
+		scrollTop.value = 0
 	}
 
 	const searchFn = () => {}
@@ -174,12 +200,46 @@
 			}).exec()
 	})
 
+	const showBox = async (type) => {
+		currentFilter.value = type
+		if (!fixed.value) {
+			await nextTick()
+			const query = uni.createSelectorQuery().in(proxy) // ✅ 用 proxy
+			query.select('#stickyBox').boundingClientRect()
+			query.selectViewport().scrollOffset()
+			query.exec((res) => {
+				if (!res || !res[0]) return
+				const boxTop = res[0].top
+				// const scrollOffset = res[1].scrollTop
+				const scrollOffset = currentScroll.value
+				scrollTop.value = scrollOffset + boxTop - 50 // 修正 offset-top
+				console.log(scrollTop.value);
+				setTimeout(() => {
+					openFilter(type)
+				}, 300)
+			})
+		} else {
+			openFilter(type)
+		}
+	}
+
+	// 打开筛选弹窗（这里你可以替换为自定义弹窗逻辑）
+	const openFilter = (type) => {
+		console.log('打开筛选弹窗，类型：', type)
+		// TODO: 打开筛选框视图
+		showFilterBox.value = true
+	}
+
+	const closeFilter = () => {
+		showFilterBox.value = false
+	}
+
 	const openDetail = (item) => {
 		uni.navigateTo({
-			url: "/pages/confide/detail?id="+item.id
+			url: "/pages/confide/detail?id=" + item.id
 		})
 	}
-	
+
 	onMounted(() => {
 		getList();
 	})
@@ -197,7 +257,12 @@
 	.confide-box {
 		background-color: #F4F6F8;
 		width: 100vw;
-		height: auto;
+		height: 100vh;
+
+		display: flex;
+		flex-direction: column;
+		background-color: #F4F6F8;
+
 		$statusBarHeight: v-bind(statusBarHeight);
 
 		.scroll-content {
@@ -306,13 +371,11 @@
 
 			.filter-box {
 				width: 100vw;
-				height: 420rpx;
 				background-color: #F4F6F8;
 				line-height: 1;
 
 				.filter-box-1 {
 					display: flex;
-					width: 686rpx;
 					margin-left: 32rpx;
 
 					.filter-box-1-item {
@@ -321,7 +384,6 @@
 						display: flex;
 						align-items: center;
 						font-weight: 500;
-						width: 25%;
 
 						.filter {
 							width: 20rpx;
@@ -470,7 +532,159 @@
 				}
 			}
 
+
+			.sticky-box {
+				width: 100vw;
+				background-color: #F4F6F8;
+				height: 170rpx;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				.sticky-box-1 {
+					display: flex;
+					flex-direction: row;
+					margin-left: 32rpx;
+
+					.sticky-box-1-item {
+						font-size: 28rpx;
+						color: rgba(0, 0, 0, 0.85);
+						display: flex;
+						align-items: center;
+						font-weight: 500;
+
+						.img {
+							height: 48rpx;
+							width: 48rpx;
+						}
+
+						.sticky {
+							width: 20rpx;
+							height: 20rpx;
+						}
+
+						.order {
+							width: 20rpx;
+							height: 24rpx;
+						}
+
+						.icon {
+							padding-left: 14rpx;
+						}
+					}
+				}
+
+				.sticky-box-2 {
+
+					width: 686rpx;
+					margin-left: 32rpx;
+					overflow-x: scroll;
+					display: flex;
+					flex-direction: row;
+					box-sizing: border-box;
+					flex-wrap: nowrap;
+					-ms-overflow-style: none;
+					overflow: -moz-scrollbars-none;
+					margin-top: 34rpx;
+
+					.sticky-box-2-item-p {
+						width: 200rpx;
+						height: 120rpx;
+						border-radius: 20rpx;
+						margin-right: 16rpx;
+						flex-grow: 0;
+						flex-shrink: 0;
+						position: relative;
+						padding: 20rpx 0rpx 0rpx 16rpx;
+
+						.p-title {
+							font-size: 30rpx;
+							font-weight: 600;
+						}
+
+						.p-txt {
+							font-size: 20rpx;
+							font-weight: normal;
+						}
+
+						.logo {
+							width: 80rpx;
+							height: 80rpx;
+							position: absolute;
+							right: 0rpx;
+							bottom: 0;
+						}
+					}
+
+					.red {
+						background: linear-gradient(360deg, #FEF1F1 -1%, #FED2D3 99%);
+						color: #F76D64 !important;
+					}
+
+					.yellow {
+						background: linear-gradient(360deg, #FFF8E6 -1%, #F9E8BD 99%);
+						color: #EB9516 !important;
+					}
+
+					.blue {
+						background: linear-gradient(360deg, #F3F8FF -1%, #C8E3FF 99%);
+						color: #2990FC !important;
+					}
+
+					.green {
+						background: linear-gradient(360deg, #EEFBE9 -1%, #DEFCD0 99%);
+						color: #87A54A !important;
+					}
+
+					.sticky-box-2-item {
+						padding: 6rpx 10rpx;
+						border-radius: 24rpx;
+						font-size: 24rpx;
+						background-color: #fff;
+						flex-grow: 0;
+						flex-shrink: 0;
+						display: flex;
+						flex-direction: column;
+						margin-right: 20rpx;
+						align-items: center;
+
+
+					}
+
+					.sticky-box-2-item-txt {
+						padding: 6rpx 10rpx;
+						border-radius: 24rpx;
+						color: rgba(0, 0, 0, 0.65);
+						font-size: 24rpx;
+						background-color: #fff;
+						flex-grow: 0;
+						flex-shrink: 0;
+						margin-right: 20rpx;
+					}
+
+					.img {
+						height: 48rpx;
+						width: 48rpx;
+					}
+
+					.txt {
+						font-size: 24rpx;
+						color: #5F5F5F;
+					}
+				}
+
+				.sticky-box-2::-webkit-scrollbar {
+					width: 0 !important;
+					display: none;
+					height: 0 !important;
+					color: transparent;
+					background-color: transparent;
+				}
+			}
+
 			.doctor-list {
+				height: 100vh;
+
 				.doctor-item {
 					width: 100vw;
 					background: #fff;
@@ -635,6 +849,77 @@
 					bottom: 0;
 				}
 			}
+		}
+	}
+
+	.mask {
+		position: fixed;
+		top: 230rpx;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.4);
+		z-index: 999;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		animation: fadeIn 0.3s;
+	}
+
+	/* 下拉弹窗 */
+	.filter-popup {
+		width: 100%;
+		background: #fff;
+		border-radius: 0 0 20rpx 20rpx;
+		animation: slideDown 0.3s;
+	}
+
+	.popup-header {
+		text-align: center;
+		padding: 30rpx 0;
+		font-weight: bold;
+		border-bottom: 1px solid #eee;
+	}
+
+	.popup-body {
+		max-height: 600rpx;
+		overflow-y: auto;
+		padding: 20rpx;
+	}
+
+	.popup-item {
+		padding: 20rpx 0;
+		border-bottom: 1px solid #f1f1f1;
+	}
+
+	.popup-footer {
+		padding: 20rpx;
+		text-align: center;
+	}
+
+	.btn {
+		background: #35ca95;
+		color: #fff;
+		border-radius: 10rpx;
+		width: 60%;
+		padding: 20rpx;
+	}
+
+	// @keyframes slideDown {
+	//   from {
+	//     transform: translateY(-100%);
+	//   }
+	//   to {
+	//     transform: translateY(0);
+	//   }
+	// }
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
 		}
 	}
 </style>

@@ -128,7 +128,7 @@
 		uni.chooseImage({
 			count: 1,
 			success: function(res) {
-				uploadFile('/api/common/upload',res.tempFilePaths[0]).then(res=>{
+				uploadFile(baseURL+'/api/common/upload',res.tempFilePaths[0]).then(res=>{
 					console.log(res);
 				userInfo.value.avatar =res.data.url	
 				})

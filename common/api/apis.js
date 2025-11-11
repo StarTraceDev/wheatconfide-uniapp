@@ -22,3 +22,5 @@ export const register = (params,config={})=>http.post('/api/user/register',param
 
 
 export const articleByType = (params,config={}) => http.get('/api/agreement/getByTitle',params,config)
+
+export const cities = (params,config={})=>http.get("/api/city/list")

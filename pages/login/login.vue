@@ -30,7 +30,7 @@
 					<input class="code-input" v-model="state.code" placeholder="请输入验证码" placeholder-class="msg" />
 					<text class="send-code" :disabled="disabled" @click="onSendSms">{{btnText}}</text>
 				</view>
-				<view class="psd" v-else><input class="uni-input" v-model="state.password" placeholder="请输入密码"
+				<view class="psd" v-else><input class="uni-input" type="password" v-model="state.password" placeholder="请输入密码"
 						placeholder-class="msg" />
 				</view>
 				<view class="login-btn" @click="loginFn">立即登录</view>

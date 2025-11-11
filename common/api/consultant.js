@@ -15,5 +15,7 @@ export const registerConsultantStep2 = (params,config={}) => http.post('/api/con
 export const registerConsultantStep3 = (params,config={}) => http.post('/api/consultant/consultant/step3',params,config)
 
 export const getConsultantByUserId = (params,config={}) =>http.post('/api/consultant/consultant/getConsultantByUserId',params,config)
+
+export const consultMenus = (params,config={})=>http.get('api/consultant/consultant/menu')
 	
 	

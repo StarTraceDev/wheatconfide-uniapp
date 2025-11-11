@@ -81,13 +81,18 @@
 			<view class="other-server">
 				<view class="title">其他服务</view>
 				<view class="other-list">
-					<view class="other-item" @click="settledFn">
+					<view class="other-item" @click="settledFn" v-if="userlnfo.userRole=='0'">
 						<view class="item-left">
 							<image src="/static/my/join.png"></image> <text>入驻平台</text>
 						</view>
 						<view class="item-right">
 							<text>麦苗倾诉·心理从业者招章</text>
 							<uni-icons type="right" size="14" color="#868686"></uni-icons>
+						</view>
+					</view>
+					<view class="other-item" v-if="userlnfo.userRole!='0'" @click="gotoServiceCenter">
+						<view class="item-left">
+							<image src="/static/my/service-setting.png"></image> <text>服务设置</text>
 						</view>
 					</view>
 					<view class="other-item">
@@ -167,6 +172,12 @@
 		url: "/static/my/grid-8.png",
 		txt: "邀请有礼"
 	}])
+	
+	const gotoServiceCenter = ()=>{
+		uni.navigateTo({
+			url:"/pages/settings/serviceSettings"
+		})
+	}
 
 	const changeRole = async () => {
 		let res = await changeConsultant({
@@ -215,11 +226,17 @@
 	}
 
 	const toNav = (index) => {
+		let url;
 		if (index == 0) {
-			uni.navigateTo({
-				url: "/pages/payment/payment-records"
-			})
+			url = "/pages/payment/order/consult-order"
+		}else if(index==1){
+			url="/pages/payment/order/listener-order"
+		}else if (index==4){
+			url = "/pages/payment/order/exam-order"
 		}
+		uni.navigateTo({
+			url: url
+		})
 	}
 
 	const settledFn = () => {
