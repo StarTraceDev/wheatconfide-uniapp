@@ -41,7 +41,7 @@
 				<view style="margin-bottom: 30rpx;"><text style="font-size: 42rpx;font-weight: bold;">热门评论</text></view>
 			<view v-for="(item,index) in commentList" :key="index" style="margin-bottom: 20rpx;">
 				<view style="display: flex;flex-direction: row;">
-					<image style="width: 48rpx;height: 48rpx;border-radius: 24rpx;" :src="item.avatar==null?'/static/my/profile.png':item.avatar"></image>
+					<image style="width: 48rpx;height: 48rpx;border-radius: 24rpx;" :src="item.avatar==null?'@/static/my/profile.png':item.avatar"></image>
 					<view style="margin-left: 20rpx;display: flex;flex-direction: column;">
 					<text style="font-size: 26rpx;">{{item.nickname}}</text>
 					<text style="margin-top: 10rpx;font-size: 28rpx;color: #666666;">{{ item.content }}</text>

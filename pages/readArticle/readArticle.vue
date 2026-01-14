@@ -7,7 +7,7 @@
 				</template>
 				<template v-slot:right>
 					<view class="right">
-						<image src="@/static/confide/share.png" style="width: 40rpx;height: 40rpx;"></image>
+						<image src="/static/confide/share.png" style="width: 40rpx;height: 40rpx;"></image>
 					</view>
 				</template>
 			</uni-nav-bar>

@@ -752,10 +752,30 @@
 .charge-test-box .scroll-content .charge-test-content-box .content-box[data-v-566b2014] {
   width: 21.4375rem;
 }
-.charge-test-box .scroll-content .charge-test-content-box .content-box .content-banner .img[data-v-566b2014] {
+.charge-test-box .scroll-content .charge-test-content-box .content-box .content-banner[data-v-566b2014] {
+  position: relative;
   width: 21.4375rem;
   height: 8.75rem;
+  display: flex;
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+}
+.charge-test-box .scroll-content .charge-test-content-box .content-box .content-banner .img[data-v-566b2014] {
+  width: 100%;
+  height: 100%;
   border-radius: 0.5rem;
+  position: absolute;
+  top: 0;
+}
+.charge-test-box .scroll-content .charge-test-content-box .content-box .content-banner .banner-text[data-v-566b2014] {
+  text-align: center;
+  margin-top: 0.9375rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .charge-test-box .scroll-content .charge-test-content-box .content-box .charge-test-options[data-v-566b2014] {
   display: flex;
@@ -764,6 +784,7 @@
   color: rgba(0, 0, 0, 0.5);
   height: 2.5rem;
   align-items: center;
+  margin-top: 0.9375rem;
   border-radius: 0.5rem;
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 0.25rem 0.625rem 0 rgba(0, 0, 0, 0.06);
@@ -913,6 +934,7 @@
 .charge-test-box .scroll-content .charge-test-content-box .recommend-content-box .recommend-content .content-list .content-item .img[data-v-566b2014] {
   width: 7.5rem;
   height: 7.5rem;
+  border-radius: 0.5rem;
 }
 .charge-test-box .scroll-content .charge-test-content-box .user-comment-content-box[data-v-566b2014] {
   padding-top: 1.5rem;
@@ -991,6 +1013,7 @@
 .charge-test-box .scroll-content .charge-test-content-box .user-comment-content-box .user-comment-content .comment-content-list .comment-content-item .content-item-header .left .img[data-v-566b2014] {
   width: 1.5rem;
   height: 1.5rem;
+  border-radius: 0.75rem;
   margin-right: 0.3125rem;
 }
 .charge-test-box .scroll-content .charge-test-content-box .user-comment-content-box .user-comment-content .comment-content-list .comment-content-item .content-item-header .right[data-v-566b2014] {

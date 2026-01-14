@@ -10,7 +10,7 @@
 						cancelButton="none" @confirm="searchHandler" />
 				</view>
 				<view class="header-right" @click="myOrderHandler">
-					<image src="@/static/psychological-test/logo.svg" class="logo-svg"></image>
+					<image src="/static/psychological-test/logo.svg" class="logo-svg"></image>
 					<text class="txt">我的测评</text>
 				</view>
 			</view>
@@ -58,7 +58,7 @@
 										</view>
 									</view>
 									<view class="img-box">
-										<image :src="item.icon?item.icon:'/static/consult/user.png'" class="img"></image>
+										<image :src="item.icon?item.icon:'@/static/consult/user.png'" class="img"></image>
 									</view>
 								</view>
 

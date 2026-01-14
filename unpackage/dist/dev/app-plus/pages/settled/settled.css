@@ -692,29 +692,37 @@
 /* 文章场景相关 */
 .settled-box[data-v-1356a0f4] {
   width: 100vw;
-  height: 100vh;
   background-image: url("../../static/settled/settled-bg.png");
   background-size: 100vw 19.75rem;
   background-repeat: no-repeat;
+  padding-bottom: 0.9375rem;
 }
 .settled-box .header[data-v-1356a0f4] {
   position: fixed;
   width: 100vw;
   height: 2.75rem;
+  z-index: 999;
 }
 .settled-box .header .header-bar[data-v-1356a0f4] {
-  padding-top: var(--1356a0f4-statusBarHeight);
+  padding-top: calc(var(--1356a0f4-statusBarHeight) - 3.8125rem);
 }
 .settled-box .header .header-bar[data-v-1356a0f4]  {
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
 }
+.settled-box .scrollClass[data-v-1356a0f4] {
+  background-color: #fff;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+}
+.settled-box .scrollClass[data-v-1356a0f4]  {
+  color: #000;
+}
 .settled-box .content[data-v-1356a0f4] {
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding-top: calc(var(--1356a0f4-statusBarHeight) + 3.8125rem);
+  padding-top: calc(var(--1356a0f4-statusBarHeight) - 0.625rem);
 }
 .settled-box .content .settled_1[data-v-1356a0f4] {
   background: url("../../static/settled/settled-1.png");
@@ -752,13 +760,13 @@
   width: 8.75rem;
   height: 2.625rem;
   border-radius: 1.3125rem;
-  background: linear-gradient(180deg, #35CA95 0%, #059363 100%);
+  background: linear-gradient(180deg, #35ca95 0%, #059363 100%);
   line-height: 2.625rem;
   font-size: 1rem;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin-top: 0.9375rem;
 }
 .settled-box .content .settled_2 .add[data-v-1356a0f4] {
-  background: linear-gradient(180deg, #ED7751 0%, #E55A33 100%);
+  background: linear-gradient(180deg, #ed7751 0%, #e55a33 100%);
 }

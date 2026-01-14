@@ -1,8 +1,8 @@
 <template>
   <view class="page">
     <view class="setting-list">
-      <view 
-        v-for="(item, index) in items" 
+      <view
+        v-for="(item, index) in items"
         :key="index"
         class="setting-item"
         @click="onItemClick(item)"
@@ -20,57 +20,65 @@
     </view>
 
     <view class="bottom-space"></view>
-	<view style="margin: 30rpx;"><u-button type="error" @click="toLogout">退出登录</u-button></view>
+    <view style="margin: 30rpx"
+      ><u-button type="error" @click="toLogout">退出登录</u-button></view
+    >
   </view>
 </template>
 
 <script setup>
 // Vue3 Composition API 写法
-import { ref } from 'vue'
+import { ref } from "vue";
 
 // 手机号脱敏函数
 const maskPhone = (phone) => {
-  if (!phone) return ''
-  const s = String(phone)
-  return s.length >= 7 ? s.slice(0, 3) + '****' + s.slice(-4) : s
-}
-
+  if (!phone) return "";
+  const s = String(phone);
+  return s.length >= 7 ? s.slice(0, 3) + "****" + s.slice(-4) : s;
+};
 
 // 列表数据
 const items = ref([
-  { title: '账号与安全', value: '', route: '/pages/account/security' },
-  { title: '隐私政策', value: '', route: '/pages/webview/webview?type=隐私政策' },
-  { title: '用户协议', value: '', route: '/pages/webview/webview?type=用户协议' },
-  { title: '关于麦苗倾诉', value: '', route: '/pages/account/wechat' },
-  { title: '帮助中心', value: '', route: '/pages/account/weibo' },
-])
+  { title: "账号与安全", value: "", route: "/pages/account/security" },
+  {
+    title: "隐私政策",
+    value: "",
+    route: "/pages/webview/webview?type=隐私政策",
+  },
+  {
+    title: "用户协议",
+    value: "",
+    route: "/pages/webview/webview?type=用户协议",
+  },
+  { title: "关于麦苗倾诉", value: "", route: "/pages/webview/webview?type=关于麦苗倾诉" },
+  { title: "帮助中心", value: "", route: "/pages/settings/help-center" },
+]);
 
 const toLogout = () => {
-	uni.showModal({
-		title:"退出登录",
-		content:"确定退出登录？",
-		confirmText:"确定",
-		cancelText:"取消",
-		success(e) {
-			if(e.confirm){
-				uni.clearStorageSync()
-				uni.navigateTo({
-					url: "/pages/login/login"
-				})
-			}
-		}
-	})
-		
-	}
+  uni.showModal({
+    title: "退出登录",
+    content: "确定退出登录？",
+    confirmText: "确定",
+    cancelText: "取消",
+    success(e) {
+      if (e.confirm) {
+        uni.clearStorageSync();
+        uni.navigateTo({
+          url: "/pages/login/login",
+        });
+      }
+    },
+  });
+};
 
 // 点击事件
 const onItemClick = (item) => {
   if (item.route) {
-    uni.navigateTo({ url: item.route })
+    uni.navigateTo({ url: item.route });
   } else {
-    uni.showToast({ title: '未配置跳转', icon: 'none' })
+    uni.showToast({ title: "未配置跳转", icon: "none" });
   }
-}
+};
 </script>
 
 <style scoped>

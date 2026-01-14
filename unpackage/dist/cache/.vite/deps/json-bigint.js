@@ -2,9 +2,9 @@ import {
   __commonJS
 } from "./chunk-Y2F7D3TJ.js";
 
-// ../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/bignumber.js/bignumber.js
+// ../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/bignumber.js/bignumber.js
 var require_bignumber = __commonJS({
-  "../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/bignumber.js/bignumber.js"(exports, module) {
+  "../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/bignumber.js/bignumber.js"(exports, module) {
     (function(globalObject) {
       "use strict";
       var BigNumber, isNumeric = /^-?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i, mathceil = Math.ceil, mathfloor = Math.floor, bignumberError = "[BigNumber Error] ", tooManyDigits = bignumberError + "Number primitive has more than 15 significant digits: ", BASE = 1e14, LOG_BASE = 14, MAX_SAFE_INTEGER = 9007199254740991, POWS_TEN = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13], SQRT_BASE = 1e7, MAX = 1e9;
@@ -1483,9 +1483,9 @@ var require_bignumber = __commonJS({
   }
 });
 
-// ../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/json-bigint/lib/stringify.js
+// ../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/json-bigint/lib/stringify.js
 var require_stringify = __commonJS({
-  "../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/json-bigint/lib/stringify.js"(exports, module) {
+  "../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/json-bigint/lib/stringify.js"(exports, module) {
     var BigNumber = require_bignumber();
     var JSON = module.exports;
     (function() {
@@ -1593,9 +1593,9 @@ var require_stringify = __commonJS({
   }
 });
 
-// ../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/json-bigint/lib/parse.js
+// ../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/json-bigint/lib/parse.js
 var require_parse = __commonJS({
-  "../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/json-bigint/lib/parse.js"(exports, module) {
+  "../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/json-bigint/lib/parse.js"(exports, module) {
     var BigNumber = null;
     var suspectProtoRx = /(?:_|\\u005[Ff])(?:_|\\u005[Ff])(?:p|\\u0070)(?:r|\\u0072)(?:o|\\u006[Ff])(?:t|\\u0074)(?:o|\\u006[Ff])(?:_|\\u005[Ff])(?:_|\\u005[Ff])/;
     var suspectConstructorRx = /(?:c|\\u0063)(?:o|\\u006[Ff])(?:n|\\u006[Ee])(?:s|\\u0073)(?:t|\\u0074)(?:r|\\u0072)(?:u|\\u0075)(?:c|\\u0063)(?:t|\\u0074)(?:o|\\u006[Ff])(?:r|\\u0072)/;
@@ -1877,9 +1877,9 @@ var require_parse = __commonJS({
   }
 });
 
-// ../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/json-bigint/index.js
+// ../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/json-bigint/index.js
 var require_json_bigint = __commonJS({
-  "../../../../../../Users/developer/project/uniapp/wheatconfide-uniapp/node_modules/json-bigint/index.js"(exports, module) {
+  "../../../../../../Users/gaomingxin/Documents/项目/wheatconfide-uniapp/node_modules/json-bigint/index.js"(exports, module) {
     var json_stringify = require_stringify().stringify;
     var json_parse = require_parse();
     module.exports = function(options) {

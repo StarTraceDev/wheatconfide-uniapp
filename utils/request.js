@@ -1,9 +1,9 @@
 import JSONBig from 'json-bigint'
 
-// export const baseURL = 'https://ceshi.maimiaoqingsu.com'
-export const baseURL = process.env.UNI_PLATFORM === 'h5'
-  ? '/' 
-  : 'https://ceshi.maimiaoqingsu.com'
+export const baseURL = 'https://ceshi.maimiaoqingsu.com'
+// export const baseURL = process.env.UNI_PLATFORM === 'h5'
+//   ? '/' 
+//   : 'https://ceshi.maimiaoqingsu.com'
 
 const requestConfig = {
   baseURL,
@@ -49,9 +49,7 @@ const request = (options) => {
           console.error('JSON解析失败:', e)
           data = res.data
         }
-
         const custom = config.custom || {}
-
         if (data.code !== 0 && data.code !== 409999) {
           if (custom.toast !== false) {
             uni.showToast({

@@ -4,7 +4,7 @@
     "iPhone",
     "iPad"
   ],
-  "id": "__UNI__3262174",
+  "id": "__UNI__6548FAC",
   "name": "uniapp-project-z",
   "version": {
     "name": "1.0.0",
@@ -17,10 +17,10 @@
     "url": ""
   },
   "permissions": {
-    "Push": {},
     "Record": {},
+    "Payment": {},
     "Camera": {},
-    "VideoPlayer": {},
+    "Geolocation": {},
     "UniNView": {
       "description": "UniNView原生渲染"
     }
@@ -41,11 +41,15 @@
       "id": "1",
       "kernel": "WKWebview"
     },
+    "compatible": {
+      "ignoreVersion": true
+    },
     "usingComponents": true,
     "nvueStyleCompiler": "uni-app",
     "compilerVersion": 3,
     "distribute": {
       "google": {
+        "packageName": "com.whsxjs.appname",
         "permissions": [
           "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
           "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
@@ -61,14 +65,57 @@
           "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
           "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
           "<uses-feature android:name=\"android.hardware.camera\"/>",
-          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-        ]
+          "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
+          "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+          "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
+          "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+          "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>"
+        ],
+        "abiFilters": [
+          "armeabi-v7a",
+          "arm64-v8a"
+        ],
+        "minSdkVersion": 21,
+        "targetSdkVersion": 30,
+        "networkSecurityConfig": {
+          "cleartextTrafficPermitted": true
+        },
+        "Geolocation": {
+          "description": "需要获取您的地理位置信息，用于定位当前城市"
+        }
       },
       "apple": {
-        "dSYMs": false
+        "dSYMs": false,
+        "idfa": false,
+        "NSCameraUsageDescription": "需要访问相机以进行视频通话",
+        "NSMicrophoneUsageDescription": "需要访问麦克风以进行语音通话"
       },
       "plugins": {
         "push": {},
+        "oauth": {},
+        "payment": {
+          "alipay": {
+            "__platform__": [
+              "android"
+            ]
+          },
+          "weixin": {
+            "__platform__": [
+              "android"
+            ],
+            "appid": "wxceb5219bbe8ae7c4",
+            "UniversalLinks": ""
+          }
+        },
+        "geolocation": {
+          "system": {
+            "__platform__": [
+              "ios",
+              "android"
+            ]
+          }
+        },
+        "maps": {},
         "audio": {
           "mp3": {
             "description": "Android平台录音支持MP3格式文件"
@@ -77,97 +124,18 @@
       }
     },
     "nativePlugins": {
-      "GoEasy-Uniapp": {
-        "OPPO appid": "",
-        "OPPO appkey": "",
-        "OPPO appsecret": "",
-        "HuaWei APP ID": "",
-        "VIVO AppID": "",
-        "VIVO AppKey": "",
-        "XIAOMI AppID": "",
-        "XIAOMI AppKey": "",
-        "MEIZU App ID": "",
-        "MEIZU App Key": "",
-        "FCM Project ID": "",
-        "FCM App ID": "",
-        "FCM current_key": "",
+      "TencentCloud-TUICallKit": {
         "__plugin_info__": {
-          "name": "GoEasy消息推送v1.5.0",
-          "description": "GoEasy消息推送，厂商通道集成, 参数顺序乱七八糟，GoEasy也很无奈：），因为Uniapp插件的参数是无序的",
+          "name": "【官方】腾讯云音视频通话插件TencentCloud-TUICallKit",
+          "description": "TUICallKit 是腾讯云官方推出的音视频通话插件，支持 1v1 通话和群组通话，并提供“类微信\"的 UI 交互，开发者仅需三个 API 就可实现。",
           "platforms": "Android,iOS",
-          "url": "",
-          "android_package_name": "",
-          "ios_bundle_id": "",
-          "isCloud": false,
-          "bought": -1,
-          "pid": "",
-          "parameters": {
-            "OPPO appid": {
-              "des": "",
-              "key": "io.goeasy.oppo.app_id",
-              "value": "_${OPPO appid}"
-            },
-            "OPPO appkey": {
-              "des": "",
-              "key": "io.goeasy.oppo.app_key",
-              "value": ""
-            },
-            "OPPO appsecret": {
-              "des": "",
-              "key": "io.goeasy.oppo.app_secret",
-              "value": ""
-            },
-            "HuaWei APP ID": {
-              "des": "",
-              "key": "com.huawei.hms.client.appid",
-              "value": ""
-            },
-            "VIVO AppID": {
-              "des": "",
-              "key": "com.vivo.push.app_id",
-              "value": ""
-            },
-            "VIVO AppKey": {
-              "des": "",
-              "key": "com.vivo.push.api_key",
-              "value": ""
-            },
-            "XIAOMI AppID": {
-              "des": "",
-              "key": "io.goeasy.xiaomi.app_id",
-              "value": "_${XIAOMI AppID}"
-            },
-            "XIAOMI AppKey": {
-              "des": "",
-              "key": "io.goeasy.xiaomi.app_key",
-              "value": "_${XIAOMI AppKey}"
-            },
-            "MEIZU App ID": {
-              "des": "",
-              "key": "io.goeasy.meizu.app_id",
-              "value": "_${MEIZU App ID}"
-            },
-            "MEIZU App Key": {
-              "des": "",
-              "key": "io.goeasy.meizu.app_key",
-              "value": ""
-            },
-            "FCM Project ID": {
-              "des": "",
-              "key": "io.goeasy.fcm.project_id",
-              "value": ""
-            },
-            "FCM App ID": {
-              "des": "",
-              "key": "io.goeasy.fcm.app_id",
-              "value": ""
-            },
-            "FCM current_key": {
-              "des": "",
-              "key": "io.goeasy.fcm.current_key",
-              "value": ""
-            }
-          }
+          "url": "https://ext.dcloud.net.cn/plugin?id=9035",
+          "android_package_name": "com.whsxjs.appname",
+          "ios_bundle_id": "com.whsxjs.appname",
+          "isCloud": true,
+          "bought": 1,
+          "pid": "9035",
+          "parameters": {}
         }
       }
     },
@@ -190,7 +158,7 @@
     "uni-app": {
       "control": "uni-v3",
       "vueVersion": "3",
-      "compilerVersion": "4.75",
+      "compilerVersion": "4.87",
       "nvueCompiler": "uni-app",
       "renderer": "auto",
       "nvue": {

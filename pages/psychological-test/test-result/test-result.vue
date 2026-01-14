@@ -10,7 +10,7 @@
 			<view class="test-result-content">
 				<view class="content">
 					<view class="banner">
-						<image :src="icon?icon:'/static/forum/bg.png'" mode="aspectFill" class="img"></image>
+						<image :src="icon?icon:'@/static/forum/bg.png'" mode="aspectFill" class="img"></image>
 					</view>
 					<view class="result-analysis-box">
 						<view class="tip">结果分析</view>

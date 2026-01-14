@@ -1057,6 +1057,7 @@
 .forum-index-content .forum-index-list .scroll-content .forum-index-list-item .item-header .item-header-left .header-pic .img[data-v-c51b6f35] {
   width: 1.5rem;
   height: 1.5rem;
+  border-radius: 0.75rem;
 }
 .forum-index-content .forum-index-list .scroll-content .forum-index-list-item .item-header .item-header-left .header-pic .name[data-v-c51b6f35] {
   font-size: 0.75rem;

@@ -6,7 +6,7 @@
 			</view>
 			<view class="user-info">
 				<view class="user-info-content">
-					<u-avatar :src="userlnfo1.avatar==null?'/static/my/profile.png':userlnfo1.avatar" class="profile"></u-avatar>
+					<u-avatar :src="userlnfo1.avatar==null?'@/static/my/profile.png':userlnfo1.avatar" class="profile"></u-avatar>
 					<view>
 						<view class="nick-name">{{userlnfo1.realName}}</view>
 						<view class="id-num">
@@ -270,7 +270,7 @@
 					width: 28rpx;
 					height: 28rpx;
 					content: '';
-					background-image: url("/static/common/forum-content-tab-active.png");
+					background-image: url("@/static/common/forum-content-tab-active.png");
 					position: absolute;
 					background-size: 100% 100%;
 					bottom: -20rpx;

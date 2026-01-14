@@ -192,7 +192,7 @@
 					width: 28rpx;
 					height: 28rpx;
 					content: '';
-					background-image: url("/static/common/forum-content-tab-active.png");
+					background-image: url("@/static/common/forum-content-tab-active.png");
 					position: absolute;
 					background-size: 100% 100%;
 					bottom: -20rpx;

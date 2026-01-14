@@ -1,41 +1,50 @@
 {
-  "hash": "f25ee374",
-  "configHash": "bd17d299",
-  "lockfileHash": "f2d48dd5",
-  "browserHash": "a5984889",
+  "hash": "f2cfba96",
+  "configHash": "ceaea928",
+  "lockfileHash": "83bf2059",
+  "browserHash": "b915b6b2",
   "optimized": {
+    "tim-js-sdk": {
+      "src": "../../../../../node_modules/tim-js-sdk/tim-js.js",
+      "file": "tim-js-sdk.js",
+      "fileHash": "05fead67",
+      "needsInterop": true
+    },
+    "tim-upload-plugin": {
+      "src": "../../../../../node_modules/tim-upload-plugin/index.js",
+      "file": "tim-upload-plugin.js",
+      "fileHash": "511bd002",
+      "needsInterop": true
+    },
     "json-bigint": {
       "src": "../../../../../node_modules/json-bigint/index.js",
       "file": "json-bigint.js",
-      "fileHash": "1bc9ad64",
+      "fileHash": "66ce56c6",
       "needsInterop": true
     },
     "lodash-es": {
       "src": "../../../../../node_modules/lodash-es/lodash.js",
       "file": "lodash-es.js",
-      "fileHash": "d973c4af",
+      "fileHash": "c3a1f24d",
       "needsInterop": false
     },
-    "recorder-core": {
-      "src": "../../../../../node_modules/recorder-core/src/recorder-core.js",
-      "file": "recorder-core.js",
-      "fileHash": "234b53cf",
+    "dayjs": {
+      "src": "../../../../../node_modules/dayjs/dayjs.min.js",
+      "file": "dayjs.js",
+      "fileHash": "4263d57d",
       "needsInterop": true
     },
-    "recorder-core/src/engine/mp3": {
-      "src": "../../../../../node_modules/recorder-core/src/engine/mp3.js",
-      "file": "recorder-core_src_engine_mp3.js",
-      "fileHash": "581d7ea7",
-      "needsInterop": true
-    },
-    "recorder-core/src/engine/mp3-engine": {
-      "src": "../../../../../node_modules/recorder-core/src/engine/mp3-engine.js",
-      "file": "recorder-core_src_engine_mp3-engine.js",
-      "fileHash": "a473d74e",
+    "dayjs/locale/zh-cn": {
+      "src": "../../../../../node_modules/dayjs/locale/zh-cn.js",
+      "file": "dayjs_locale_zh-cn.js",
+      "fileHash": "b29046b4",
       "needsInterop": true
     }
   },
   "chunks": {
+    "chunk-OMFSQXEY": {
+      "file": "chunk-OMFSQXEY.js"
+    },
     "chunk-Y2F7D3TJ": {
       "file": "chunk-Y2F7D3TJ.js"
     }

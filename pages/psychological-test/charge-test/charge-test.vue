@@ -16,7 +16,7 @@
 				<view class="content-box">
 					<!-- :style="{backgroundImage:'url('+examDetail.icon==null?'/static/forum/bg.png':examDetail.icon+')'}" -->
 					<view class="content-banner">
-						<image :src="examDetail.icon==null?'/static/forum/bg.png':examDetail.icon" mode="aspectFill"
+						<image :src="examDetail.icon==null?'@/static/forum/bg.png':examDetail.icon" mode="aspectFill"
 							class="img"></image>
 						<view class="banner-text">
 							<text style="color: white;font-size: 42rpx;">{{examDetail.title}}</text>
@@ -70,7 +70,7 @@
 										</view>
 									</view>
 									<view class="img-box">
-										<image :src="item.icon?item.icon:'/static/consult/user.png'" mode="aspectFill" class="img"></image>
+										<image :src="item.icon?item.icon:'@/static/consult/user.png'" mode="aspectFill" class="img"></image>
 									</view>
 								</view>
 
@@ -110,7 +110,7 @@
 								<view class="content-item-header">
 									<view class="left">
 										<view>
-											<image :src="item.avatar?item.avatar:'/static/my/profile.png'" mode="aspectFill" class="img"></image>
+											<image :src="item.avatar?item.avatar:'@/static/my/profile.png'" mode="aspectFill" class="img"></image>
 										</view>
 										<view>{{item.real_name}}</view>
 									</view>

@@ -786,13 +786,13 @@
   width: 100vw;
   min-height: 100vh;
   height: auto;
-  background-color: #F4F6F8;
+  background-color: #f4f6f8;
 }
 .evaluate-box .scroll-content[data-v-aa8d1f1e] {
   height: 100vh;
 }
 .evaluate-box .scroll-content .evaluate-content[data-v-aa8d1f1e] {
-  background: linear-gradient(180deg, #D5FFF0 2%, #F4F6F8 100%);
+  background: linear-gradient(180deg, #d5fff0 2%, #f4f6f8 100%);
   height: 15rem;
   width: 100vw;
 }
@@ -855,7 +855,7 @@
   padding-bottom: 1.875rem;
 }
 .evaluate-box .scroll-content .evaluate-content .evaluate-info-box .evaluate-list-box .header-title[data-v-aa8d1f1e] {
-  height: 3.5rem;
+  height: 1.25rem;
   border-bottom: 0.03125rem solid rgba(0, 0, 0, 0.04);
   padding-left: 0.875rem;
   line-height: 3.5rem;
@@ -874,7 +874,7 @@
   align-items: center;
 }
 .evaluate-box .scroll-content .evaluate-content .evaluate-info-box .evaluate-list-box .score-content .score .star .txt[data-v-aa8d1f1e] {
-  color: #FFC300;
+  color: #ffc300;
   font-size: 1.25rem;
   font-weight: 500;
   padding-right: 0.3125rem;
@@ -921,7 +921,7 @@
 .evaluate-box .scroll-content .evaluate-content .evaluate-info-box .evaluate-list-box .sortBoxActive[data-v-aa8d1f1e] {
   width: 100vw;
   position: fixed;
-  top: calc(var(--aa8d1f1e-statusBarHeight) + 2.125rem);
+  top: calc(var(--aa8d1f1e-statusBarHeight) - 0.40625rem);
   background: #fff;
   z-index: 1;
   left: 0;
@@ -936,7 +936,7 @@
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   background: rgba(53, 202, 149, 0.102);
-  color: #35CA95;
+  color: #35ca95;
   font-size: 0.8125rem;
   flex-shrink: 0;
   margin-top: 0.625rem;
@@ -956,6 +956,7 @@
   align-items: center;
 }
 .evaluate-box .scroll-content .evaluate-content .evaluate-info-box .evaluate-list-box .content-list .content-header .user-info .picture[data-v-aa8d1f1e] {
+  border-radius: 50%;
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -987,7 +988,7 @@
   width: 19.6875rem;
   border-radius: 0.25rem;
   /* 自动布局 */
-  background: #F4F6F8;
+  background: #f4f6f8;
   margin-top: 0.75rem;
   font-size: 0.8125rem;
 }
@@ -1008,7 +1009,7 @@
   height: 2.5rem;
   line-height: 2.5rem;
   border-radius: 1.25rem;
-  background: #35CA95;
+  background: #35ca95;
   text-align: center;
   color: #fff;
   font-size: 0.9375rem;

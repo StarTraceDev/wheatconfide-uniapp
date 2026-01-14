@@ -1,21 +1,26 @@
-import http from "@/utils/request.js"
+import http from "@/utils/request.js";
 // 获取文章列表
-export const getArticleList = (params, config = {}) => http.post('/api/article/article/getArticleList',
-	params, config)
+export const getArticleList = (params, config = {}) =>
+  http.post("/api/article/article/getArticleList", params, config);
 
-export const getArticleByUserId = (params, config = {}) => http.post('/api/article/article/getArticleByUserId',
-	params, config)
-	
-export const getArticleDetail = (params, config = {}) => http.post('/api/article/article/getArticleDetail',
-	params, config)
+export const getArticleByUserId = (params, config = {}) =>
+  http.post("/api/article/article/getArticleByUserId", params, config);
 
-export const saveArticle = (params, config = {}) => http.post('/api/article/article/saveArticle',
-	params, config)
-	
-export const getCommentById = (params, config = {}) => http.post('/api/comment/comment/getCommentById',
-	params, config)
-	
-export const saveComment = (params, config = {}) => http.post('/api/comment/comment/saveComment',
-	params, config)
-	
-	export const relativeArticle = (params,config={}) => http.get('/api/article/article/relativeArticle')
+export const getArticleDetail = (params, config = {}) =>
+  http.post("/api/article/article/getArticleDetail", params, config);
+
+export const saveArticle = (params, config = {}) =>
+  http.post("/api/article/article/saveArticle", params, config);
+
+export const getCommentById = (params, config = {}) =>
+  http.post("/api/comment/comment/getCommentById", params, config);
+
+export const saveComment = (params, config = {}) =>
+  http.post("/api/comment/comment/saveComment", params, config);
+
+export const relativeArticle = (params, config = {}) =>
+  http.get("/api/article/article/relativeArticle");
+
+  // 反馈列表
+export const getFeedback = (params, config = {}) =>
+  http.post("/api/admin/feedback/page", params, config);

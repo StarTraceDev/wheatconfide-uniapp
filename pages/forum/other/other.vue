@@ -6,7 +6,7 @@
 			</view>
 			<view class="user-info">
 				<view class="user-info-content">
-					<image src="@/static/my/profile.png" class="profile"></image>
+					<image src="/static/my/profile.png" class="profile"></image>
 					<view>
 						<view class="nick-name">大石头</view>
 						<view class="id-num">
@@ -237,7 +237,7 @@
 					width: 28rpx;
 					height: 28rpx;
 					content: '';
-					background-image: url("/static/common/forum-content-tab-active.png");
+					background-image: url("@/static/common/forum-content-tab-active.png");
 					position: absolute;
 					background-size: 100% 100%;
 					bottom: -20rpx;

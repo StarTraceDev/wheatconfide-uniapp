@@ -1,139 +1,157 @@
 <template>
-	<view class="teacher-container">
-		<view class="card">
-			<view class="avatar-wrap">
-				<image class="avatar" :src="info.avatar?info.avatar:'@/static/consult/user.png'" mode="aspectFill"></image>
-				<text class="txt">现在有空</text>
-			</view>
-			<view class="info-wrap">
-				<view class="name-title">{{info.name}}</view>
-				<view class="job-title">70后/白羊座/社会心理师</view>
-				<view class="stats">
-					5000+人次·500+时长
-				</view>
-				<view class="tags">
-					<text class="tag" v-for="(item,index) in info.serviceType.split(',')">{{item}}</text>
-					<!-- <text class="tag">压力管理</text> -->
-					<!-- <text class="tag">婚姻家庭</text> -->
-				</view>
-				<view class="price-button">
-					<view class="price" v-if="info.price"><text class="unit">¥</text>19.9<text class="txt">起</text></view>
-					<view style="font-size: 26rpx;color: red;" v-else>限时免费</view>
-					<view class="contact">找ta聊</view>
-				</view>
-			</view>
-
-
-		</view>
-	</view>
+  <view class="teacher-listener">
+    <view class="card-listener">
+      <view class="avatar-wrap-listener">
+        <!-- <image class="avatar" :src="JSON.parse(info.masterGallery)[0].url" mode="aspectFill"></image> -->
+        <image
+          class="avatar-listener"
+          :src="'https://s.maimiaoqingsu.com/a624ea3f-e71f-4d00-b94d-1cc157055449.JPG'"
+          mode="aspectFill"
+        ></image>
+      </view>
+      <view class="info-wrap">
+        <view class="job-title">
+          <view class="name-title">{{ info.name }}</view>
+          <view
+            >{{ getGenerationByBirthdate(info.birthdate) }} |
+            {{ info.constellation }}</view
+          >
+        </view>
+        <view class="tags">
+          <text
+            class="tag"
+            v-for="(item, index) in info.serviceTypes.slice(0, 2)"
+            >{{ item }}</text
+          >
+        </view>
+        <view class="stats">
+          <view>
+						<view class="stats-item">
+							<view class="num">{{ info.years }}年</view>
+							<view>从业时间</view>
+						</view>
+						<view class="stats-item">
+							<view class="num">{{ info.platformHours }}+</view>
+							<view>平台时长</view>
+						</view>
+					</view>
+          <view>
+						<view class="stats-item">
+							<view class="num">{{ info.commentCount }}+</view>
+							<view>评价</view>
+						</view>
+						<view class="stats-item">
+							<view class="num">{{ info.commentCount }}+</view>
+							<view>回头客</view>
+						</view>
+					</view>
+        </view>
+        <view class="price-button">
+          <view class="contact">
+            <uni-icons type="location" size="20" color="#9da6a4"></uni-icons>
+            <view>{{ info.address }}</view>
+          </view>
+          <view v-if="info.quoteList[0]" style="font-size: 38rpx; color: red"
+            >¥{{ info.quoteList[0].quoteAmount }}</view
+          >
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script setup>
-	
-	import {defineProps} from "vue";
-	const props=defineProps({
-		info:{
-			type:Object
-		}
-	})
+import { getGenerationByBirthdate } from "@/lib/utils.js";
+import { defineProps } from "vue";
+const props = defineProps({
+  info: {
+    type: Object,
+  },
+});
 </script>
 
 <style scoped lang="scss">
-	.teacher-container {
-		height: 304rpx;
-		background-color: #fff;
-		border-radius: 20rpx;
-		padding: 24rpx 24rpx 0rpx 24rpx;
+.teacher-listener {
+  height: 304rpx;
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx 24rpx 0rpx 24rpx;
 
-		.card {
-			display: flex;
+  .card-listener {
+    display: flex;
+    flex-direction: column;
+    .avatar-wrap-listener {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-			.avatar-wrap {
-				position: relative;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
+      .avatar-listener {
+        width: 150rpx;
+        height: 150rpx;
+        border-radius: 50%;
+      }
+    }
 
-				.avatar {
-					width: 168rpx;
-					height: 168rpx;
-				}
+    .info-wrap {
+      .job-title {
+        display: flex;
+        margin-top: 10rpx;
+        align-items: center;
+        justify-content: space-between;
+        .name-title {
+          color: rgba(0, 0, 0, 0.85);
+          font-size: 35rpx;
+        }
+      }
+      .stats {
+        display: flex;
+        padding-top: 0.375rem;
+        font-size: 20rpx;
+        color: rgba(0, 0, 0, 0.5);
+        flex-wrap: wrap;
+				justify-content: space-between;
 
-				.txt {
-					font-size: 20rpx;
-					color: #fff;
-					padding: 8rpx 20rpx;
-					background: #35CA95;
-					border-radius: 20rpx;
-					position: absolute;
-					top: 148rpx;
-				}
-			}
-
-			.info-wrap {
-				margin-left: 20rpx;
-
-				.name-title {
-					color: rgba(0, 0, 0, 0.85);
-					font-size: 32rpx;
-				}
-
-				.job-title {
-					color: rgba(0, 0, 0, 0.85);
-					font-size: 24rpx;
-					padding-top: 12rpx;
-				}
-
-				.stats {
-					display: flex;
-					padding-top: 12rpx;
-					font-size: 24rpx;
-					color: rgba(0, 0, 0, 0.5);
-
-					.stat {}
-				}
-
-				.tags {
-					padding-top: 12rpx;
-
-					.tag {
-						color: #35CA95;
-						font-size: 20rpx;
-						border-radius: 8rpx;
-						border: 1px solid #35CA95;
-						padding: 4rpx 6rpx;
-						margin-right: 10rpx;
-					}
-				}
-
-				.price-button {
-					display: flex;
-					padding-top: 30rpx;
-					justify-content: space-between;
-				    align-items: center;
-					.price {
-						color: #FA5151;
-						font-size: 40rpx;
-				
-						.unit,
-						.txt {
-							font-size: 20rpx;
-						}
-					}
-				
-					.contact {
-						width: 140rpx;
-						height: 60rpx;
-						border-radius: 60rpx;
-						/* 自动布局 */
-						background: #35CA95;
-						text-align: center;
-						line-height: 60rpx;
-						font-size: 28rpx;
-						color: #fff;
-					}
-				}
-			}
-		}
-	}
+        .stats-item {
+          margin: 5rpx 0;
+          display: flex;
+          align-items: center;
+          .num {
+            color: #2e3030;
+          }
+        }
+      }
+      .tags {
+        padding-top: 12rpx;
+        .tag {
+          color: #2e3030;
+          font-size: 20rpx;
+          border-radius: 8rpx;
+          border: 1px solid #c7cbca;
+          padding: 4rpx 6rpx;
+          margin-right: 10rpx;
+        }
+      }
+      .price-button {
+        display: flex;
+        padding-top: 30rpx;
+        justify-content: space-between;
+        align-items: center;
+        .price {
+          color: #fa5151;
+          font-size: 40rpx;
+          .unit,
+          .txt {
+            font-size: 20rpx;
+          }
+        }
+        .contact {
+          display: flex;
+          font-size: 24rpx;
+          color: #9da6a4;
+        }
+      }
+    }
+  }
+}
 </style>

@@ -760,6 +760,7 @@
 }
 .my-order-box .order-content-box .scroll-content .order-content-list .order-content-item .item-box .text-content[data-v-94d077b1] {
   margin-left: 0.625rem;
+  flex: 1;
 }
 .my-order-box .order-content-box .scroll-content .order-content-list .order-content-item .item-box .text-content .header[data-v-94d077b1] {
   display: flex;
@@ -784,6 +785,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 0.875rem;
+  flex: 1;
 }
 .my-order-box .order-content-box .scroll-content .order-content-list .order-content-item .item-box .text-content .footer .free[data-v-94d077b1] {
   font-size: 0.75rem;
@@ -802,6 +804,11 @@
   line-height: 1.5rem;
   color: #fff;
   font-size: 0.75rem;
+}
+.my-order-box .order-content-box .scroll-content .order-content-list .order-content-item .item-box .text-content .footer .btns[data-v-94d077b1] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .my-order-box .order-content-box .scroll-content .order-content-list .order-content-item[data-v-94d077b1]:not(:first-child) {
   margin-top: 0.625rem;

@@ -28,7 +28,7 @@
 					<view class="item-header">
 						<view class="item-header-left">
 							<view class="header-pic">
-								<image :src="i.avatar==null?'/static/my/profile.png':i.avatar" class="img"></image>
+								<image :src="i.avatar==null?'@/static/my/profile.png':i.avatar" class="img"></image>
 								<view class="name">{{i.realName}}</view>
 								<text class="tip">咨询师</text>
 							</view>
@@ -227,7 +227,7 @@
 					width: 28rpx;
 					height: 28rpx;
 					content: '';
-					background-image: url("/static/common/forum-content-tab-active.png");
+					background-image: url("@/static/common/forum-content-tab-active.png");
 					position: absolute;
 					background-size: 100% 100%;
 					bottom: -20rpx;

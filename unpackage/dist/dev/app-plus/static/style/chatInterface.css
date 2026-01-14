@@ -8,11 +8,10 @@ page {
 	height: auto;
 }
 
-.chatInterface .scroll-view {
-	padding-left: 32rpx;
-	padding-right: 32rpx;
+.scroll-view {
+	padding: 100rpx 0;
 	-webkit-overflow-scrolling: touch;
-	padding-bottom: 150rpx;
+	padding-bottom: 200rpx;
 }
 
 .chatInterface .scroll-view .history-loaded {
@@ -170,13 +169,41 @@ page {
 
 .action-top {
 	display: flex;
-	align-items: center;
 	box-sizing: border-box;
 	background: #F6F6F6;
 	backdrop-filter: blur(27.1828px);
 	border-top: 1px solid #ECECEC;
 	padding: 0 20rpx;
 	margin-bottom: 20rpx;
+	flex-direction: column;
+}
+
+.action-middle{
+  display: flex;
+  align-items: center;
+}
+
+.action-item{
+	padding: 10rpx 20rpx;
+	display: flex;
+	align-items: center;
+	font-size: 24rpx;
+	color: #333;
+	border-radius: 10rpx;
+	margin: 15rpx 0 0rpx 10rpx;
+	background-color: #fff;
+}
+
+.message-time {
+	font-size: 24rpx;
+	color: #999999;
+	text-align: center;
+}
+
+.action-bottom-box {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .consult-input {
@@ -597,3 +624,4 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked {
 	margin-left: 10rpx;
 	color: #d02129;
 }
+

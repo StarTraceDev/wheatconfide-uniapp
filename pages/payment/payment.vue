@@ -1,413 +1,761 @@
 <template>
-	<view>
-		<view class="new-recharge-box">
-			<!-- <view class="recharge-info">
-				<view class="need-recharge">
-					<view>剩余积分：
-						<text>{{lastPoint}}</text>
-					</view>
-					<view>
-						充值金额：<text>{{money}}</text>元
-					</view>
-					<view>
-						积分价格：<text>{{rate}}</text>元/个
-					</view>
-					<view>
-						充值积分：<text>{{point}}</text>积分（可查看<text>{{phoneRate}}</text>个电话号码）
+	<view class="settled-box">
+		<view class="header">
+			<uni-nav-bar :class="scrollTop > 15 ? 'scrollClass' : ''" backgroundColor="rgba(255,255,255,0)" :border="false"
+				title="确认订单" class="header-bar">
+				<template v-slot:left>
+					<uni-icons type="left" size="24" @click="backFn"></uni-icons>
+				</template>
+			</uni-nav-bar>
+		</view>
+		<scroll-view scroll-y @scroll="onPageScroll" style="height: 100vh" :show-scrollbar="false">
+			<view class="consultation-content">
+				<view class="notice-bar">
+					<uni-icons type="sound" size="20" color="#F87171"></uni-icons>
+					<view class="notice-text">
+						为确保沟通顺畅，请提前确认设备是否开启对应麦克风权限>>
 					</view>
 				</view>
-			</view> -->
-			<view class="recharge-wrap">
-				<view class="recharge-money-tips">请选择</view>
-				<view class="recharge-new-choose clearfix">
-					<view class="recharge-new-item" v-for="(item,index) in list" :key="index">
-						<view :class="current == index ? 'recharge-new-box recharge-new-active' : 'recharge-new-box'" @click="handleClick(item,index)">
-							<view class="recharge-new-money">
-								<text>{{item.money}}</text>元
+				<view class="user-info-section">
+					<image :src="avatarImg" class="user-avatar"></image>
+					<view class="user-details">
+						<view class="user-name">{{ titleName }}</view>
+						<view class="user-expertise">{{ planTitle }}</view>
+					</view>
+				</view>
+				<view class="appointment-info">
+					<view class="info-item">
+						<view class="info-label">预约时间</view>
+						<view class="info-value">{{ formatTime(orderData.date) }}</view>
+					</view>
+					<view class="info-item">
+						<view class="info-label">咨询方式</view>
+						<view class="consultation-methods">
+							<view class="method-item">
+								<uni-icons type="videocam" size="20" :color="consultation == 1 ? '#34A76F' : '#959596'"></uni-icons>
+								<text class="method-text" :style="{ color: consultation == 1 ? '' : '#666' }">视频</text>
+								<image v-show="consultation == 1" style="left: 60rpx" src="@/static/index/subscript.png"></image>
+							</view>
+							<view class="method-item">
+								<uni-icons type="mic" size="20" :color="consultation == 2 ? '#34A76F' : '#959596'"></uni-icons>
+								<text class="method-text" :style="{ color: consultation == 2 ? '' : '#666' }">语音</text>
+								<image v-show="consultation == 2" style="right: 160rpx" src="@/static/index/subscript.png"></image>
+							</view>
+							<view class="method-item">
+								<uni-icons type="compose" size="20" :color="consultation == 3 ? '#34A76F' : '#959596'"></uni-icons>
+								<text class="method-text" :style="{ color: consultation == 3 ? '' : '#666' }">文字</text>
+								<image v-show="consultation == 3" style="right: 10rpx" src="@/static/index/subscript.png"></image>
 							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="recharge-pay-species">
-				<view class="recharge-pay-wechat" @click="choosePay('wxPay')">
-					<view class="recharge-pay-wechatflex">
-						<image class="recharge-pay-wechatimg" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-wechatimg.png"></image>
-						<text>微信支付</text>
+
+				<view class="consultation-plan-section">
+					<view class="plan-title">咨询方案</view>
+					<view class="plan-list-container">
+						<view class="plan-item" v-for="(plan, index) in planList" :key="index"
+							:class="{ 'plan-item--active': plan.selected }" @click="selectPlan(plan, index)">
+							<view class="plan-item-content">
+								<view class="plan-info">
+									<image :src="plan.selected
+											? `/static/auth/${selectImg}.png`
+											: '/static/auth/not-selected.png'
+										" class="plan-select-icon"></image>
+									<view class="plan-name">【{{ plan.title }}】{{ plan.serviceDuration }}分钟</view>
+								</view>
+								<view class="plan-price">￥{{ plan.quoteAmount }}</view>
+							</view>
+						</view>
 					</view>
-					<image v-if="payType==='wxPay'" class="recharge-pay-selected" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
-					<image v-else class="recharge-pay-select" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
 				</view>
-				<view class="recharge-pay-line"></view>
-				<view class="recharge-pay-alipay" @click="choosePay('aliPay')">
-					<view class="recharge-pay-wechatflex">
-						<image class="recharge-pay-alipayimg" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-alipayimg.png"></image>
-						<text>支付宝支付</text>
+
+				<view class="consultation-plan-section">
+					<view class="plan-title">服务须知</view>
+					<view class="please-note">
+						<view class="note">
+							<view>这里是内容，请仔细阅读了解是否存在以下描述的情况</view>
+							<view class="note-text" :style="{'max-height': showMore ? 'none' : '200rpx'}">
+								<view v-html="content"></view>
+							</view>
+							<view class="text-display" @click="showMore = !showMore">
+								<uni-icons :type=" showMore ? 'up' :'down'" size="20" color="#959596" />
+							</view>
+							<view class="clause">
+								<view class="clause-text disagree" @click="handleClause('disagree')">
+									<image :src="`/static/auth/${clauseVal == 'disagree' ? selectImg : 'not-selected' }.png`" class="plan-select-icon" />
+									<view :class="clauseVal == 'disagree'? 'clause-txt' : ''">存在以上情况</view>
+								</view>
+								<view class="clause-text agree" @click="handleClause('agree')">
+									<image :src="`/static/auth/${clauseVal == 'agree' ? selectImg : 'not-selected' }.png`" class="plan-select-icon" />
+									<view :class="clauseVal == 'agree'? 'clause-txt' : ''">不存在以上情况，且同意<text :style="{color: textColor}" @click="gotoPrivacy('用户下单服务协议')">《用户下单服务协议》</text></view></view>
+							</view>
+						</view>
 					</view>
-					<image v-if="payType==='aliPay'" class="recharge-pay-selected" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
-					<image v-else class="recharge-pay-select" src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-select.png"></image>
+				</view>
+
+				<view class="consultation-plan-section">
+					<view class="plan-title">支付方式</view>
+					<view class="please-note">
+						<view class="note-pay" @click="handlePayment('weixin')">
+							<view class="pay-item">
+								<image src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-wechatimg.png"></image>
+								<view>微信支付</view>
+							</view>
+							<image :src="`/static/auth/${ paymentMethod == 'weixin' ? selectImg : 'not-selected'}.png`" style="width: 25rpx; height: 25rpx"></image>
+						</view>
+						<view class="note-pay" @click="handlePayment('alipay')">
+							<view class="pay-item">
+								<image src="http://cdn.yupao.com/pc/images/zgp/recharge-pay-alipayimg.png"></image>
+								<view>支付宝支付</view>
+							</view>
+							<image :src="`/static/auth/${ paymentMethod == 'alipay' ? selectImg : 'not-selected'}.png`" style="width: 25rpx; height: 25rpx"></image>
+						</view>
+					</view>
 				</view>
 			</view>
-		</view>
+		</scroll-view>
 		<view class="recharge-pay-footer">
-			<view style="display: flex;margin-left: 20rpx;">
-				<view class="recharge-pay-text">金额：</view>
-				<view class="recharge-pay-price">
-					￥：<text class="recharge-pay-money">{{money}}</text>
-				</view>
+			<view style="display: flex; margin-left: 20rpx">
+				<view class="recharge-pay-price">¥{{ orderData.price }}<text>元/{{ orderData.duration }}分钟</text></view>
 			</view>
-			<view style="display: flex;margin-right: 20rpx;">
-				<button class="recharge-sure-price" @click="orderPay">确认支付</button>
+			<view style="display: flex; margin-right: 20rpx">
+				<button :disabled="clauseVal == 'disagree'" class="recharge-sure-price" @click="orderPay">提交订单</button>
 			</view>
 		</view>
-		<uni-popup ref="popupDialog" type="dialog">
-			<uni-popup-dialog :type="msgType" content="充值需要绑定微信,是否绑定?" @confirm="dialogConfirm" @close="dialogClose"></uni-popup-dialog>
+		
+		<uni-popup ref="popup" type="center" :animation="false">
+			<view class="popup-container" v-if="popupType == 'service'">
+				<view class="popup-title">
+					<uni-icons type="notification-filled" size="40" color="#35CA95"></uni-icons>
+				</view>
+				<view class="popup-content">
+						抱歉，您存在的情况不适于咨询， 建议您选择更专业治疗，以便于给您提 供更好的服务。
+				</view>
+				<view class="popup-btn">
+					<view class="popup-btn-text" @tap="closePopup">知道了</view>
+				</view>
+			</view>
+			<view class="popup-order" v-if="popupType == 'success'">
+				<view class="popup-order-header">
+					<uni-icons custom-prefix="iconfont" type="icon-smile-full" size="30" color="#f7db79" class="icon" />
+					<view class="popup-order-title">
+						<view>恭喜您</view>
+						<view>订单已成功支付！</view>
+					</view>
+				</view>
+				<view class="popup-order-btn">
+					<view @click="gotoOrder">查看订单</view>
+					<view>|</view>
+					<view @click="gotoIndex">返回首页</view>
+				</view>
+			</view>
 		</uni-popup>
 	</view>
 </template>
 
 <script setup>
-	import {
-		ref,
-		onMounted,
-		reactive
-	} from 'vue';
-	import {
-		wxPay
-	} from "@/common/api/order.js";
-	const list = ref([{
-			money:'30',
-			point:'600'
-		},{
-			money:'100',
-			point:'900'
-		},{
-			money:'200',
-			point:'1500'
-		},{
-			money:'800',
-			point:'4500'
-		}
-	])
-	const current = ref(0)
-	const providerList = ref(['wxpay','alipay'])
-	const lastPoint = ref(0)
-	const money = ref(30)
-	const point = ref(600)
-	const rate = ref(1.00)
-	const msgType = ref('info')
-	const payType = ref('wxPay')
-	
-	const handleClick = (item, index) => {
-		current.value = index;
-		money.value = item.money;
-		point.value = item.point;
-		rate.value = (item.money/item.point).toFixed(2);
-		phoneRate.value = (item.point/3).toFixed(0);
-	}
-	
-	const choosePay = (e) => {
-		payType.value = e
-	}
-	
-	const orderPay = async (id) => {
-		let res = await wxPay({
-			amount: money.value,
-			type: 'wxPay'
-		});
-		
-		uni.requestPayment({
-			"provider": "wxpay",
-			"orderInfo": res.data.data,
-			success(res) {
-				console.log(res);
-				uni.navigateBack({
-					delta:1
-				})
-			},
-			fail(e) {
-				console.log(e);
-			}
-		})
+import { ref, watch } from "vue";
+import { useGlobalDataStore } from "@/stores/global.js";
+import { onShow, onLoad } from "@dcloudio/uni-app";
+import { consultantList } from "@/common/api/worry.js";
+import { timeStrToSecondTimestamp } from '@/lib/utils.js'
+import { payment, wxPay, aliPay, orderList, payResult } from "@/common/api/order.js";
+import { getUserInfo, articleByType } from "@/common/api/apis.js";
+import { usePayment } from '@/utils/usePayment.js'
+import { formatTime } from '@/lib/utils.js'
 
-		consultantInfo.value = res.data;
+const globalStore = useGlobalDataStore();
+const statusBarHeight = ref(globalStore.statusBarHeight + "px");
+const consultation = ref(1);
+const startColor = ref('#35ca955c');
+const selectImg = ref('select-green')
+const textColor = ref('#34a76f')
+const showMore = ref(false);
+const avatarImg = ref('');
+const titleName = ref('');
+const orderData = ref({
+	counselorId: '', // 咨询师ID
+	consultType: null, // 咨询方式
+	date: null, // 预约日期
+	serveCategoryId: 3, // 服务类别ID
+	startTime: null, // 开始时间
+	endTime: null, // 结束时间
+	duration: null, // 时长
+	price: null
+})
+
+const props = defineProps({
+  distinguish: {
+    type: String,
+    default: 'consultation'
+  },
+});
+
+// const getlnfo = async () => {
+//   let res = await getUserInfo();
+//   console.log(res.data);
+// };
+// console.log(uni.getStorageSync('userId'));
+
+// getlnfo();
+
+
+watch(() => props.distinguish, (newVal) =>{
+	if(newVal == 'consultation') {
+		startColor.value = '#35ca955c'
+		selectImg.value = 'select-green'
+		textColor.value = '#34a76f'
+	} else {
+		startColor.value = '#ffbb4166'
+		selectImg.value = 'select-yellow'
+		textColor.value = '#EB9516'
 	}
 	
-	// import wx from '@/api/wechat/wechat.js';
-	// import order from '@/api/order/order.js';
-	// export default {
-	// 	data() {
-	// 		return {
-	// 		
-	// 		}
-	// 	},
-	// 	onLoad:function(options){
-	// 		this.lastPoint = options.point;
-	// 		this.ifBind();
-	// 	},
-	// 	methods: {
-	// 		ifBind(){
-	// 			wx.isBind ({
-	// 				// #ifdef APP-PLUS
-	// 				bindType:'app',
-	// 				// #endif
-	// 				// #ifdef MP-WEIXIN
-	// 				bindType:'wx',
-	// 				// #endif
-	// 			}).then(res => {
-	// 				if(!res.data.success){
-	// 					this.$refs.popupDialog.open()
-	// 				}
-	// 			})
-	// 		},
-	// 		pay(){
-	// 			if(this.payType==='wxPay') {
-	// 				// #ifdef MP-WEIXIN
-	// 				order.wxPay({
-	// 					amount: this.money,
-	// 					type: 'wxPay'
-	// 				}).then(res => {
-	// 					uni.requestPayment({
-	// 						"provider":"wxpay",
-	// 						...res.data.data,
-	// 					    success(res) {
-	// 							console.log(res);
-	// 							uni.navigateBack({
-	// 								delta:1
-	// 							})
-	// 						},
-	// 					    fail(e) {
-	// 							console.log(e);
-	// 						}
-	// 					})
-	// 				})
-	// 				// #endif
-	// 				// #ifdef APP-PLUS
-	// 				order.wxpayApp({
-	// 					amount:this.money,
-	// 					type: 'wxPay'
-	// 				}).then(res => {
-	// 					uni.requestPayment({
-	// 						"provider":"wxpay",
-	// 						"orderInfo":res.data.data,
-	// 					    success(res) {
-	// 							console.log(res);
-	// 							uni.navigateBack({
-	// 								delta:1
-	// 							})
-	// 						},
-	// 					    fail(e) {
-	// 							console.log(e);
-	// 						}
-	// 					})
-	// 				})
-	// 				// #endif
-	// 			} else {
-	// 				order.aliPayApp({
-	// 					amount:this.money,
-	// 					type: 'aliPay'
-	// 				}).then(res => {
-	// 					uni.requestPayment({
-	// 						provider: "alipay",
-	// 						orderInfo: res.data.data,
-	// 					    success(res) {
-	// 							console.log(res);
-	// 							uni.navigateBack({
-	// 								delta:1
-	// 							})
-	// 						},
-	// 					    fail(e) {
-	// 							console.log(e);
-	// 						}
-	// 					})
-	// 				})
-	// 			}
-	// 		},
-	// 		dialogConfirm() {
-	// 			uni.navigateTo({
-	// 				url:'../../system'
-	// 			})
-	// 		},
-	// 		dialogClose() {
-	// 			console.log('ok')
-	// 		},
-	// 	
-	// 	}
-	// }
+}, {
+	immediate: true,
+	deep: true,
+})
+
+onShow(() => { });
+const scrollTop = ref(0);
+
+const onPageScroll = (e) => {
+	scrollTop.value = e.detail.scrollTop;
+};
+const backFn = () => {
+	uni.navigateBack({
+		delta: 1,
+	});
+};
+
+const gotoPrivacy = (type) => {
+  uni.navigateTo({
+    url: `/pages/webview/webview?type=${type}`,
+  });
+};
+
+const content = ref("");
+const getAgreementByType = async () => {
+  try {
+		const queryParams = {
+        current: 1,
+        size: 10,
+        title: '咨询服务须知',
+      }
+		let { data } = await articleByType(queryParams);
+    content.value = data.records[0].content;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+// 获取计划
+const planList = ref([]);
+const planTitle = ref('')
+const getlnfo = async (id) => {
+	let { data } = await consultantList(id)
+  // let res = await getUserInfo();
+	data.map((item, index) => {
+		item.selected = index === 0 ? true : false
+	})
+	const { quoteAmount, serviceDuration, serviceQuoteType } = data[0]
+	orderData.value.consultType = serviceQuoteType
+	orderData.value.price = quoteAmount
+	orderData.value.serveCategoryId = data[0].id
+	orderData.value.duration = serviceDuration
+	planList.value = data
+	planTitle.value = data[0].title
+};
+
+const selectPlan = (plan, index) => {
+	planTitle.value = plan.title
+	planList.value.forEach((plan, i) => {
+		plan.selected = i === index;
+	});
+	consultation.value = plan.serviceQuoteType
+	const { createTime, quoteAmount, serviceDuration, serviceQuoteType } = plan
+	orderData.value.consultType = serviceQuoteType
+	orderData.value.price = quoteAmount
+	orderData.value.duration = serviceDuration
+};
+
+// 用户协议
+const clauseVal = ref('agree');
+const popupType = ref('service')
+const popup = ref(null)
+const handleClause = (val) => {
+	popupType.value = 'service'
+	if(val == 'disagree') {
+		popup.value.open('center');
+	}
+	clauseVal.value = val
+}
+const closePopup = () => {
+	popup.value.close();
+}
+const paymentMethod = ref('weixin')
+const handlePayment = (val) => {
+	paymentMethod.value = val
+}
+
+// 查看订单
+const gotoOrder = () => { 
+	uni.navigateTo({
+			url: `/pages/payment/order/listener-order`
+	})
+}
+
+// 返回首页
+const gotoIndex = () => {
+	uni.switchTab({
+		url: '/pages/index/index'
+	})
+}
+
+const { 
+  isLoading, 
+  paymentStatus, 
+  initPaymentChannels, 
+  wechatPay, 
+  alipay,
+  PAYMENT_STATUS
+} = usePayment()
+
+// 微信支付处理
+const orderPay = async (id) => {
+	try {
+		const api = paymentMethod.value == 'weixin' ? wxPay : aliPay
+			const type = paymentMethod.value == 'weixin' ? 'wxPay' : 'aliPay'
+			const res = await orderList(orderData.value)
+			const { data } = await api({
+					orderId: res.data.orderSn,
+					amount: res.data.amount,
+					type,
+					status: 1
+				})
+				if(paymentMethod.value == 'weixin') {
+					handleWechatPay(data.orderString)
+				} else {
+					handleAlipay(data.orderString, res.data.orderSn)
+				}
+		} catch (err) {
+			message.value = err.message || '支付宝支付失败'
+		}
+}
+
+// 支付宝支付处理
+const handleAlipay = async (orderInfo, orderSn) => {
+  try {
+    const result = await alipay(orderInfo)
+    payResultApi(orderSn)
+  } catch (err) {
+    message.value = err.message || '支付宝支付失败'
+  }
+}
+
+// 微信支付处理
+const handleWechatPay = async (orderInfo) => {
+  try {
+    const result = await wechatPay(orderInfo)
+    if (result.status === PAYMENT_STATUS.SUCCESS) {
+      message.value = '微信支付成功'
+      // 处理支付成功逻辑（如跳转到成功页）
+    }
+  } catch (err) {
+    message.value = err.message || '微信支付失败'
+  }
+}
+
+// 支付结果
+const payResultApi = async (orderSn) => {
+	try {
+		const result = await payResult({ orderSn })
+		if (result.data.status == 2) {
+			popupType.value = 'success'
+			popup.value.open('center');
+		}
+	} catch (err) {
+		message.value = err.message || '支付失败'
+	}
+}
+
+onLoad((options) => {
+	const { date, startTime, endTime } = JSON.parse(options.time)
+	orderData.value.date = timeStrToSecondTimestamp(`${date} ${endTime}`)
+	orderData.value.startTime = timeStrToSecondTimestamp(`${date} ${startTime}`)
+	orderData.value.endTime = timeStrToSecondTimestamp(`${date} ${endTime}`)	
+	const { to, avatar, name, id } = options
+	avatarImg.value = avatar;
+	titleName.value = name
+	orderData.value.counselorId = id
+	console.log(orderData.value);
+	getAgreementByType();
+	getlnfo(to);
+})
+
 </script>
 
-<style scoped>
-	/* * {
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-	} */
-	/*伪类清除浮动*/
-	.clearfix::after{
-		display:block;
-		content:"";
-		height:0;
-		clear:both;
-		overflow:hidden;
-		visibility:hidden;
-		zoom:1;
-	}
-	/*新充值布局*/
-	.new-recharge-box{
-		 width: 100%;
-		 padding: 5rpx 10rpx;
-		 background-color: #f7f6f9;
-	}
-	.recharge-info{
-		 left: 0;
-		 top: 0;
-		 width: 100%;
-		 height: auto;
-		 padding: 0.2rem 0 0;
-		 background: white;
-	}
-	.recharge-info .need-recharge{
-		padding: 1rpx 20rpx;
-		font-style: normal;
-		color: #35CA95;
-		line-height: 50rpx;
-		font-size:30rpx;
-	}
-	.recharge-wrap{
-		 width: 100%;
-		 padding: 0.2rem 0 0;
-		 background: white;
-		 margin-top: 10rpx;
-		 border-radius: 3px;
-		 box-shadow: #e7e6e4 0 0 0.1rem;
-	}
-	.recharge-money-tips{
-		 color: #333333;
-		 padding: 1rpx 20rpx;
-		 line-height: 60rpx;
-	}
-	.recharge-new-choose{
-		 padding: 1rpx;
-	}
-	.recharge-new-item{
-		 /* #ifdef MP-WEIXIN */
-		  width: 30.333%;
-		 /* #endif */
-		 /* #ifndef MP-WEIXIN */
-		  width: 33.333%;
-		 /* #endif */
-		 height: 100rpx;
-		 float: left;
-		 padding: 0 10rpx;
-		 margin-bottom: 20rpx;
-		 overflow: hidden;
-	}
-	.recharge-new-box{
-		 background: white;
-		 height: 100rpx;
-		 border-radius: 3px;
-		 padding: 0.15rem 0;
-		 border:1px solid #f4f4f4;
-	}
-	.recharge-new-box view{
-		 text-align: center;
-		 line-height: 80rpx;
-	}
-	.recharge-new-money{
-		 color: #333;
-	}
-	.recharge-new-integral{
-		 color: #adadad;
-	}
-	.recharge-new-active{
-		 background: #35CA95;
-		 border-color: #35CA95;
-	}
-	.recharge-new-active view{
-		 color: #fff;
-	}
-	.recharge-new-active::after{
-		 position: absolute;
-		 content: '';
-		 width: 0.38rem;
-		 height: 0.38rem;
-		 right: 0px;
-		 bottom: 0px;
-		 background: url("https://cdn.yupao.com/newyupao/v2.1.8/images/recharge-select.png") no-repeat;
-		 background-size: 100% 100%;
-	}
-	.recharge-btn-sure{
-		 height: 0.9rem;
-		 line-height: 0.7rem;
-		 font-size: 0.3rem;
-	}
-	.recharge-pay-species {
-		width: 100%;
-		padding: 2rpx 10rpx ;
-		background: white;
-		margin-top: 10rpx;
-		border-radius: 3px;
-		box-shadow: #e7e6e4 0 0 0.1rem;
-		font-size: 14px;
-	}
-	.recharge-pay-species text {
-		color: #333;
-	}
-	.recharge-pay-wechat,
-	.recharge-pay-alipay {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		line-height: 80rpx;
-	}
-	
-	.recharge-pay-wechatimg,
-	.recharge-pay-alipayimg {
-		width: 23px;
-		height: 23px;
-		margin-right: 13px;
-	}
-	
-	.recharge-pay-selected,
-	.recharge-pay-select {
-		width: 14px;
-		height: 14px;
-	}
-	
-	.recharge-pay-wechatflex {
-		display: flex;
-		align-items: center;
-	}
-	
-	.recharge-pay-line {
-		border-bottom: 1px dashed #E6E1E1;
-		margin: .2rem 0;
-	}
-	
-	.recharge-pay-footer {
+<style lang="scss" scoped>
+::v-deep .uni-scroll-view-content{
+	padding-bottom: 450rpx !important;
+}
+$primary-color: #333;
+$secondary-color: #666;
+$border-color: #d8d8d8;
+$notice-color: #898686;
+$spacing-small: 20rpx;
+$spacing-medium: 30rpx;
+$spacing-large: 40rpx;
+$border-radius: 10rpx;
+
+// 混合器
+@mixin flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@mixin flex-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.settled-box {
+	$statusBarHeight: v-bind(statusBarHeight);
+	width: 100vw;
+	min-height: 100vh !important;
+	// background-image: url("@/static/settled/settled-bg.png");
+	background-size: 100vw 232rpx;
+	background-repeat: no-repeat;
+	background-image: linear-gradient(to bottom, v-bind(startColor), rgba(255, 0, 0, 0));
+	background-color: #f4f6f8;
+
+	.header {
 		position: fixed;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		left: 0;
-		bottom: 0;
-		width: 100%;
-		padding: 10rpx 10rpx;
-		background: white;
-		z-index: 100;
-		box-shadow: #e8e6e3 0 0 5px;
+		width: 100vw;
+		height: 88rpx;
+		z-index: 999;
+
+		.header-bar {
+			padding-top: calc($statusBarHeight - 122rpx);
+
+			::v-deep(.uni-nav-bar-text) {
+				font-size: 32rpx;
+				font-weight: 600;
+				color: #fff;
+			}
+		}
 	}
-	.recharge-pay-text {
-		font-size: 15px;
-		color: #3F3F3F;
-		font-weight: 600;
+
+	.scrollClass {
+		background-color: #fff;
+		box-shadow: 0rpx 4rpx 20rpx rgba(0, 0, 0, 0.1);
+
+		::v-deep(.uni-nav-bar-text) {
+			color: #000;
+		}
 	}
-	.recharge-pay-price {
-		font-size: 14px;
-		color: #35CA95;
+
+	.consultation-content {
+		min-height: calc(100% + $statusBarHeight + 30rpx);
+		padding-top: calc($statusBarHeight - 20rpx);
+
+		.notice-bar {
+			@include flex-center;
+			font-size: 22rpx;
+			padding: $spacing-small 0;
+
+			.notice-text {
+				color: $notice-color;
+				margin-left: 10rpx;
+			}
+		}
+
+		.user-info-section {
+			display: flex;
+			margin: $spacing-large 60rpx;
+			padding-bottom: $spacing-medium;
+			border-bottom: 2rpx solid $border-color;
+
+			.user-avatar {
+				width: 150rpx;
+				height: 150rpx;
+				border-radius: $border-radius;
+				flex-shrink: 0;
+			}
+
+			.user-details {
+				margin-left: $spacing-medium;
+
+				.user-name {
+					padding: $spacing-small $spacing-small 10rpx 0;
+					font-size: 32rpx;
+					font-weight: bold;
+					color: $primary-color;
+				}
+
+				.user-expertise {
+					padding: 20rpx $spacing-small 0 0;
+					font-size: 28rpx;
+					color: $secondary-color;
+				}
+			}
+		}
+
+		.appointment-info {
+			margin: 0 60rpx 50rpx;
+
+			.info-item {
+				@include flex-between;
+				margin-bottom: $spacing-medium;
+
+				.info-label {
+					font-size: 28rpx;
+					color: $primary-color;
+					font-weight: 500;
+				}
+
+				.info-value {
+					font-size: 28rpx;
+				}
+
+				.consultation-methods {
+					position: relative;
+					display: flex;
+					align-items: center;
+					gap: 40rpx;
+
+					.method-item {
+						@include flex-center;
+
+						.method-text {
+							margin-left: 10rpx;
+							font-size: 26rpx;
+						}
+
+						image {
+							position: absolute;
+							top: 30rpx;
+							width: 25rpx;
+							height: 25rpx;
+						}
+					}
+				}
+			}
+		}
+
+		.consultation-plan-section {
+			.plan-title {
+				margin: 0 45rpx;
+				font-size: 35rpx;
+				font-weight: 500;
+				color: #333;
+			}
+
+			.plan-list-container {
+				background: #fff;
+				margin: 10rpx 30rpx 30rpx;
+				padding: 20rpx 50rpx;
+				border-radius: 20rpx;
+				box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+			}
+
+			.plan-item {
+				padding: 15rpx 0;
+				border-radius: 12rpx;
+				transition: all 0.3s ease;
+				color: $secondary-color;
+
+				&.plan-item--active {
+					.plan-name {
+						color: #000;
+						font-weight: 500;
+					}
+
+					.plan-price {
+						font-size: 35rpx;
+						color: #000;
+						font-weight: 500;
+					}
+				}
+
+				.plan-item-content {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					padding: 0 15rpx;
+
+					.plan-info {
+						display: flex;
+						align-items: center;
+						flex: 1;
+					}
+
+					.plan-price {
+						font-size: 35rpx;
+						font-weight: 500;
+						margin-left: 30rpx;
+					}
+				}
+
+				&:active {
+					opacity: 0.7;
+					transform: scale(0.98);
+				}
+			}
+
+			.plan-select-icon {
+				width: 25rpx;
+				height: 25rpx;
+			}
+
+			.please-note{
+				background: #fff;
+				margin: 10rpx 30rpx 20rpx;
+				padding: 30rpx;
+				border-radius: 20rpx;
+				font-size: 26rpx;
+				color: #575050;
+				.note{
+					.note-text{
+						overflow: hidden;
+						padding: 20rpx;
+						view {
+							padding: 10rpx 0;
+						}
+					}
+					.text-display{
+						text-align: center;
+					}
+					.clause{
+						.clause-text{
+							@include flex-center;
+							justify-content: normal;
+							padding-bottom: 20rpx;
+							image {
+								padding-right: 15rpx;
+							}
+							.clause-txt{
+								color: #000;
+							}
+						}
+					}
+				}
+				.note-pay{
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					margin: 20rpx 0;
+					.pay-item{
+						display: flex;
+						align-items: center;
+						image {
+							width: 50rpx;
+							height: 50rpx;
+							margin-right: 30rpx
+						}
+					}
+				}
+			}
+		}
 	}
-	.recharge-sure-price {
-		background-color: #35CA95;
-		border: none;
-		color: #fff;
+}
+
+.recharge-pay-footer {
+	position: fixed;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	padding: 30rpx 10rpx 10rpx;
+	background: white;
+	z-index: 100;
+	box-shadow: #e8e6e3 0 0 5px;
+}
+
+.recharge-pay-price {
+	font-size: 40rpx;
+	color: v-bind(textColor);
+
+	text {
+		padding-left: 10rpx;
+		font-size: 20rpx;
 	}
+}
+
+.recharge-sure-price {
+	background-color: v-bind(textColor);
+	border-radius: 50rpx;
+	padding: 0 40rpx;
+	font-size: 24rpx;
+	border: none;
+	color: #fff;
+}
+.popup-container{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+}
+.popup-title{
+	position: absolute;
+	top: 10rpx;
+	width: 22%;
+	padding: 40rpx;
+	border-radius: 50%;
+	background-color: #fff;
+	@include flex-center;
+	z-index: 100;
+}
+.popup-content{
+	width: 65%;
+	margin-top: 100rpx;
+	padding: 69rpx 40rpx 0;
+	font-size: 28rpx;
+	color: #333;
+	line-height: 40rpx;
+	background-color: #fff;
+	border-radius: 20rpx 20rpx 0 0;
+	line-height: 60rpx;
+}
+.popup-btn{	
+	@include flex-center;
+	background-color: #fff;
+	width: 65%;
+	border-radius: 0 0 20rpx 20rpx;
+}
+.popup-btn-text{
+	@include flex-center;
+	padding: 5rpx ;
+	border-radius: 50rpx;
+	font-size: 28rpx;
+	width: 200rpx;
+	color: #35CA95;
+	border: 2rpx solid #35CA95;
+	margin: 20rpx 0;
+}
+.popup-order{
+	width: 500rpx;
+	height: 300rpx;
+	padding: 20rpx;
+	border-radius: 20rpx;
+	background-color: #fff;
+}
+.popup-order-header{
+	@include flex-center;
+	height: 80%;
+}
+.popup-order-title{
+	margin-left: 40rpx;
+}
+.popup-order-btn{
+	@include flex-center;
+	justify-content: space-around;
+	color: #9f9f9f;
+	height: 20%;
+}
 </style>

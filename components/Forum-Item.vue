@@ -35,14 +35,14 @@
 <style lang="scss" scoped>
 	.forum-Item {
 		width: 686rpx;
-		height: 408rpx;
+		min-height: 380rpx;
 		border-radius: 20rpx;
 		background: #FFFFFF;
 		display: flex;
 
 		.forum-content {
 			padding: 32rpx;
-			width: 622rpx;
+			width: 686rpx;
 			.content {
 				font-size: 28rpx;
 				color: rgba(0, 0, 0, 0.85);

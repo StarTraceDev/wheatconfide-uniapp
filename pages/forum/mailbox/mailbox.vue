@@ -20,7 +20,7 @@
 					</view>
 					<view class="item-header-right">
 						<image
-							:src="type=='new'?'/static/forum/new-logo.png':type=='old'?'/static/forum/old-logo.png':'/static/forum/future-logo.png'"
+							:src="type=='new'?'@/static/forum/new-logo.png':type=='old'?'@/static/forum/old-logo.png':'@/static/forum/future-logo.png'"
 							class="img"></image>
 					</view>
 				</view>

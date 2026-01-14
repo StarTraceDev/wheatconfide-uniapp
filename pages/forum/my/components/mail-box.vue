@@ -12,7 +12,7 @@
 							</mote-lines-divide>
 						</view>
 					</view>
-					<image :src="item.type=='old'?'/static/forum/old-arrow.png':item.type=='new'?'/static/forum/new-arrow.png':'/static/forum/future-arrow.png'" class="img"></image>
+					<image :src="item.type=='old'?'@/static/forum/old-arrow.png':item.type=='new'?'@/static/forum/new-arrow.png':'@/static/forum/future-arrow.png'" class="img"></image>
 				</view>
 			</view>
 		</scroll-view>

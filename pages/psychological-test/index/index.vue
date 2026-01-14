@@ -12,7 +12,7 @@
 							cancelButton="none" @confirm="searchHandler" />
 					</view>
 					<view class="header-right" @click="myOrderHandler">
-						<image src="@/static/psychological-test/logo.svg" class="logo-svg"></image>
+						<image src="/static/psychological-test/logo.svg" class="logo-svg"></image>
 						<text class="txt">我的测评</text>
 					</view>
 				</view>
@@ -22,7 +22,7 @@
 						<view class="test-list">
 							<view class="test-item" v-for="(item,index) in recommend" :key="index"
 								@click="gotoDetail(item)">
-								<image :src="item.icon?item.icon:'/static/forum/bg.png'" mode="aspectFill" class="img">
+								<image :src="item.icon?item.icon:'@/static/forum/bg.png'" mode="aspectFill" class="img">
 								</image>
 								<view class="test-title">{{item.title}}</view>
 								<view class="use-test">{{item.examNum}}人已测</view>
@@ -85,7 +85,7 @@
 					<view class="content-list">
 						<view class="content-item" v-for="(item,index) in dailyRecommendExams" :key="index"
 							@click="gotoDetail(item)">
-							<image :src="item.icon?item.icon:'/static/forum/bg.png'" mode="aspectFill" class="img">
+							<image :src="item.icon?item.icon:'@/static/forum/bg.png'" mode="aspectFill" class="img">
 							</image>
 							<view>
 								<view class="title">{{item.title}}</view>
@@ -129,7 +129,7 @@
 									</view>
 								</view>
 								<view class="img-box">
-									<image :src="item.icon?item.icon:'/static/consult/user.png'" mode="aspectFill"
+									<image :src="item.icon?item.icon:'@/static/consult/user.png'" mode="aspectFill"
 										class="img"></image>
 								</view>
 							</view>

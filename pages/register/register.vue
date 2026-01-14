@@ -2,10 +2,11 @@
 	<view class="login-box">
 		<view class="login-bg">
 			<view class="bg-top">
-				<image src="/static/register/register-bg.png" class="image"></image>
+				<!-- <image src="/static/register/register-bg.png" class="image"></image> -->
+				<!-- <image src="../../static/register/" class="image"></image> -->
 			</view>
 			<view class="bg-top-content">
-				<u-icon name="arrow-left" size="42"></u-icon>
+				<u-icon name="arrow-left" size="42" @click="gotoLogin"></u-icon>
 				<view style="margin-left: 30rpx;margin-right: 30rpx;">
 					<view class="welcome"><text>欢迎注册</text> <text class="txt">「麦苗倾诉」</text></view>
 					<view class="msg">注册账号发现更多精彩</view>
@@ -15,7 +16,6 @@
 							<view class="input-box">
 								<input class="input" type="number" v-model="form.userName" placeholder="请输入手机号" />
 							</view>
-
 							<!-- 验证码 -->
 							<view class="input-box code-box">
 								<input class="input" type="number" v-model="form.code" placeholder="请输入验证码" />
@@ -58,7 +58,7 @@
 		register
 	} from "@/common/api/apis.js"
 	const border = ref(true)
-	const agree = ref(false)
+	const agree = ref(true)
 	const codeText = ref('获取验证码')
 	const form = ref({
 		userName: null,
@@ -70,7 +70,7 @@
 	const gotoLogin = () => {
 		uni.navigateBack()
 	}
-
+	
 	const gotoPrivacy = () => {
 		uni.switchTab({
 			url: "/pages/index/index"
@@ -112,10 +112,6 @@
 			}, 1000)
 		}
 	}
-
-
-
-
 	const gotoRegister = async () => {
 		if(!form.value.userName){
 			uni.showToast({
@@ -137,6 +133,12 @@
 				icon:"error"
 			})
 			return
+		}
+		if(!agree.value){
+			uni.showToast({
+				title:"请同意协议",
+				icon:"error"
+			})
 		}
 		let resp = await register(form.value)
 		let userInfo = resp.data

@@ -67,7 +67,14 @@
 			"style": {
 				"navigationBarTitleText": "入驻"
 			}
-		}, {
+		},
+		{
+			"path": "pages/settled/application",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, 
+		{
 			"path": "pages/consult-feel/consult-feel",
 			"style": {
 				"navigationBarTitleText": "咨询感受"
@@ -129,6 +136,12 @@
 		},
 		{
 			"path": "pages/forum/my/userInfo",
+			"style": {
+				"navigationBarTitleText": "用户信息"
+			}
+		},
+		{
+			"path": "pages/forum/my/info",
 			"style": {
 				"navigationBarTitleText": "用户信息"
 			}
@@ -202,11 +215,7 @@
 		{
 			"path": "pages/message/private-chat",
 			"style": {
-				"navigationStyle": "default",
-				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#F1F1F1",
-				"enablePullDownRefresh": true
-				// "navigationStyle": ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -225,6 +234,48 @@
 			}
 		},
 		{
+			"path": "pages/settings/help-center",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/service-setup",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/service-price",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/feedback",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/complaint",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/order/refund-order",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/settings/record",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/payment/order/consult-order",
 			"style": {
 				"navigationStyle": "custom"
@@ -238,6 +289,18 @@
 		},
 		{
 			"path": "pages/payment/order/listener-order",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/order/bill-order",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/order/evaluation-order",
 			"style": {
 				"navigationStyle": "custom"
 			}
@@ -273,13 +336,20 @@
 				// "navigationStyle": "",
 				"navigationBarTextStyle": "black"
 			}
-		}, {
+		},
+		{
 			"path": "pages/payment/payment-records",
 			"style": {
 				"navigationBarTitleText": "我的订单",
 				"navigationBarBackgroundColor": "#F4F6F8",
 				// "navigationStyle": "",
 				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/payment/order-details",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -312,6 +382,78 @@
 			{
 				"navigationBarTitleText" : "",
 				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/wallet/bill",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/my/wallet/withdrawal",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/my/wallet/bank-card",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/my/wallet/mine",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/mall-home",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/product-details",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/shopping-cart",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/delivery-address",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/operation-address",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/order-details",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/order-list",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/shopping-mall/order-confirmation",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		}
 	],

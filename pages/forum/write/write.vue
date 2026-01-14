@@ -10,12 +10,12 @@
 				<view class="first-item green" @click="openPageHandler('/pages/forum/write/send-dynamics/send-dynamics')">
 					<view class="title" >发心事</view>
 					<view class="content">此时此刻，随时记录收获爱与温暖</view>
-					<image src="@/static/forum/send.svg" class="img"></image>
+					<image src="/static/forum/send.svg" class="img"></image>
 				</view>
 				<view class="first-item yellow" @click="openPageHandler('/pages/forum/write/ask-question/ask-question')">
 					<view class="title" >提问题</view>
 					<view class="content">7万+7万+专业咨询师为你答疑解惑</view>
-					<image src="@/static/forum/qa.svg" class="img"></image>
+					<image src="/static/forum/qa.svg" class="img"></image>
 				</view>
 			</view>
 			<view class="txt">写给自己的一封信</view>
