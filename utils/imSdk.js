@@ -1,320 +1,439 @@
 /**
- * 腾讯云IM+TUICallKit音视频 全局封装类
- * Vue3 setup 全局挂载，uniapp全端适配
+ * 腾讯云IM+TUICallKit音视频 全局封装类 最终定稿版
+ * ✅ 改用 import TIM from "tim-js-sdk" 引入方式
+ * ✅ 彻底修复【外部获取TIM实例undefined】核心问题
+ * ✅ Vue3 setup + uniapp 全端适配
+ * ✅ 包含：文字/语音/图片消息+历史记录+实时接收+checkPolicy校验+TUICallKit音视频通话
+ * ✅ 对外暴露完整TIM实例，支持外部直接调用原生方法
  */
+import TIM from "tim-js-sdk";
+import COS from "cos-js-sdk-v5";
 import { tencentSigIm, tencentSigTrtc, checkPolicy } from "@/common/api/consultant.js";
-import { showToast, showModal } from '@/utils/uniApi.js' // 自己的提示工具类，可替换为uni.showToast
 
-// 腾讯云IM 全局实例
-let timInstance = null;
-// TUICallKit 音视频实例
-let callKitInstance = null;
-// IM登录状态
-const imStatus = {
-  isLogin: false, // 是否已登录IM
-  userId: "",     // 当前登录用户ID
-  userSig: "",    // IM签名
-  trtcSig: ""     // 音视频签名
-};
-// 聊天核心缓存
-const chatCache = {
-  currentToUserId: "", // 当前聊天的对方用户ID
-  messageList: [],     // 当前会话消息列表
-  lastMsgSeq: 0        // 历史消息拉取游标，用于分页加载
-};
-
-// ===================== 常量配置 =====================
+// ===================== 常量配置 (只改这里的SDKAPPID即可) =====================
 const CONFIG = {
-  SDKAPPID: 你的腾讯云SDKAPPID, // 必填，你的腾讯云IM应用ID
-  MSG_PAGE_SIZE: 20, // 历史消息每次拉取条数
-  VOICE_TIME_MAX: 60, // 语音最大录制时长(秒)
-  IM_TYPE: { // 消息类型常量
+  SDKAPPID: 1600116083, // 腾讯云IM应用ID
+  MSG_PAGE_SIZE: 20, // 历史消息每页条数
+  VOICE_TIME_MAX: 60, // 语音最长录制秒数
+  VOICE_FORMAT: 'mp3', // 语音格式
+};
+
+// ===================== 腾讯云IM 常量硬编码 (根治 EVENT undefined 核心) =====================
+const TIM_CONST = {
+  EVENT: {
+    MESSAGE_RECEIVED: 'MESSAGE_RECEIVED',
+    SDK_READY: 'SDK_READY',
+    SDK_NOT_READY: 'SDK_NOT_READY',
+    KICKED_OUT: 'KICKED_OUT',
+    NET_STATE_CHANGE: 'NET_STATE_CHANGE'
+  },
+  CONV_C2C: 'C2C', // 单聊会话类型
+  MSG_TYPE: {
     TEXT: "TIMTextElem",
     IMAGE: "TIMImageElem",
-    VOICE: "TIMSoundElem",
-    CUSTOM: "TIMCustomElem"
+    VOICE: "TIMSoundElem"
   }
 };
 
-// ===================== 核心IM类 =====================
+// ===================== 工具函数 =====================
+const showToast = (title) => uni.showToast({ title, icon: 'none', duration: 2000 });
+
+// ===================== 核心IM封装类 =====================
 class TencentIm {
   constructor() {
-    this.initIM(); // 初始化IM SDK
-    this.initTUICallKit(); // 初始化音视频插件
+    this.timInstance = null; // ✅ 挂载到类实例上【核心修复】外部可直接访问
+    this.callKitInstance = null; // ✅ 音视频实例也挂载到类上
+    this.imStatus = { isLogin: false, userId: "", userSig: "", trtcSig: "" }; // 登录状态挂载到类
+    this.chatCache = { currentToUserId: "", messageList: [], lastMsgSeq: "" }; // 聊天缓存挂载到类
+    this.initIM();
+    this.initTUICallKit();
   }
 
   /**
-   * 1. 初始化腾讯云IM SDK
+   * 初始化腾讯云IM SDK ✅ 标准tim-js-sdk初始化方式 + COS依赖配置
    */
   initIM() {
-    const TIM = uni.requirePlugin('tim-js-sdk');
-    timInstance = TIM.create({
-      SDKAppID: CONFIG.SDKAPPID
-    });
-    // 设置SDK日志级别，线上可改为0
-    timInstance.setLogLevel(1);
-    // 注册IM全局事件监听（核心：实时消息、连接状态等）
-    this.registerImEvent();
+    try {
+      // 1. 初始化IM实例 - 标准写法
+      this.timInstance = TIM.create({
+        SDKAppID: CONFIG.SDKAPPID
+      });
+      if (!this.timInstance) {
+        showToast('IM实例初始化失败');
+        return;
+      }
+
+      // 2. 腾讯云官方必配：COS上传依赖，多媒体消息必须
+      this.timInstance.registerPlugin({ 'cos-js-sdk': COS });
+
+      // 3. 设置日志级别 1=开发环境 0=生产环境
+      this.timInstance.setLogLevel(1);
+
+      // 4. 注册全局事件监听
+      this.registerImEvent();
+    } catch (err) {
+      console.error('IM初始化异常:', err);
+      showToast('IM初始化异常，请重试');
+    }
   }
 
   /**
-   * 2. 初始化TUICallKit音视频插件 (你已导入的官方插件)
+   * 初始化TUICallKit音视频插件 (不变)
    */
   initTUICallKit() {
-    callKitInstance = uni.requirePlugin('TencentCloud-TUICallKit');
-    // 初始化插件配置
-    callKitInstance.init({
-      SDKAppID: CONFIG.SDKAPPID,
-      timInstance: timInstance, // 共享IM实例，无需重复登录
-    });
+    try {
+      this.callKitInstance = uni.requirePlugin('TencentCloud-TUICallKit');
+      if (!this.callKitInstance) {
+        showToast('音视频插件加载失败');
+        return;
+      }
+      // 传入挂载在类上的IM实例，共享登录态
+      this.callKitInstance.init({
+        SDKAppID: CONFIG.SDKAPPID,
+        timInstance: this.timInstance
+      });
+    } catch (err) {
+      console.error('音视频插件初始化异常:', err);
+    }
   }
 
   /**
-   * 3. 注册IM全局事件监听 - 核心方法【实时接收消息/状态变更】
+   * 注册IM全局事件监听 ✅ 无任何undefined风险
    */
   registerImEvent() {
-    timInstance.on(timInstance.EVENT.MESSAGE_RECEIVED, (event) => {
-      // 实时收到新消息，event.data 为消息数组
-      const newMsgList = event.data;
+    if (!this.timInstance) return;
+    const { EVENT } = TIM_CONST;
+
+    // ✅ 实时接收新消息 - 核心事件
+    this.timInstance.on(EVENT.MESSAGE_RECEIVED, (event) => {
+      const newMsgList = event.data || [];
+      if (newMsgList.length === 0) return;
       this.handleNewMessage(newMsgList);
-      // 可通过uniapp全局事件总线，把消息抛给页面监听
       uni.$emit('im_message_received', newMsgList);
     });
-    // 其他事件监听（按需添加）
-    timInstance.on(timInstance.EVENT.SDK_READY, () => imStatus.isLogin = true);
-    timInstance.on(timInstance.EVENT.SDK_NOT_READY, () => imStatus.isLogin = false);
-    timInstance.on(timInstance.EVENT.KICKED_OUT, () => this.loginOutIm());
+
+    // ✅ IM登录就绪/可用
+    this.timInstance.on(EVENT.SDK_READY, () => {
+      this.imStatus.isLogin = true;
+      uni.$emit('im_login_success');
+    });
+
+    // ✅ IM未就绪/断开连接
+    this.timInstance.on(EVENT.SDK_NOT_READY, () => {
+      this.imStatus.isLogin = false;
+      uni.$emit('im_login_fail');
+    });
+
+    // ✅ 账号被踢下线
+    this.timInstance.on(EVENT.KICKED_OUT, () => {
+      showToast('你的账号已在其他设备登录');
+      this.loginOutIm();
+      uni.$emit('im_kicked_out');
+    });
+
+    // ✅ 网络状态变更提示
+    this.timInstance.on(EVENT.NET_STATE_CHANGE, (event) => {
+      if (event.data.state === 'DISCONNECTED') {
+        showToast('网络断开，消息将暂存本地');
+      }
+    });
   }
 
   /**
-   * 4. 用户登录成功后 -> 初始化并登录IM【核心入口】
-   * @param {String} userId 登录成功后拿到的用户ID (必传)
-   * @returns {Promise<Boolean>} 是否登录成功
+   * 用户登录成功后 登录IM【核心入口】
+   * @param {String} userId 用户ID
+   * @returns {Promise<Boolean>}
    */
   async loginIm(userId) {
-    if (!userId) return showToast('用户ID不能为空'), false;
-    if (imStatus.isLogin) return true;
-    
-    try {
-      // 1. 获取IM签名 (调用你的接口)
-      const { data: imSigData } = await tencentSigIm({ userId });
-      imStatus.userId = userId;
-      imStatus.userSig = imSigData.userSig;
+    if (!userId) { showToast('用户ID不能为空'); return false; }
+    if (this.imStatus.isLogin && this.imStatus.userId === userId) return true;
+    if (!this.timInstance) { showToast('IM未初始化'); return false; }
 
-      // 2. 腾讯云IM官方登录方法
-      await timInstance.login({
-        userID: userId,
-        userSig: imStatus.userSig
-      });
-      
-      imStatus.isLogin = true;
-      uni.$emit('im_login_success');
+    try {
+      const { data: imSigData } = await tencentSigIm({ userId });
+      if (!imSigData?.userSig) { showToast('IM签名获取失败'); return false; }
+
+      this.imStatus.userId = userId;
+      this.imStatus.userSig = imSigData.userSig;
+      await this.timInstance.login({ userID: userId, userSig: imSigData.userSig });
+      this.imStatus.isLogin = true;
       return true;
     } catch (err) {
-      imStatus.isLogin = false;
-      showToast(`IM登录失败:${err.message || '签名异常'}`);
+      this.imStatus.isLogin = false;
+      console.error('IM登录失败:', err);
+      showToast(`IM登录失败：${err.message || '签名异常'}`);
       return false;
     }
   }
 
   /**
-   * 5. 拉取历史聊天记录【核心业务】
+   * 拉取历史聊天记录【分页加载】
    * @param {String} toUserId 对方用户ID
    * @param {Boolean} isLoadMore 是否加载更多
-   * @returns {Promise<Array>} 格式化后的消息列表
+   * @returns {Promise<Array>}
    */
   async getHistoryMessage(toUserId, isLoadMore = false) {
-    if (!imStatus.isLogin || !toUserId) return [];
-    chatCache.currentToUserId = toUserId;
-    
+    if (!this.imStatus.isLogin || !toUserId || !this.timInstance) return [];
+    this.chatCache.currentToUserId = toUserId;
+
     try {
-      const params = {
-        conversationID: `C2C${toUserId}`, // C2C单聊会话ID格式
+      const reqParams = {
+        conversationID: `C2C${toUserId}`,
         count: CONFIG.MSG_PAGE_SIZE,
-        nextReqMessageID: isLoadMore ? chatCache.lastMsgSeq : ''
+        nextReqMessageID: isLoadMore ? this.chatCache.lastMsgSeq : ''
       };
-      // 腾讯云IM拉取历史消息API
-      const { data: { messageList, nextReqMessageID } } = await timInstance.getMessageList(params);
-      
-      chatCache.lastMsgSeq = nextReqMessageID;
-      const formatMsg = this.formatMessageList(messageList);
-      chatCache.messageList = isLoadMore ? [...chatCache.messageList, ...formatMsg] : formatMsg;
-      return chatCache.messageList;
+      const { data } = await this.timInstance.getMessageList(reqParams);
+      this.chatCache.lastMsgSeq = data.nextReqMessageID || '';
+      const formatMsg = this.formatMessage(data.messageList || []);
+      this.chatCache.messageList = isLoadMore ? [...this.chatCache.messageList, ...formatMsg] : formatMsg;
+      return this.chatCache.messageList;
     } catch (err) {
+      console.error('拉取历史消息失败:', err);
       showToast('历史消息加载失败');
       return [];
     }
   }
 
   /**
-   * 6. 发送消息前置校验【必须调用】- 你的checkPolicy接口封装
+   * 发送消息前置校验【必调】- 你的接口完整适配
    * @param {String} content 消息内容
-   * @param {String} toUserId 对方用户ID
-   * @returns {Promise<Boolean>} 是否允许发送
+   * @param {String} toUserId 对方ID
+   * @returns {Promise<Boolean>}
    */
   async checkSendPolicy(content, toUserId) {
     const params = {
       content: content,
       expireSeconds: 0,
-      fromUserId: imStatus.userId,
+      fromUserId: this.imStatus.userId,
       ordered: true,
       toUserId: toUserId
     };
     try {
       const { data } = await checkPolicy(params);
-      if (data.allowed) {
-        return true;
-      } else {
-        // 校验不通过，根据limitType提示对应文案
-        const tipText = {
-          SENSITIVE: '消息包含敏感词，禁止发送',
-          FREE_LIMIT: '未下单，消息发送次数已达上限',
-          RATE_LIMIT: '发送频率过高，请稍后再试',
-          COMPLAINT_RESTRICT: '你已被投诉，暂时禁止发送消息',
-          BANNED: '账号已被封禁，无法发送消息'
-        }[data.limitType] || data.message || '发送失败，权限校验不通过';
-        showToast(tipText);
-        return false;
-      }
+      if (data?.allowed) return true;
+      const tipMap = {
+        SENSITIVE: '消息包含敏感词，禁止发送',
+        FREE_LIMIT: '未下单，消息发送次数已达上限',
+        RATE_LIMIT: '发送频率过高，请稍后再试',
+        COMPLAINT_RESTRICT: '你已被投诉，暂时禁止发送消息',
+        BANNED: '账号已被封禁，无法发送消息'
+      };
+      const tipText = tipMap[data.limitType] || data.message || '发送权限校验失败';
+      showToast(tipText);
+      return false;
     } catch (err) {
-      showToast('发送校验失败');
+      console.error('发送校验失败:', err);
+      showToast('发送校验失败，请重试');
       return false;
     }
   }
 
   /**
-   * 7. 发送文字消息【核心】- 带前置校验
-   * @param {String} text 文字内容
-   * @param {String} toUserId 对方用户ID
-   * @returns {Promise<Boolean>}
+   * 发送文字消息 ✅ 带校验
    */
   async sendTextMsg(text, toUserId) {
-    if (!text.trim() || !toUserId) return showToast('消息内容不能为空'), false;
-    // 前置校验：调用checkPolicy，不通过直接返回
-    const isAllow = await this.checkSendPolicy(text, toUserId);
+    const trimText = text.trim();
+    if (!trimText || !toUserId) { showToast('消息内容不能为空'); return false; }
+    const isAllow = await this.checkSendPolicy(trimText, toUserId);
     if (!isAllow) return false;
 
     try {
-      // 创建文字消息实例
-      const message = timInstance.createTextMessage({
+      const message = this.timInstance.createTextMessage({
         to: toUserId,
-        conversationType: timInstance.CONV_C2C,
-        payload: { text: text.trim() }
+        conversationType: TIM_CONST.CONV_C2C,
+        payload: { text: trimText }
       });
-      // 发送消息
-      await timInstance.sendMessage(message);
+      await this.timInstance.sendMessage(message);
       return true;
     } catch (err) {
+      console.error('文字消息发送失败:', err);
       showToast('文字消息发送失败');
       return false;
     }
   }
 
   /**
-   * 8. 发送图片消息【核心】- 带前置校验 + 自动上传腾讯云COS
-   * @param {String} toUserId 对方用户ID
-   * @returns {Promise<Boolean>}
+   * 发送图片消息 ✅ 带校验 + 自动上传COS
    */
   async sendImageMsg(toUserId) {
-    if (!toUserId) return showToast('参数异常'), false;
+    if (!toUserId) { showToast('参数异常'); return false; }
     const isAllow = await this.checkSendPolicy('图片消息', toUserId);
     if (!isAllow) return false;
 
     try {
-      // 选择图片(压缩+原图可选)
       const { tempFiles } = await uni.chooseImage({
         count: 1,
         sizeType: ['compressed'],
         sourceType: ['album', 'camera']
       });
-      // 创建图片消息，SDK自动上传腾讯云，无需自己处理COS
-      const message = timInstance.createImageMessage({
+      console.log(tempFiles);
+      
+      if (!tempFiles.length) return false;
+      const message = this.timInstance.createImageMessage({
         to: toUserId,
-        conversationType: timInstance.CONV_C2C,
+        conversationType: TIM_CONST.CONV_C2C,
         payload: { file: tempFiles[0] }
       });
-      await timInstance.sendMessage(message);
+      await this.timInstance.sendMessage(message);
       return true;
     } catch (err) {
+      console.error('图片消息发送失败:', err);
       showToast('图片发送失败');
       return false;
     }
   }
 
   /**
-   * 9. 发送语音消息【核心】- 带前置校验 + 录音+上传一体化
-   * @param {String} toUserId 对方用户ID
-   * @returns {Promise<Boolean>}
+   * 发送语音消息 ✅ 带校验 + 完整录音逻辑
    */
   async sendVoiceMsg(toUserId) {
-    if (!toUserId) return showToast('参数异常'), false;
+    if (!toUserId) { showToast('参数异常'); return false; }
     const isAllow = await this.checkSendPolicy('语音消息', toUserId);
     if (!isAllow) return false;
 
     return new Promise((resolve) => {
       const recorderManager = uni.getRecorderManager();
-      // 录音配置
       recorderManager.start({
         duration: CONFIG.VOICE_TIME_MAX * 1000,
-        format: 'mp3',
-        sampleRate: 16000
+        format: CONFIG.VOICE_FORMAT,
+        sampleRate: 16000,
+        numberOfChannels: 1
       });
-      // 录音结束回调
+
       recorderManager.onStop(async (res) => {
         try {
-          const message = timInstance.createSoundMessage({
+          const message = this.timInstance.createSoundMessage({
             to: toUserId,
-            conversationType: timInstance.CONV_C2C,
+            conversationType: TIM_CONST.CONV_C2C,
             payload: { file: res }
           });
-          await timInstance.sendMessage(message);
+          await this.timInstance.sendMessage(message);
           showToast('语音发送成功');
           resolve(true);
         } catch (err) {
+          console.error('语音消息发送失败:', err);
           showToast('语音发送失败');
           resolve(false);
         }
       });
-      // 监听用户主动停止录音
-      uni.$once('voice_stop', () => recorderManager.stop());
+
+      recorderManager.onError(() => {
+        showToast('录音失败，请重试');
+        resolve(false);
+      });
+
+      uni.$once('im_voice_stop', () => recorderManager.stop());
     });
   }
 
   /**
-   * 10. 集成TUICallKit - 发起音视频通话【核心】
-   * @param {String} toUserId 对方用户ID
-   * @param {Boolean} isVideo 是否视频通话(true=视频，false=语音)
-   * @returns {Promise<Boolean>}
+   * 发起音视频通话 ✅ TUICallKit完整集成
+   * @param {String} toUserId 对方ID
+   * @param {Boolean} isVideo true=视频 false=语音
    */
   async callUser(toUserId, isVideo = false) {
-    if (!imStatus.isLogin || !toUserId) return showToast('请先登录IM'), false;
+    if (!this.imStatus.isLogin || !toUserId || !this.callKitInstance) {
+      showToast('请先完成IM登录');
+      return false;
+    }
+
     try {
-      // 获取音视频专属签名
-      const { data: trtcData } = await tencentSigTrtc({ userId: imStatus.userId });
-      imStatus.trtcSig = trtcData.userSig;
-      
-      // 调用TUICallKit发起通话 (完全适配你给的github插件)
-      callKitInstance.call({
+      const { data: trtcData } = await tencentSigTrtc({ userId: this.imStatus.userId });
+      if (!trtcData?.userSig) { showToast('音视频签名获取失败'); return false; }
+      this.imStatus.trtcSig = trtcData.userSig;
+
+      this.callKitInstance.call({
         userID: toUserId,
-        type: isVideo ? 2 : 1, // 1=语音通话 2=视频通话
-        userSig: imStatus.trtcSig
+        type: isVideo ? 2 : 1,
+        userSig: this.imStatus.trtcSig
       });
       return true;
     } catch (err) {
-      showToast('通话发起失败');
+      console.error('发起通话失败:', err);
+      showToast('通话发起失败，请重试');
       return false;
     }
   }
 
   /**
-   * 工具方法：消息格式化、IM登出、新消息处理等
+   * ✅ 新增：对外暴露TIM实例的【推荐方法】- 最稳妥，统一入口
    */
-  formatMessageList(list) { /* 消息列表格式化，按需自定义，如时间/消息类型处理 */ return list.reverse(); }
-  handleNewMessage(list) { /* 实时消息处理，追加到当前会话列表 */ chatCache.messageList.push(...list); }
-  loginOutIm() { timInstance.logout(); imStatus.isLogin = false; uni.$emit('im_login_out'); }
-  getImStatus() { return imStatus; }
-  getChatCache() { return chatCache; }
+  getTimInstance() {
+    return this.timInstance;
+  }
+
+  /**
+   * ✅ 新增：对外暴露TUICallKit实例
+   */
+  getCallKitInstance() {
+    return this.callKitInstance;
+  }
+
+  /**
+   * 消息格式化处理
+   */
+  formatMessage(msgList) {
+    if (!msgList.length) return [];
+    return msgList.reverse().map(item => ({
+      ...item,
+      isSelf: item.from === this.imStatus.userId,
+      time: this.formatMsgTime(item.time)
+    }));
+  }
+
+  /**
+   * 处理实时接收的新消息
+   */
+  handleNewMessage(newMsgList) {
+    const formatMsg = this.formatMessage(newMsgList);
+    this.chatCache.messageList.push(...formatMsg);
+  }
+
+  /**
+   * 格式化消息时间
+   */
+  formatMsgTime(timestamp) {
+    const date = new Date(timestamp * 1000);
+    return `${date.getHours().toString().padStart(2,0)}:${date.getMinutes().toString().padStart(2,0)}`;
+  }
+
+  /**
+   * 退出IM登录
+   */
+  async loginOutIm() {
+    if (this.timInstance && this.imStatus.isLogin) {
+      await this.timInstance.logout();
+    }
+    this.imStatus.isLogin = false;
+    this.imStatus.userId = '';
+    this.imStatus.userSig = '';
+    this.chatCache.messageList = [];
+    this.chatCache.lastMsgSeq = '';
+    uni.$emit('im_logout');
+  }
+
+  // 暴露状态和缓存
+  getImStatus() { return { ...this.imStatus }; }
+  getChatCache() { return { ...this.chatCache }; }
 }
 
-// 全局导出单例，防止重复实例化
-export const TencentImSdk = new TencentIm();
+// 全局单例导出 + 异常兜底
+let TencentImSdk = null;
+try {
+  TencentImSdk = new TencentIm();
+} catch (err) {
+  console.error('IM单例初始化失败:', err);
+  TencentImSdk = {
+    loginIm: () => { showToast('IM初始化异常'); return false; },
+    getHistoryMessage: () => [],
+    sendTextMsg: () => false,
+    sendImageMsg: () => false,
+    sendVoiceMsg: () => false,
+    callUser: () => false,
+    loginOutIm: () => {},
+    getTimInstance: () => null,
+    timInstance: null
+  };
+}
+
+export { TencentImSdk };

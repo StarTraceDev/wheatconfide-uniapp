@@ -4,25 +4,23 @@
       <view class="id-card-content">
         <view class="title">身份认证</view>
         <view class="remark">仅用于身份实名核验，信息会严格保密</view>
-        
         <!-- 身份证上传区域 -->
         <view class="unload-card-box">
           <view class="upload-card-item" @click="uploadPhoto(1)">
             <image
-              :src="localData.idcardFront || '@/static/auth/id-card-front.png'"
+              :src="localData.idcardFront || '/static/auth/id-card-front.png'"
               class="img"
-            ></image>
+            />
             <view class="txt">身份证人像面</view>
           </view>
           <view class="upload-card-item" @click="uploadPhoto(2)">
             <image
-              :src="localData.idcardBackend || '@/static/auth/id-card-back.png'"
+              :src="localData.idcardBackend || '/static/auth/id-card-back.png'"
               class="img"
-            ></image>
+            />
             <view class="txt">身份证国徽面</view>
           </view>
         </view>
-
         <!-- 表单区域 -->
         <view class="id-card-form-content">
           <!-- 基本信息 -->
@@ -37,7 +35,6 @@
               />
             </view>
           </view>
-          
           <view class="form-item">
             <view class="label require">身份证号</view>
             <view class="content">
@@ -49,7 +46,6 @@
               />
             </view>
           </view>
-          
           <view class="form-item">
             <view class="label require">出生年月</view>
             <view class="content" @click="showTimePicker">
@@ -61,13 +57,12 @@
                 :params="timeParams"
                 mode="time"
                 @confirm="confirmBirthday"
-              ></u-picker>
+              />
             </view>
           </view>
-
           <!-- 个人形象照 -->
           <view class="upload-section">
-            <view class="label require">
+            <view class="label require requires">
               个人形象照
               <text class="sub-label">（用于个人主页封面，格式jpg/png，大小2M内）</text>
             </view>
@@ -80,9 +75,8 @@
               name="file"
               :action="uploadUrl"
               :maxCount="5"
-            ></u-upload>
+            />
           </view>
-
           <!-- 手持身份证件 -->
           <view class="form-item upload-with-image">
             <view class="upload-content">
@@ -96,11 +90,10 @@
                 name="file"
                 :action="uploadUrl"
                 :maxCount="1"
-              ></u-upload>
+              />
             </view>
-            <image src="/static/auth/hold-in-hand.png" class="example-image"></image>
+            <image src="/static/auth/hold-in-hand.png" class="example-image" />
           </view>
-
           <!-- 承诺书 -->
           <view class="form-item upload-with-image">
             <view class="upload-content">
@@ -114,44 +107,41 @@
                 name="file"
                 :action="uploadUrl"
                 :maxCount="1"
-              ></u-upload>
+              />
             </view>
             <view class="promise">
               <view class="template" @click="handleTemplate('手写承诺书')">
                 点击查看<text>《承诺书模板》</text>
               </view>
               <view class="promise-item" v-for="(item, index) in promiseRequirements" :key="index">
-                <image src="/static/auth/stars.png"></image>
+                <image src="/static/auth/stars.png" />
                 <view>{{ item }}</view>
               </view>
             </view>
           </view>
-
           <!-- 星座选择 -->
           <view class="form-item">
             <view class="label require">星座</view>
             <picker :range="stars" @change="starChange">
               <view class="content picker-content">
                 {{ localData.constellation || "请选择" }}
-                <uni-icons type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons>
+                <uni-icons type="right" size="14" color="rgba(0, 0, 0, 0.3)" />
               </view>
             </picker>
           </view>
-
           <!-- 地区选择 -->
           <view class="form-item">
             <view class="label require">所在地区</view>
             <view class="content" @click="chooseArea">
               {{ localData.address || "请选择" }}
-              <uni-icons type="right" size="14" color="rgba(0, 0, 0, 0.3)"></uni-icons>
+              <uni-icons type="right" size="14" color="rgba(0, 0, 0, 0.3)" />
             </view>
             <u-picker
               v-model="regionPicker"
               @confirm="confirmRegion"
               mode="region"
-            ></u-picker>
+            />
           </view>
-
           <!-- 个人签名 -->
           <view class="form-item user-sign">
             <view class="label">个人签名</view>
@@ -164,10 +154,9 @@
                 :clearable="false"
                 v-model="localData.signature"
                 class="signature-input"
-              ></uni-easyinput>
+              />
             </view>
           </view>
-
           <!-- 个人简介 -->
           <view class="form-item user-introduction">
             <view class="label">个人简介</view>
@@ -179,7 +168,7 @@
                 auto-height
                 :height="height"
                 placeholder="请输入个人简介"
-              ></u-input>
+              />
             </view>
           </view>
         </view>
@@ -189,12 +178,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, defineProps, watch } from "vue";
+import { ref, defineProps, watch, nextTick } from "vue";
 import { uploadFile } from "@/utils/common";
 import { onUnload } from "@dcloudio/uni-app";
 import { registerConsultantStep1 } from "@/common/api/consultant.js";
 import { registerListenerStep1 } from "@/common/api/listener.js";
-import { baseURL } from "@/utils/request";
 
 // 常量定义
 const STARS = [
@@ -218,24 +206,74 @@ const props = defineProps({
   },
 });
 
-console.log(props.modelValue, "props.modelValue - - - - - - - -  - ");
-
 const emit = defineEmits(["update:modelValue", "committed"]);
 
-// 响应式数据
-const localData = computed({
-  get: () => props.modelValue,
-  set: (value) => emit("update:modelValue", value),
+// 解析masterGallery的工具方法
+const parseMasterGallery = (val) => {
+  // 空值（新用户）返回空数组
+  if (!val || val === "[]" || val === "''") return [];
+  try {
+    // 解析字符串为数组
+    const parsed = JSON.parse(val);
+    // 确保是数组且每个项有url属性
+    return Array.isArray(parsed) 
+      ? parsed.map(item => ({ url: item.url || '' })).filter(item => item.url) 
+      : [];
+  } catch (e) {
+    // 解析失败返回空数组
+    return [];
+  }
+};
+
+// 核心：本地数据维护（重点处理masterGallery）
+const localData = ref({
+  ...props.modelValue,
+  // 初始化masterGallery：解析接口返回的字符串，无数据则为空数组（新用户）
+  masterGallery: parseMasterGallery(props.modelValue.masterGallery),
+  // 确保u-upload的fileList默认是数组
+  holdIdCardImg: props.modelValue.holdIdCardImg || [],
+  commitmentImg: props.modelValue.commitmentImg || []
 });
 
+// 标记是否为新用户（masterGallery初始为空）
+const isNewUser = ref(!props.modelValue.masterGallery || parseMasterGallery(props.modelValue.masterGallery).length === 0);
+
+// 监听props.modelValue变化，同步到本地（nextTick避免立即触发循环）
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    nextTick(() => {
+      const newMasterGallery = parseMasterGallery(newVal.masterGallery);
+      localData.value = {
+        ...newVal,
+        masterGallery: newMasterGallery,
+        holdIdCardImg: newVal.holdIdCardImg || [],
+        commitmentImg: newVal.commitmentImg || []
+      };
+      // 更新新用户标记
+      isNewUser.value = !newVal.masterGallery || newMasterGallery.length === 0;
+    });
+  },
+  { immediate: true, deep: true }
+);
+
+// 监听本地数据变化，延迟通知父组件（打破递归循环）
+watch(
+  localData,
+  (newVal) => {
+    nextTick(() => {
+      emit("update:modelValue", { ...newVal });
+    });
+  },
+  { deep: true }
+);
+
+// 响应式数据
 const birthdayShow = ref(false);
 const regionPicker = ref(false);
-const workTimeShow = ref(false);
 const height = ref(150);
-
 const token = uni.getStorageSync("token");
 const headers = ref({ token });
-// const uploadUrl = ref(baseURL + "/api/common/upload");
 const uploadUrl = ref("https://ceshi.maimiaoqingsu.com/api/common/upload");
 
 const timeParams = ref({
@@ -247,7 +285,6 @@ const timeParams = ref({
   second: false,
 });
 
-// 计算属性
 const stars = ref(STARS);
 const promiseRequirements = ref(PROMISE_REQUIREMENTS);
 
@@ -256,24 +293,28 @@ const showTimePicker = () => {
   birthdayShow.value = true;
 };
 
+// 选择生日
 const confirmBirthday = (e) => {
   localData.value.birthdate = `${e.year}-${e.month}`;
 };
 
-const confirmRegion = (e) => {
-  localData.value.address = e.province.name + e.city.name + e.area.name;
-};
-
+// 打开地区选择
 const chooseArea = () => {
   regionPicker.value = true;
 };
 
+// 选择地区
+const confirmRegion = (e) => {
+  localData.value.address = e.province.name + e.city.name + e.area.name;
+};
+
+// 选择星座
 const starChange = (e) => {
   localData.value.constellation = stars.value[e.detail.value];
 };
 
+// 查看承诺书
 const handleTemplate = (type) => {
-  // 处理承诺书模板查看逻辑
   uni.navigateTo({
     url: `/pages/webview/webview?type=${type}`,
   });
@@ -281,37 +322,40 @@ const handleTemplate = (type) => {
 
 // 上传相关方法
 const beforeUpload = () => {
-  // 上传前校验逻辑
+  // 上传前校验逻辑（可补充文件大小/格式校验）
 };
 
+// 上传完成-个人形象照（确保生成[{url: xxx}]格式）
 const uploadComplete1 = (data, index, lists) => {
-   if (lists && lists[index]) {
+  if (lists && lists[index]) {
+    // 确保url赋值正确
     lists[index].url = data.data?.url || '';
-    localData.value.masterGallery = [...lists]; // 触发响应式更新
+    // 覆盖masterGallery，确保是[{url: xxx}]格式
+    localData.value.masterGallery = lists.map(item => ({ url: item.url || '' })).filter(item => item.url);
   }
 };
 
 const uploadComplete2 = (data, index, lists) => {
-  localData.value.holdIdCardImg = data.data.url;
+  lists[index].url = data.data?.url || '';
+  localData.value.holdIdCardImg = lists;
 };
 
 const uploadComplete3 = (data, index, lists) => {
-  localData.value.commitmentImg = data.data.url;
+  lists[index].url = data.data?.url || '';
+  localData.value.commitmentImg = lists;
 };
 
+// 删除图片（同步更新masterGallery）
 const deletePic = (field, index, lists) => {
-  console.log(`删除${field}第${index}张图片`, lists);
-  localData.value[field] = lists;
+  localData.value[field] = lists.map(item => ({ url: item.url || '' })).filter(item => item.url);
 };
 
+// 上传照片
 const uploadPhoto = async (type) => {
   try {
     const res = await uni.chooseImage({ count: 1 });
     const filePath = res.tempFilePaths[0];
-    
-    // const uploadRes = await uploadFile(baseURL + "/api/common/upload", filePath);
-    const uploadRes = await uploadFile("https://ceshi.maimiaoqingsu.com/api/common/upload", filePath);
-    
+    const uploadRes = await uploadFile(uploadUrl.value, filePath);
     
     if (uploadRes.code === 0) {
       if (type === 1) {
@@ -331,75 +375,75 @@ const uploadPhoto = async (type) => {
 
 // 提交表单
 const submit = async () => {
+  // 完善必填项校验
   const requiredFields = [
     { field: localData.value.idcardFront, message: "请上传身份证人像页" },
     { field: localData.value.idcardBackend, message: "请上传身份证国徽页" },
     { field: localData.value.name, message: "请输入姓名" },
     { field: localData.value.idcardNum, message: "请输入身份证号" },
-    { field: localData.value.masterGallery?.length, message: "请上传个人形象照" },
+    { field: localData.value.birthdate, message: "请选择出生年月" },
+    // 核心：masterGallery校验 - 新用户必须上传，老用户只要有数据即可
+    { 
+      field: localData.value.masterGallery.length, 
+      message: "请上传个人形象照",
+      validate: () => !isNewUser.value ? true : localData.value.masterGallery.length > 0
+    },
     { field: localData.value.holdIdCardImg?.length, message: "请上传手持身份证件照" },
-    { field: localData.value.commitmentImg?.length, message: "请上传手写承诺书照" }
+    { field: localData.value.commitmentImg?.length, message: "请上传手写承诺书照" },
+    { field: localData.value.constellation, message: "请选择星座" },
+    { field: localData.value.address, message: "请选择所在地区" }
   ];
 
-  for (const { field, message } of requiredFields) {
-    if (!field) {
-      uni.showToast({ title: message, icon: "none" });
+  // 校验必填项
+  for (const item of requiredFields) {
+    // 自定义校验逻辑
+    if (item.validate) {
+      if (!item.validate()) {
+        uni.showToast({ title: item.message, icon: "none" });
+        return;
+      }
+    } else if (!item.field) {
+      uni.showToast({ title: item.message, icon: "none" });
       return;
     }
   }
-  const { masterGallery, commitmentImg, holdIdCardImg } = localData.value
-  if(typeof commitmentImg != 'string' || typeof holdIdCardImg != 'string') {
-    localData.value.commitmentImg = commitmentImg[0].url;
-    localData.value.holdIdCardImg = holdIdCardImg[0].url;
-  }
-  // 处理图库数据
-  const processedGallery = Array.isArray(masterGallery) 
-    ? masterGallery.map(item => item.url).filter(url => !!url) 
-    : [];
+
+  // 构造提交数据（重点：masterGallery转字符串，覆盖原有数据）
   const submitData = {
     ...localData.value,
-    masterGallery: JSON.stringify(processedGallery),
+    // masterGallery转JSON字符串，确保覆盖接口原有数据
+    masterGallery: JSON.stringify(localData.value.masterGallery),
     consultantType: props.consultantType,
     idCardNo: localData.value.idcardNum,
     idCardFrontImg: localData.value.idcardFront,
     idCardBackImg: localData.value.idcardBackend,
+    holdIdCardImg: localData.value.holdIdCardImg[0]?.url || '',
+    commitmentImg: localData.value.commitmentImg[0]?.url || ''
   };
 
   uni.showLoading({ title: "提交中" });
 
   try {
-    const api = props.consultantType == 1 ? registerConsultantStep1 : registerListenerStep1;
+    console.log(submitData, props.consultantType);
+    
+    const api = props.consultantType == '1' ? registerConsultantStep1 : registerListenerStep1;
     const res = await api(submitData);
     
     uni.hideLoading();
-    localData.value = res.data;
+    localData.value = { ...localData.value, ...res.data };
     emit("committed", "");
   } catch (error) {
     uni.hideLoading();
     console.error("提交失败:", error);
+    uni.showToast({ title: "提交失败，请重试", icon: "error" });
   }
 };
 
 // 暴露方法
 defineExpose({ submit });
 
-// 监听器
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    try {
-      const masterGallery = JSON.parse(newVal.masterGallery || "[]");
-      localData.value.masterGallery = Array.isArray(masterGalleryData) ? masterGalleryData.map(url => ({ url })) 
-        : [];
-    } catch (e) {
-      localData.value.masterGallery = [];
-    }
-  },
-  { immediate: true, deep: true }
-);
-
 onUnload(() => {
-  // 清理逻辑
+  // 清理逻辑（如需要可补充）
 });
 </script>
 
@@ -497,7 +541,7 @@ onUnload(() => {
           color: rgba(0, 0, 0, 0.85);
 
           .sub-label {
-            font-size: 22rpx;
+            font-size: 20rpx;
             color: rgba(0, 0, 0, 0.5);
           }
 
@@ -506,6 +550,10 @@ onUnload(() => {
             color: #fa5151;
             position: absolute;
             right: -20rpx;
+          }
+
+          &.requires::after {
+            left: 145rpx;
           }
         }
 

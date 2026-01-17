@@ -1307,10 +1307,16 @@ uni-checkbox .uni-checkbox-input {
   color: #000;
 }
 .settled-box .scroll-view[data-v-2afa2121] {
-  padding-top: calc(var(--2afa2121-statusBarHeight) + 0.625rem);
+  padding: calc(var(--2afa2121-statusBarHeight) + 1.875rem ) 0 4.6875rem;
   z-index: 1;
   background-color: #f4f6f8;
-  min-height: 100vh;
+  -webkit-overflow-scrolling: auto;
+  /* 关闭iOS弹性滚动 */
+  overflow-scrolling: auto;
+  touch-action: pan-x;
+  /* 仅允许横向滑动，禁止纵向下拉操作 */
+  box-sizing: border-box;
+  height: 100vh;
 }
 .settled-box .scroll-view .history-loaded[data-v-2afa2121] {
   text-align: center;
@@ -1339,6 +1345,15 @@ uni-checkbox .uni-checkbox-input {
   max-width: 15.625rem;
   word-wrap: break-word;
 }
+.settled-box .scroll-view .message-item-right .right-content .image-content[data-v-2afa2121] {
+  margin-right: 0.625rem;
+  max-width: 9.375rem;
+  max-height: 9.375rem;
+  min-width: 6.25rem;
+  min-height: 6.25rem;
+  word-wrap: break-word;
+  border-radius: 0.625rem;
+}
 .settled-box .scroll-view .message-item-left[data-v-2afa2121] {
   display: flex;
   justify-content: flex-end;
@@ -1359,4 +1374,40 @@ uni-checkbox .uni-checkbox-input {
   margin-right: 0.625rem;
   max-width: 15.625rem;
   word-wrap: break-word;
+}
+.settled-box .scroll-view .message-item-left .left-content .image-content[data-v-2afa2121] {
+  margin-right: 0.625rem;
+  max-width: 9.375rem;
+  max-height: 9.375rem;
+  min-width: 6.25rem;
+  min-height: 6.25rem;
+  word-wrap: break-word;
+  border-radius: 0.625rem;
+}
+.message-item-left[data-v-2afa2121],
+.message-item-right[data-v-2afa2121] {
+  padding: 0.625rem;
+}
+.record-button[data-v-2afa2121] {
+  width: 100%;
+  height: 2.1875rem;
+  font-size: 0.78125rem;
+  line-height: 2.1875rem;
+  border-radius: 40px;
+  margin: 0.625rem;
+  margin-left: 0;
+  background: #fff;
+  border: none;
+}
+.popup-content[data-v-2afa2121] {
+  display: flex;
+  background-color: #fff;
+  align-items: center;
+  flex-direction: column;
+}
+.popup-content .popup-item[data-v-2afa2121] {
+  margin: 0.625rem 0;
+}
+.icon-action[data-v-2afa2121] {
+  margin-right: 0.3125rem;
 }

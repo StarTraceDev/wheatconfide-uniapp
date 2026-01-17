@@ -10,6 +10,10 @@
         <view class="children-content">
           <view class="top-bg"></view>
           <view class="current-component">
+            <view class="component-tip" v-if="consultant.status == 1 || consultant.status == 3">
+              <uni-icons type="notification-filled" size="20" color="#fd3e3c" />
+              <view>{{ consultant.status == 1 ? '您上传的身份证照片不清晰，请修改后再提交' : '' }}</view>
+            </view>
             <view class="step-box">
               <view class="step-content">
                 <view
@@ -116,6 +120,16 @@
         <view><text>您的资料未通过审核~</text></view>
       </view>
     </view>
+    <uni-popup ref="popup" type="message">
+      <view class="popup-content">
+        <view class="content-title">您的申请已提交成功</view>
+        <view class="content-text">稍后可进入申请页面查看审核进度</view>
+        <view class="content-btn"
+          :style="{ background: consultantType == 1 ? '#35CA95' : '#EB9516' }"
+          @click="closePopup"
+        >返回“我的”</view>
+      </view>
+    </uni-popup>
   </view>
 </template>
 <script setup>
@@ -124,11 +138,11 @@ import { useGlobalDataStore } from "@/stores/global.js";
 import { onLoad } from "@dcloudio/uni-app";
 import { getConsultantByUserId } from "@/common/api/consultant.js";
 import { getListenerByUserId } from "@/common/api/listener.js";
-import { saveConsultant } from "@/common/api/consultant.js";
+import { registerConsultantStep3 } from "@/common/api/consultant";
+import { registerListenerStep3 } from "@/common/api/listener.js";
 import idCard from "./components/idCard.vue";
 import career from "./components/career.vue";
 import certificate from "./components/certificate.vue";
-import { constant } from "lodash-es";
 
 const globalStore = useGlobalDataStore();
 const statusBarHeight = ref(globalStore.statusBarHeight + "px");
@@ -144,17 +158,24 @@ const userInfo = ref('');
 onLoad((options) => {
   consultantType.value = options.type;
   userInfo.value = JSON.parse(options.userInfo);
-  console.log(userInfo.value);
   uni.setNavigationBarTitle({ title: "认证" });
   getConsultantDetail();
 });
+
+const feedbackPrompt = (status) => {
+  const promptMap = {
+    1: "您的入驻申请正在审核中，请耐心等待......",
+    2: "已满",
+  }
+  return promptMap[status]
+}
 
 const getConsultantDetail = async () => {
   if (consultantType.value == 1) {
     let resp = await getConsultantByUserId({ userId: userInfo.value });
     const data = {
       ...resp.data,
-        idcardNum: resp.data.sysUser.idCardNo,
+      idcardNum: resp.data.sysUser.idCardNo,
       idcardFront: resp.data.sysUser.idCardFrontImg,
       idcardBackend: resp.data.sysUser.idCardBackImg,
       occupationId: resp.data.sysUser.occupationId
@@ -171,12 +192,11 @@ const getConsultantDetail = async () => {
 };
 
 const processingImg = (val) => {
-  const { masterGallery, commitmentImg, holdIdCardImg } = val;
-  const master = masterGallery ? JSON.parse(masterGallery) : [];
-  const commitment = formatImages([commitmentImg]);
-  const holdIdCard = formatImages([holdIdCardImg]);
+  const { commitmentImg, holdIdCardImg } = val;
+  const commitment = commitmentImg ? formatImages([commitmentImg]) : [];
+  const holdIdCard = holdIdCardImg ? formatImages([holdIdCardImg]) : [];
+  
   const data = Object.assign(val, {
-    masterGallery: master,
     commitmentImg: commitment,
     holdIdCardImg: holdIdCard,
   });
@@ -217,7 +237,8 @@ const nextStepHandler = () => {
   }
 };
 
-const step1Commit = () => {
+const step1Commit = (from) => {
+  consultant.value = from;
   step.value = step.value + 1;
 };
 
@@ -226,10 +247,7 @@ const setp2Commit = () => {
 };
 
 const finalCommit = () => {
-  uni.showToast({
-    title: "资料已提交，请等待审核",
-  });
-  uni.navigateBack();
+  popup.value.open('center');
 };
 
 const prevStepHandler = () => {
@@ -247,6 +265,8 @@ watch(step, (newVal, oldVal) => {
   }
 });
 
+const popup = ref(null);
+
 const examineHandler = async () => {
   finalStep.value?.submit();
   const { certificateList, educationList, careerList, consultantType } = finalStep.value.fromDataCertificate
@@ -259,13 +279,21 @@ const examineHandler = async () => {
     consultantType,
     certificates: formData.value.certificate.files,
   };
-  try{
-    let res = await saveConsultant(submitData);
-  } catch (err) {
-    console.error("提交失败：", err);
-    uni.showToast({ title: "提交失败", icon: "error" });
-  }
+  // try{
+  //   // const api = consultantType == 1 ? registerConsultantStep3 : registerListenerStep3
+  //   // let res = await api(submitData);
+  // } catch (err) {
+  //   console.error("提交失败：", err);
+  //   uni.showToast({ title: "提交失败", icon: "error" });
+  // }
 };
+
+// 关闭
+const closePopup = () => {
+  uni.switchTab({
+    url: '/pages/my/index'
+  });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -306,7 +334,20 @@ $statusBarHeight: v-bind(statusBarHeight);
           z-index: 2;
           height: 100%;
           padding-bottom: 220rpx;
-
+          .component-tip{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10rpx;
+            view{
+              width: 80%;
+              font-size: 23rpx;
+              color: #778580;
+              padding: 5rpx 15rpx;
+              border-radius: 20rpx;
+              background-color: #DCF5EC;
+            }
+          }
           .step-box {
             width: 750rpx;
             height: 96rpx;
@@ -432,5 +473,30 @@ $statusBarHeight: v-bind(statusBarHeight);
       }
     }
   }
+}
+.popup-content{
+  background-color: #fff;
+  padding: 90rpx 90rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20rpx;
+  .content-title{
+    font-size: 35rpx;
+  }
+  .content-text{
+    margin: 20rpx 0 50rpx;
+    font-size: 20rpx;
+    color: #9E9E9E;
+  }
+  .content-btn{
+    color: #fff;
+    font-size: 23rpx;
+    padding: 10rpx 30rpx;
+    border-radius: 10rpx;
+  }
+}
+::v-deep .uni-page-head{
+  z-index: 0 !important;
 }
 </style>

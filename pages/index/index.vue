@@ -232,7 +232,7 @@
               @click="switchClick(2)"
             >热门倾听师</view>
           </view>
-          <view class="more" @click="switchTabsFn(2)"
+          <view class="more" @click="switchTabsFn()"
             >更多<uni-icons
               type="right"
               size="12"
@@ -396,7 +396,7 @@
   </view>
 </template>
 <script setup>
-import { getUserInfo } from "@/common/api/apis.js";
+import { getUserInfo, getMallSwitch } from "@/common/api/apis.js";
 import { getArticleList } from "@/common/api/article.js";
 import { getListenerList } from "@/common/api/listener.js";
 import { getAnswerList } from "@/common/api/answer.js";
@@ -408,8 +408,7 @@ import ConsultTeacherListItem from "@/components/Consult-Teacher-List-Item.vue";
 import RecommendArticleItem from "@/components/Recommend-Article-Item";
 import ForumItem from "@/components/Forum-Item";
 import { useGlobalDataStore } from "@/stores/global.js";
-import { useTIM } from "@/utils/useTIM.js"; // 引入腾讯云TIM
-import { tencentSigIm, getConsultantList } from "@/common/api/consultant.js";
+import { getConsultantList } from "@/common/api/consultant.js";
 import { postCategoryList, getProductsByCategory } from "@/common/api/shoppingMall.js";
 
 const banners = ref([]);
@@ -418,7 +417,7 @@ const globalStore = useGlobalDataStore();
 const statusBarHeight = ref(globalStore.statusBarHeight + 20 + "rpx");
 const searchContentHeight = ref(globalStore.statusBarHeight + 56 + "rpx");
 const searchSwiperHeight = ref(globalStore.statusBarHeight + 95 + "rpx");
-const { loginTIM } = useTIM('1600116083');
+// const { loginTIM } = useTIM('1600116083');
 
 let scrollTop = ref(0);
 const listenerMenu = ref([]);
@@ -441,24 +440,8 @@ onShow(() => {
   }
   currentUser.value = uni.$currentUser;
   getBanners();
+  getMallSwitchApi();
 });
-
-// 登陆腾讯云IM
-const chatLogin = async (id) => {
-  try {
-    const { data } = await tencentSigIm({ userId: id });
-    const success = await loginTIM({ userId: id, userSig: data.userSig });
-    if (success) {
-      await waitSDKReady();
-      if (!tim.value) {
-        console.error('TIM 实例仍未初始化');
-        return;
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 const getBanners = async () => {
   let res = await bannerList();
@@ -470,16 +453,9 @@ const categoryList = ref([]);
 const currentCategoryId = ref(0);
 const getProductsByCategoryApi = async () => {
   let res = await postCategoryList();
-  let flatList = [];
-  res.data.forEach(topItem => {
-    flatList.push(topItem);
-    if (topItem.children && topItem.children.length > 0) {
-      flatList = [...flatList, ...topItem.children];
-    }
-  })
-  currentCategoryId.value = flatList[0].id
-  loadGoodsByCategory(flatList[0].id)
-  categoryList.value = flatList;
+  currentCategoryId.value = res.data[0].id
+  loadGoodsByCategory(res.data[0].id)
+  categoryList.value = res.data;
 }
 // 点击分类
 const handleCategoryClick = (category) =>{
@@ -610,13 +586,6 @@ const openTeacherFn = (type, val) => {
   });
 };
 
-const switchTabsFn = (type) => {
-  let url = type == 1 ? "/pages/consult/index" : "/pages/confide/index";
-  uni.switchTab({
-    url,
-  });
-};
-
 const openForumHandler = () => {
   uni.navigateTo({
     url: "/pages/forum/index/index",
@@ -648,21 +617,34 @@ const switchClick = (index) => {
   handover.value = index
 }
 
+const switchTabsFn = () => {
+  let url = handover.value == 1 ? "/pages/consult/index" : "/pages/confide/index";
+  uni.switchTab({
+    url,
+  });
+};
+
+// 获取倾听
 const getListener = async () => {
-  let res = await getListenerList(data.listParams);
+  let res = await getListenerList({
+    ...data.listParams,
+    params: {
+      isPreferred: 1
+    }
+  });
   data.listenerList = res.data.records;
 };
 
+// 获取咨询师
 const getConsultantListApi = async () => {
   let res = await getConsultantList({
     ...data.listParams,
     params: {
       current: 1,
-      size: 10
+      size: 10,
+      isPreferred: 1
     },
   });
-  console.log(res.data.records);
-  
   data.consultantList = res.data.records;
 }
 
@@ -733,7 +715,6 @@ onMounted(() => {
   getAnswer();
   getConsultantListApi();
   getProductsByCategoryApi();
-  chatLogin(uni.$currentUser.id);
   let cMenuList = uni.getStorageSync("consultantMenu");
   if (!cMenuList) {
     getConsultantMenu();
@@ -759,6 +740,17 @@ onMounted(() => {
     listenerMenu.value = showMenus;
   }
 });
+
+// 获取商城开关
+const getMallSwitchApi = async () => {
+  try {
+    const { data } = await getMallSwitch();
+    uni.setStorageSync('mallSwitch', data);
+    globalStore.setMallSwitch(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
 </script>
 <style lang="scss" scoped>
 .home-box {

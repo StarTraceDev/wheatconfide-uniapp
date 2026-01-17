@@ -1,3 +1,6 @@
+
+
+
 <template>
   <view class="message-box">
     <uni-nav-bar
@@ -33,16 +36,6 @@
             :class="activeIndex == 1 ? 'active' : ''"
             @click="tabActiveHandler(1)"
           >
-            <!-- <uni-badge
-              class="uni-badge-left-margin"
-              :text="noticeNum"
-              v-if="noticeNum && noticeNum > 0"
-              absolute="rightTop"
-              :max-num="99"
-            >
-              <text class="txt">通知</text>
-            </uni-badge>
-            <text class="txt" v-else>通知</text> -->
             <text class="txt">通知</text>
           </view>
         </view>
@@ -89,22 +82,12 @@
               <view class="content-item-right">
                 <view class="content-user-date">
                   <view class="name">{{ item.realName }}</view>
-                  <view class="date">{{
-                    formatDate(item.lastMessage.lastTime)
-                  }}</view>
+                  <view class="date">{{ formatDate(item.lastMessage?.lastTime || item.lastMessageTime) }}</view>
                 </view>
                 <view class="item-info-bottom-item">
                   <view class="item-info-top_content">
-                    <text class="unread-text">
-                      <!-- {{
-                        conversation.lastMessage.read === false &&
-                        conversation.lastMessage.senderId === currentUser.id
-                          ? "[未读]"
-                          : ""
-                      }} -->
-                      <!-- [未读] -->
-                    </text>
-                    <text>{{ messageType(item.lastMessage.type) }}</text>
+                    <text class="unread-text" v-if="item.unreadCount > 0">[未读]</text>
+                    <text>{{ messageType(item.lastMessage?.type || item.lastMsgType) }}</text>
                   </view>
                   <view class="item-info-bottom_action" @click.stop="showAction(item)">
                     <uni-icons
@@ -122,7 +105,7 @@
       </view>
     </view>
 
-    <!-- <view class="message-content notice-content" v-else>
+    <view class="message-content notice-content" v-else>
       <view class="scroll-content-box">
         <scroll-view scroll-y class="scroll-content" :show-scrollbar="false">
           <view class="content-item" v-for="i in 1" :key="i">
@@ -143,7 +126,8 @@
           </view>
         </scroll-view>
       </view>
-    </view> -->
+    </view>
+    
     <uni-popup
       ref="conversationPopup"
       type="center"
@@ -178,119 +162,150 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { formatDate } from "@/lib/utils";
-import { useTIM } from "@/utils/useTIM.js";
 import { onShow } from "@dcloudio/uni-app";
 import { useGlobalDataStore } from "@/stores/global.js";
-import { tencentSigIm, postAdminList } from "@/common/api/consultant.js";
+import { postAdminList } from "@/common/api/consultant.js";
 import CustomerService from "@/components/Customer-Service.vue";
+import { TencentImSdk } from "@/utils/imSdk.js"; // 替换原useTIM，导入封装的IM SDK
 
 // ====================  全局顶部 =====================
 const globalStore = useGlobalDataStore();
 const statusBarHeight = ref(globalStore.statusBarHeight + "px");
 
-// ====================  TIM 会话列表 =====================
-const SDKAppID = 1600116083;
-const {
-  tim,
-  loading,
-  errorMsg,
-  isLogin,
-  sdkReady,
-  loginTIM,
-  waitSDKReady,
-  onTIMEvent,
-} = useTIM(SDKAppID);
+// ====================  IM 核心变量 =====================
+const conversations = ref([]); // 会话列表
+const privateChantNum = ref(0); // 未读总数
+const activeIndex = ref(0); // 顶部tab：0=私聊 1=通知
+const contentTabLists = ref([
+  { id: 1, label: "全部" },
+  { id: 2, label: "服务中" },
+  { id: 3, label: "服务过" },
+]);
+const contentTabActiveIndex = ref(1); // 内容分类tab
+const conversationPopup = ref(null); // 会话操作弹窗
+const currentConversation = ref(null); // 当前操作的会话
+const alreadReadPopup = ref(null); // 全部已读弹窗
+const serviceRef = ref(null); // 客服组件ref
+const currentUser = ref(uni.getStorageSync("currentUser") || {}); // 当前用户信息
 
-const testUser = {
-  userId: uni.getStorageSync("currentUser").id,
-  userSig: "",
-};
-
+// ====================  IM 初始化 & 登录 =====================
+// 初始化IM并登录
 const initIM = async () => {
-  try {
-    await getConversationList();
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-const conversations = ref([]);
-const getConversationList = async () => {
-  await waitSDKReady();
-  try {
-    const message = await tim.value.getConversationList({ hasUnreadCount: true }); // count: 20, // 获取20条会话
-    const unread = await tim.value.getTotalUnreadMessageCount();
-    userList(message.data.conversationList);
-    // conversations.value = message.data.conversationList;
-    // conversationList.value = res.data.conversationList
-  } catch (err) {
-    console.error("获取会话列表失败：", err);
-  }
-};
-
-const userList = async (list) => {
-  if (!Array.isArray(list) || list.length === 0) {
-    conversations.value = [];
-    console.log('list为空，无需处理');
+  if (!currentUser.value.id) {
+    uni.showToast({ title: "用户信息缺失", icon: "none" });
     return;
   }
+  // 调用imSdk中的登录方法
+  const loginResult = await TencentImSdk.loginIm(currentUser.value.id);
+  
+  if (loginResult) {
+    await getConversationList(); // 登录成功后获取会话列表
+  } else {
+    uni.showToast({ title: "IM登录失败", icon: "none" });
+  }
+};
+
+// ====================  会话列表相关 =====================
+// 获取会话列表（核心）
+const getConversationList = async () => {
   try {
-    const idList = list.map(item => item.toAccount).filter(id => id);
+    // 获取TIM实例
+    const timInstance = TencentImSdk.getTimInstance(); 
+    if (!timInstance) {
+      console.warn("TIM实例未初始化完成，无法获取会话列表");
+      return;
+    }
+    // 获取会话列表
+    const { data } = await timInstance.getConversationList();
+    
+    const conversationList = data.conversationList || [];
+    // 计算总未读消息数
+    const totalUnread = conversationList.reduce((total, item) => {
+      return total + (item.unreadCount || 0);
+    }, 0);
+    
+    // 赋值未读数
+    privateChantNum.value = totalUnread;
+    await handleConversationUserInfo(conversationList);
+
+  } catch (err) {
+    console.error("获取会话列表失败：", err);
+    conversations.value = [];
+    privateChantNum.value = 0;
+  }
+};
+
+// 处理会话列表，拼接用户信息（头像、昵称）
+const handleConversationUserInfo = async (list) => {
+  if (!Array.isArray(list) || list.length == 0) {
+    conversations.value = [];
+    return;
+  }
+
+  try {
+    // 提取对方用户ID列表
+    const idList = list.map(item => {
+      // C2C会话：toAccount是对方ID；群聊可根据业务调整
+      return item.type === 'C2C' ? item.toAccount : item.groupID;
+    }).filter(id => id);
+    
     if (idList.length === 0) {
       conversations.value = [...list];
       return;
     }
-    const { data } = await postAdminList({
-      params: {
-        id: idList
-      }
-    });
+
+    // 调用接口获取用户信息
+    const { data } = await postAdminList({ params: { id: idList } });
     const recordMap = {};
     const records = Array.isArray(data.records) ? data.records : [data.records];
+
     records.forEach(item => {
-      if (item.id) { // 确保id存在
+      if (item.id) {
         recordMap[item.id] = {
           avatar: item.avatar,
           realName: item.realName
         };
       }
     });
+
+    // 拼接会话列表和用户信息
     const processedList = list.map(item => {
-      const matched = recordMap[item.toAccount] || {};
+      const targetId = item.type === 'C2C' ? item.toAccount : item.groupID;
+      const userInfo = recordMap[targetId] || {};
       return {
         ...item,
-        avatar: matched.avatar || '', 
-        realName: matched.realName || ''
+        avatar: userInfo.avatar || '',
+        realName: userInfo.realName || '未知用户',
+        // 兼容消息时间和类型字段
+        lastMessageTime: item.lastMessage?.time * 1000 || Date.now(),
+        lastMsgType: item.lastMessage?.type || 'TIMTextElem'
       };
     });
-    console.log(processedList);
-    
+
+    // 按置顶+时间排序（置顶的在前，然后按最后消息时间降序）
+    processedList.sort((a, b) => {
+      if (a.isPinned !== b.isPinned) {
+        return a.isPinned ? -1 : 1; // 置顶的排前面
+      }
+      return b.lastMessageTime - a.lastMessageTime; // 最新消息排前面
+    });
     
     conversations.value = processedList;
   } catch (err) {
-    console.error('请求postAdminList失败：', err);
-    // conversationList.value = [...list];
+    console.error('获取用户信息失败：', err);
+    conversations.value = list.map(item => ({
+      ...item,
+      avatar: '',
+      realName: '未知用户',
+      lastMessageTime: item.lastMessage?.time * 1000 || Date.now(),
+      lastMsgType: item.lastMessage?.type || 'TIMTextElem'
+    }));
   }
 };
-    
 
-onMounted(() => {
-  onTIMEvent(TIM.EVENT.SDK_READY, () => {
-    if (isLogin) {
-      getConversationList();
-    }
-  });
-  onTIMEvent(TIM.EVENT.CONVERSATION_LIST_UPDATED, (event) => {
-    conversationList.value = event.data.conversationList;
-  });
-  if (isLogin && sdkReady) {
-    getConversationList();
-  }
-});
-// ====
-
+// 消息类型转换
 const messageType = (val) => {
   switch (val) {
     case "TIMTextElem":
@@ -306,114 +321,160 @@ const messageType = (val) => {
   }
 };
 
-const privateChantNum = ref(0);
-const noticeNum = ref(101);
-const activeIndex = ref(0);
+// ====================  事件监听 =====================
+// 监听IM事件（SDK就绪、新消息、会话更新等）
+const registerIMEvents = () => {
+  // SDK登录成功/就绪
+  uni.$on('im_login_success', () => {
+    getConversationList();
+  });
 
-// =================== 客服弹窗 ===================
-const serviceRef = ref(null);
-const customerService = () => {
-  serviceRef.value.open();
+  // 新消息接收
+  uni.$on('im_message_received', () => {
+    getConversationList(); // 收到新消息刷新会话列表
+  });
+
+  // 账号被踢下线
+  uni.$on('im_kicked_out', () => {
+    uni.showToast({ title: '账号已在其他设备登录', icon: 'none' });
+    conversations.value = [];
+    privateChantNum.value = 0;
+  });
 };
-// ===================
 
+// 移除IM事件监听（防止内存泄漏）
+const unregisterIMEvents = () => {
+  uni.$off('im_login_success');
+  uni.$off('im_message_received');
+  uni.$off('im_kicked_out');
+};
+
+// ====================  交互逻辑 =====================
+// 顶部tab切换（私聊/通知）
 const tabActiveHandler = (i) => {
-  i != activeIndex.value ? (activeIndex.value = i) : "";
+  if (i !== activeIndex.value) {
+    activeIndex.value = i;
+  }
 };
 
-const contentTabLists = ref([
-  { id: 1, label: "全部" },
-  { id: 2, label: "服务中" },
-  { id: 3, label: "服务过" },
-]);
-const contentTabActiveIndex = ref(1);
-
+// 内容分类tab切换（全部/服务中/服务过）
 const contentTabHandler = (i) => {
-  i != contentTabActiveIndex.value ? (contentTabActiveIndex.value = i) : "";
+  if (i !== contentTabActiveIndex.value) {
+    contentTabActiveIndex.value = i;
+    // 可根据分类过滤会话列表，此处预留逻辑
+    // if (i === 2) { ... } else if (i === 3) { ... }
+  }
 };
-const currentUser = ref({});
 
-onShow(() => {
-  initIM();
-  currentUser.value = uni.getStorageSync("currentUser");
-});
-
-// ================== 会话列表操作 ==================
-const conversationPopup = ref(null);
-const currentConversation = ref(null);
-
+// 打开会话操作弹窗（置顶/删除）
 const showAction = (conversation) => {
   currentConversation.value = conversation;
   conversationPopup.value?.open();
 };
 
-//会话置顶
-const topConversation = () => {
+// 置顶/取消置顶会话
+const topConversation = async () => {
+  if (!currentConversation.value) return;
   conversationPopup.value?.close();
-  const { isPinned, conversationID } = currentConversation.value;
-  let description = isPinned ? "取消置顶" : "置顶";
+  
+  const timInstance = TencentImSdk.timInstance || TencentImSdk._timInstance;
+  if (!timInstance) return;
 
-  let promise = tim.value.pinConversation({
-    conversationID,
-    isPinned: !isPinned,
-  });
-  promise.then(() => {
-    getConversationList();
-    uni.showToast({
-      title: description + "成功",
-      icon: "none",
+  const { conversationID, isPinned } = currentConversation.value;
+  const description = isPinned ? "取消置顶" : "置顶";
+  
+  try {
+    await timInstance.pinConversation({
+      conversationID,
+      isPinned: !isPinned
     });
-  })
+    await getConversationList(); // 刷新会话列表
+    uni.showToast({ title: `${description}成功`, icon: "none" });
+  } catch (err) {
+    console.error(`${description}失败：`, err);
+    uni.showToast({ title: `${description}失败`, icon: "none" });
+  }
 };
-// 删除会话
-const deleteConversation = () => {
-  conversationPopup.value?.close();
-  const { conversationID } = currentConversation.value;
 
+// 删除会话
+const deleteConversation = async () => {
+  if (!currentConversation.value) return;
+  conversationPopup.value?.close();
+  
+  const timInstance = TencentImSdk.timInstance || TencentImSdk._timInstance;
+  if (!timInstance) return;
+
+  const { conversationID } = currentConversation.value;
   uni.showModal({
     content: "确认删除这条会话吗？",
-    success: (res) => {
+    success: async (res) => {
       if (res.confirm) {
-        let promise = tim.value.deleteConversation(conversationID);
-        promise.then(() => {
-          getConversationList();
-          uni.showToast({
-            title: "删除成功",
-            icon: "none",
-          });
-        })
+        try {
+          await timInstance.deleteConversation(conversationID);
+          await getConversationList(); // 刷新会话列表
+          uni.showToast({ title: "删除成功", icon: "none" });
+        } catch (err) {
+          console.error("删除会话失败：", err);
+          uni.showToast({ title: "删除失败", icon: "none" });
+        }
       }
     },
   });
 };
 
-// 全部已读
-const alreadReadPopup = ref(null);
+// 打开全部已读确认弹窗
 const alreadReadHandler = () => {
   alreadReadPopup.value?.open();
 };
+
+// 取消全部已读操作
 const cancelHandler = () => {
   alreadReadPopup.value?.close();
 };
 
-const confirmHandler = () => {
-  let promise = tim.value.setAllMessageRead()
-  promise.then(() => {
-    getConversationList();
-    uni.showToast({
-      title: "操作成功",
-    });
-  })
-  
+// 确认全部已读
+const confirmHandler = async () => {
+  const timInstance = TencentImSdk.timInstance || TencentImSdk._timInstance;
+  if (!timInstance) return;
+
+  try {
+    await timInstance.setAllMessageRead();
+    await getConversationList(); // 刷新会话列表
+    privateChantNum.value = 0; // 重置未读数
+    uni.showToast({ title: "操作成功", icon: "success" });
+  } catch (err) {
+    console.error("标记全部已读失败：", err);
+    uni.showToast({ title: "操作失败", icon: "none" });
+  }
   cancelHandler();
 };
 
-const chatHandler = (val) => {
-  const { userProfile, realName, avatar } = val;
+// 点击会话进入聊天页面
+const chatHandler = (item) => {
+  const toUserId = item.type === 'C2C' ? item.userProfile.userID : item.groupID;
   uni.navigateTo({
-    url: `/pages/message/private-chat?to=${userProfile.userID}&name=${realName} &avatar=${avatar}`,
+    url: `/pages/message/private-chat?to=${toUserId}&name=${item.realName}&avatar=${item.avatar}`,
   });
 };
+
+// 打开客服弹窗
+const customerService = () => {
+  serviceRef.value?.open();
+};
+
+// ====================  生命周期 =====================
+onMounted(() => {
+  registerIMEvents(); // 注册IM事件
+});
+
+onUnmounted(() => {
+  unregisterIMEvents(); // 移除IM事件监听
+});
+
+onShow(() => {
+  currentUser.value = uni.getStorageSync("currentUser") || {};
+  initIM(); // 页面显示时初始化IM
+});
 </script>
 
 <style scoped lang="scss">
@@ -569,11 +630,8 @@ $statusBarHeight: v-bind(statusBarHeight);
                 color: #a1a6aa;
                 width: 528rpx;
                 overflow: hidden;
-                /* 隐藏溢出的文本 */
                 text-overflow: ellipsis;
-                /* 显示省略号 */
                 white-space: nowrap;
-                /* 禁止文本换行 */
                 margin-top: 12rpx;
                 height: 40rpx;
                 line-height: 40rpx;

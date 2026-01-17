@@ -112,12 +112,10 @@
               <view class="point-list">
                 <view
                   class="point-item"
-                  v-for="(item, index) in item.serviceTypes"
+                  v-for="(item, index) in item.serviceTypes.slice(0, 3)"
                   :key="index"
                   >{{ item }}</view
                 >
-                <!-- <view class="point-item">压力管理</view>
-                <view class="point-item">婚姻家庭</view> -->
               </view>
             </view>
             <view class="doctor-info-1">
@@ -129,7 +127,7 @@
               </view>
               <view class="address">
                 <image src="/static/consult/address.png"></image
-                ><text>{{ item.address }}</text>
+                ><text>{{ formatAddress(item.address) }}</text>
               </view>
             </view>
           </view>
@@ -171,7 +169,7 @@
 import ListFiltering from "@/components/List-Filtering.vue";
 import { ref, reactive, watch, getCurrentInstance, nextTick, onMounted } from "vue";
 import { getListenerList } from "@/common/api/listener.js";
-import { getGenerationByBirthdate } from "@/lib/utils.js";
+import { getGenerationByBirthdate, formatAddress } from "@/lib/utils.js";
 import { cities } from "@/common/api/apis.js";
 import { consultMenus } from "@/common/api/consultant.js";
 import { useGlobalDataStore } from "@/stores/global.js";
@@ -186,7 +184,7 @@ const showCityBox = ref(false);
 const statusBarHeight = ref(globalStore.statusBarHeight + "rpx");
 const banners = ref([]);
 const sticky = ref([
-  { id: 1, name: "困扰", open: false },
+  { id: 1, name: "倾听方向", open: false },
   { id: 2, name: "城市", open: false },
   { id: 3, name: "价格", open: false },
   { id: 4, name: "排序", open: false },

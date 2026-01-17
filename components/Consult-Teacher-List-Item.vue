@@ -3,7 +3,6 @@
 		<view class="card">
 			<view class="avatar-wrap">
 				<image class="avatar" :src="avatarImg(info)" mode="aspectFill"></image>
-				<!-- <image class="avatar" :src="'https://s.maimiaoqingsu.com/a624ea3f-e71f-4d00-b94d-1cc157055449.JPG'" mode="aspectFill"></image> -->
 				<view class="name-title">{{info.name}}</view>
 			</view>
 			<view class="info-wrap">
@@ -31,10 +30,13 @@
 				</view>
 				<view class="price-button">
 					<view class="contact">
-						<uni-icons type="location" size="20" color="#9da6a4"></uni-icons>
-						<view>{{ info.address }}</view>
+						<image src="/static/consult/address.png"></image>
+						<view>{{ formatAddress(info.address) }}</view>
 					</view>
-					<view v-if="info.quoteList[0]" style="font-size: 38rpx;color: red;">¥{{ info.quoteList[0].quoteAmount }}</view>
+					<view v-if="info.quoteList[0]" class="price-info">
+            <view class="price-unit">¥</view>
+            <view>{{ info.quoteList[0].quoteAmount }}</view>
+          </view>
 				</view>
 			</view>
 		</view>
@@ -42,21 +44,22 @@
 </template>
 
 <script setup>
-	import { getGenerationByBirthdate } from "@/lib/utils.js";
-	import { defineProps } from "vue";
-	const props = defineProps({
-		info:{
-			type:Object
-		}
-	})
+import { formatAddress } from "@/lib/utils.js";
+import { defineProps } from "vue";
 
-	const avatarImg = (item) => {
-  const { masterGallery } = item
-  if(!masterGallery) {
-    return '/static/consult/user.png'
-  } else {
-    return JSON.parse(masterGallery)[0]
-  }
+const props = defineProps({
+	info:{
+		type:Object
+	}
+})
+
+const avatarImg = (item) => {
+const { masterGallery } = item
+if(!masterGallery) {
+		return '/static/consult/user.png'
+	} else {
+		return JSON.parse(masterGallery)[0].url
+	}
 }
 </script>
 
@@ -136,9 +139,9 @@
 
 				.price-button {
 					display: flex;
-					padding-top: 30rpx;
+					padding-top: 20rpx;
 					justify-content: space-between;
-				    align-items: center;
+					align-items: center;
 					.price {
 						color: #FA5151;
 						font-size: 40rpx;
@@ -151,15 +154,24 @@
 				
 					.contact {
 						display: flex;
-						// width: 140rpx;
-						// height: 60rpx;
-						// border-radius: 60rpx;
-						// /* 自动布局 */
-						// background: #35CA95;
-						// text-align: center;
-						// line-height: 60rpx;
-						font-size: 24rpx;
+						font-size: 20rpx;
 						color: #9da6a4;
+						image {
+							width: 25rpx;
+							height: 25rpx;
+						}
+					}
+					.price-info{
+						display: flex;
+						align-items: flex-end;
+						font-size: 38rpx;
+						color: red;
+						.price-unit{
+							color: red;
+							font-size: 25rpx;
+							margin-right: 3rpx;
+							margin-bottom: 5rpx;
+						}
 					}
 				}
 			}

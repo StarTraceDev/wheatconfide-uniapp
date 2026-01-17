@@ -8,6 +8,7 @@
       :show-scrollbar="false"
       scroll-with-animation
       id="scrollView"
+      @scroll="onScroll"
     >
       <uni-nav-bar
         :backgroundColor="scrollTop > 15 ? '#fff' : 'transparent'"
@@ -19,12 +20,20 @@
       >
         <template v-slot:left>
           <view class="right">
-            <uni-icons
-              type="left"
-              size="24"
-              v-if="scrollTop > 15"
-              @click="backFn"
-            ></uni-icons>
+           <view v-if="scrollTop > 15" class="nav-right">
+              <uni-icons
+                type="left"
+                size="24"
+                @click="backFn"
+              />
+              <view class="line">
+                <img :src="JSON.parse(listenerInfo?.masterGallery || '[]')[0]?.url" />
+                <view>
+                  <view class="line-name">{{ listenerInfo?.name }}</view>
+                  <view class="line-job">{{ listenerInfo?.occupationName }}</view>
+                </view>
+              </view>
+            </view>
             <image
               @click="backFn"
               src="/static/common/back_circle.png"
@@ -36,12 +45,13 @@
         </template>
         <template v-slot:right>
           <view class="right">
-            <image
-              src="/static/confide/share.png"
-              style="width: 40rpx; height: 40rpx"
-              v-if="scrollTop > 15"
-            >
-            </image>
+            <view v-if="scrollTop > 15" class="nav-right">
+              <view class="share" @click="shareFn">+ 关注</view>
+              <image
+                src="/static/confide/share.png"
+                style="width: 40rpx; height: 40rpx"
+              />
+            </view>
             <image
               src="/static/common/share_circle.png"
               style="width: 56rpx; height: 56rpx"
@@ -63,7 +73,7 @@
               :duration="500"
             >
               <swiper-item
-                v-for="(item, index) in JSON.parse(listenerInfo.masterGallery)"
+                v-for="(item, index) in JSON.parse(listenerInfo?.masterGallery || '[]')"
                 :key="index"
                 class="swiper-item"
               >
@@ -79,9 +89,8 @@
         <view class="consult-detail-info">
           <view class="detail-item-line-1">
             <view class="name">
-              <text class="name-a">{{ listenerInfo.name }}</text>
-              <text class="name-b">{{ listenerInfo.major }}</text>
-              <!-- <text class="name-c">90后</text> -->
+              <text class="name-a">{{ listenerInfo?.name }}</text>
+              <text v-if="listenerInfo?.occupationName" class="name-b">{{ listenerInfo?.occupationName }}</text>
             </view>
             <view class="money">
               <image src="/static/common/yellow-follow.png" class="img"></image>
@@ -90,13 +99,13 @@
           </view>
           <view class="detail-item-line-2">
             <text
-              >{{ listenerInfo.address }} |
-              {{getGenerationByBirthdate(listenerInfo.birthdate) }} |
-              {{ listenerInfo.constellation }}</text
+              >{{ getCityFromAddress(listenerInfo?.address) }} |
+              {{getGenerationByBirthdate(listenerInfo?.birthdate) }} |
+              {{ listenerInfo?.constellation }}</text
             >
           </view>
           <view class="detail-item-line-3">
-            {{ listenerInfo.signature }}
+            {{ listenerInfo?.signature }}
           </view>
 
           <view class="detail-item-line-4">
@@ -104,28 +113,28 @@
               <view class="list">
                 <view class="item">
                   <view>
-                    <text class="num">{{ expData.retainedCustomers }}</text>
+                    <text class="num">{{ expData?.retainedCustomers || 0 }}</text>
                     <text class="unit">次</text>
                   </view>
                   <view class="txt">服务人次</view>
                 </view>
                 <view class="item">
                   <view>
-                    <text class="num">{{ expData.listenHours }}</text>
+                    <text class="num">{{ expData?.listenHours || 0 }}</text>
                     <text class="unit">小时</text>
                   </view>
                   <view class="txt">倾听时长</view>
                 </view>
                 <view class="item">
                   <view>
-                    <text class="num">{{ expData.retainedCustomers }}</text>
+                    <text class="num">{{ expData?.retainedCustomers || 0 }}</text>
                     <text class="unit">次</text>
                   </view>
                   <view class="txt">回头客</view>
                 </view>
                 <view class="item">
                   <view>
-                    <text class="num">{{ expData.rating }}</text>
+                    <text class="num">{{ expData?.rating || 0 }}</text>
                     <text class="unit">分</text>
                   </view>
                   <view class="txt">综合评分</view>
@@ -188,7 +197,7 @@
           <view class="detail-item-line-6" id="tab-2">
             <view class="content">
               <view class="title">个人介绍</view>
-              <view class="info"> {{ listenerInfo.profile }}</view>
+              <view class="info"> {{ listenerInfo?.profile }}</view>
             </view>
           </view>
 
@@ -197,7 +206,7 @@
               <view class="info" :style="{'max-height': maxHeight, overflow: 'hidden' }">
                 <view
                   class="certificate-detail"
-                  v-if="listenerInfo.certificateList"
+                  v-if="listenerInfo?.certificateList && listenerInfo.certificateList.length"
                   v-for="(item, index) in listenerInfo.certificateList"
                   :key="index"
                 >
@@ -212,7 +221,7 @@
                 </view>
                 <view
                   class="eduication-detail"
-                  v-if="listenerInfo.educationList"
+                  v-if="listenerInfo?.educationList && listenerInfo.educationList.length"
                   v-for="(item, index) in listenerInfo.educationList"
                   :key="index"
                 >
@@ -230,7 +239,7 @@
                   <view class="training">
                     <view class="training-title">伦理培训</view>
                     <view class="training-timer"
-                      >{{ stepList.length }}项培训，累计40小时</view
+                      >{{ stepList?.length }}项培训，累计40小时</view
                     >
                   </view>
                   <view class="step-box">
@@ -251,7 +260,7 @@
             <view class="content">
               <view class="title">擅长领域</view>
               <view class="info">
-                <view style="display: flex;flex-direction: row;" v-for="(item,index) in listenerInfo.serviceTypes" :key="index">
+                <view style="display: flex;flex-direction: row;" v-for="(item,index) in listenerInfo?.serviceTypes || []" :key="index">
                 {{item}}
                 <view class="detail-title"></view>
                 <view class="detail-content">沟通不畅、社交恐惧、社交技巧、人际冲突、不合群、人际边界、社会适应难、信任危机、设有关系</view>
@@ -264,7 +273,8 @@
                     margin-right: 10rpx;
                     margin-bottom: 10rpx;
                   "
-                  v-for="(item, index) in listenerInfo.serviceTypes"
+                  v-for="(item, index) in listenerInfo?.serviceTypes || []"
+                  :key="index"
                 >
                   {{ item }}
                 </text>
@@ -282,7 +292,7 @@
           <view class="detail-item-line-6 detail-item-line-9" id="tab-5">
             <view class="content">
               <view class="title">
-                <view class="txt">评价<text>({{evaluationList.total}})</text></view>
+                <view class="txt">评价<text>({{evaluationList?.total || 0}})</text></view>
                 <view class="more" @click="openEvaluate"
                   >查看更多真实评价<uni-icons
                     type="right"
@@ -301,7 +311,7 @@
                   <view class="second">
                     <view class="second-item">
                       <text class="txt-1">真实评价</text>
-                      <text class="txt-2">{{evaluationList.total}}条</text>
+                      <text class="txt-2">{{evaluationList?.total || 0}}条</text>
                     </view>
                     <view class="second-item">
                       <text class="txt-1">用户推荐</text>
@@ -311,36 +321,39 @@
                 </view>
 
                 <view class="comment-list">
-                  <view class="comment-item" v-for="(item, index) in evaluationList.records" :key="item.id">
-                    <view class="user-box">
-                      <view class="user-info">
-                        <image src="/static/my/profile.png" class="img"></image>
-                        <text class="txt">{{ item.nickname }}</text>
+                  <view v-if="evaluationList?.records?.length">
+                    <view class="comment-item" v-for="(item, index) in evaluationList.records.slice(0, 3)" :key="item.id">
+                      <view class="user-box">
+                        <view class="user-info">
+                          <image src="/static/my/profile.png" class="img"></image>
+                          <text class="txt">{{ item.nickname }}</text>
+                        </view>
+                        <view class="star"
+                          ><uni-rate
+                            :disabled="true"
+                            disabledColor="#FFC300"
+                            :value="item.star"
+                            size="12"
+                          />
+                        </view>
                       </view>
-                      <view class="star"
-                        ><uni-rate
-                          :disabled="true"
-                          disabledColor="#FFC300"
-                          :value="item.star"
-                          size="12"
-                        />
+                      <view class="comment-content">
+                        <mote-lines-divide :line="3" expandText="展开" foldHint="收起">
+                          {{ item.content }}
+                        </mote-lines-divide>
                       </view>
-                    </view>
-                    <view class="comment-content">
-                      <mote-lines-divide :line="3" expandText="展开" foldHint="收起">
-												{{ item.content }}
-											</mote-lines-divide>
-                    </view>
-                    <view class="tags" v-for="(tag, index) in handleTagStr(item.tags)" :key="index">
-                      <text class="tag-item">{{ tag }}</text>
-                    </view>
-                    <view class="theme-date">
-                      <view class="theme">
-                        咨询主题：<text class="txt">心理压抑</text>
+                      <view class="tags" v-for="(tag, index) in handleTagStr(item.tags)" :key="index">
+                        <text class="tag-item">{{ tag }}</text>
                       </view>
-                      <view class="date">{{ item.createTime }}</view>
+                      <view class="theme-date">
+                        <view class="theme">
+                          咨询主题：<text class="txt">心理压抑</text>
+                        </view>
+                        <view class="date">{{ item.createTime }}</view>
+                      </view>
                     </view>
                   </view>
+                  <view v-else style="margin-top: 10rpx;text-align: center;">暂无咨询感受</view>
                 </view>
               </view>
             </view>
@@ -359,7 +372,7 @@
 import { ref, nextTick, onMounted, getCurrentInstance } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useGlobalDataStore } from "@/stores/global.js";
-import { handleCareerList, getGenerationByBirthdate } from "@/lib/utils.js";
+import { handleCareerList, getCityFromAddress, getGenerationByBirthdate } from "@/lib/utils.js";
 import { getCommentByTargetUserId } from "@/common/api/worry.js";
 import {
   getListenerById,
@@ -374,7 +387,24 @@ const statusBarHeight = ref(globalStore.statusBarHeight + "px");
 const scrollTop = ref(0);
 const tabIndex = ref(0);
 const fixedActive = ref(false);
-const listenerInfo = ref();
+// 初始化listenerInfo，给所有用到的属性设置默认值，避免undefined报错
+const listenerInfo = ref({
+  masterGallery: '[]',
+  name: '',
+  occupationName: '',
+  address: '',
+  birthdate: '',
+  constellation: '',
+  signature: '',
+  profile: '',
+  certificateList: [],
+  educationList: [],
+  serviceTypes: [],
+  careerList: [],
+  id: '',
+  userId: '',
+  avatar: ''
+});
 const maxHeight = ref('832rpx');
 const instance = getCurrentInstance();
 const top = ref(0);
@@ -412,6 +442,12 @@ const backFn = () => {
   });
 };
 
+// 分享方法补全（避免点击报错）
+const shareFn = () => {
+  // 可补充分享逻辑，暂留空
+  console.log('点击关注/分享');
+};
+
 const tabsList = ref([
   {
     label: "服务",
@@ -442,14 +478,23 @@ const tabsList = ref([
 
 const stepList = ref([]);
 // 评价
-const evaluationList = ref([])
+const evaluationList = ref({
+  total: 0,
+  records: []
+});
 const getCommentByTargetUserIdApi = async (id) => {
-  let { data } = await getCommentByTargetUserId({ targetUserId: id, page: 1, pageSize: 10 });
-  evaluationList.value = data
-  tabsList.value[4].label = `评价(${data.total})`
-}
+  try {
+    let { data } = await getCommentByTargetUserId({ targetUserId: id, page: 1, pageSize: 10 });
+    evaluationList.value = data || { total: 0, records: [] };
+    tabsList.value[4].label = `评价(${evaluationList.value.total || 0})`;
+  } catch (e) {
+    console.error('获取评价列表失败：', e);
+    evaluationList.value = { total: 0, records: [] };
+    tabsList.value[4].label = `评价(0)`;
+  }
+};
 
-const stepActive = ref(stepList.value.length);
+const stepActive = ref(0);
 const openEvaluate = () => {
   uni.navigateTo({
     url: `/pages/evaluate/evaluate?userId=${userIds.value}`,
@@ -460,37 +505,76 @@ const openEvaluate = () => {
  * 获取详情
  */
 const getListenerInfo = async (userId) => {
-  let res = await getListenerById({
-    userId,
-  });
-  listenerInfo.value = res.data;
-  console.log(res.data);
-  
-  stepList.value = handleCareerList(res.data.careerList);
+  try {
+    let res = await getListenerById({
+      userId,
+    });
+    // 接口返回空时兜底为空对象，合并默认值避免属性丢失
+    listenerInfo.value = { ...listenerInfo.value, ...(res.data || {}) };
+    console.log(res.data);
+    // 处理职业经历列表，兜底空数组
+    stepList.value = handleCareerList(listenerInfo.value?.careerList || []);
+    // 更新stepActive
+    stepActive.value = stepList.value.length;
+  } catch (e) {
+    console.error('获取倾听师信息失败：', e);
+    // 报错时重置为默认值
+    listenerInfo.value = {
+      masterGallery: '[]',
+      name: '',
+      occupationName: '',
+      address: '',
+      birthdate: '',
+      constellation: '',
+      signature: '',
+      profile: '',
+      certificateList: [],
+      educationList: [],
+      serviceTypes: [],
+      careerList: [],
+      id: '',
+      userId: '',
+      avatar: ''
+    };
+    stepList.value = [];
+    stepActive.value = 0;
+  }
 };
 
 const service = ref({});
-const expData = ref({});
+const expData = ref({
+  retainedCustomers: 0,
+  listenHours: 0,
+  rating: 0
+});
 const consultInfo = async (id) => {
   try {
     const info = await getCommentInfo({ id });
     const list = await getCommentList({ id, page: 1, count: 10 });
     const exp = await getServiceExperience({ id });
-    service.value = info.data;
-    expData.value = exp.data;
+    service.value = info.data || {};
+    expData.value = exp.data || { retainedCustomers: 0, listenHours: 0, rating: 0 };
     console.log(info, list, exp, "info");
-  } catch (e) {}
+  } catch (e) {
+    console.error('获取咨询信息失败：', e);
+    service.value = {};
+    expData.value = { retainedCustomers: 0, listenHours: 0, rating: 0 };
+  }
 };
 
 const openReservation = () => {
-  const { userId, name, avatar } = listenerInfo.value;
+  // 加容错，避免listenerInfo为空时报错
+  const { userId, name, avatar, id } = listenerInfo.value || {};
+  if (!userId) return uni.showToast({ title: '数据加载中，请稍后', icon: 'none' });
   uni.navigateTo({
-    url: `/pages/payment/payment-records?id=${listenerInfo.value.id}&userId=${userId}&name=${name}&avatar=${avatar}`,
+    url: `/pages/payment/payment-records?id=${id}&userId=${userId}&name=${name}&avatar=${avatar}`,
   });
 };
 
 const toChat = () => {
-  const { userId, name, avatar } = listenerInfo.value;
+  // 加容错，避免listenerInfo为空时报错
+  const { userId, name, avatar } = listenerInfo.value || {};
+  if (!userId) return uni.showToast({ title: '数据加载中，请稍后', icon: 'none' });
   uni.navigateTo({
     url: `/pages/message/private-chat?to=${userId}&name=${name}&avatar=${avatar}`,
   });
@@ -498,6 +582,10 @@ const toChat = () => {
 
 const handleTagStr = (tagStr) => {
   return (tagStr ?? '').trim().split(',').filter(tag => tag.trim());
+};
+// 同步 scrollTop 和实际滚动位置
+const onScroll = (e) => {
+  scrollTop.value = e.detail.scrollTop;
 };
 </script>
 
@@ -509,13 +597,16 @@ const handleTagStr = (tagStr) => {
   height: auto;
   background-color: #f4f6f8;
 
+
   .scroll-content {
     height: calc(100vh - 108rpx);
+
 
     .consult-detail-content {
       width: 100vw;
       position: absolute;
       top: 0px;
+
 
       .header {
         .header-bar {
@@ -527,10 +618,12 @@ const handleTagStr = (tagStr) => {
         }
       }
 
+
       .headerActive {
         background-color: #fff;
       }
     }
+
 
     .consult-detail-content {
       .swiper-content {
@@ -538,9 +631,11 @@ const handleTagStr = (tagStr) => {
           width: 100vw;
           height: 590rpx;
 
+
           .swiper {
             width: 100vw;
             height: 590rpx;
+
 
             .swiper-item {
               width: 100vw;
@@ -548,8 +643,10 @@ const handleTagStr = (tagStr) => {
               backdrop-filter: blur(133px);
             }
 
+
             ::v-deep .uni-swiper-dots {
               bottom: 100rpx !important;
+
 
               .uni-swiper-dot {
                 width: 6px;
@@ -557,6 +654,7 @@ const handleTagStr = (tagStr) => {
                 border-radius: 3px;
                 background: rgba(255, 255, 255, 0.16);
               }
+
 
               .uni-swiper-dot-active {
                 background: #ffffff;
@@ -566,9 +664,10 @@ const handleTagStr = (tagStr) => {
         }
       }
 
+
       .consult-detail-info {
         width: 100vw;
-        background: linear-gradient(180deg, #ffe8b9 1%, #fff 2%, #f4f6f8 33%);
+        background: linear-gradient(180deg, #ffe8b9 2%, #fff 6%, #f4f6f8 33%);
         height: auto;
         border-top-right-radius: 40rpx;
         border-top-left-radius: 40rpx;
@@ -576,11 +675,13 @@ const handleTagStr = (tagStr) => {
         position: relative;
         z-index: 1;
 
+
         .detail-item-line-1 {
           padding: 32rpx;
           display: flex;
           justify-content: space-between;
           align-items: center;
+
 
           .name {
             font-size: 48rpx;
@@ -590,11 +691,12 @@ const handleTagStr = (tagStr) => {
             display: flex;
             align-items: center;
 
+
             .name-a,
-            .name-b,
-            .name-c {
+            .name-b {
               margin-right: 12rpx;
             }
+
 
             .name-b {
               font-size: 22rpx;
@@ -607,16 +709,9 @@ const handleTagStr = (tagStr) => {
               padding: 8rpx 16rpx;
             }
 
-            .name-c {
-              border-radius: 18rpx;
-              background: #dfe1f7;
-              font-size: 22rpx;
-              font-weight: 500;
-              line-height: 22rpx;
-              color: #000000;
-              padding: 8rpx 16rpx;
-            }
+
           }
+
 
           .money {
             font-size: 24rpx;
@@ -626,10 +721,12 @@ const handleTagStr = (tagStr) => {
             flex-direction: row;
             align-items: center;
 
+
             .img {
               width: 38rpx;
               height: 32rpx;
             }
+
 
             .txt {
               padding-left: 10rpx;
@@ -637,11 +734,13 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-2 {
           font-size: 26rpx;
           line-height: 26rpx;
           padding: 0rpx 32rpx;
           color: rgba(0, 0, 0, 0.85);
+
 
           text:not(:last-of-type)::after {
             position: relative;
@@ -652,6 +751,7 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-3 {
           padding: 0rpx 32rpx;
           margin-top: 24rpx;
@@ -659,10 +759,12 @@ const handleTagStr = (tagStr) => {
           color: rgba(0, 0, 0, 0.85);
         }
 
+
         .detail-item-line-4 {
           display: flex;
           justify-content: center;
           margin-top: 40rpx;
+
 
           .content {
             width: 686rpx;
@@ -677,6 +779,7 @@ const handleTagStr = (tagStr) => {
             -ms-overflow-style: none;
             overflow: -moz-scrollbars-none;
 
+
             .tips {
               position: absolute;
               left: 0px;
@@ -690,11 +793,13 @@ const handleTagStr = (tagStr) => {
               background: linear-gradient(270deg, #fdd496 0%, #fcf6ec 95%);
               border-top-left-radius: 16rpx;
 
+
               image {
                 width: 20rpx;
                 height: 20rpx;
                 padding-right: 10rpx;
               }
+
 
               text {
                 font-size: 22rpx;
@@ -703,6 +808,7 @@ const handleTagStr = (tagStr) => {
                 color: rgba(0, 0, 0, 0.85);
               }
             }
+
 
             .list {
               padding: 0rpx 36rpx;
@@ -715,11 +821,14 @@ const handleTagStr = (tagStr) => {
               -ms-overflow-style: none;
               /* IE 和 Edge */
 
+
               .item {
                 text-align: center;
                 padding-top: 74rpx;
 
+
                 flex-shrink: 0;
+
 
                 .num {
                   font-size: 36rpx;
@@ -727,16 +836,19 @@ const handleTagStr = (tagStr) => {
                   font-weight: 600;
                 }
 
+
                 .unit {
                   font-size: 20rpx;
                   color: rgba(0, 0, 0, 0.85);
                 }
+
 
                 .txt {
                   font-size: 22rpx;
                   color: rgba(0, 0, 0, 0.5);
                 }
               }
+
 
               .item:not(:last-of-type) {
                 margin-right: 60rpx;
@@ -745,10 +857,12 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-5 {
           margin-top: 60rpx;
           display: flex;
           justify-content: center;
+
 
           .tabs {
             width: 686rpx;
@@ -759,6 +873,7 @@ const handleTagStr = (tagStr) => {
             /* Firefox */
             -ms-overflow-style: none;
             justify-content: space-between;
+
 
             /* IE 和 Edge */
             .tab-item {
@@ -774,14 +889,17 @@ const handleTagStr = (tagStr) => {
               justify-content: center;
             }
 
+
             .tab-item:not(:last-of-type) {
               margin-right: 30rpx;
             }
+
 
             .active {
               color: #212528;
               font-size: 32rpx;
               font-weight: 600;
+
 
               &::after {
                 position: absolute;
@@ -796,6 +914,7 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .tabsFixed {
           width: 100vw;
           position: fixed;
@@ -808,11 +927,14 @@ const handleTagStr = (tagStr) => {
           align-items: center;
         }
 
+
         .detail-item-line-6 {
-          margin-top: 60rpx;
+          margin-top: 20rpx;
+
 
           display: flex;
           justify-content: center;
+
 
           .content {
             width: 686rpx;
@@ -821,6 +943,7 @@ const handleTagStr = (tagStr) => {
             border-radius: 20rpx;
             padding-top: 32rpx;
 
+
             .title {
               font-size: 30rpx;
               font-weight: 500;
@@ -828,6 +951,7 @@ const handleTagStr = (tagStr) => {
               color: #212528;
               padding-left: 28rpx;
             }
+
 
             .info {
               font-size: 26rpx;
@@ -840,12 +964,15 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .tab5 {
           margin-top: 20rpx;
+
 
           .tab5-content {
             .info {
               padding: 0;
+
 
               .voice-box {
                 display: flex;
@@ -860,11 +987,13 @@ const handleTagStr = (tagStr) => {
                 padding: 0rpx 32rpx;
                 margin-top: 20rpx;
 
+
                 .voice-info {
                   .title {
                     font-size: 32rpx;
                     font-weight: 500;
                     color: #000000;
+
 
                     .money {
                       color: #fa5151;
@@ -872,17 +1001,20 @@ const handleTagStr = (tagStr) => {
                       padding: 0rpx 8rpx 0rpx 16rpx;
                     }
 
+
                     .unit {
                       color: #fa5151;
                       font-size: 20rpx;
                     }
                   }
 
+
                   .txt {
                     color: rgba(0, 0, 0, 0.5);
                     font-size: 24rpx;
                   }
                 }
+
 
                 .voice-img {
                   .img {
@@ -895,9 +1027,11 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-7 {
           .content {
             padding: 40rpx 0rpx;
+
 
             .info {
               .detail {
@@ -906,6 +1040,7 @@ const handleTagStr = (tagStr) => {
                 background: rgba(235, 149, 22, 0.1);
                 padding: 24rpx 26rpx;
 
+
                 .detail-title {
                   font-size: 26rpx;
                   font-weight: 500;
@@ -913,6 +1048,7 @@ const handleTagStr = (tagStr) => {
                   letter-spacing: 0px;
                   color: #eb9516;
                 }
+
 
                 .detail-content {
                   font-size: 24rpx;
@@ -924,10 +1060,12 @@ const handleTagStr = (tagStr) => {
               }
             }
 
+
             .tags {
               display: flex;
               padding-left: 28rpx;
               margin-top: 40rpx;
+
 
               .tag-item {
                 border-radius: 8px;
@@ -943,10 +1081,12 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-8 {
           .content {
             // max-height: 932rpx;
             overflow: hidden;
+
 
             .info {
               .certificate-detail,
@@ -965,15 +1105,18 @@ const handleTagStr = (tagStr) => {
                   color: #4838f5;
                 }
 
+
                 .tag-info {
                   line-height: 1;
                   margin-left: 12rpx;
+
 
                   .tag-title {
                     font-size: 30rpx;
                     font-weight: 500;
                     color: #212528;
                   }
+
 
                   .certificate-info,
                   .eduication-info {
@@ -987,8 +1130,10 @@ const handleTagStr = (tagStr) => {
                 }
               }
 
+
               .eduication-detail {
                 margin-top: 66rpx;
+
 
                 .tag {
                   background: #fff0da;
@@ -996,11 +1141,14 @@ const handleTagStr = (tagStr) => {
                 }
               }
 
+
               .step-detail {
                 margin-top: 60rpx;
 
+
                 .training {
                   display: flex;
+
 
                   .training-title {
                     width: 116rpx;
@@ -1013,6 +1161,7 @@ const handleTagStr = (tagStr) => {
                     text-align: center;
                   }
 
+
                   .training-timer {
                     background: #f2faf7;
                     display: inline;
@@ -1024,9 +1173,11 @@ const handleTagStr = (tagStr) => {
                   }
                 }
 
+
                 .step-box {
                   ::v-deep .uni-steps__column-text {
                     border: none !important;
+
 
                     // padding-top: 0rpx !important;
                     .uni-steps__column-title {
@@ -1034,6 +1185,7 @@ const handleTagStr = (tagStr) => {
                       font-weight: normal;
                       color: rgba(0, 0, 0, 0.5);
                     }
+
 
                     .uni-steps__column-desc {
                       font-size: 26rpx;
@@ -1055,6 +1207,7 @@ const handleTagStr = (tagStr) => {
             }
           }
 
+
           .more {
             font-size: 24rpx;
             color: #eb9516;
@@ -1062,8 +1215,10 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-9 {
           padding-bottom: 60rpx;
+
 
           .content {
             .title {
@@ -1071,12 +1226,14 @@ const handleTagStr = (tagStr) => {
               justify-content: space-between;
               align-items: center;
 
+
               .txt {
                 text {
                   font-size: 24rpx;
                   color: rgba(0, 0, 0, 0.5);
                 }
               }
+
 
               .more {
                 color: rgba(0, 0, 0, 0.5);
@@ -1086,6 +1243,7 @@ const handleTagStr = (tagStr) => {
                 padding-right: 32rpx;
               }
             }
+
 
             .info {
               .feel-type-box {
@@ -1097,10 +1255,12 @@ const handleTagStr = (tagStr) => {
                 background: #fdf9f0;
                 align-items: center;
 
+
                 .first {
                   width: 272rpx;
                   position: relative;
                   padding-left: 32rpx;
+
 
                   .percent {
                     font-size: 48rpx;
@@ -1108,12 +1268,14 @@ const handleTagStr = (tagStr) => {
                     color: #b17940;
                   }
 
+
                   .txt {
                     font-size: 24rpx;
                     color: #b17940;
                     font-weight: 400;
                   }
                 }
+
 
                 .first::after {
                   content: "";
@@ -1125,23 +1287,28 @@ const handleTagStr = (tagStr) => {
                   top: 0;
                 }
 
+
                 .second {
                   display: flex;
+
 
                   .second-item {
                     display: flex;
                     flex-direction: column;
+
 
                     .txt-1 {
                       font-size: 22rpx;
                       color: rgba(0, 0, 0, 0.3);
                     }
 
+
                     .txt-2 {
                       font-size: 26rpx;
                       color: rgba(0, 0, 0, 0.85);
                     }
                   }
+
 
                   .second-item:first-child {
                     margin-left: 68rpx;
@@ -1150,29 +1317,36 @@ const handleTagStr = (tagStr) => {
                 }
               }
 
+
               .comment-list {
                 margin-top: 32rpx;
+
 
                 .comment-item:not(:last-child) {
                   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
                 }
 
+
                 .comment-item {
                   padding-bottom: 32rpx;
                   margin-top: 32rpx;
+
 
                   .user-box {
                     display: flex;
                     justify-content: space-between;
 
+
                     .user-info {
                       display: flex;
                       align-items: center;
+
 
                       .img {
                         width: 48rpx;
                         height: 48rpx;
                       }
+
 
                       .txt {
                         font-size: 24rpx;
@@ -1182,6 +1356,7 @@ const handleTagStr = (tagStr) => {
                     }
                   }
 
+
                   .comment-content {
                     font-size: 26rpx;
                     line-height: 40rpx;
@@ -1189,8 +1364,10 @@ const handleTagStr = (tagStr) => {
                     margin-top: 22rpx;
                   }
 
+
                   .tags {
                     margin-top: 12rpx;
+
 
                     .tag-item {
                       padding: 6rpx 8rpx;
@@ -1204,19 +1381,23 @@ const handleTagStr = (tagStr) => {
                     }
                   }
 
+
                   .theme-date {
                     margin-top: 36rpx;
                     display: flex;
                     justify-content: space-between;
 
+
                     .theme {
                       color: rgba(0, 0, 0, 0.5);
                       font-size: 24rpx;
+
 
                       .txt {
                         color: rgba(0, 0, 0, 0.65);
                       }
                     }
+
 
                     .date {
                       color: rgba(0, 0, 0, 0.35);
@@ -1229,6 +1410,7 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-10 {
           .remark {
             font-size: 22rpx;
@@ -1237,35 +1419,42 @@ const handleTagStr = (tagStr) => {
             color: rgba(0, 0, 0, 0.5);
           }
 
+
           .info {
             .txt {
               font-size: 22rpx;
               color: rgba(0, 0, 0, 0.5);
             }
 
+
             .order-timer-box {
               display: flex;
               flex-wrap: nowrap;
+
 
               .order-timer-item {
                 flex-shrink: 0;
                 text-align: center;
                 width: 90rpx;
 
+
                 .month {
                   font-size: 20rpx;
                   color: rgba(0, 0, 0, 0.5);
                 }
+
 
                 .day {
                   font-size: 36rpx;
                   color: rgba(0, 0, 0, 0.85);
                 }
 
+
                 .week {
                   font-size: 24rpx;
                   color: rgba(0, 0, 0, 0.85);
                 }
+
 
                 .isOrder {
                   width: 80rpx;
@@ -1280,6 +1469,7 @@ const handleTagStr = (tagStr) => {
                 }
               }
 
+
               .active {
                 .month,
                 .day,
@@ -1287,6 +1477,7 @@ const handleTagStr = (tagStr) => {
                 .isOrder {
                   color: #35ca95 !important;
                 }
+
 
                 .isOrder {
                   background: rgba(53, 202, 149, 0.102);
@@ -1296,11 +1487,14 @@ const handleTagStr = (tagStr) => {
           }
         }
 
+
         .detail-item-line-11 {
           margin-top: 20rpx;
 
+
           .content {
             background-color: transparent;
+
 
             .title {
               text-align: center;
@@ -1308,6 +1502,7 @@ const handleTagStr = (tagStr) => {
               color: rgba(0, 0, 0, 0.6);
               font-size: 28rpx;
             }
+
 
             .title:before {
               content: "";
@@ -1319,6 +1514,7 @@ const handleTagStr = (tagStr) => {
               left: 0;
             }
 
+
             .title:after {
               content: "";
               position: absolute;
@@ -1329,10 +1525,12 @@ const handleTagStr = (tagStr) => {
               right: 0;
             }
 
+
             .info {
               font-size: 22rpx;
               color: rgba(0, 0, 0, 0.5);
               text-align: left;
+
 
               view {
                 margin-top: 20rpx;
@@ -1344,6 +1542,7 @@ const handleTagStr = (tagStr) => {
     }
   }
 
+
   .footer {
     width: 100vw;
     height: 108rpx;
@@ -1354,6 +1553,7 @@ const handleTagStr = (tagStr) => {
     bottom: 0rpx;
     justify-content: space-around;
     align-items: center;
+
 
     .message,
     .reservation {
@@ -1369,11 +1569,53 @@ const handleTagStr = (tagStr) => {
       border: 1px solid #eb9516;
     }
 
+
     .reservation {
       background: #eb9516;
       border: none;
       color: #fff;
     }
   }
+}
+.nav-right{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  .line{
+    display: flex;
+    align-items: center;
+    img{
+      width: 70rpx;
+      height: 70rpx;
+      border-radius: 50%;
+      margin-right: 10rpx;
+    }
+    .line-name{
+      font-size: 25rpx;
+      font-weight: bold;
+      margin-left: 5rpx;
+    }
+    .line-job{
+      font-size: 17rpx;
+      padding: 5rpx 10rpx;
+      border-radius: 20rpx;
+      background: #f9eac2;
+    }
+  }
+  .share{
+    color: #fff;
+    font-size: 22rpx;
+    padding: 10rpx 20rpx;
+    border-radius: 30rpx;
+    background: #eb9516;
+    margin-right: 20rpx;
+  }
+}
+::v-deep .uni-navbar__header{
+  height: 88rpx !important;
+}
+::v-deep .uni-navbar__header-btns{
+  width: 500rpx !important;
 }
 </style>

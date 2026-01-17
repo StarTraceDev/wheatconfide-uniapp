@@ -1,50 +1,35 @@
 {
-  "hash": "f2cfba96",
+  "hash": "ed2a3003",
   "configHash": "ceaea928",
-  "lockfileHash": "83bf2059",
-  "browserHash": "b915b6b2",
+  "lockfileHash": "d04d6be9",
+  "browserHash": "7cbb2868",
   "optimized": {
-    "tim-js-sdk": {
-      "src": "../../../../../node_modules/tim-js-sdk/tim-js.js",
-      "file": "tim-js-sdk.js",
-      "fileHash": "05fead67",
-      "needsInterop": true
-    },
-    "tim-upload-plugin": {
-      "src": "../../../../../node_modules/tim-upload-plugin/index.js",
-      "file": "tim-upload-plugin.js",
-      "fileHash": "511bd002",
+    "cos-js-sdk-v5": {
+      "src": "../../../../../node_modules/cos-js-sdk-v5/dist/cos-js-sdk-v5.js",
+      "file": "cos-js-sdk-v5.js",
+      "fileHash": "ad961c5e",
       "needsInterop": true
     },
     "json-bigint": {
       "src": "../../../../../node_modules/json-bigint/index.js",
       "file": "json-bigint.js",
-      "fileHash": "66ce56c6",
+      "fileHash": "7b7c7e62",
+      "needsInterop": true
+    },
+    "tim-js-sdk": {
+      "src": "../../../../../node_modules/tim-js-sdk/tim-js.js",
+      "file": "tim-js-sdk.js",
+      "fileHash": "11ecb6c8",
       "needsInterop": true
     },
     "lodash-es": {
       "src": "../../../../../node_modules/lodash-es/lodash.js",
       "file": "lodash-es.js",
-      "fileHash": "c3a1f24d",
+      "fileHash": "8715c906",
       "needsInterop": false
-    },
-    "dayjs": {
-      "src": "../../../../../node_modules/dayjs/dayjs.min.js",
-      "file": "dayjs.js",
-      "fileHash": "4263d57d",
-      "needsInterop": true
-    },
-    "dayjs/locale/zh-cn": {
-      "src": "../../../../../node_modules/dayjs/locale/zh-cn.js",
-      "file": "dayjs_locale_zh-cn.js",
-      "fileHash": "b29046b4",
-      "needsInterop": true
     }
   },
   "chunks": {
-    "chunk-OMFSQXEY": {
-      "file": "chunk-OMFSQXEY.js"
-    },
     "chunk-Y2F7D3TJ": {
       "file": "chunk-Y2F7D3TJ.js"
     }

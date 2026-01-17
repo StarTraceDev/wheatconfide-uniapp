@@ -172,6 +172,8 @@ const radioList = ref([
 ])
 
 onLoad((options) => {
+  console.log(SON.parse(options.order));
+  
   orderInfo.value = JSON.parse(options.order);
   orderRefund.value.orderSn = orderInfo.value.orderSn
 })

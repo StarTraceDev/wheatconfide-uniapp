@@ -2,10 +2,13 @@
   <uni-popup ref="popup" type="message">
     <view class="popup-content">
       <uni-icons type="closeempty" size="20" color="#A6A6A6" class="close-icon" @click="close"></uni-icons>
-      <view class="title">您的专属客服</view>
-      <image :src="imageUrl" @longpress="handleLongPress" />
+      <view class="title">
+        <view class="title-text">您的专属客服</view>
+        <image src="/static/my/robot.png" class="title-robot" />
+      </view>
+      <image :src="imageUrl" @longpress="handleLongPress" class="QRcode" />
       <view class="save-code">
-        <uni-icons type="download" size="25" color="#35CA95"></uni-icons>
+        <image src="/static/my/save.png" class="title-save" />
           <view><text>长按保存</text>到相册</view>
       </view>
     </view>
@@ -71,11 +74,12 @@ const handleLongPress = async () => {
     text-align: right;
   }
   .title{
+    position: relative;
     font-size: 36rpx;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 900;
   }
-  image {
+  .QRcode {
     border: 3rpx solid #35ca95;
     border-radius: 20rpx;
     width: 350rpx;
@@ -93,5 +97,21 @@ const handleLongPress = async () => {
       color: #35ca95;
     }
   }
+}
+.title-text{
+  position: relative;
+  z-index: 999;
+}
+.title-robot{
+  position: absolute;
+  top: -8rpx;
+  right: -22rpx;
+  z-index: 1;
+  width: 50rpx;
+  height: 50rpx;
+}
+.title-save{
+  width: 35rpx;
+  height: 35rpx;
 }
 </style>

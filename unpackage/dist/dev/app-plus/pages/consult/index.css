@@ -1210,6 +1210,14 @@
   color: var(--034e6136-colorSelected);
   font-weight: 600;
 }
+
+uni-scroll-view[data-v-034e6136] ::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+}
+
 /**
  * 这里是uni-app内置的常用样式变量
  *
@@ -2002,9 +2010,9 @@
   border-left: 0.1875rem solid transparent;
 }
 .left-item.active[data-v-bb75eca2] {
-  color: #35C996;
+  color: var(--bb75eca2-colorChange);
   background-color: #fff;
-  border-left-color: #35C996;
+  border-left-color: var(--bb75eca2-colorChange);
 }
 .right-content[data-v-bb75eca2] {
   flex: 1;
@@ -2030,6 +2038,9 @@
   display: flex;
   align-items: center;
   gap: 0.1875rem;
+}
+.toggle-btn-color[data-v-bb75eca2] {
+  color: #ffa967;
 }
 .child-wrap[data-v-bb75eca2] {
   display: flex;
@@ -2057,7 +2068,7 @@
   /* 保证单行高度，垂直居中 */
 }
 .child-item.selected[data-v-bb75eca2] {
-  background-color: #35C996;
+  background-color: var(--bb75eca2-colorChange);
   color: #fff;
 }
 .linkage-container[data-v-bb75eca2] {
@@ -2354,11 +2365,12 @@
   text-align: right;
 }
 .popup-content .title[data-v-d93a6781] {
+  position: relative;
   font-size: 1.125rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 900;
 }
-.popup-content uni-image[data-v-d93a6781] {
+.popup-content .QRcode[data-v-d93a6781] {
   border: 0.09375rem solid #35ca95;
   border-radius: 0.625rem;
   width: 10.9375rem;
@@ -2375,6 +2387,22 @@
 }
 .popup-content .save-code uni-text[data-v-d93a6781] {
   color: #35ca95;
+}
+.title-text[data-v-d93a6781] {
+  position: relative;
+  z-index: 999;
+}
+.title-robot[data-v-d93a6781] {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.6875rem;
+  z-index: 1;
+  width: 1.5625rem;
+  height: 1.5625rem;
+}
+.title-save[data-v-d93a6781] {
+  width: 1.09375rem;
+  height: 1.09375rem;
 }
 /**
  * 这里是uni-app内置的常用样式变量

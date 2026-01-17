@@ -21,19 +21,23 @@
 import { onLoad } from "@dcloudio/uni-app";
 import { ref } from "vue";
 
-const type = ref(null)
+const serviceType = ref(null)
 onLoad((options) => {
-	type.value = JSON.parse( options.type);
+	serviceType.value = JSON.parse(options.type);
 })
+
+// 跳转
 const gotoPersonSettingPage = ()=>{
+	const { id, userRole } = serviceType.value
 	uni.navigateTo({
-		url: `/pages/forum/my/userInfo?userInfo=${type.value.id}&type=${type.value.userRole}`
+		url: `/pages/forum/my/userInfo?type=${userRole}&userInfo=${JSON.stringify(id)}`
 	})
 }
 	
 const gotoServiceSettingPage = ()=>{
+	const { id, userRole } = serviceType.value
 	uni.navigateTo({
-		url: `/pages/settings/services?userInfo=${type.value}`
+		url: `/pages/forum/service/auth?type=${userRole}&userInfo=${JSON.stringify(id)}`
 	})
 }
 </script>

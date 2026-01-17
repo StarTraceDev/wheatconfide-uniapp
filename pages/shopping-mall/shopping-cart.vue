@@ -381,7 +381,7 @@ const handleBuy = () => {
   orderStore.setOrderList(selectedIds)
   // 跳转到结算页（携带SKU、选中的颜色、数量参数）
   uni.navigateTo({
-    url: `/pages/shopping-mall/order-confirmation`,
+    url: `/pages/shopping-mall/order-confirmation?type=shoppingCart`,
   })
 }
 

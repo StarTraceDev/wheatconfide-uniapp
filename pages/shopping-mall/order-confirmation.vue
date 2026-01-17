@@ -63,15 +63,15 @@
 						</view>
 						<view class="plan-item">
 							<view>运费</view>
-							<view>{{ orderData.freeShipping == 1 ? '免运费' : '¥0.00' }}</view>
+							<view>{{ orderData.freeShipping == 1 ? '免运费' : `¥${goodsTotal}` }}</view>
 						</view>
 						<view class="plan-item">
 							<view>商品总价</view>
-							<view style="color: #de1718;">¥{{ orderData.currentSku.price * orderData.currentSku.quantity }}</view>
+							<view style="color: #de1718;">¥{{ freightTotal }}</view>
 						</view>
 						<view class="plan-item">
 							<view>应付金额</view>
-							<view style="color: #de1718;">¥{{ orderData.currentSku.price * orderData.currentSku.quantity }}</view>
+							<view style="color: #de1718;">¥{{ allTotal }}</view>
 						</view>
 					</view>
 				</view>
@@ -109,16 +109,16 @@
 			</view>
 		</scroll-view>
 		<view class="recharge-pay-footer">
-			<button class="recharge-sure-price" @click="orderPay">立即支付 ¥{{ orderData.currentSku.price * orderData.currentSku.quantity }}</button>
+			<button class="recharge-sure-price" @click="orderPay">立即支付 ¥{{ allTotal }}</button>
 		</view>
 	</view>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useGlobalDataStore } from "@/stores/global.js";
 import { useOrderStore } from "@/stores/orderStore.js";
-import { onShow, onLoad } from "@dcloudio/uni-app";
+import { onShow, onLoad, onUnload } from "@dcloudio/uni-app";
 import { payment, wxPay, aliPay, payResult } from "@/common/api/order.js";
 import { usePayment } from '@/utils/usePayment.js'
 import { getDefaultAddress, submitOrder } from '@/common/api/shoppingMall.js'
@@ -126,11 +126,9 @@ import { getDefaultAddress, submitOrder } from '@/common/api/shoppingMall.js'
 const scrollTop = ref(0);
 const globalStore = useGlobalDataStore();
 const orderStore = useOrderStore();
+const purchaseType = ref('')
 const statusBarHeight = ref(globalStore.statusBarHeight + "px");
 const orderData = ref([]) // 订单数据
-
-orderData.value = orderStore.orderList
-console.log(orderStore.orderList);
 
 const onPageScroll = (e) => {
 	scrollTop.value = e.detail.scrollTop;
@@ -174,6 +172,35 @@ const handleMinus = (index) => {
 	}
 }
 
+// 商品的总价
+const goodsTotal = computed(() => {
+  return orderData.value.reduce((total, item) => {
+    // 只计算选中的商品: 单价 * 数量
+    if (item.checked) {
+      total += item.price * item.quantity
+    }
+    return total
+  }, 0).toFixed(2) // 保留2位小数，金额必备
+})
+
+// 快递总运费
+const freightTotal = computed(() => {
+  return orderData.value.reduce((total, item) => {
+    // 规则：选中+不包邮(freeShipping=0)的商品，才累加运费
+    if (item.checked && item.freeShipping === 0) {
+      total += item.freightFee
+    }
+    return total
+  }, 0).toFixed(2)
+})
+
+// 所有费用合计总价
+const allTotal = computed(() => {
+  // 转数字计算，避免字符串拼接，再保留2位小数
+  const total = Number(goodsTotal.value) + Number(freightTotal.value)
+  return total.toFixed(2)
+})
+
 // 支付方式
 const paymentMethod = ref('weixin')
 const handlePayment = (val) => {
@@ -204,13 +231,17 @@ const orderPay = async (id) => {
 			const { id, addressId, currentSku, remark } = orderData.value
 			const OrderInfo = {
 				addressId,
-				directBuyItem: {
+				remark
+			}
+			if(purchaseType.value == 'shoppingCart') {
+				OrderInfo.cartItemIds = orderData.value.map(item => item.id)
+			} else {
+				OrderInfo.directBuyItem = {
 					productId: id,
 					quantity: currentSku.quantity,
 					skuId: currentSku.id
-				},
-				remark
-			}			
+				}
+			}
 			const res = await submitOrder(OrderInfo)
 			const { data } = await api({
 					orderId: res.data.orderId,
@@ -262,18 +293,24 @@ const payResultApi = async (orderSn) => {
 }
 
 onLoad((options) => {
-	const order = uni.getStorageSync('orderTempData');
-	console.log(order);
+	purchaseType.value = options.type
 	
-  // if(order){
-	// 	orderData.value = order = order; 
-  //   uni.removeStorageSync('orderTempData');
-  // }
+  if(options.type == 'purchase') {
+		console.log([orderStore.order]);
+		orderData.value = [orderStore.order]; 
+  } else {
+		orderData.value = orderStore.orderList
+	}
 })
 
 onShow(() => {
 	getDefaultAddressFn()
 });
+
+onUnload(() => {
+	orderStore.clearOrder()
+	orderStore.clearOrderList()
+})
 </script>
 
 <style lang="scss" scoped>

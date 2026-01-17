@@ -231,16 +231,14 @@
 						&:not(:first-child) {
 							border-top: 1rpx solid rgba(0, 0, 0, 0.08);
 						}
-
-
 					}
-
 					.auture {
 						height: 152rpx;
 
 						.pic {
-							width: 80rpx;
-							height: 80rpx;
+							width: 90rpx;
+							height: 90rpx;
+							border-radius: 50%;
 						}
 					}
 				}

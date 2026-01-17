@@ -1,7 +1,6 @@
 <template>
   <view class="container">
     <!-- 顶部地区栏 -->
-    <!-- 当前定位城市：{{ cityInfo.province }} - {{ cityInfo.city }} - {{ cityInfo.district }} -->
     <view class="top-region-bar">
       <view class="current-region">
         <text class="region-label">当前地区：</text>
@@ -75,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, getCurrentInstance, computed } from "vue";
+import { ref, onMounted, getCurrentInstance, computed } from "vue";
 const props = defineProps({
   categories: { type: Array, default: () => [] },
   colorType: { type: Number, default: 1 },
@@ -90,75 +89,61 @@ const leftScrollTop = ref(0); // 左侧滚动条位置
 const localCategories = ref([]);
 const selectedText = ref('');
 
-
-const cityInfo = ref({
-  province: '定位中...',
-  city: '',
-  district: '',
-  latitude: '', // 纬度
-  longitude: '' // 经度
-})
 // 获取当前城市
 const getCurrentCity = async () => {
-  try {
-    // 1. 第一步：向用户申请【位置授权】
-    const authRes = await uni.authorize({
-      scope: 'scope.userLocation'
-    })
-    
-    if (authRes.errMsg !== 'authorize:ok') {
-      uni.showToast({ title: '请开启定位权限', icon: 'none' })
-      return
-    }
+  uni.getLocation({
+    type: 'gcj02', // 国测局坐标系，国内地图必用，无偏移
+    altitude: false,
+    // 定位成功回调
+    success: async (res) => {
+      // 经纬度转省市区
+      const { data } = await uni.request({
+        url: 'https://apis.map.qq.com/ws/geocoder/v1/',
+        method: 'GET',
+        data: {
+          location: `${res.latitude},${res.longitude}`,
+          key: 'OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77',
+          get_poi: 0
+        }
+      })      
 
-    // 2. 第二步：UniApp原生API获取经纬度
-    uni.getLocation({
-      type: 'gcj02', // 国测局坐标系【必须用这个】，国内地图统一标准，解析城市不偏移
-      altitude: false,
-      success: async (res) => {
-        // 存储经纬度
-        cityInfo.value.latitude = res.latitude
-        cityInfo.value.longitude = res.longitude
-        
-        // 3. 第三步：免费经纬度转【省市区】（核心，无密钥免费接口，稳定可用）
-        const { data } = await uni.request({
-          url: 'https://apis.map.qq.com/ws/geocoder/v1/',
-          method: 'GET',
-          data: {
-            location: `${res.latitude},${res.longitude}`,
-            key: 'OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77', // 腾讯地图免费公用key，可直接用
-            get_poi: 0 // 不需要周边POI，提高解析速度
+      // 解析省市区数据
+      if (data.status === 0) {
+        const address = data.result.address_component
+        selectedText.value = address.city || address.province
+      } else {
+        uni.showToast({ title: '城市解析失败', icon: 'none', duration: 2000 })
+      }
+    },
+    // 定位失败/授权拒绝
+    fail: (err) => {
+      console.log('定位失败：', err)
+      const errMsg = err.errMsg || ''
+      // 用户拒绝定位权限
+      if (errMsg.includes('auth deny')) {
+        uni.showModal({
+          title: '权限提示',
+          content: '你已拒绝定位权限，无法获取城市信息',
+          confirmText: '去开启',
+          cancelText: '取消',
+          success: (modalRes) => {
+            if (modalRes.confirm) uni.openSetting() // 跳转权限设置页
           }
         })
-
-        // 解析成功，赋值省市区
-        if (data.status === 0) {
-          const address = data.result.address_component
-          cityInfo.value.province = address.province
-          cityInfo.value.city = address.city || address.province // 兼容直辖市：北京/上海等，city为空则取province
-          cityInfo.value.district = address.district
-        } else {
-          uni.showToast({ title: '城市解析失败', icon: 'none' })
-        }
-      },
-      fail: (err) => {
-        // 定位失败的各种异常处理
-        if (err.errMsg.includes('auth deny')) {
-          uni.showToast({ title: '您拒绝了定位权限', icon: 'none' })
-        } else {
-          uni.showToast({ title: '定位失败，请检查网络', icon: 'none' })
-        }
-        console.log('定位失败：', err)
+      } 
+      // 网络/GPS/设备原因定位失败
+      else {
+        uni.showToast({ title: '定位失败，请检查网络和GPS', icon: 'none', duration: 2000 })
       }
-    })
-  } catch (err) {
-    uni.showToast({ title: '授权失败', icon: 'none' })
-  }
+    }
+  })
 }
 
 const colorSelected = ref('#35c996');
 // 初始化
 onMounted(() => {
+  getCurrentCity();
+
   props.colorType == 1 ? colorSelected.value = "#35c996" : colorSelected.value = "#ffa767";
   // 初始化本地副本
   localCategories.value = props.categories.map((cat) => ({
@@ -166,11 +151,6 @@ onMounted(() => {
     allSelected: false,
     children: (cat.children || []).map((c) => ({ ...c, selected: false })),
   }));
-  
-  // 默认选中第一个省份的“全部”
-  if (localCategories.value.length > 0) {
-    handleProvinceClick(0);
-  }
 });
 
 // 左侧省份点击事件
@@ -365,5 +345,13 @@ defineExpose({
 .city-item--selected {
   color: v-bind(colorSelected);
   font-weight: 600;
+}
+</style>
+<style>
+scroll-view ::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
 }
 </style>

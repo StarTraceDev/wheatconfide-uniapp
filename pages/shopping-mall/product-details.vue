@@ -78,8 +78,11 @@
               <uni-icons custom-prefix="iconfont" type="icon-dunpai" size="20" color="#B5B5B5" class="icon" />
               <view class="guarantee">
                 <view>严选好物</view>
+                <view style="color: #9E9E9E;">·</view>
                 <view>售后无忧</view>
+                 <view style="color: #9E9E9E;">·</view>
                 <view>诚信为本</view>
+                 <view style="color: #9E9E9E;">·</view>
                 <view>货真价实</view>
               </view>
             </view>
@@ -99,7 +102,7 @@
                 <text>商品评价</text>
                 <text class="line"></text>
               </view>
-              <view class="comment" @click="openEvaluate">全部评论 > </view>
+              <view class="comment" @click="openEvaluate">全部评价 > </view>
             </view>
             <view v-if="evaluationList.length === 0" class="no-evaluation">
               暂无评价
@@ -174,6 +177,9 @@
     <!-- 规格弹窗 -->
     <uni-popup ref="popup" type="bottom" border-radius="20rpx 20rpx 0 0">
       <view class="goods-container">
+        <view class="close" @click="closePopup">
+          <uni-icons type="closeempty" size="20"></uni-icons>
+        </view>
         <!-- 商品头图+信息 -->
         <view class="goods-header">
           <!-- 商品图片（替换为实际商品图） -->
@@ -248,6 +254,7 @@
 import { onMounted, ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useGlobalDataStore } from "@/stores/global.js";
+import { useOrderStore } from "@/stores/orderStore.js";
 import { getProductDetail, addCart } from "@/common/api/shoppingMall.js";
 import { getCommentByTargetUserId } from "@/common/api/worry.js";
 import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide";
@@ -436,24 +443,35 @@ const handleAddCart = async () => {
 }
 
 // 立即购买
+const orderStore = useOrderStore();
 const handleBuyNow = () => {
   if (!currentSku.value) {
     return showToast({ title: '请选择商品规格', icon: 'none' })
   }
+  const { name, thumbnail } = productDetails.value;
+  const { specValues, price } = currentSku.value;
   const data = {
-    ...productDetails.value,
+    productName: name,
+    specValues,
+    totalAmount: price,
+    quantity: count.value,
     currentSku: {
       ...currentSku.value,
       quantity: count.value
     },
-    detailImages: null
+    thumbnail
   } 
-  console.log(data);
   
+  orderStore.setOrder(data)
   // 跳转到结算页（携带SKU、选中的颜色、数量参数）
-  // uni.navigateTo({
-  //   url: `/pages/shopping-mall/order-confirmation`,
-  // })
+  uni.navigateTo({
+    url: `/pages/shopping-mall/order-confirmation?type=purchase`,
+  })
+}
+
+// 关闭弹窗
+const closePopup = () => {
+  popup.value.close()
 }
 </script>
 
@@ -747,6 +765,11 @@ const handleBuyNow = () => {
   opacity: 1;
   line-height: 1;
   border-radius: 20rpx 20rpx 0 0;
+  .close{
+    text-align: right;
+    margin-top: 10rpx;
+    margin-bottom: 20rpx;
+  }
 }
 .goods-header {
   display: flex;
@@ -754,8 +777,8 @@ const handleBuyNow = () => {
   margin-bottom: 40rpx;
 }
 .goods-img {
-  width: 200rpx;
-  height: 200rpx;
+  width: 170rpx;
+  height: 170rpx;
   border-radius: 16rpx;
 }
 .goods-info {

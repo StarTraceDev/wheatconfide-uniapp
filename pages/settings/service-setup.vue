@@ -87,9 +87,9 @@
         <view class="content-header">
           <view class="content-header-item">
             <view style="width: 35%; text-align: center">名称</view>
-            <view>咨询方式</view>
-            <view>时长</view>
-            <view>价格</view>
+            <view style="width: 20%; text-align: center">咨询方式</view>
+            <view style="width: 15%; text-align: center">时长</view>
+            <view style="width: 15%; text-align: center">价格</view>
           </view>
           <view
             class="content-header-item"
@@ -107,11 +107,12 @@
               ></image>
               <view>{{ item.title }}</view>
             </view>
-            <view style="width: 110rpx; text-align: center">{{
+
+            <view style="width: 20%; text-align: center">{{
               item.serviceQuoteType == 1 ? "视频" : item.serviceQuoteType == 2 ? "语音" : "图文"
             }}</view>
-            <view>{{ item.serviceDuration }}分钟</view>
-            <view>¥ {{ item.quoteAmount }}</view>
+            <view style="width: 16%">{{ item.serviceDuration }}分钟</view>
+            <view style="width: 16%">¥ {{ item.quoteAmount }}</view>
           </view>
         </view>
         <view class="header-operation">

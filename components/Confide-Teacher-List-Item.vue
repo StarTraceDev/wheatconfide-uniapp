@@ -2,12 +2,7 @@
   <view class="teacher-listener">
     <view class="card-listener">
       <view class="avatar-wrap-listener">
-        <!-- <image class="avatar" :src="JSON.parse(info.masterGallery)[0].url" mode="aspectFill"></image> -->
-        <image
-          class="avatar-listener"
-          :src="'https://s.maimiaoqingsu.com/a624ea3f-e71f-4d00-b94d-1cc157055449.JPG'"
-          mode="aspectFill"
-        ></image>
+				<image class="avatar-listener" :src="avatarImg(info)" mode="aspectFill"></image>
       </view>
       <view class="info-wrap">
         <view class="job-title">
@@ -35,7 +30,7 @@
 							<view>平台时长</view>
 						</view>
 					</view>
-          <view>
+          <view style="min-width: 40%">
 						<view class="stats-item">
 							<view class="num">{{ info.commentCount }}+</view>
 							<view>评价</view>
@@ -48,12 +43,13 @@
         </view>
         <view class="price-button">
           <view class="contact">
-            <uni-icons type="location" size="20" color="#9da6a4"></uni-icons>
-            <view>{{ info.address }}</view>
+            <image src="/static/consult/address.png"></image>
+            <view>{{ formatAddress(info.address) }}</view>
           </view>
-          <view v-if="info.quoteList[0]" style="font-size: 38rpx; color: red"
-            >¥{{ info.quoteList[0].quoteAmount }}</view
-          >
+          <view v-if="info.quoteList[0]" class="price-info">
+            <view class="price-unit">¥</view>
+            <view>{{ info.quoteList[0].quoteAmount }}</view>
+          </view>
         </view>
       </view>
     </view>
@@ -61,13 +57,24 @@
 </template>
 
 <script setup>
-import { getGenerationByBirthdate } from "@/lib/utils.js";
+import { getGenerationByBirthdate, formatAddress } from "@/lib/utils.js";
 import { defineProps } from "vue";
 const props = defineProps({
   info: {
     type: Object,
   },
 });
+
+// 获取头像
+const avatarImg = (item) => {
+  const { masterGallery } = item
+
+  if(!masterGallery) {
+    return '/static/consult/user.png'
+  } else {
+    return JSON.parse(masterGallery)[0].url
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -97,7 +104,7 @@ const props = defineProps({
       .job-title {
         display: flex;
         margin-top: 10rpx;
-        align-items: center;
+        align-items: flex-end;
         justify-content: space-between;
         .name-title {
           color: rgba(0, 0, 0, 0.85);
@@ -147,11 +154,30 @@ const props = defineProps({
         }
         .contact {
           display: flex;
-          font-size: 24rpx;
+          font-size: 20rpx;
           color: #9da6a4;
+          image {
+            width: 25rpx;
+            height: 25rpx;
+          }
+        }
+        .price-info{
+          display: flex;
+          align-items: flex-end;
+          font-size: 38rpx;
+          color: red;
+          .price-unit{
+            color: red;
+            font-size: 25rpx;
+            margin-right: 3rpx;
+            margin-bottom: 5rpx;
+          }
         }
       }
     }
   }
+}
+.list-item{
+  margin-bottom: 5rpx !important;
 }
 </style>

@@ -19,7 +19,10 @@
 				<view class="user-info-section">
 					<image :src="avatarImg" class="user-avatar"></image>
 					<view class="user-details">
-						<view class="user-name">{{ titleName }}</view>
+						<view class="user-name">
+							<view>{{ titleName }}</view>
+							<image src="/static/consult/user.png"></image>
+						</view>
 						<view class="user-expertise">{{ planTitle }}</view>
 					</view>
 				</view>
@@ -29,26 +32,26 @@
 						<view class="info-value">2025-11-02 09:25</view>
 					</view> -->
 					<view class="info-item">
-						<view class="info-label">咨询方式</view>
+						<view class="info-label">倾听方式</view>
 						<view class="consultation-methods">
-							<view class="method-item" :class="consultation == 1 ? 'method-item-active' : ''">
+							<!-- <view class="method-item" :class="consultation == 1 ? 'method-item-active' : ''">
 								<uni-icons type="compose" size="20" :color="consultation == 1 ? '#EB9516' : '#959596'"></uni-icons>
 								<text class="method-text">视频</text>
+							</view> -->
+							<view class="method-item" :class="consultation == 3 ? 'method-item-active' : ''" >
+								<uni-icons type="compose" size="20" :color="consultation == 3 ? '#EB9516' : '#959596'"></uni-icons>
+								<text class="method-text">文字</text>
 							</view>
 							<view class="method-item" :class="consultation == 2 ? 'method-item-active' : ''" >
 								<uni-icons type="mic" size="20" :color="consultation == 2 ? '#EB9516' : '#959596'"></uni-icons>
 								<text class="method-text">语音</text>
-							</view>
-							<view class="method-item" :class="consultation == 3 ? 'method-item-active' : ''" >
-								<uni-icons type="compose" size="20" :color="consultation == 3 ? '#EB9516' : '#959596'"></uni-icons>
-								<text class="method-text">文字</text>
 							</view>
 						</view>
 					</view>
 				</view>
 
 				<view class="consultation-plan-section">
-					<view class="plan-title">咨询方案</view>
+					<view class="plan-title">倾听方案</view>
 					<view class="plan-list-container">
 						<view class="plan-item" v-for="(plan, index) in planList" :key="index"
 							:class="{ 'plan-item--active': plan.selected }" @click="selectPlan(plan, index)">
@@ -162,7 +165,7 @@ import { payment, wxPay, aliPay, createListen, payResult } from "@/common/api/or
 
 const globalStore = useGlobalDataStore();
 const statusBarHeight = ref(globalStore.statusBarHeight + "px");
-const consultation = ref(1);
+const consultation = ref(2);
 const startColor = ref('#35ca955c');
 const selectImg = ref('select-green')
 const textColor = ref('#34a76f')
@@ -260,6 +263,8 @@ const getAgreementByType = async () => {
 };
 
 const selectPlan = (plan, index) => {
+	console.log(plan);
+	
 	planList.value.forEach((plan, i) => {
 		plan.selected = i === index;
 	});
@@ -410,7 +415,7 @@ $border-radius: 10rpx;
 	// background-image: url("@/static/settled/settled-bg.png");
 	background-size: 100vw 232rpx;
 	background-repeat: no-repeat;
-	background-image: linear-gradient(to bottom, #FFE3B0, rgba(255, 0, 0, 0));
+	background-image: linear-gradient(to bottom, #FFE3B0 10%, rgba(255, 0, 0, 0) 45%, rgba(255, 0, 0, 0) 100%);
 	background-color: #f4f6f8;
 
 	.header {
@@ -461,25 +466,29 @@ $border-radius: 10rpx;
 			border-bottom: 2rpx solid $border-color;
 
 			.user-avatar {
-				width: 150rpx;
-				height: 150rpx;
-				border-radius: $border-radius;
+				width: 100rpx;
+				height: 100rpx;
+				border-radius: 50%;
 				flex-shrink: 0;
 			}
 
 			.user-details {
+				width: 100%;
 				margin-left: $spacing-medium;
 
 				.user-name {
-					padding: $spacing-small $spacing-small 10rpx 0;
-					font-size: 32rpx;
-					font-weight: bold;
+					display: flex;
+					padding: 0 $spacing-small 10rpx 0;
 					color: $primary-color;
+					justify-content: space-between;
+					image{
+						width: 40rpx;
+						height: 40rpx;
+					}
 				}
 
 				.user-expertise {
-					padding: 20rpx $spacing-small 0 0;
-					font-size: 28rpx;
+					padding: 0 $spacing-small 0 0;
 					color: $secondary-color;
 				}
 			}
@@ -494,6 +503,7 @@ $border-radius: 10rpx;
 				margin-bottom: $spacing-medium;
 
 				.info-label {
+					margin-bottom: 10rpx;
 					font-size: 35rpx;
 					font-weight: 500;
 					color: #333;

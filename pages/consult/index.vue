@@ -97,7 +97,7 @@
               <view class="job">{{ item.occupationName }}</view>
               <view class="address">
                 <image src="/static/consult/address.png"></image>
-                <text>{{ item.address }}</text>
+                <text>{{ formatAddress(item.address) }}</text>
               </view>
             </view>
             <view class="doctor-info-1">
@@ -131,7 +131,7 @@
     </scroll-view>
 
     <!-- 下拉弹窗 + 遮罩 -->
-    <view v-if="showCityBox" class="mask" @click="closeCityFilter">
+    <view v-show="showCityBox" class="mask" @click="closeCityFilter">
       <view class="filter-popup" @click.stop>
         <!-- <view class="popup-header">筛选条件 {{ currentFilter }}</view> -->
         <view class="popup-body">
@@ -163,6 +163,7 @@ import ListFiltering from "@/components/List-Filtering.vue";
 import { ref, reactive, watch, getCurrentInstance, nextTick, onMounted } from "vue";
 import { getConsultantList, consultMenus } from "@/common/api/consultant.js";
 import { cities } from "@/common/api/apis.js";
+import { formatAddress } from "@/lib/utils.js";
 import { useGlobalDataStore } from "@/stores/global.js";
 import { bannerList } from "@/common/api/index.js";
 import { onReachBottom } from "@dcloudio/uni-app";
@@ -207,7 +208,7 @@ const avatarImg = (item) => {
   if(!masterGallery) {
     return '/static/consult/user.png'
   } else {
-    return JSON.parse(masterGallery)[0]
+    return JSON.parse(masterGallery)[0].url
   }
 }
 const searchParams = ref({

@@ -93,8 +93,8 @@
 
 <script setup>
 import { login, sendSms, smsLogin, getMallSwitch } from "@/common/api/apis.js";
-// 在组件中使用
 import { useGlobalDataStore } from "@/stores/global";
+import { TencentImSdk } from '@/utils/imSdk.js'
 import { ref } from "vue";
 
 const store = useGlobalDataStore();
@@ -133,6 +133,8 @@ const loginFn = async () => {
     uni.switchTab({
       url: "/pages/index/index",
     });
+    const isImLogin = await TencentImSdk.loginIm(data.id);
+
   } catch (error) {
     console.log(error);
   }

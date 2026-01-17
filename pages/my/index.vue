@@ -41,7 +41,7 @@
               @change="changeRoleFunc"
             >
               <view class="change-user-box">
-                <view class="change-user">{{ consultantTypeMap[userlnfo.consultantType] }}
+                <view class="change-user">{{ typeMap(userlnfo.userRole, userlnfo.consultantType) }}
                   <image
                     src="/static/my/bottom-arrow.png"
                     class="bottom-arrow"
@@ -91,7 +91,7 @@
         </view>
       </view>
 
-			<view class="my-server" v-if="userlnfo.consultantType != '0'">
+			<view class="my-server" v-if="userlnfo.consultantType != '0' && userlnfo.userRole != '0'">
         <view class="title">{{ userlnfo.userRole == '1' ? '咨询' : '倾听' }}专区</view>
         <view class="grid-box">
           <view
@@ -155,8 +155,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { getUserInfo, userSummary } from "@/common/api/apis.js";
+import { ref } from "vue";
+import { getUserInfo, userSummary, getMallSwitch } from "@/common/api/apis.js";
 import { changeConsultant } from "@/common/api/user.js";
 import { onShow } from "@dcloudio/uni-app";
 import { useGlobalDataStore } from "@/stores/global.js";
@@ -240,11 +240,13 @@ const pasteId = () => {
 };
 
 // 切换角色
-const consultantTypeMap = {
-  0: '用户',
-  1: '咨询师',
-  2: '倾诉师'
-};
+const typeMap = (userRole, type) => {
+  if (userRole == '1') {
+    return type == 0 ? '用户' : '咨询师'
+  } else {
+    return type == 0 ? '用户' : '倾诉师'
+  }
+}
 const userRoleMap = {
   1: ['用户', '咨询师'],
   2: ['用户', '倾诉师']
@@ -297,6 +299,7 @@ const toConsultingNav = (index) => {
   });
 };
 
+// 入驻
 const settledFn = (userRole) => {
   if(userRole == 0) {
     uni.navigateTo({
@@ -325,6 +328,9 @@ const getlnfo = async () => {
   let res = await getUserInfo();
   userlnfo.value = res.data;
   userRoleTitle.value = userRoleMap[userlnfo.value.userRole]
+  if(res.data.userRole == 0) {
+    let res = await changeConsultant({ consultantType: 0 });
+  }
 };
 const summary = ref({});
 const userSummaryApi = async () => {
@@ -333,9 +339,20 @@ const userSummaryApi = async () => {
   });
   summary.value = res.data
 }
+// 获取商城开关
+const getMallSwitchApi = async () => {
+  try {
+    const { data } = await getMallSwitch();
+    uni.setStorageSync('mallSwitch', data);
+    globalStore.setMallSwitch(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 onShow(() => {
   getlnfo();
+  getMallSwitchApi();
   userSummaryApi();
 });
 </script>

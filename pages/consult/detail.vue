@@ -8,6 +8,7 @@
       :show-scrollbar="false"
       scroll-with-animation
       id="scrollView"
+      @scroll="onScroll"
     >
       <uni-nav-bar
         :backgroundColor="scrollTop > 15 ? '#fff' : 'transparent'"
@@ -18,29 +19,38 @@
         fixed
       >
         <template v-slot:left>
-          <view class="right">
-            <uni-icons
-              type="left"
-              size="24"
-              v-if="scrollTop > 15"
-              @click="backFn"
-            ></uni-icons>
+          <view class="right" >
+            <view v-if="scrollTop > 15" class="nav-right">
+              <uni-icons
+                type="left"
+                size="24"
+                @click="backFn"
+              />
+              <view class="line">
+                <img :src="JSON.parse(consultantInfo.masterGallery)[0].url" />
+                <view>
+                  <view class="line-name">{{ consultantInfo.name }}</view>
+                  <view class="line-job">{{ consultantInfo.occupationName }}</view>
+                </view>
+              </view>
+            </view>
             <image
               src="/static/common/back_circle.png"
               style="width: 56rpx; height: 56rpx"
               @click="backFn"
               v-else
-            ></image>
+            />
           </view>
         </template>
         <template v-slot:right>
           <view class="right">
-            <image
-              src="/static/confide/share.png"
-              style="width: 40rpx; height: 40rpx"
-              v-if="scrollTop > 15"
-            >
-            </image>
+            <view v-if="scrollTop > 15" class="nav-right">
+              <view class="share" @click="shareFn">+ 关注</view>
+              <image
+                src="/static/confide/share.png"
+                style="width: 40rpx; height: 40rpx"
+              />
+            </view>
             <image
               src="/static/common/share_circle.png"
               style="width: 56rpx; height: 56rpx"
@@ -69,7 +79,7 @@
                 class="swiper-item"
               >
                 <image
-                  :src="item"
+                  :src="item.url"
                   style="height: 590rpx"
                   mode="heightFix"
                 ></image>
@@ -81,7 +91,7 @@
           <view class="detail-item-line-1">
             <view class="name">
               <text class="name-a">{{ consultantInfo.name }}</text>
-              <text class="name-b">{{ consultantInfo.occupationName }}</text>
+              <text v-if="consultantInfo.occupationName" class="name-b">{{ consultantInfo.occupationName }}</text>
               <text class="name-c">{{
                 getGenerationByBirthdate(consultantInfo.birthdate)
               }}</text>
@@ -98,7 +108,7 @@
           <view class="detail-item-line-3">
             <view class="address">
               <image src="/static/common/address.png"></image>
-              <text>{{ consultantInfo.address }}</text>
+              <text>{{ getCityFromAddress(consultantInfo.address) }}</text>
             </view>
             <view class="txt">
               <view>
@@ -263,28 +273,31 @@
                 </view> -->
 
                 <view class="comment-list">
-                  <view
-                    class="comment-item"
-                    v-for="(item, index) in evaluationList"
-                    :key="index"
-                  >
-                    <view class="comment-item-header">
-                      <view class="user">
-                        <image :src="item.avatar" style="border-radius: 50%" />
-                        <text>{{ item.nickname }}</text>
+                  <view v-if="evaluationList.length">
+                    <view
+                      class="comment-item"
+                      v-for="(item, index) in evaluationList.slice(0, 3)"
+                      :key="index"
+                    >
+                      <view class="comment-item-header">
+                        <view class="user">
+                          <image :src="item.avatar" style="border-radius: 50%" />
+                          <text>{{ item.nickname }}</text>
+                        </view>
+                        <view class="date">{{ item.createTime }}</view>
                       </view>
-                      <view class="date">{{ item.createTime }}</view>
-                    </view>
-                    <view class="comment-item-content">
-                      <mote-lines-divide
-                        :line="3"
-                        expandText="展开"
-                        foldHint="收起"
-                      >
-                        {{ item.content }}
-                      </mote-lines-divide>
+                      <view class="comment-item-content">
+                        <mote-lines-divide
+                          :line="3"
+                          expandText="展开"
+                          foldHint="收起"
+                        >
+                          {{ item.content }}
+                        </mote-lines-divide>
+                      </view>
                     </view>
                   </view>
+                  <view v-else style="margin-top: 10rpx;text-align: center;">暂无咨询感受</view>
                 </view>
               </view>
             </view>
@@ -338,7 +351,7 @@
       </view>
     </scroll-view>
     <view class="footer">
-      <view class="follow">
+      <view class="follow" @click="shareFn">
         <image src="/static/common/follow.png"></image>
         <text>关注</text>
       </view>
@@ -465,17 +478,13 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref, getCurrentInstance, computed } from "vue";
-import { onLoad, onBackPress } from "@dcloudio/uni-app";
+import { nextTick, onMounted, ref, getCurrentInstance, computed, watch } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
 import { useGlobalDataStore } from "@/stores/global.js";
-import { handleCareerList, getGenerationByBirthdate } from "@/lib/utils.js";
-import {
-  getConsultantById,
-  getCommentInfo,
-  getCommentList,
-  getServiceExperienceCon,
-} from "@/common/api/consultant.js";
+import { handleCareerList, getCityFromAddress, getGenerationByBirthdate } from "@/lib/utils.js";
+import { getConsultantById, getCommentInfo, getCommentList, getServiceExperienceCon } from "@/common/api/consultant.js";
 import { getCommentByTargetUserId, getSchedule } from "@/common/api/worry.js";
+import { follow, collect, followStatus } from "@/common/api/user.js";
 import MoteLinesDivide from "@/components/mote-lines-divide/mote-lines-divide";
 import CustomerService from "@/components/Customer-Service.vue";
 
@@ -495,14 +504,33 @@ const consultantInfo = ref({
 });
 const userIds = ref("");
 const quoteList = ref({});
+const optionsID = ref('')
+
 onLoad((options) => {
+  optionsID.value = options.id;
   userIds.value = options.userId;
   quoteList.value = JSON.parse(options.quoteList);
   consultInfo(options.id);
   getConsultantInfo(options.id);
   getScheduleApi(options.id);
   getCommentByTargetUserIdApi(options.userId);
+  followStatusApi(options.id);
 });
+
+// 关注状态
+const followType = ref(0);
+const followStatusApi = async (id) => {
+  let { data } = await followStatus({ targetId: id, targetType: 1 });
+  console.log(data);
+  followType.value = data;
+}
+// 关注/取消
+const shareFn = async () => {
+  try {
+    const api = followType.value == 1 ? follow : collect;
+    const res = await api({ targetType: 1, targetId: Number(optionsID.value) });
+  } catch (error) {}
+};
 
 const getScheduleApi = async (id) => {
   let res = await getSchedule({ consultantId: id });
@@ -752,6 +780,11 @@ onMounted(() => {
     selectedDate.value = dateOptions.value[0]; // 默认选中第一个日期
   }
 });
+
+// 同步 scrollTop 和实际滚动位置
+const onScroll = (e) => {
+  scrollTop.value = e.detail.scrollTop;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -1086,7 +1119,7 @@ onMounted(() => {
         }
 
         .detail-item-line-6 {
-          margin-top: 60rpx;
+          margin-top: 20rpx;
           width: 100vw;
 
           display: flex;
@@ -1806,5 +1839,46 @@ onMounted(() => {
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
   background: #e5e7eb;
+}
+.nav-right{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  .line{
+    display: flex;
+    align-items: center;
+    img{
+      width: 70rpx;
+      height: 70rpx;
+      border-radius: 50%;
+      margin-right: 10rpx;
+    }
+    .line-name{
+      font-size: 25rpx;
+      font-weight: bold;
+      margin-left: 5rpx;
+    }
+    .line-job{
+      font-size: 17rpx;
+      padding: 5rpx 10rpx;
+      border-radius: 20rpx;
+      background: #f9eac2;
+    }
+  }
+  .share{
+    color: #fff;
+    font-size: 22rpx;
+    padding: 10rpx 20rpx;
+    border-radius: 30rpx;
+    background: #35ca95;
+    margin-right: 20rpx;
+  }
+}
+::v-deep .uni-navbar__header{
+  height: 88rpx !important;
+}
+::v-deep .uni-navbar__header-btns{
+  width: 500rpx !important;
 }
 </style>

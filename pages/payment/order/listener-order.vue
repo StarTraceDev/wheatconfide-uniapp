@@ -45,18 +45,9 @@
         <!-- 订单内容 -->
         <view class="order-body" @click="toDetail(item)">
           <!-- <view class="title">首单体验</view> -->
-          <view class="desc"
-            ><text>购买时长：</text>{{ item.buyDuration }}</view
-          >
-          <view class="desc"
-            ><text>服务方式：</text>{{ item.consultTypeDesc }}</view
-          >
-          <view class="desc"
-            ><text>剩余时间：</text>{{ item.remainingDuration }}</view
-          >
-          <view class="desc"
-            ><text>到期时间：</text>{{ item.expirationTime }}</view
-          >
+          <view class="desc"><text>购买时长：</text>{{ item.buyDuration }}</view>
+          <view class="desc"><text>服务方式：</text>{{ item.consultTypeDesc }}</view>
+          <view class="desc"><text>剩余时间：</text>{{ item.remainingDuration }}</view>
           <view class="desc"><text>下单时间：</text>{{ item.createTime }}</view>
         </view>
 
@@ -104,7 +95,7 @@
               shape="circle"
               type="warning"
               @click="handleChat(item)"
-              >立即咨询</u-button
+              >立即联系</u-button
             >
             <u-button
               v-if="item.status == 3"
@@ -139,8 +130,8 @@ import { serviceTyep } from "./order.js";
 
 const tabs = ref([
   { name: "全部" },
-  { name: "待付款" },
-  { name: "待咨询" },
+  { name: "待支付" },
+  { name: "待服务" },
   { name: "待评价" },
   { name: "交易完成" },
 ]);
@@ -156,7 +147,7 @@ const changeTab = (e) => {
   if(e == 0) {
     delete paramsData.value.params.status;
   }
-  postList();
+  postList(false);
 };
 
 const paramsData = ref({
@@ -173,13 +164,17 @@ const listEmpty = ref(false);
 onReachBottom(() => {
  if(!listEmpty.value) {
    paramsData.value.current += 1;
-   postList();
+   postList(true);
  }
 })  
-const postList = async() => {
+const postList = async(val) => {
 	try {
 		const res = await postOrder(paramsData.value);
-    orderList.value = [...orderList.value, ...res.data.records]
+    if(val) {
+      orderList.value = [...orderList.value, ...res.data.records]
+    } else {
+      orderList.value = res.data.records
+    }
     listEmpty.value = res.data.records.length === 0 ? true : false
 	} catch (e) {
 		console.log(e);
@@ -269,8 +264,7 @@ const cancelOrder = async (item) => {
       title: "取消成功",
       icon: "none",
     })
-    orderList.value = []
-    postList();
+    postList(false);
   } catch(e) {
     console.log(e);
   }
@@ -284,7 +278,7 @@ const toRefund = (item) => {
 }
 
 onMounted(() => {
-  postList();
+  postList(false);
 })
 </script>
 
@@ -363,7 +357,7 @@ onMounted(() => {
 
       .desc {
         font-size: 24rpx;
-        margin-bottom: 10rpx;
+        margin-bottom: 15rpx;
         text{
         color: #888;
         }
@@ -390,7 +384,8 @@ onMounted(() => {
       align-items: flex-end;
       justify-content: flex-end;
       .btn {
-        padding: 16rpx 30rpx;
+        font-size: 25rpx;
+        padding: 15rpx 25rpx;
         min-width: 160rpx;
       }
     }

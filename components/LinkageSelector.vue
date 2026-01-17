@@ -6,7 +6,7 @@
         v-for="(cat, idx) in localCategories"
         :key="cat.id"
         class="left-item"
-        :class="{ active: currentCategoryIndex === idx }"
+        :class="{ active: currentCategoryIndex == idx }"
         @click="scrollToCategory(idx)"
       >
         {{ cat.name }}
@@ -31,10 +31,11 @@
           <view
             v-if="cat.children.length > 9"
             class="toggle-btn"
+            :class="colorType == 2 ? 'toggle-btn-color' : ''"
             @click.stop="toggleExpand(idx)"
           >
             {{ cat.spread ? '收起' : '更多' }}
-            <u-icon :name="cat.spread ? 'arrow-up' : 'arrow-down'" size="14" color="#35C996" />
+            <u-icon :name="cat.spread ? 'arrow-up' : 'arrow-down'" size="14" :color="colorType == 2 ? '#ffa967' : '#35C996'" />
           </view>
         </view>
 
@@ -56,8 +57,9 @@
 
 <script setup>
 import { spread } from 'lodash-es'
-import { ref, nextTick, onMounted,computed,defineEmits } from 'vue'
+import { ref, nextTick, onMounted, computed, defineEmits } from 'vue'
 import { getCurrentInstance } from 'vue'
+
 const emit = defineEmits(['update:selected'])
 const instance = getCurrentInstance()
 const props = defineProps({
@@ -65,10 +67,21 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-    maxSelect: {
-      type: Number,
-      default: 5
-    }
+  maxSelect: {
+    type: Number,
+    default: 5
+  },
+  colorType: {
+    type: Number,
+    default: 1
+  }
+})
+
+const colorChange = computed(() => {
+  if (props.colorType == 1) {
+    return "#35CA95";
+  }
+  return "#ffa767";
 })
 
 const activeIndex = ref(0)
@@ -272,9 +285,9 @@ onMounted(() => {
 	}
 	
 	.left-item.active {
-	  color: #35C996;
-	  background-color: #fff;
-	  border-left-color: #35C996;
+	  color: v-bind(colorChange);
+ 	  background-color: #fff;
+	  border-left-color: v-bind(colorChange);
 	}
 	
 	.right-content {
@@ -306,6 +319,9 @@ onMounted(() => {
 	  align-items: center;
 	  gap: 6rpx;
 	}
+  .toggle-btn-color{
+    color: #ffa967;
+  }
 	
 	.child-wrap {
 	  display: flex;
@@ -332,7 +348,7 @@ onMounted(() => {
 	}
 	
 	.child-item.selected {
-	  background-color: #35C996;
+	  background-color: v-bind(colorChange);
 	  color: #fff;
 	}
 

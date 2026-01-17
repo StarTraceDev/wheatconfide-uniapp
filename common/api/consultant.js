@@ -1,3 +1,10 @@
+/*
+ * @Description: 当前页面描述
+ * @Author: StarTraceDev
+ * @Date: 2025-11-10 17:47:02
+ * @LastEditors: StarTraceDev
+ * @LastEditTime: 2026-01-15 15:12:25
+ */
 import http from "@/utils/request.js";
 // 获取咨询师列表
 export const getConsultantList = (params, config = {}) =>

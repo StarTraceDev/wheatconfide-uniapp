@@ -126,7 +126,7 @@ import { serviceTyep } from "./order.js";
 
 const tabs = ref([
   { name: "全部" },
-  { name: "待付款" },
+  { name: "待支付" },
   { name: "待咨询" },
   { name: "待评价" },
   { name: "交易完成" },
@@ -151,21 +151,25 @@ const changeTab = (e) => {
   if(e == 0) {
     delete paramsData.value.params.status;
   }
-  postList();
+  postList(false);
 };
 const listEmpty = ref(false);
 
 onReachBottom(() => {
  if(!listEmpty.value) {
    paramsData.value.current += 1;
-   postList();
+   postList(true);
  }
 })  
 
-const postList = async () => {
+const postList = async (val) => {
   try {
     const { data } = await postOrder(paramsData.value);
-    orderList.value = [...orderList.value, ...data.records]
+    if(val) {
+      orderList.value = [...orderList.value, ...data.records]
+    } else {
+      orderList.value = data.records
+    }
     listEmpty.value = res.data.records.length === 0 ? true : false
   } catch (e) {
     console.log(e);
@@ -175,7 +179,7 @@ const postList = async () => {
 const getStatusText = (status) => {
   switch (status) {
     case 1:
-      return "待付款";
+      return "待支付";
     case 2:
       return "待咨询";
     case 3:
@@ -256,13 +260,13 @@ const cancelOrder = async (item) => {
       title: "取消成功",
       icon: "none",
     })
-    postList();
+    postList(false);
   } catch(e) {
     console.log(e);
   }
 }
 onMounted(() => {
-  postList();
+  postList(false);
 });
 </script>
 
@@ -279,7 +283,7 @@ onMounted(() => {
 
   .order-card {
     margin: 20rpx 30rpx;
-    background-color: #f7f8fa;
+    background-color: #fff;
     border-radius: 20rpx;
     padding: 24rpx;
     margin-bottom: 24rpx;
@@ -367,7 +371,8 @@ onMounted(() => {
       align-items: flex-end;
       justify-content: flex-end;
       .btn {
-        padding: 16rpx 30rpx;
+        font-size: 25rpx;
+        padding: 15rpx 25rpx;
         min-width: 160rpx;
       }
     }

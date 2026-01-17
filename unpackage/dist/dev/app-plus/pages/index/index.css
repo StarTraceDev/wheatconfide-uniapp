@@ -655,7 +655,7 @@
 .teacher-listener .card-listener .info-wrap .job-title[data-v-5a7db619] {
   display: flex;
   margin-top: 0.3125rem;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
 }
 .teacher-listener .card-listener .info-wrap .job-title .name-title[data-v-5a7db619] {
@@ -705,8 +705,27 @@
 }
 .teacher-listener .card-listener .info-wrap .price-button .contact[data-v-5a7db619] {
   display: flex;
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: #9da6a4;
+}
+.teacher-listener .card-listener .info-wrap .price-button .contact uni-image[data-v-5a7db619] {
+  width: 0.78125rem;
+  height: 0.78125rem;
+}
+.teacher-listener .card-listener .info-wrap .price-button .price-info[data-v-5a7db619] {
+  display: flex;
+  align-items: flex-end;
+  font-size: 1.1875rem;
+  color: red;
+}
+.teacher-listener .card-listener .info-wrap .price-button .price-info .price-unit[data-v-5a7db619] {
+  color: red;
+  font-size: 0.78125rem;
+  margin-right: 0.09375rem;
+  margin-bottom: 0.15625rem;
+}
+.list-item[data-v-5a7db619] {
+  margin-bottom: 0.15625rem !important;
 }
 /**
  * 这里是uni-app内置的常用样式变量
@@ -801,7 +820,7 @@
 }
 .teacher-container .card .info-wrap .price-button[data-v-07f0244f] {
   display: flex;
-  padding-top: 0.9375rem;
+  padding-top: 0.625rem;
   justify-content: space-between;
   align-items: center;
 }
@@ -815,8 +834,24 @@
 }
 .teacher-container .card .info-wrap .price-button .contact[data-v-07f0244f] {
   display: flex;
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: #9da6a4;
+}
+.teacher-container .card .info-wrap .price-button .contact uni-image[data-v-07f0244f] {
+  width: 0.78125rem;
+  height: 0.78125rem;
+}
+.teacher-container .card .info-wrap .price-button .price-info[data-v-07f0244f] {
+  display: flex;
+  align-items: flex-end;
+  font-size: 1.1875rem;
+  color: red;
+}
+.teacher-container .card .info-wrap .price-button .price-info .price-unit[data-v-07f0244f] {
+  color: red;
+  font-size: 0.78125rem;
+  margin-right: 0.09375rem;
+  margin-bottom: 0.15625rem;
 }
 /**
  * 这里是uni-app内置的常用样式变量

@@ -62,7 +62,7 @@
           </view>
           <!-- 个人形象照 -->
           <view class="upload-section">
-            <view class="label require">
+            <view class="label require requires">
               个人形象照
               <text class="sub-label">（用于个人主页封面，格式jpg/png，大小2M内）</text>
             </view>
@@ -208,40 +208,50 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "committed"]);
 
-// 核心修复：改用ref维护本地数据，避免computed双向绑定的循环
+// 解析masterGallery的工具方法
+const parseMasterGallery = (val) => {
+  // 空值（新用户）返回空数组
+  if (!val || val === "[]" || val === "''") return [];
+  try {
+    // 解析字符串为数组
+    const parsed = JSON.parse(val);
+    // 确保是数组且每个项有url属性
+    return Array.isArray(parsed) 
+      ? parsed.map(item => ({ url: item.url || '' })).filter(item => item.url) 
+      : [];
+  } catch (e) {
+    // 解析失败返回空数组
+    return [];
+  }
+};
+
+// 核心：本地数据维护（重点处理masterGallery）
 const localData = ref({
   ...props.modelValue,
-  masterGallery: (() => {
-    try {
-      const gallery = JSON.parse(props.modelValue.masterGallery || "[]");
-      return Array.isArray(gallery) ? gallery.map(url => ({ url })) : [];
-    } catch (e) {
-      return [];
-    }
-  })(),
+  // 初始化masterGallery：解析接口返回的字符串，无数据则为空数组（新用户）
+  masterGallery: parseMasterGallery(props.modelValue.masterGallery),
   // 确保u-upload的fileList默认是数组
   holdIdCardImg: props.modelValue.holdIdCardImg || [],
   commitmentImg: props.modelValue.commitmentImg || []
 });
+
+// 标记是否为新用户（masterGallery初始为空）
+const isNewUser = ref(!props.modelValue.masterGallery || parseMasterGallery(props.modelValue.masterGallery).length === 0);
 
 // 监听props.modelValue变化，同步到本地（nextTick避免立即触发循环）
 watch(
   () => props.modelValue,
   (newVal) => {
     nextTick(() => {
+      const newMasterGallery = parseMasterGallery(newVal.masterGallery);
       localData.value = {
         ...newVal,
-        masterGallery: (() => {
-          try {
-            const masterGallery = JSON.parse(newVal.masterGallery || "[]");
-            return Array.isArray(masterGallery) ? masterGallery.map(url => ({ url })) : [];
-          } catch (e) {
-            return [];
-          }
-        })(),
+        masterGallery: newMasterGallery,
         holdIdCardImg: newVal.holdIdCardImg || [],
         commitmentImg: newVal.commitmentImg || []
       };
+      // 更新新用户标记
+      isNewUser.value = !newVal.masterGallery || newMasterGallery.length === 0;
     });
   },
   { immediate: true, deep: true }
@@ -315,11 +325,13 @@ const beforeUpload = () => {
   // 上传前校验逻辑（可补充文件大小/格式校验）
 };
 
-// 上传完成-个人形象照
+// 上传完成-个人形象照（确保生成[{url: xxx}]格式）
 const uploadComplete1 = (data, index, lists) => {
   if (lists && lists[index]) {
+    // 确保url赋值正确
     lists[index].url = data.data?.url || '';
-    localData.value.masterGallery = lists.map(item => ({ url: item.url }));
+    // 覆盖masterGallery，确保是[{url: xxx}]格式
+    localData.value.masterGallery = lists.map(item => ({ url: item.url || '' })).filter(item => item.url);
   }
 };
 
@@ -333,9 +345,9 @@ const uploadComplete3 = (data, index, lists) => {
   localData.value.commitmentImg = lists;
 };
 
-// 删除图片
+// 删除图片（同步更新masterGallery）
 const deletePic = (field, index, lists) => {
-  localData.value[field] = lists;
+  localData.value[field] = lists.map(item => ({ url: item.url || '' })).filter(item => item.url);
 };
 
 // 上传照片
@@ -370,7 +382,12 @@ const submit = async () => {
     { field: localData.value.name, message: "请输入姓名" },
     { field: localData.value.idcardNum, message: "请输入身份证号" },
     { field: localData.value.birthdate, message: "请选择出生年月" },
-    { field: localData.value.masterGallery?.length, message: "请上传个人形象照" },
+    // 核心：masterGallery校验 - 新用户必须上传，老用户只要有数据即可
+    { 
+      field: localData.value.masterGallery.length, 
+      message: "请上传个人形象照",
+      validate: () => !isNewUser.value ? true : localData.value.masterGallery.length > 0
+    },
     { field: localData.value.holdIdCardImg?.length, message: "请上传手持身份证件照" },
     { field: localData.value.commitmentImg?.length, message: "请上传手写承诺书照" },
     { field: localData.value.constellation, message: "请选择星座" },
@@ -378,17 +395,24 @@ const submit = async () => {
   ];
 
   // 校验必填项
-  for (const { field, message } of requiredFields) {
-    if (!field) {
-      uni.showToast({ title: message, icon: "none" });
+  for (const item of requiredFields) {
+    // 自定义校验逻辑
+    if (item.validate) {
+      if (!item.validate()) {
+        uni.showToast({ title: item.message, icon: "none" });
+        return;
+      }
+    } else if (!item.field) {
+      uni.showToast({ title: item.message, icon: "none" });
       return;
     }
   }
 
-  // 构造提交数据（适配接口格式）
+  // 构造提交数据（重点：masterGallery转字符串，覆盖原有数据）
   const submitData = {
     ...localData.value,
-    masterGallery: JSON.stringify(localData.value.masterGallery.map(item => item.url)),
+    // masterGallery转JSON字符串，确保覆盖接口原有数据
+    masterGallery: JSON.stringify(localData.value.masterGallery),
     consultantType: props.consultantType,
     idCardNo: localData.value.idcardNum,
     idCardFrontImg: localData.value.idcardFront,
@@ -397,20 +421,15 @@ const submit = async () => {
     commitmentImg: localData.value.commitmentImg[0]?.url || ''
   };
 
-  // 移除无关字段（根据实际接口调整）
-  delete submitData.masterGallery; // 已转JSON字符串，原数组字段删除
-  delete submitData.holdIdCardImg; // 已提取url，原数组字段删除
-  delete submitData.commitmentImg; // 已提取url，原数组字段删除
-
   uni.showLoading({ title: "提交中" });
 
-  try {
-    const api = props.consultantType == 1 ? registerConsultantStep1 : registerListenerStep1;
+  try {    
+    const api = props.consultantType == '1' ? registerConsultantStep1 : registerListenerStep1;
     const res = await api(submitData);
     
     uni.hideLoading();
     localData.value = { ...localData.value, ...res.data };
-    emit("committed", "");
+    emit("committed", submitData);
     uni.showToast({ title: "提交成功", icon: "success" });
   } catch (error) {
     uni.hideLoading();
@@ -521,7 +540,7 @@ onUnload(() => {
           color: rgba(0, 0, 0, 0.85);
 
           .sub-label {
-            font-size: 22rpx;
+            font-size: 20rpx;
             color: rgba(0, 0, 0, 0.5);
           }
 
@@ -530,6 +549,10 @@ onUnload(() => {
             color: #fa5151;
             position: absolute;
             right: -20rpx;
+          }
+
+          &.requires::after {
+            left: 145rpx;
           }
         }
 

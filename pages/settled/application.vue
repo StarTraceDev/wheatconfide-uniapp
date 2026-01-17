@@ -122,7 +122,7 @@ import { articleByType } from "@/common/api/apis.js";
 const scrollTop = ref(0);
 const globalStore = useGlobalDataStore();
 const statusBarHeight = ref(globalStore.statusBarHeight + "px");
-const isAgree = ref(true);
+const isAgree = ref(false);
 const navTitle = ref("申请成为咨询师");
 const typeDistinguish = ref("1");
 const benefitList = ref([]);
@@ -196,14 +196,14 @@ const fangfa = (list, type, inde) => {
 };
 
 const toAgreement = () => {
-  const title = typeDistinguish.value == 1 ? "倾听师入驻协议" : "咨询师入驻协议";
+  const title = typeDistinguish.value == 1 ? "咨询师入驻协议" : "倾听师入驻协议";
    uni.navigateTo({
     url: `/pages/webview/webview?type=${title}`,
   });
 };
 
 const getAgreementByType = async () => {
-  const title = typeDistinguish.value == 1 ? "心理咨询师入驻条件" : "倾听师入驻条件";
+  const title = typeDistinguish.value == 1 ? "成为心理咨询师条件" : "成为倾听师条件";
   try {
 		const queryParams = {
         current: 1,

@@ -6,14 +6,14 @@
           <picker @change="bindPickerChange" :value="selectIndex" :range="occupationList" :range-key="rangeKey">
 						<view class="career-collapse-item">
               <view style="display: flex;align-items: center;justify-content: space-between;margin: 40rpx 0;">
-                <view>职业<text style="color: red;">*</text></view>
+                <view>职业</view>
                 <view style="color: #595959;font-size: 25rpx;" >{{ occupationId ? occupationId : '请选择' }}</view>
               </view>
             </view>
 					</picker>
           <view class="career-collapse-item">
             <view style="display: flex;align-items: center;justify-content: space-between;margin: 40rpx 0;">
-              <view >工作开始时间<text style="color: red;">*</text></view>
+              <view >工作开始时间</view>
               <view style="color: #595959;font-size: 25rpx;" @click="certificatePickerShow = true">{{ workTime ? workTime : '请选择' }}</view>
             </view>
           </view>
@@ -121,8 +121,8 @@ const emit = defineEmits(["update:modelValue", "committed"]);
 
 const submit = async () => {
     const requiredFields = [
-    { field: occupationId.value, message: "请选择职业" },
-    { field: workTime.value, message: "请选择工作时间" },
+    // { field: occupationId.value, message: "请选择职业" },
+    // { field: workTime.value, message: "请选择工作时间" },
     { field: selectedIds.value, message: "请选择服务类型" },
   ];
 
@@ -134,6 +134,8 @@ const submit = async () => {
   }
 
   props.modelValue.serviceType = selectedIds.value.join(",");
+  console.log(props.modelValue);
+  
   if (props.consultantType == 1) {
     let resp = await registerConsultantStep2(props.modelValue);
     emit("committed", "");

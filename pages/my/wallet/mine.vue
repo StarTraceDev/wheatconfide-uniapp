@@ -94,7 +94,7 @@ onPageScroll((e) => {
 });
 
 const handleWithdrawal = (url) => {
-   uni.navigateTo({ url: `${url}&type=${JSON.stringify(type.value)}` });
+   uni.navigateTo({ url: `${url}?type=${JSON.stringify(type.value)}` });
 }
 
 </script>

@@ -11,24 +11,19 @@
         <template v-slot:left>
           <uni-icons type="left" size="24" @click="backFn"></uni-icons>
         </template>
-        <template v-slot:right>
-          <view class="right">
-            <image
-              src="/static/confide/share.png"
-              style="width: 40rpx; height: 40rpx"
-            ></image>
-          </view>
-        </template>
       </uni-nav-bar>
       <scroll-view
         scroll-y="true"
-        v-if="true"
         :show-scrollbar="false"
         class="scroll-content"
       >
         <view class="children-content">
           <view class="top-bg"></view>
           <view class="current-component">
+            <view class="component-tip" v-if="consultant.status == 1 || consultant.status == 3">
+              <uni-icons type="notification-filled" size="20" color="#fd3e3c" />
+              <view>{{ consultant.status == 1 ? '您上传的身份证照片不清晰，请修改后再提交' : '' }}</view>
+            </view>
             <view class="handler-components-box">
               <idCard
                 v-show="step == 1"
@@ -37,14 +32,19 @@
                 @committed="step1Commit"
                 ref="idCardRef"
                 v-model="formData.idCard"
-              ></idCard>
+              />
               <view class="footer">
                 <view class="tip">
                   <image src="/static/auth/tip.svg" class="img"></image
                   >个人信息安全保障中
                 </view>
-                <view class="btn">
-                  <view class="next" @click="nextStepHandler">提交审核</view>
+                <view class="btn" v-if="step == 1">
+                  <view
+                    class="next"
+                    :class="consultantType == 1 ? 'next-ba1' : 'next-ba2'"
+                    @click="nextStepHandler"
+                    >提交审核</view
+                  >
                 </view>
               </view>
               <!-- <component :is="currentComponent" :key="currentComponent"></component> -->
@@ -52,23 +52,17 @@
           </view>
         </view>
       </scroll-view>
-      <view v-else-if="consultant.verifyStatus == 1">
-        <!--认证审核中-->
-        <!--图标-->
-        <view>
-          <u-icon name="info-circle-fill"></u-icon>
-        </view>
-        <view><text>认证审核中，请稍后查看</text></view>
-        <view><text @click="recheck" style="color: red">重新审核</text></view>
-      </view>
-      <view v-else-if="consultant.verifyStatus == 2">
-        <!--审核通过-->
-        <view><text>您已认证成为心理咨询师</text></view>
-      </view>
-      <view v-else>
-        <view><text>您的资料未通过审核~</text></view>
-      </view>
     </view>
+    <uni-popup ref="popup" type="message">
+      <view class="popup-content">
+        <view class="content-title">您的申请已提交成功</view>
+        <view class="content-text">稍后可进入申请页面查看审核进度</view>
+        <view class="content-btn"
+          :style="{ background: consultantType == 1 ? '#35CA95' : '#EB9516' }"
+          @click="closePopup"
+        >返回“我的”</view>
+      </view>
+    </uni-popup>
   </view>
 </template>
 <script setup>
@@ -77,7 +71,11 @@ import { useGlobalDataStore } from "@/stores/global.js";
 import { onLoad } from "@dcloudio/uni-app";
 import { getConsultantByUserId } from "@/common/api/consultant.js";
 import { getListenerByUserId } from "@/common/api/listener.js";
+import { registerConsultantStep3 } from "@/common/api/consultant";
+import { registerListenerStep3 } from "@/common/api/listener.js";
 import idCard from "./components/idCard.vue";
+// import career from "./components/career.vue";
+// import certificate from "./components/certificate.vue";
 
 const globalStore = useGlobalDataStore();
 const statusBarHeight = ref(globalStore.statusBarHeight + "px");
@@ -93,17 +91,22 @@ const userInfo = ref('');
 onLoad((options) => {
   consultantType.value = options.type;
   userInfo.value = JSON.parse(options.userInfo);
-  console.log(userInfo.value);
   uni.setNavigationBarTitle({ title: "认证" });
   getConsultantDetail();
 });
+
+const backFn = () => {
+  uni.navigateBack({
+    delta: 1,
+  });
+};
 
 const getConsultantDetail = async () => {
   if (consultantType.value == 1) {
     let resp = await getConsultantByUserId({ userId: userInfo.value });
     const data = {
       ...resp.data,
-        idcardNum: resp.data.sysUser.idCardNo,
+      idcardNum: resp.data.sysUser.idCardNo,
       idcardFront: resp.data.sysUser.idCardFrontImg,
       idcardBackend: resp.data.sysUser.idCardBackImg,
       occupationId: resp.data.sysUser.occupationId
@@ -120,12 +123,11 @@ const getConsultantDetail = async () => {
 };
 
 const processingImg = (val) => {
-  const { masterGallery, commitmentImg, holdIdCardImg } = val;
-  const master = masterGallery ? JSON.parse(masterGallery) : [];
-  const commitment = formatImages([commitmentImg]);
-  const holdIdCard = formatImages([holdIdCardImg]);
+  const { commitmentImg, holdIdCardImg } = val;
+  const commitment = commitmentImg ? formatImages([commitmentImg]) : [];
+  const holdIdCard = holdIdCardImg ? formatImages([holdIdCardImg]) : [];
+  
   const data = Object.assign(val, {
-    masterGallery: master,
     commitmentImg: commitment,
     holdIdCardImg: holdIdCard,
   });
@@ -163,34 +165,11 @@ const nextStepHandler = () => {
   }
   if (step.value == 2) {
     careerRef.value?.submit();
-
-    // if (consultantType.value == 1) {
-    // 	consultant.value.consultantType = consultantType.value
-    // 	console.log(consultant);
-    // 	registerConsultantStep2(consultant.value).then(res => {
-    // 		// console.log(res);
-    // 		step.value = step.value + 1
-    // 	})
-    // }else{
-
-    // }
-    // step.value = step.value+1
   }
 };
 
 const step1Commit = () => {
-  step.value = step.value + 1;
-};
-
-const setp2Commit = () => {
-  step.value = step.value + 1;
-};
-
-const finalCommit = () => {
-  uni.showToast({
-    title: "资料已提交，请等待审核",
-  });
-  uni.navigateBack();
+  popup.value.open('center');
 };
 
 const prevStepHandler = () => {
@@ -198,7 +177,6 @@ const prevStepHandler = () => {
 };
 
 watch(step, (newVal, oldVal) => {
-  // console.log(newVal);
   if (newVal == 1) {
     currentComponent.value = idCard;
   } else if (newVal == 2) {
@@ -209,24 +187,35 @@ watch(step, (newVal, oldVal) => {
   }
 });
 
+const popup = ref(null);
+
 const examineHandler = async () => {
+  finalStep.value?.submit();
+  const { certificateList, educationList, careerList, consultantType } = finalStep.value.fromDataCertificate
   const submitData = {
     ...formData.value.idCard,
     ...formData.value.career,
+    certificateList, 
+    educationList, 
+    careerList, 
+    consultantType,
     certificates: formData.value.certificate.files,
   };
-
-  // console.log(submitData);
-  // let res = await saveConsultant(submitData);
-  finalStep.value?.submit();
-
-  // uni.showToast({
-  // 	title: '发布成功',
-  // 	icon: 'none', // 可选值 'success', 'loading', 'none'
-  // 	duration: 2000 // 持续时长，单位ms
-  // });
-  // console.log(res)
+  // try{
+  //   // const api = consultantType == 1 ? registerConsultantStep3 : registerListenerStep3
+  //   // let res = await api(submitData);
+  // } catch (err) {
+  //   console.error("提交失败：", err);
+  //   uni.showToast({ title: "提交失败", icon: "error" });
+  // }
 };
+
+// 关闭
+const closePopup = () => {
+  uni.switchTab({
+    url: '/pages/my/index'
+  });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -262,14 +251,27 @@ $statusBarHeight: v-bind(statusBarHeight);
         }
 
         .current-component {
-          padding-top: 24rpx;
           position: relative;
           z-index: 2;
           height: 100%;
           padding-bottom: 220rpx;
+          .component-tip{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10rpx;
+            view{
+              width: 80%;
+              font-size: 23rpx;
+              color: #778580;
+              padding: 5rpx 15rpx;
+              border-radius: 20rpx;
+              background-color: #DCF5EC;
+            }
+          }
 
           .handler-components-box {
-            margin-top: 38rpx;
+            margin-top: 0rpx;
           }
         }
       }
@@ -313,12 +315,17 @@ $statusBarHeight: v-bind(statusBarHeight);
         width: 100%;
         height: 100%;
         border-radius: 60rpx;
-        background: #35ca95;
         color: #fff;
         font-size: 30rpx;
         font-weight: 500;
         text-align: center;
         line-height: 88rpx;
+      }
+      .next-ba1 {
+        background: #35ca95;
+      }
+      .next-ba2 {
+        background: #eb9516;
       }
     }
 
@@ -333,6 +340,29 @@ $statusBarHeight: v-bind(statusBarHeight);
     }
   }
 }
+.popup-content{
+  background-color: #fff;
+  padding: 90rpx 90rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20rpx;
+  .content-title{
+    font-size: 35rpx;
+  }
+  .content-text{
+    margin: 20rpx 0 50rpx;
+    font-size: 20rpx;
+    color: #9E9E9E;
+  }
+  .content-btn{
+    color: #fff;
+    font-size: 23rpx;
+    padding: 10rpx 30rpx;
+    border-radius: 10rpx;
+  }
+}
+::v-deep .uni-page-head{
+  z-index: 0 !important;
+}
 </style>
-
-

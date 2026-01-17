@@ -3,6 +3,7 @@
     <div v-if="layoutType == 1">
       <linkage-selector
       @update:selected="changeServiceType"
+      :colorType="colorType"
       :categories="serviceTypes"
       ></linkage-selector>
     </div>

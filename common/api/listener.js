@@ -10,7 +10,7 @@ export const getListenerInfo = (params, config = {}) =>
   http.post("/api/listener/getListenerById", params, config);
 
 export const saveListener = (params, config = {}) =>
-  http.post("/api/listener/saveListener", params, config);
+  http.post("/api/listener/checkListener", params, config);
 
 export const registerListenerStep1 = (params, config = {}) =>
   http.post("/api/listener/step1", params, config);
